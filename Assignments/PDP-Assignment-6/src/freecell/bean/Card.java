@@ -25,6 +25,10 @@ public class Card implements Comparable<Card> {
     return rank;
   }
 
+  public static Card parse(String cardString) {
+    return new Card(null, null);
+  }
+
   @Override
   public int compareTo(Card o) {
     //todo
