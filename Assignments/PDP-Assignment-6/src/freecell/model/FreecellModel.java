@@ -35,6 +35,27 @@ public class FreecellModel implements FreecellOperations<Card> {
     return Utils.getShuffledDeck();
   }
 
+  /**
+   * Deal a new game of freecell with the given deck, with or without shuffling it first. This
+   * method first verifies that the deck is valid. It deals the deck among the cascade piles in
+   * roundrobin fashion. Thus if there are 4 cascade piles, the 1st pile will get cards 0, 4, 8,
+   * ..., the 2nd pile will get cards 1, 5, 9, ..., the 3rd pile will get cards 2, 6, 10, ... and
+   * the 4th pile will get cards 3, 7, 11, .... Depending on the number of cascade piles, they may
+   * have a different number of cards
+   *
+   * <p> The method will throw an IllegalArgumentException in the following cases:
+   * <ul>
+   * <li> If the deck is empty or null </li>
+   * <li> If the deck size is not 52 </li>
+   * <li> If the deck has duplicate cards </li>
+   * <li> If the deck has null cards </li>
+   * </ul>
+   * </p>
+   *
+   * @param deck    the deck to be dealt
+   * @param shuffle if true, shuffle the deck else deal the deck as-is
+   * @throws IllegalArgumentException if the deck is invalid
+   */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
 

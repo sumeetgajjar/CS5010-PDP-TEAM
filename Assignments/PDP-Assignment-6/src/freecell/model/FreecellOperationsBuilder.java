@@ -6,5 +6,5 @@ public interface FreecellOperationsBuilder {
 
   FreecellOperationsBuilder opens(int o);
 
-  <K> FreecellOperations<K> build();
+  <K> FreecellOperations<K> build(); // todo ask on piazza and explain this change
 }
