@@ -1,5 +1,6 @@
 import java.util.List;
 
+import freecell.model.FreecellModel;
 import freecell.model.PileType;
 
 /**
