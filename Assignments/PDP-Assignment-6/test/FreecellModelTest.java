@@ -22,6 +22,7 @@ public class FreecellModelTest {
     // this tests that size is 52, there are no duplicates and there are only valid cards
     Set<Card> expectedUnorderedDeck = new HashSet<>(getValidDeck());
     Assert.assertEquals(52, expectedUnorderedDeck.size());
+
     // cascade piles
     for (int i = 4; i <= 8; i++) {
       // open piles
@@ -31,8 +32,9 @@ public class FreecellModelTest {
                 .opens(j)
                 .build();
 
-        Assert.assertEquals(expectedUnorderedDeck,
-                new HashSet<>(model.getDeck()));
+        //test invoking multiple calls to getDeck returns a valid deck
+        Assert.assertEquals(expectedUnorderedDeck, new HashSet<>(model.getDeck()));
+        Assert.assertEquals(expectedUnorderedDeck, new HashSet<>(model.getDeck()));
       }
     }
   }

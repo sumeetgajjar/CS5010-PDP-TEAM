@@ -3,6 +3,7 @@ package freecell.model;
 import java.util.List;
 
 import freecell.bean.Card;
+import util.Utils;
 
 /**
  * Created by gajjar.s, on 1:47 PM, 10/28/18
@@ -17,9 +18,21 @@ public class FreecellModel implements FreecellOperations<Card> {
     this.numberOfOpenPile = numberOfOpenPile;
   }
 
+  /**
+   * Return a valid and complete deck of cards for a game of Freecell. There is no restriction
+   * imposed on the ordering of these cards in the deck. An invalid deck is defined as a deck that
+   * has one or more of these flaws:
+   * <ul>
+   * <li>It does not have 52 cards</li> <li>It has duplicate cards</li>
+   * <li>It has at least one invalid card (invalid suit or invalid number)</li>
+   * </ul>
+   *
+   * @return the deck of cards as a list
+   */
   @Override
   public List<Card> getDeck() {
-    return null;
+    //todo discuss about returning the same order for a given instance
+    return Utils.getShuffledDeck();
   }
 
   @Override
