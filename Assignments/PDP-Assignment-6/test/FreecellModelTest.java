@@ -2,12 +2,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import freecell.bean.Card;
 import freecell.bean.Rank;
@@ -225,6 +227,85 @@ public class FreecellModelTest {
         }
       }
     }
+  }
+
+  @Test
+  public void startGameWithShuffleFalse() {
+
+    for (int openPile = 1; openPile <= 4; openPile++) {
+      for (int cascadePile = 4; cascadePile <= 8; cascadePile++) {
+
+        FreecellOperations<Card> freecellOperations = FreecellModel.getBuilder()
+                .opens(openPile)
+                .cascades(cascadePile)
+                .build();
+
+        List<Card> validDeck = getValidDeck();
+
+        freecellOperations.startGame(validDeck, false);
+        String gameState = freecellOperations.getGameState();
+        String[] stateLines = gameState.split(System.lineSeparator());
+
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePile, validDeck);
+
+        for (int i = (4 + openPile), j = 0; i < stateLines.length; i++, j++) {
+          String expectedCascadingPileString = expectedCascadingPiles.get(j).stream()
+                  .map(Card::toString)
+                  .collect(Collectors.joining(","));
+          Assert.assertEquals(String.format(
+                  "C%d:%s", j + 1, expectedCascadingPileString), stateLines[i]);
+        }
+      }
+    }
+  }
+
+  @Test
+  public void startGameWithShuffleTrue() {
+
+    for (int openPile = 1; openPile <= 4; openPile++) {
+      for (int cascadePile = 4; cascadePile <= 8; cascadePile++) {
+
+        FreecellOperations<Card> freecellOperations = FreecellModel.getBuilder()
+                .opens(openPile)
+                .cascades(cascadePile)
+                .build();
+
+        List<Card> validDeck = getValidDeck();
+
+        freecellOperations.startGame(validDeck, true);
+        String gameState = freecellOperations.getGameState();
+        String[] stateLines = gameState.split(System.lineSeparator());
+
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePile, validDeck);
+
+        Set<Card> actualCardsInCascadingPiles = new HashSet<>(52);
+        for (int i = (4 + openPile), j = 0; i < stateLines.length; i++, j++) {
+          String actualCascadingPileString = stateLines[i].split(":")[1];
+          Set<Card> actualCardsInCascadingPile = Arrays.stream(actualCascadingPileString.split(","))
+                  .map(Card::parse)
+                  .collect(Collectors.toSet());
+
+          actualCardsInCascadingPiles.addAll(actualCardsInCascadingPile);
+          List<Card> expectedCardsInCascadingPile = expectedCascadingPiles.get(j);
+
+          Assert.assertEquals(expectedCardsInCascadingPile.size(), actualCardsInCascadingPile.size());
+        }
+
+        Assert.assertTrue(actualCardsInCascadingPiles.containsAll(validDeck));
+      }
+    }
+  }
+
+  private List<List<Card>> getCardsInCascadingPiles(int cascadePile, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePile);
+    for (int i = 0; i < cascadePile; i++) {
+      List<Card> cardsInCascadePile = new LinkedList<>();
+      for (int j = 0; j < validDeck.size(); j += cascadePile) {
+        cardsInCascadePile.add(validDeck.get(j));
+      }
+      expectedCascadingPiles.add(i, cardsInCascadePile);
+    }
+    return expectedCascadingPiles;
   }
 
   @Test
