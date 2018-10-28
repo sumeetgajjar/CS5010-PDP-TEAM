@@ -9,6 +9,14 @@ import freecell.bean.Card;
  */
 public class FreecellModel implements FreecellOperations<Card> {
 
+  private final int numberOfCascadePile;
+  private final int numberOfOpenPile;
+
+  private FreecellModel(int numberOfCascadePile, int numberOfOpenPile) {
+    this.numberOfCascadePile = numberOfCascadePile;
+    this.numberOfOpenPile = numberOfOpenPile;
+  }
+
   @Override
   public List<Card> getDeck() {
     return null;
@@ -56,6 +64,34 @@ public class FreecellModel implements FreecellOperations<Card> {
   }
 
   public static FreecellOperationsBuilder getBuilder() {
-    return null;
+    return new FreecellModelBuilder();
+  }
+
+  public static class FreecellModelBuilder implements FreecellOperationsBuilder {
+    private int numberOfCascadePile;
+    private int numberOfOpenPile;
+
+    private FreecellModelBuilder() {
+      this.numberOfCascadePile = 8;
+      this.numberOfOpenPile = 4;
+    }
+
+    @Override
+    public FreecellOperationsBuilder cascades(int c) {
+      this.numberOfCascadePile = c;
+      return this;
+    }
+
+    @Override
+    public FreecellOperationsBuilder opens(int o) {
+      this.numberOfOpenPile = o;
+      return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public FreecellOperations build() {
+      return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
+    }
   }
 }
