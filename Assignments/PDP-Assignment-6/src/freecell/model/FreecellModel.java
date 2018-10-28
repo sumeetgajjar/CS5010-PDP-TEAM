@@ -13,6 +13,18 @@ public class FreecellModel implements FreecellOperations<Card> {
   private final int numberOfCascadePile;
   private final int numberOfOpenPile;
 
+  /**
+   * Constructs a {@link FreecellModel} object with the given params. It throws {@link
+   * IllegalArgumentException} for following given cases.
+   * <ul>
+   * <li>If the given numberOfCascadePile is less than 4 or is greater than 8</li>
+   * <li>If the given numberOfOpenPile is less than 1 or is greater than 4</li>
+   * </ul>
+   *
+   * @param numberOfCascadePile the number of cascading piles for the game
+   * @param numberOfOpenPile    the number of open piles for the game
+   * @throws IllegalArgumentException if the given params are invalid
+   */
   private FreecellModel(int numberOfCascadePile, int numberOfOpenPile) {
     this.numberOfCascadePile = numberOfCascadePile;
     this.numberOfOpenPile = numberOfOpenPile;

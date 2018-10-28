@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -38,6 +39,23 @@ public class FreecellModelTest {
         //test invoking multiple calls to getDeck returns a valid deck
         Assert.assertEquals(expectedUnorderedDeck, new HashSet<>(model.getDeck()));
         Assert.assertEquals(expectedUnorderedDeck, new HashSet<>(model.getDeck()));
+      }
+    }
+  }
+
+  @Test
+  public void constructingGameWithInvalidPiles() {
+    for (int openPileCount : Arrays.asList(-1, 0, 5)) {
+      for (int cascadingPileCount : Arrays.asList(-1, 0, 1, 2, 3, 9)) {
+        try {
+          FreecellModel.getBuilder()
+                  .cascades(cascadingPileCount)
+                  .opens(openPileCount)
+                  .build();
+          Assert.fail("should have failed");
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("invalid input", e.getMessage());
+        }
       }
     }
   }
