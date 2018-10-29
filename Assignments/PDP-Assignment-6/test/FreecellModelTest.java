@@ -30,12 +30,12 @@ public class FreecellModelTest {
     Assert.assertEquals(52, expectedUnorderedDeck.size());
 
     // cascade piles
-    for (int i = 4; i <= 8; i++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       // open piles
-      for (int j = 1; j <= 4; j++) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(i)
-                .opens(j)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
 
         //test invoking multiple calls to getDeck returns a valid deck
@@ -47,8 +47,8 @@ public class FreecellModelTest {
 
   @Test
   public void constructingGameWithInvalidPiles() {
-    for (int openPileCount : Arrays.asList(-1, 0, 5)) {
-      for (int cascadingPileCount : Arrays.asList(-1, 0, 1, 2, 3, 9)) {
+    for (int openPileCount : Arrays.asList(-1, 0)) {
+      for (int cascadingPileCount : Arrays.asList(-1, 0, 1, 2, 3)) {
         try {
           FreecellModel.getBuilder()
                   .cascades(cascadingPileCount)
