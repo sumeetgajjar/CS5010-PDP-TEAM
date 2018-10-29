@@ -727,44 +727,46 @@ public class FreecellModelTest {
                 .build();
 
 
-        List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
+        for (boolean shuffle : Arrays.asList(true, false)) {
+          List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
 
-        model.startGame(deck, false);
+          model.startGame(deck, shuffle);
 
-        //moving last ace to open pile
-        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+          //moving last ace to open pile
+          int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+          int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
 
-        List<List<Card>> expectedOpenPiles = getListOfEmptyLists(openPiles);
+          List<List<Card>> expectedOpenPiles = getListOfEmptyLists(openPiles);
 
-        List<List<Card>> expectedCascadePiles = getCardsInCascadingPiles(cascadingPiles, deck);
-        Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+          List<List<Card>> expectedCascadePiles = getCardsInCascadingPiles(cascadingPiles, deck);
+          Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
 
-        expectedOpenPiles.get(0).add(0, lastAce);
-        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
-
-        Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4),
-                expectedOpenPiles,
-                expectedCascadePiles),
-                model.getGameState());
-
-        Assert.assertFalse(model.isGameOver());
-
-        for (int sourceOpenPile = 0; sourceOpenPile < openPiles; sourceOpenPile++) {
-          int destinationOpenPileIndex = (sourceOpenPile + 1) % openPiles;
-
-          Card cardFromOpenPile = expectedOpenPiles.get(sourceOpenPile).remove(0);
-          expectedOpenPiles.get(destinationOpenPileIndex).add(cardFromOpenPile);
-
-          model.move(PileType.OPEN, sourceOpenPile, 0, PileType.OPEN,
-                  destinationOpenPileIndex);
+          expectedOpenPiles.get(0).add(0, lastAce);
+          model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
 
           Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4),
                   expectedOpenPiles,
-                  expectedCascadePiles), model.getGameState());
+                  expectedCascadePiles),
+                  model.getGameState());
 
           Assert.assertFalse(model.isGameOver());
 
+          for (int sourceOpenPile = 0; sourceOpenPile < openPiles; sourceOpenPile++) {
+            int destinationOpenPileIndex = (sourceOpenPile + 1) % openPiles;
+
+            Card cardFromOpenPile = expectedOpenPiles.get(sourceOpenPile).remove(0);
+            expectedOpenPiles.get(destinationOpenPileIndex).add(cardFromOpenPile);
+
+            model.move(PileType.OPEN, sourceOpenPile, 0, PileType.OPEN,
+                    destinationOpenPileIndex);
+
+            Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4),
+                    expectedOpenPiles,
+                    expectedCascadePiles), model.getGameState());
+
+            Assert.assertFalse(model.isGameOver());
+
+          }
         }
       }
     }
