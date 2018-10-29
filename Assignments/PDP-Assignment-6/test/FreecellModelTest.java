@@ -588,6 +588,20 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void getGameStateReturnsEmptyStringBeforeStarting() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        Assert.assertEquals("", model.getGameState());
+      }
+    }
+  }
+
+  @Test
   public void moveCardFromFoundationToFoundationWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -835,7 +849,7 @@ public class FreecellModelTest {
     }
   }
 
-  //todo check game state string where move is tested
+//todo check game state string where move is tested
 
   private static class GameState {
     private final List<List<Card>> foundationPile;
