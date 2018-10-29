@@ -355,12 +355,30 @@ public class FreecellModelTest {
                 .build();
 
         Assert.assertFalse(model.isGameOver());
+        Assert.assertEquals("", model.getGameState());
 
         try {
           model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 0);
         } catch (IllegalStateException e) {
           Assert.assertEquals("cannot move before starting game", e.getMessage());
         }
+
+        Assert.assertEquals("", model.getGameState());
+
+        try {
+          model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, 0);
+        } catch (IllegalStateException e) {
+          Assert.assertEquals("cannot move before starting game", e.getMessage());
+        }
+
+        Assert.assertEquals("", model.getGameState());
+        try {
+          model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 0);
+        } catch (IllegalStateException e) {
+          Assert.assertEquals("cannot move before starting game", e.getMessage());
+        }
+
+        Assert.assertEquals("", model.getGameState());
 
         Assert.assertFalse(model.isGameOver());
       }
@@ -948,6 +966,24 @@ public class FreecellModelTest {
 
     String expectedGameState = convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles);
     Assert.assertEquals(expectedGameState, model.getGameState());
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.CASCADE, 0);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.OPEN, 0);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.FOUNDATION, 1);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
   }
 
   private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {

@@ -86,6 +86,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li> PileType cannot be null </li>
    * <li> pileNumber and cardIndex cannot be negative </li>
    * <li> pileNumber and cardIndex cannot overflow </li>
+   * <li> A move invoked after game is over </li>
    * </ul>
    *
    * @param source         the type of the source pile see @link{PileType}
