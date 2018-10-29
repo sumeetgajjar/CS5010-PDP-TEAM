@@ -991,6 +991,24 @@ public class FreecellModelTest {
 
     String expectedGameState = convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles);
     Assert.assertEquals(expectedGameState, model.getGameState());
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.CASCADE, 0);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.OPEN, 0);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 12, PileType.FOUNDATION, 1);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
   }
 
   private List<List<Card>> getListOfEmptyLists(int listSize) {
