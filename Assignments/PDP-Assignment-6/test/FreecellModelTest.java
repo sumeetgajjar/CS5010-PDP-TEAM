@@ -685,4 +685,30 @@ public class FreecellModelTest {
     return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
             && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
   }
+
+  private static class GameState {
+    private final List<List<Card>> foundationPile;
+    private final List<List<Card>> openPile;
+    private final List<List<Card>> cascadePile;
+
+    private GameState(List<List<Card>> foundationPile,
+                      List<List<Card>> openPile,
+                      List<List<Card>> cascadePile) {
+      this.foundationPile = foundationPile;
+      this.openPile = openPile;
+      this.cascadePile = cascadePile;
+    }
+
+    public List<List<Card>> getFoundationPile() {
+      return foundationPile;
+    }
+
+    public List<List<Card>> getOpenPile() {
+      return openPile;
+    }
+
+    public List<List<Card>> getCascadePile() {
+      return cascadePile;
+    }
+  }
 }
