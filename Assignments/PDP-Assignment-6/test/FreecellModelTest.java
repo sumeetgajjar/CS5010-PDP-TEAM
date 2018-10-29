@@ -802,6 +802,36 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void moveCardFromCascadeWithWrongCardIndexFails() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      model.startGame(deck, shuffle);
+      try {
+        model.move(PileType.CASCADE, 0, 11, PileType.OPEN, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+
+      try {
+        model.move(PileType.CASCADE, 0, 13, PileType.OPEN, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+    }
+  }
+
+  @Test
   public void moveCardFromCascadeToCascadeWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
