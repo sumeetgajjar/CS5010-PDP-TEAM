@@ -624,6 +624,46 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void moveCardFromFoundationToCascadeWorks() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+
+    model.startGame(deck, false);
+
+    List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePileCount, deck);
+    List<List<Card>> expectedOpenPiles = getListOfEmptyLists(4);
+    List<List<Card>> expectedFoundationPiles = getListOfEmptyLists(4);
+
+    for (int sourcePileIndex = 0; sourcePileIndex < cascadePileCount; sourcePileIndex++) {
+      Card cardFromCascadingPile = expectedCascadingPiles.get(sourcePileIndex).remove(12);
+      expectedFoundationPiles.get(sourcePileIndex).add(cardFromCascadingPile);
+
+      model.move(PileType.CASCADE, sourcePileIndex, 12, PileType.FOUNDATION, sourcePileIndex);
+
+      Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+    }
+
+
+    for (int sourcePileIndex = 0; sourcePileIndex < cascadePileCount; sourcePileIndex++) {
+      int destinationPileIndex = (sourcePileIndex + 1) % 4;
+
+      Card cardFromFoundationPile = expectedFoundationPiles.get(sourcePileIndex).remove(0);
+      expectedCascadingPiles.get(destinationPileIndex).add(cardFromFoundationPile);
+
+      model.move(PileType.FOUNDATION, sourcePileIndex, 0, PileType.CASCADE, destinationPileIndex);
+
+      Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+    }
+  }
+
+  @Test
   public void moveCardFromFoundationToFoundationWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -820,79 +860,6 @@ public class FreecellModelTest {
     }
   }
 
-  private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
-    List<Card> deck = model.getDeck();
-    //sorting the deck so that all Aces shifts to the end of the deck
-    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
-    return deck;
-  }
-
-  private List<Card> getValidDeck() {
-    List<Card> deck = new ArrayList<>(52);
-    for (Suit suit : Suit.values()) {
-      for (CardValue cardValue : CardValue.values()) {
-        deck.add(new Card(suit, cardValue));
-      }
-    }
-    return deck;
-  }
-
-  private List<List<Card>> getCardsInCascadingPiles(int cascadePileCount, List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePileCount);
-    for (int i = 0; i < cascadePileCount; i++) {
-      List<Card> cardsInCascadePile = new LinkedList<>();
-      for (int j = 0; j < validDeck.size(); j += cascadePileCount) {
-        cardsInCascadePile.add(validDeck.get(j));
-      }
-      expectedCascadingPiles.add(i, cardsInCascadePile);
-    }
-    return expectedCascadingPiles;
-  }
-
-  private boolean isValidCascadePileMove(List<List<Card>> cardsInCascadingPiles,
-                                         int fromCascadePile,
-                                         int toCascadePile) {
-    Card lastInSource = Utils.getLast(cardsInCascadingPiles.get(fromCascadePile));
-    Card lastInDestination = Utils.getLast(cardsInCascadingPiles.get(toCascadePile));
-
-    return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
-            && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
-  }
-
-  private String convertPilesIntoString(List<List<Card>> foundationPiles,
-                                        List<List<Card>> openPiles,
-                                        List<List<Card>> cascadePiles) {
-    StringBuilder builder = new StringBuilder();
-    List<String> foundationLists = foundationPiles.stream()
-            .map(listOfCards -> listOfCards.stream().map(Card::toString)
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
-    addPileStringsToBuilder(builder, foundationLists, 'F');
-
-    List<String> openLists = openPiles.stream()
-            .map(listOfCards -> listOfCards.stream().map(Card::toString)
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
-    addPileStringsToBuilder(builder, openLists, 'O');
-
-    List<String> cascadeLists = cascadePiles.stream()
-            .map(listOfCards -> listOfCards.stream().map(Card::toString)
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
-    addPileStringsToBuilder(builder, cascadeLists, 'C');
-    return builder.toString().trim();
-  }
-
-  private void addPileStringsToBuilder(StringBuilder builder, List<String> strings, char symbol) {
-    for (int i = 0; i < strings.size(); i++) {
-      builder.append(symbol);
-      builder.append(i + 1);
-      builder.append(":");
-      builder.append(strings.get(i));
-      builder.append(System.lineSeparator());
-    }
-  }
-
   @Test
   public void simulateEntireGame() {
     int cascadePileCount = 4;
@@ -903,17 +870,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = new ArrayList<>(52);
-    List<CardValue> cardValues = Arrays.stream(CardValue.values())
-            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
-            .collect(Collectors.toList());
-
-    for (CardValue cardValue : cardValues) {
-      deck.add(new Card(Suit.SPADES, cardValue));
-      deck.add(new Card(Suit.DIAMONDS, cardValue));
-      deck.add(new Card(Suit.CLUBS, cardValue));
-      deck.add(new Card(Suit.HEARTS, cardValue));
-    }
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
 
     Assert.assertFalse(model.isGameOver());
 
@@ -991,6 +948,94 @@ public class FreecellModelTest {
 
     String expectedGameState = convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles);
     Assert.assertEquals(expectedGameState, model.getGameState());
+  }
+
+  private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
+    List<Card> deck = model.getDeck();
+    //sorting the deck so that all Aces shifts to the end of the deck
+    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+    return deck;
+  }
+
+  private List<Card> getValidDeck() {
+    List<Card> deck = new ArrayList<>(52);
+    for (Suit suit : Suit.values()) {
+      for (CardValue cardValue : CardValue.values()) {
+        deck.add(new Card(suit, cardValue));
+      }
+    }
+    return deck;
+  }
+
+  private List<List<Card>> getCardsInCascadingPiles(int cascadePileCount, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePileCount);
+    for (int i = 0; i < cascadePileCount; i++) {
+      List<Card> cardsInCascadePile = new LinkedList<>();
+      for (int j = 0; j < validDeck.size(); j += cascadePileCount) {
+        cardsInCascadePile.add(validDeck.get(j));
+      }
+      expectedCascadingPiles.add(i, cardsInCascadePile);
+    }
+    return expectedCascadingPiles;
+  }
+
+  private boolean isValidCascadePileMove(List<List<Card>> cardsInCascadingPiles,
+                                         int fromCascadePile,
+                                         int toCascadePile) {
+    Card lastInSource = Utils.getLast(cardsInCascadingPiles.get(fromCascadePile));
+    Card lastInDestination = Utils.getLast(cardsInCascadingPiles.get(toCascadePile));
+
+    return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
+            && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
+  }
+
+  private String convertPilesIntoString(List<List<Card>> foundationPiles,
+                                        List<List<Card>> openPiles,
+                                        List<List<Card>> cascadePiles) {
+    StringBuilder builder = new StringBuilder();
+    List<String> foundationLists = foundationPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, foundationLists, 'F');
+
+    List<String> openLists = openPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, openLists, 'O');
+
+    List<String> cascadeLists = cascadePiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, cascadeLists, 'C');
+    return builder.toString().trim();
+  }
+
+  private void addPileStringsToBuilder(StringBuilder builder, List<String> strings, char symbol) {
+    for (int i = 0; i < strings.size(); i++) {
+      builder.append(symbol);
+      builder.append(i + 1);
+      builder.append(":");
+      builder.append(strings.get(i));
+      builder.append(System.lineSeparator());
+    }
+  }
+
+  private List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    for (CardValue cardValue : cardValues) {
+      deck.add(new Card(Suit.SPADES, cardValue));
+      deck.add(new Card(Suit.DIAMONDS, cardValue));
+      deck.add(new Card(Suit.CLUBS, cardValue));
+      deck.add(new Card(Suit.HEARTS, cardValue));
+    }
+    return deck;
   }
 
   private List<List<Card>> getListOfEmptyLists(int listSize) {
