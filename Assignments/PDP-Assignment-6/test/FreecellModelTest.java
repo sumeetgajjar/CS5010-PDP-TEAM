@@ -31,7 +31,7 @@ public class FreecellModelTest {
 
     // cascade piles
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      // open piles
+
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
@@ -64,13 +64,12 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithNullOrEmptyDeck() {
-    // cascade piles
-    for (int cascadePileCount = 4; cascadePileCount <= 8; cascadePileCount++) {
-      // open piles
-      for (int OpenPileCount = 1; OpenPileCount <= 4; OpenPileCount++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadePileCount)
-                .opens(OpenPileCount)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
         try {
           model.startGame(null, true);
@@ -106,13 +105,12 @@ public class FreecellModelTest {
   @Test
   public void startGameFailsWith51Cards() {
 
-    // cascade piles
-    for (int cascadePileCount = 4; cascadePileCount <= 8; cascadePileCount++) {
-      // open piles
-      for (int openPileCount = 1; openPileCount <= 4; openPileCount++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadePileCount)
-                .opens(openPileCount)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
 
         List<Card> deckWith51Cards = getValidDeck().subList(0, 52);
@@ -135,13 +133,12 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWith53Cards() {
-    // cascade piles
-    for (int cascadePileCount = 4; cascadePileCount <= 8; cascadePileCount++) {
-      // open piles
-      for (int openPileCount = 1; openPileCount <= 4; openPileCount++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadePileCount)
-                .opens(openPileCount)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
 
         List<Card> deckWith53Cards = getValidDeck();
@@ -169,13 +166,12 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithCorrectSizeButNullCardInDeck() {
-    // cascade piles
-    for (int cascadePileCount = 4; cascadePileCount <= 8; cascadePileCount++) {
-      // open piles
-      for (int openPileCount = 1; openPileCount <= 4; openPileCount++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadePileCount)
-                .opens(openPileCount)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
 
         List<Card> deckWith52Cards = getValidDeck().subList(0, 52);
@@ -200,13 +196,12 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithDuplicates() {
-    // cascade piles
-    for (int cascadePileCount = 4; cascadePileCount <= 8; cascadePileCount++) {
-      // open piles
-      for (int openPileCount = 1; openPileCount <= 4; openPileCount++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadePileCount)
-                .opens(openPileCount)
+                .cascades(cascadingPiles)
+                .opens(openPiles)
                 .build();
 
         List<Card> deckWithDuplicates = getValidDeck().subList(0, 52);
@@ -232,23 +227,24 @@ public class FreecellModelTest {
   @Test
   public void startGameWithShuffleFalse() {
 
-    for (int openPile = 1; openPile <= 4; openPile++) {
-      for (int cascadePile = 4; cascadePile <= 8; cascadePile++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
 
-        FreecellOperations<Card> freecellOperations = FreecellModel.getBuilder()
-                .opens(openPile)
-                .cascades(cascadePile)
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+
+        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+                .opens(openPiles)
+                .cascades(cascadingPiles)
                 .build();
 
         List<Card> validDeck = getValidDeck();
 
-        freecellOperations.startGame(validDeck, false);
-        String gameState = freecellOperations.getGameState();
+        freeCellOperations.startGame(validDeck, false);
+        String gameState = freeCellOperations.getGameState();
         String[] stateLines = gameState.split(System.lineSeparator());
 
-        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePile, validDeck);
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, validDeck);
 
-        for (int i = (4 + openPile), j = 0; i < stateLines.length; i++, j++) {
+        for (int i = (4 + openPiles), j = 0; i < stateLines.length; i++, j++) {
           String expectedCascadingPileString = expectedCascadingPiles.get(j).stream()
                   .map(Card::toString)
                   .collect(Collectors.joining(","));
@@ -262,24 +258,25 @@ public class FreecellModelTest {
   @Test
   public void startGameWithShuffleTrue() {
 
-    for (int openPile = 1; openPile <= 4; openPile++) {
-      for (int cascadePile = 4; cascadePile <= 8; cascadePile++) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
 
-        FreecellOperations<Card> freecellOperations = FreecellModel.getBuilder()
-                .opens(openPile)
-                .cascades(cascadePile)
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+
+        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+                .opens(openPiles)
+                .cascades(cascadingPiles)
                 .build();
 
         List<Card> validDeck = getValidDeck();
 
-        freecellOperations.startGame(validDeck, true);
-        String gameState = freecellOperations.getGameState();
+        freeCellOperations.startGame(validDeck, true);
+        String gameState = freeCellOperations.getGameState();
         String[] stateLines = gameState.split(System.lineSeparator());
 
-        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePile, validDeck);
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, validDeck);
 
         Set<Card> actualCardsInCascadingPiles = new HashSet<>(52);
-        for (int i = (4 + openPile), j = 0; i < stateLines.length; i++, j++) {
+        for (int i = (4 + openPiles), j = 0; i < stateLines.length; i++, j++) {
           String actualCascadingPileString = stateLines[i].split(":")[1];
           Set<Card> actualCardsInCascadingPile = Arrays.stream(actualCascadingPileString.split(","))
                   .map(Card::parse)
@@ -306,10 +303,6 @@ public class FreecellModelTest {
       expectedCascadingPiles.add(i, cardsInCascadePile);
     }
     return expectedCascadingPiles;
-  }
-
-  @Test
-  public void startGame() {
   }
 
   @Test
