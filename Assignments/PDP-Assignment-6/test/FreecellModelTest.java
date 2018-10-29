@@ -614,15 +614,48 @@ public class FreecellModelTest {
         List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
 
         model.startGame(deck, false);
-
         //moving last ace to foundation pile
         int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
         int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        List<List<Card>> expectedFoundationPiles = new ArrayList<>(4);
+        for (int i = 0; i < 4; i++) {
+          expectedFoundationPiles.add(new LinkedList<>());
+        }
+
+        List<List<Card>> expectedCascadePiles = getCardsInCascadingPiles(cascadingPiles, deck);
+        Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+
+        expectedFoundationPiles.get(0).add(0, lastAce);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, Collections.emptyList(),
+                expectedCascadePiles), model.getGameState());
+
+        Card cardFromFoundationPile = expectedFoundationPiles.get(0).remove(0);
+        expectedFoundationPiles.get(1).add(cardFromFoundationPile);
         model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 1);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, Collections.emptyList(),
+                expectedCascadePiles), model.getGameState());
+
+        cardFromFoundationPile = expectedFoundationPiles.get(1).remove(0);
+        expectedFoundationPiles.get(2).add(cardFromFoundationPile);
         model.move(PileType.FOUNDATION, 1, 0, PileType.FOUNDATION, 2);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, Collections.emptyList(),
+                expectedCascadePiles), model.getGameState());
+
+        cardFromFoundationPile = expectedFoundationPiles.get(2).remove(0);
+        expectedFoundationPiles.get(3).add(cardFromFoundationPile);
         model.move(PileType.FOUNDATION, 2, 0, PileType.FOUNDATION, 3);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, Collections.emptyList(),
+                expectedCascadePiles), model.getGameState());
+
+        cardFromFoundationPile = expectedFoundationPiles.get(3).remove(0);
+        expectedFoundationPiles.get(0).add(cardFromFoundationPile);
         model.move(PileType.FOUNDATION, 3, 0, PileType.FOUNDATION, 0);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, Collections.emptyList(),
+                expectedCascadePiles), model.getGameState());
+
+        Assert.assertFalse(model.isGameOver());
       }
     }
   }
@@ -644,11 +677,40 @@ public class FreecellModelTest {
         //moving last ace to open pile
         int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
         int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        List<List<Card>> expectedOpenPiles = new ArrayList<>(openPiles);
+        for (int i = 0; i < openPiles; i++) {
+          expectedOpenPiles.add(new LinkedList<>());
+        }
+
+        List<List<Card>> expectedCascadePiles = getCardsInCascadingPiles(cascadingPiles, deck);
+        Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+
+        expectedOpenPiles.get(0).add(0, lastAce);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
+
+        Assert.assertEquals(convertPilesIntoString(Collections.emptyList(),
+                expectedOpenPiles,
+                expectedCascadePiles),
+                model.getGameState());
+
+        Assert.assertFalse(model.isGameOver());
+
         for (int sourceOpenPile = 0; sourceOpenPile < openPiles; sourceOpenPile++) {
-          model.move(PileType.OPEN, sourceOpenPile,
-                  0, PileType.OPEN,
-                  (sourceOpenPile + 1) % openPiles);
+          int destinationOpenPileIndex = (sourceOpenPile + 1) % openPiles;
+
+          Card cardFromOpenPile = expectedOpenPiles.get(sourceOpenPile).remove(0);
+          expectedOpenPiles.get(destinationOpenPileIndex).add(cardFromOpenPile);
+
+          model.move(PileType.OPEN, sourceOpenPile, 0, PileType.OPEN,
+                  destinationOpenPileIndex);
+
+          Assert.assertEquals(convertPilesIntoString(Collections.emptyList(),
+                  expectedOpenPiles,
+                  expectedCascadePiles), model.getGameState());
+
+          Assert.assertFalse(model.isGameOver());
+
         }
       }
     }
@@ -668,19 +730,41 @@ public class FreecellModelTest {
 
         model.startGame(deck, false);
 
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedOpenPiles = new ArrayList<>(openPiles);
+        for (int i = 0; i < openPiles; i++) {
+          expectedOpenPiles.add(new LinkedList<>());
+        }
+
+        List<List<Card>> expectedFoundationPiles = new ArrayList<>(4);
+        for (int i = 0; i < 4; i++) {
+          expectedFoundationPiles.add(new LinkedList<>());
+        }
+
         //moving last ace to open pile
         int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
         int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        Card lastAce = expectedCascadingPiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+        expectedFoundationPiles.get(0).add(lastAce);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+        Assert.assertFalse(model.isGameOver());
+
         for (int foundationPilePosition = 0; foundationPilePosition < 4; foundationPilePosition++) {
           for (int openPilePosition = 0; openPilePosition < openPiles; openPilePosition++) {
+            Card lastCardFromFoundationPile = expectedFoundationPiles.get(foundationPilePosition).remove(0);
+            expectedOpenPiles.get(openPilePosition).add(lastCardFromFoundationPile);
             model.move(PileType.FOUNDATION, foundationPilePosition, 0, PileType.OPEN, openPilePosition);
+            Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+            Assert.assertFalse(model.isGameOver());
+
+            Card lastCardFromOpenPile = expectedOpenPiles.get(openPilePosition).remove(0);
+            expectedFoundationPiles.get(foundationPilePosition).add(lastCardFromOpenPile);
             model.move(PileType.OPEN, openPilePosition, 0, PileType.FOUNDATION, foundationPilePosition);
+            Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+            Assert.assertFalse(model.isGameOver());
           }
-          model.move(PileType.FOUNDATION,
-                  foundationPilePosition,
-                  0, PileType.FOUNDATION,
-                  (foundationPilePosition + 1) % 4);
         }
       }
     }
@@ -809,11 +893,11 @@ public class FreecellModelTest {
     return deck;
   }
 
-  private List<List<Card>> getCardsInCascadingPiles(int cascadePile, List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePile);
-    for (int i = 0; i < cascadePile; i++) {
+  private List<List<Card>> getCardsInCascadingPiles(int cascadePileCount, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePileCount);
+    for (int i = 0; i < cascadePileCount; i++) {
       List<Card> cardsInCascadePile = new LinkedList<>();
-      for (int j = 0; j < validDeck.size(); j += cascadePile) {
+      for (int j = 0; j < validDeck.size(); j += cascadePileCount) {
         cardsInCascadePile.add(validDeck.get(j));
       }
       expectedCascadingPiles.add(i, cardsInCascadePile);
