@@ -364,11 +364,15 @@ public class FreecellModelTest {
                 .opens(openPiles)
                 .build();
 
+        Assert.assertFalse(model.isGameOver());
+
         try {
           model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 0);
         } catch (IllegalStateException e) {
           Assert.assertEquals("cannot move before starting game", e.getMessage());
         }
+
+        Assert.assertFalse(model.isGameOver());
       }
     }
   }
