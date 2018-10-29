@@ -4,7 +4,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -384,7 +383,9 @@ public class FreecellModelTest {
 
 
         List<Card> deck = model.getDeck();
-        deck.sort(Comparator.comparingInt(c -> c.getCardValue().getPriority()));
+        //sorting the deck so that all Aces shifts to the end of the deck
+        deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+
         model.startGame(deck, false);
 
         //moving last ace to foundation pile
