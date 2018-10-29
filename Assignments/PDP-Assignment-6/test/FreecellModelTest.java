@@ -737,6 +737,40 @@ public class FreecellModelTest {
             && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
   }
 
+  private String convertPilesIntoString(List<List<Card>> foundationPiles,
+                                        List<List<Card>> openPiles,
+                                        List<List<Card>> cascadePiles) {
+    StringBuilder builder = new StringBuilder();
+    List<String> foundationLists = foundationPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, foundationLists, 'F');
+
+    List<String> openLists = openPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, openLists, 'O');
+
+    List<String> cascadeLists = cascadePiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, cascadeLists, 'C');
+    return builder.toString().trim();
+  }
+
+  private void addPileStringsToBuilder(StringBuilder builder, List<String> strings, char symbol) {
+    for (int i = 0; i < strings.size(); i++) {
+      builder.append(symbol);
+      builder.append(i + 1);
+      builder.append(":");
+      builder.append(strings.get(i));
+      builder.append(System.lineSeparator());
+    }
+  }
+
   //todo check game state string where move is tested
 
   private static class GameState {
