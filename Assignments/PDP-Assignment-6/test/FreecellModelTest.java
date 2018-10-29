@@ -999,6 +999,49 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void moveCardFromOpenPileToFoundationPileFails() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+
+    model.startGame(deck, false);
+    //moving ace of spades to open pile 0
+    model.move(PileType.CASCADE, 0, 12, PileType.OPEN, 0);
+    //moving ace of diamonds to open pile 1
+    model.move(PileType.CASCADE, 1, 12, PileType.OPEN, 1);
+    //moving ace of spades to foundation pile 0
+    model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 1);
+
+    String gameStateBeforeInvalidMove = model.getGameState();
+    try {
+      //moving ace of diamonds to foundation pile 0
+      model.move(PileType.OPEN, 1, 0, PileType.FOUNDATION, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+    Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+    //moving two of spades to foundation pile 0
+    model.move(PileType.CASCADE, 0, 11, PileType.OPEN, 0);
+
+    gameStateBeforeInvalidMove = model.getGameState();
+    try {
+      //moving two of spades to foundation pile 1
+      model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid move", e.getMessage());
+    }
+    Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+  }
+
+  @Test
   public void moveCardFromOpenToOpenWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
