@@ -802,7 +802,7 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void moveCardFromCascadeWithWrongCardIndexFails() {
+  public void moveCardFromCascadePileWithWrongCardIndexFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
     FreecellOperations<Card> model = FreecellModel.getBuilder()
@@ -824,6 +824,56 @@ public class FreecellModelTest {
 
       try {
         model.move(PileType.CASCADE, 0, 13, PileType.OPEN, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+    }
+  }
+
+  @Test
+  public void moveCardFromOpenPileWithWrongCardIndexFails() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      model.startGame(deck, shuffle);
+      model.move(PileType.CASCADE, 0, 12, PileType.OPEN, 0);
+
+      try {
+        model.move(PileType.OPEN, 0, 1, PileType.CASCADE, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+    }
+  }
+
+  @Test
+  public void moveCardFromFoundationPileWithWrongCardIndexFails() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      model.startGame(deck, shuffle);
+      model.move(PileType.CASCADE, 0, 12, PileType.FOUNDATION, 0);
+
+      try {
+        model.move(PileType.FOUNDATION, 0, 1, PileType.CASCADE, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid move", e.getMessage());
