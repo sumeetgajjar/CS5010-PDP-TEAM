@@ -972,6 +972,33 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void moveCardFromOpenPileToOpenPileFails() {
+    int cascadePileCount = 4;
+    int openPileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(openPileCount)
+            .build();
+
+
+    for (boolean shuffle : Arrays.asList(false, true)) {
+      model.startGame(model.getDeck(), shuffle);
+
+      model.move(PileType.CASCADE, 0, 0, PileType.OPEN, 0);
+      model.move(PileType.CASCADE, 1, 0, PileType.OPEN, 1);
+
+      String gameStateBeforeInvalidMove = model.getGameState();
+      try {
+        model.move(PileType.OPEN, 0, 0, PileType.OPEN, 1);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+      Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+    }
+  }
+
+  @Test
   public void moveCardFromOpenToOpenWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
