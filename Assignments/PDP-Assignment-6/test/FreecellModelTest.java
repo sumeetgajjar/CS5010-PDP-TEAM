@@ -565,98 +565,6 @@ public class FreecellModelTest {
     }
   }
 
-  @Test // todo review
-  public void isGameOverFalseForNonEmptyCascadePiles() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadingPiles)
-                .opens(openPiles)
-                .build();
-        for (boolean toShuffle : Arrays.asList(true, false)) {
-          model.startGame(model.getDeck(), toShuffle);
-          Assert.assertFalse(model.isGameOver());
-
-          List<List<Card>> cardsInCascadingPiles = getCardsInCascadingPiles(cascadingPiles,
-                  getValidDeck());
-
-          // move from each cascade pile to an open pile and check isGameOver
-          for (int i = 0; i < cascadingPiles; i++) {
-            int openPileNumber = randomGenerator.nextInt(openPiles);
-            model.move(PileType.CASCADE,
-                    i,
-                    cardsInCascadingPiles.get(i).size() - 1
-                    , PileType.OPEN
-                    , openPileNumber);
-            Assert.assertFalse(model.isGameOver());
-            model.move(PileType.OPEN,
-                    openPileNumber,
-                    0
-                    , PileType.CASCADE
-                    , i);
-            Assert.assertFalse(model.isGameOver());
-          }
-
-          // check all valid moves within cascade piles and ensure that they do not affect
-          // isGameOver
-
-          for (int i = 0; i < cascadingPiles; i++) {
-            for (int j = 0; j < cascadingPiles; j++) {
-              if (i == j) {
-                continue;
-              }
-              if (isValidCascadePileMove(cardsInCascadingPiles, i, j)) {
-                model.move(PileType.CASCADE,
-                        i,
-                        cardsInCascadingPiles.get(i).size() - 1
-                        , PileType.CASCADE
-                        , j);
-
-                Assert.assertFalse(model.isGameOver());
-
-                model.move(PileType.CASCADE,
-                        j,
-                        cardsInCascadingPiles.get(j).size() - 1
-                        , PileType.CASCADE
-                        , i);
-
-                Assert.assertFalse(model.isGameOver());
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  //todo check game state string where move is tested
-  private static class GameState {
-
-    private final List<List<Card>> foundationPile;
-    private final List<List<Card>> openPile;
-    private final List<List<Card>> cascadePile;
-
-    private GameState(List<List<Card>> foundationPile,
-                      List<List<Card>> openPile,
-                      List<List<Card>> cascadePile) {
-      this.foundationPile = foundationPile;
-      this.openPile = openPile;
-      this.cascadePile = cascadePile;
-    }
-
-    public List<List<Card>> getFoundationPile() {
-      return foundationPile;
-    }
-
-    public List<List<Card>> getOpenPile() {
-      return openPile;
-    }
-
-    public List<List<Card>> getCascadePile() {
-      return cascadePile;
-    }
-  }
-
   @Test
   public void getGameStateReturnsEmptyStringBeforeStarting() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -1072,6 +980,7 @@ public class FreecellModelTest {
                   lastCardIndexOfAce,
                   PileType.CASCADE,
                   (lastPileOfAce - 1) % cascadingPiles);
+          Assert.fail("Should have failed");
         } catch (IllegalArgumentException e) {
           Assert.assertEquals("Invalid move", e.getMessage());
         }
@@ -1098,6 +1007,7 @@ public class FreecellModelTest {
                     0,
                     PileType.CASCADE,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1109,6 +1019,7 @@ public class FreecellModelTest {
                     0,
                     PileType.CASCADE,
                     cascadingPiles - 2);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1120,6 +1031,7 @@ public class FreecellModelTest {
                     0,
                     PileType.OPEN,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1131,6 +1043,7 @@ public class FreecellModelTest {
                     0,
                     PileType.FOUNDATION,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1158,6 +1071,7 @@ public class FreecellModelTest {
                     0,
                     PileType.OPEN,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1169,6 +1083,7 @@ public class FreecellModelTest {
                     0,
                     PileType.CASCADE,
                     cascadingPiles);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1180,6 +1095,7 @@ public class FreecellModelTest {
                     0,
                     PileType.FOUNDATION,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1207,6 +1123,7 @@ public class FreecellModelTest {
                     0,
                     PileType.FOUNDATION,
                     1);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1218,6 +1135,7 @@ public class FreecellModelTest {
                     0,
                     PileType.CASCADE,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1229,6 +1147,7 @@ public class FreecellModelTest {
                     0,
                     PileType.OPEN,
                     0);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
@@ -1266,6 +1185,7 @@ public class FreecellModelTest {
           try {
             model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce - openPiles,
                     PileType.OPEN, currentOpenPile);
+            Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }
