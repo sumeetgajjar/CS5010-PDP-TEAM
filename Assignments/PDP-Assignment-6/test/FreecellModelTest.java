@@ -4,6 +4,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -647,6 +648,56 @@ public class FreecellModelTest {
     }
   }
 
+  @Test
+  public void simulateEntireGame() {
+    int cascadePileCount = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadePileCount)
+            .opens(cascadePileCount)
+            .build();
+
+
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    for (CardValue cardValue : cardValues) {
+      deck.add(new Card(Suit.SPADES, cardValue));
+      deck.add(new Card(Suit.DIAMONDS, cardValue));
+      deck.add(new Card(Suit.CLUBS, cardValue));
+      deck.add(new Card(Suit.HEARTS, cardValue));
+    }
+
+    Assert.assertFalse(model.isGameOver());
+
+    model.startGame(deck, false);
+    Assert.assertFalse(model.isGameOver());
+
+    for (int cardIndex = 12; cardIndex >= 0; cardIndex--) {
+      for (int cascadePileIndex = 0, openPileIndex = 0; cascadePileIndex < cascadePileCount; cascadePileIndex++, openPileIndex++) {
+        model.move(PileType.CASCADE, cascadePileIndex, cardIndex, PileType.OPEN, openPileIndex);
+        Assert.assertFalse(model.isGameOver());
+      }
+
+      for (int cascadePileIndex = 0, openPileIndex = 0; cascadePileIndex < cascadePileCount; cascadePileIndex++, openPileIndex++) {
+        model.move(PileType.OPEN, openPileIndex, 0, PileType.CASCADE, (cascadePileIndex + 1) % cascadePileCount);
+        Assert.assertFalse(model.isGameOver());
+      }
+
+      for (int cascadePileIndex = 0, foundationPileIndex = 0; cascadePileIndex < cascadePileCount; cascadePileIndex++, foundationPileIndex++) {
+        model.move(PileType.CASCADE, cascadePileIndex, cardIndex, PileType.FOUNDATION, (foundationPileIndex + 1) % 4);
+
+        if (cardIndex == 0 && cascadePileIndex == 3) {
+          Assert.assertTrue(model.isGameOver());
+        } else {
+          Assert.assertFalse(model.isGameOver());
+        }
+      }
+    }
+    Assert.assertTrue(model.isGameOver());
+  }
+
   private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
     List<Card> deck = model.getDeck();
     //sorting the deck so that all Aces shifts to the end of the deck
@@ -685,6 +736,8 @@ public class FreecellModelTest {
     return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
             && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
   }
+
+  //todo check game state string where move is tested
 
   private static class GameState {
     private final List<List<Card>> foundationPile;
