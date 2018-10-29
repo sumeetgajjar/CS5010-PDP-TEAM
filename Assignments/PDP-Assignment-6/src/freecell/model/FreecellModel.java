@@ -64,6 +64,8 @@ public class FreecellModel implements FreecellOperations<Card> {
    * </ul>
    * </p>
    *
+   * <p> The deck passed as input will not be mutated by <code>startGame</code></p>
+   *
    * @param deck    the deck to be dealt
    * @param shuffle if true, shuffle the deck else deal the deck as-is
    * @throws IllegalArgumentException if the deck is invalid

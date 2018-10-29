@@ -17,6 +17,7 @@ import freecell.bean.Suit;
 import freecell.model.FreecellModel;
 import freecell.model.FreecellOperations;
 import freecell.model.PileType;
+import util.Utils;
 
 /**
  * Created by gajjar.s, on 1:18 PM, 10/28/18
@@ -294,18 +295,6 @@ public class FreecellModelTest {
     }
   }
 
-  private List<List<Card>> getCardsInCascadingPiles(int cascadePile, List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePile);
-    for (int i = 0; i < cascadePile; i++) {
-      List<Card> cardsInCascadePile = new LinkedList<>();
-      for (int j = 0; j < validDeck.size(); j += cascadePile) {
-        cardsInCascadePile.add(validDeck.get(j));
-      }
-      expectedCascadingPiles.add(i, cardsInCascadePile);
-    }
-    return expectedCascadingPiles;
-  }
-
   @Test
   public void moveWithInvalidArguments() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -386,7 +375,67 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void isGameOver() {
+  public void isGameOverFalseForNonEmptyCascadePiles() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+        for (boolean toShuffle : Arrays.asList(true, false)) {
+          model.startGame(model.getDeck(), toShuffle);
+          Assert.assertFalse(model.isGameOver());
+
+          List<List<Card>> cardsInCascadingPiles = getCardsInCascadingPiles(cascadingPiles,
+                  getValidDeck());
+
+          // move from each cascade pile to an open pile and check isGameOver
+          for (int i = 0; i < cascadingPiles; i++) {
+            int openPileNumber = randomGenerator.nextInt(openPiles);
+            model.move(PileType.CASCADE,
+                    i,
+                    cardsInCascadingPiles.get(i).size() - 1
+                    , PileType.OPEN
+                    , openPileNumber);
+            Assert.assertFalse(model.isGameOver());
+            model.move(PileType.OPEN,
+                    openPileNumber,
+                    0
+                    , PileType.CASCADE
+                    , i);
+            Assert.assertFalse(model.isGameOver());
+          }
+
+          // check all valid moves within cascade piles and ensure that they do not affect
+          // isGameOver
+
+          for (int i = 0; i < cascadingPiles; i++) {
+            for (int j = 0; j < cascadingPiles; j++) {
+              if (i == j) {
+                continue;
+              }
+              if (isValidCascadePileMove(cardsInCascadingPiles, i, j)) {
+                model.move(PileType.CASCADE,
+                        i,
+                        cardsInCascadingPiles.get(i).size() - 1
+                        , PileType.CASCADE
+                        , j);
+
+                Assert.assertFalse(model.isGameOver());
+
+                model.move(PileType.CASCADE,
+                        j,
+                        cardsInCascadingPiles.get(j).size() - 1
+                        , PileType.CASCADE
+                        , i);
+
+                Assert.assertFalse(model.isGameOver());
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   @Test
@@ -405,5 +454,27 @@ public class FreecellModelTest {
       }
     }
     return deck;
+  }
+
+  private boolean isValidCascadePileMove(List<List<Card>> cardsInCascadingPiles,
+                                         int fromCascadePile,
+                                         int toCascadePile) {
+    Card lastInSource = Utils.getLast(cardsInCascadingPiles.get(fromCascadePile));
+    Card lastInDestination = Utils.getLast(cardsInCascadingPiles.get(toCascadePile));
+
+    return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
+            && lastInDestination.getRank().compareTo(lastInSource.getRank()) == 1;
+  }
+
+  private List<List<Card>> getCardsInCascadingPiles(int numberOfCascadePiles, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(numberOfCascadePiles);
+    for (int i = 0; i < numberOfCascadePiles; i++) {
+      List<Card> cardsInCascadePile = new LinkedList<>();
+      for (int j = 0; j < validDeck.size(); j += numberOfCascadePiles) {
+        cardsInCascadePile.add(validDeck.get(j));
+      }
+      expectedCascadingPiles.add(i, cardsInCascadePile);
+    }
+    return expectedCascadingPiles;
   }
 }
