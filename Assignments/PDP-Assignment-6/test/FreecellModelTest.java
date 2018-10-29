@@ -659,6 +659,7 @@ public class FreecellModelTest {
     List<List<Card>> expectedOpenPiles = getListOfEmptyLists(4);
     List<List<Card>> expectedFoundationPiles = getListOfEmptyLists(4);
 
+    //moving cards from cascade to foundation
     for (int sourcePileIndex = 0; sourcePileIndex < cascadePileCount; sourcePileIndex++) {
       Card cardFromCascadingPile = expectedCascadingPiles.get(sourcePileIndex).remove(12);
       expectedFoundationPiles.get(sourcePileIndex).add(cardFromCascadingPile);
@@ -669,6 +670,7 @@ public class FreecellModelTest {
     }
 
 
+    //moving cards from foundation to cascade
     for (int sourcePileIndex = 0; sourcePileIndex < cascadePileCount; sourcePileIndex++) {
       int destinationPileIndex = (sourcePileIndex + 1) % 4;
 
