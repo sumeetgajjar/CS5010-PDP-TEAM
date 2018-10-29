@@ -242,18 +242,8 @@ public class FreecellModelTest {
         List<Card> validDeck = getValidDeck();
 
         freeCellOperations.startGame(validDeck, false);
-        String gameState = freeCellOperations.getGameState();
-        String[] stateLines = gameState.split(System.lineSeparator());
-
         List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, validDeck);
-
-        for (int i = (4 + openPiles), j = 0; i < stateLines.length; i++, j++) {
-          String expectedCascadingPileString = expectedCascadingPiles.get(j).stream()
-                  .map(Card::toString)
-                  .collect(Collectors.joining(","));
-          Assert.assertEquals(String.format(
-                  "C%d:%s", j + 1, expectedCascadingPileString), stateLines[i]);
-        }
+        Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4), getListOfEmptyLists(openPiles), expectedCascadingPiles), freeCellOperations.getGameState());
       }
     }
   }
