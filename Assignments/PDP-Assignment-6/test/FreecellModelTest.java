@@ -828,6 +828,20 @@ public class FreecellModelTest {
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid move", e.getMessage());
       }
+
+      try {
+        model.move(PileType.CASCADE, 0, 11, PileType.FOUNDATION, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+
+      try {
+        model.move(PileType.CASCADE, 0, 13, PileType.FOUNDATION, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
     }
   }
 
@@ -853,6 +867,13 @@ public class FreecellModelTest {
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid move", e.getMessage());
       }
+
+      try {
+        model.move(PileType.OPEN, 0, 1, PileType.FOUNDATION, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
     }
   }
 
@@ -874,6 +895,13 @@ public class FreecellModelTest {
 
       try {
         model.move(PileType.FOUNDATION, 0, 1, PileType.CASCADE, 0);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+
+      try {
+        model.move(PileType.FOUNDATION, 0, 1, PileType.OPEN, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid move", e.getMessage());
