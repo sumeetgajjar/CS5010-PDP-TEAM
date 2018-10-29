@@ -458,23 +458,39 @@ public class FreecellModelTest {
 
 
         List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
+        List<List<Card>> expectedCascadingCardPiles = getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedOpenPiles = getListOfEmptyLists(4);
+        List<List<Card>> expectedFoundationPiles = getListOfEmptyLists(4);
 
         model.startGame(deck, false);
 
         //moving last ace to foundation pile
         int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
         int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        Card cardFromCascadingPile = expectedCascadingCardPiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+        expectedFoundationPiles.get(0).add(cardFromCascadingPile);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
 
         //moving a card to open pile
         lastCardIndexOfAce--;
+        cardFromCascadingPile = expectedCascadingCardPiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
+        expectedOpenPiles.get(0).add(cardFromCascadingPile);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
+
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles), model.getGameState());
 
         //moving cards to same position as source
         lastCardIndexOfAce--;
+
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.CASCADE, lastPileOfAce);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles), model.getGameState());
+
         model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 0);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles), model.getGameState());
+
         model.move(PileType.OPEN, 0, 0, PileType.OPEN, 0);
+        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles), model.getGameState());
       }
     }
   }
@@ -853,6 +869,11 @@ public class FreecellModelTest {
         Assert.assertFalse(model.isGameOver());
       }
     }
+  }
+
+  @Test
+  public void moveCardFromOpen() {
+
   }
 
   @Test
