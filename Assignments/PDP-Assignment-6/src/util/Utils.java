@@ -43,4 +43,15 @@ public class Utils {
     }
     return input;
   }
+
+  /**
+   * Gets the last element from the list
+   *
+   * @param list the list from which to get the last element from
+   * @param <T>  the type of data in the list
+   * @return the last element
+   */
+  public static <T> T getLast(List<T> list) throws IndexOutOfBoundsException {
+    return list.get(list.size() - 1);
+  }
 }
