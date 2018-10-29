@@ -738,10 +738,6 @@ public class FreecellModelTest {
     Assert.assertEquals(expectedGameState, model.getGameState());
   }
 
-  private String convertPilesIntoString(List<List<Card>> expectedFoundationPiles, List<List<Card>> expectedOpenPiles, List<List<Card>> expectedCascadingPiles) {
-    return null;
-  }
-
   private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
     List<Card> deck = model.getDeck();
     //sorting the deck so that all Aces shifts to the end of the deck
