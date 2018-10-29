@@ -10,19 +10,19 @@ import util.Utils;
 public class Card implements Comparable<Card> {
 
   private final Suit suit;
-  private final Rank rank;
+  private final CardValue cardValue;
 
-  public Card(Suit suit, Rank rank) throws IllegalArgumentException {
+  public Card(Suit suit, CardValue cardValue) throws IllegalArgumentException {
     this.suit = Utils.requireNonNull(suit);
-    this.rank = Utils.requireNonNull(rank);
+    this.cardValue = Utils.requireNonNull(cardValue);
   }
 
   public Suit getSuit() {
     return suit;
   }
 
-  public Rank getRank() {
-    return rank;
+  public CardValue getCardValue() {
+    return cardValue;
   }
 
   public static Card parse(String cardString) {
@@ -41,11 +41,11 @@ public class Card implements Comparable<Card> {
     if (!(o instanceof Card)) return false;
     Card card = (Card) o;
     return getSuit() == card.getSuit() &&
-            getRank() == card.getRank();
+            getCardValue() == card.getCardValue();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getSuit(), getRank());
+    return Objects.hash(getSuit(), getCardValue());
   }
 }

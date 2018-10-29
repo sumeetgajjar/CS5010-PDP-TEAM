@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import freecell.bean.Card;
-import freecell.bean.Rank;
+import freecell.bean.CardValue;
 import freecell.bean.Suit;
 
 /**
@@ -21,8 +21,8 @@ public class Utils {
   public static List<Card> getShuffledDeck() {
     List<Card> deck = new ArrayList<>(52);
     for (Suit suit : Suit.values()) {
-      for (Rank rank : Rank.values()) {
-        deck.add(new Card(suit, rank));
+      for (CardValue cardValue : CardValue.values()) {
+        deck.add(new Card(suit, cardValue));
       }
     }
     Collections.shuffle(deck);

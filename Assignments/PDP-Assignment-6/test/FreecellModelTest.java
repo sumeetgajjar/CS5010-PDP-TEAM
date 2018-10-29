@@ -4,6 +4,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import freecell.bean.Card;
-import freecell.bean.Rank;
+import freecell.bean.CardValue;
 import freecell.bean.Suit;
 import freecell.model.FreecellModel;
 import freecell.model.FreecellOperations;
@@ -145,7 +146,7 @@ public class FreecellModelTest {
         List<Card> deckWith53Cards = getValidDeck();
         deckWith53Cards.add(new Card(
                 Suit.values()[randomGenerator.nextInt(4)],
-                Rank.values()[randomGenerator.nextInt(13)]
+                CardValue.values()[randomGenerator.nextInt(13)]
         ));
 
         try {
@@ -303,8 +304,9 @@ public class FreecellModelTest {
                 .opens(openPiles)
                 .build();
 
+        List<Card> deck = model.getDeck();
         for (boolean shuffle : Arrays.asList(true, false)) {
-          model.startGame(getValidDeck(), shuffle);
+          model.startGame(deck, shuffle);
 
           try {
             model.move(null, 1, 1, PileType.CASCADE, 1);
@@ -366,6 +368,38 @@ public class FreecellModelTest {
         } catch (IllegalStateException e) {
           Assert.assertEquals("cannot move before starting game", e.getMessage());
         }
+      }
+    }
+  }
+
+  @Test
+  public void moveToSamePositionAsSourcePosition() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+
+        List<Card> deck = model.getDeck();
+        deck.sort(Comparator.comparingInt(c -> c.getCardValue().getPriority()));
+        model.startGame(deck, false);
+
+        //moving last ace to foundation pile
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
+
+        //moving a card to open pile
+        lastCardIndexOfAce--;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
+
+        //moving cards to same position as source
+        lastCardIndexOfAce--;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.CASCADE, lastPileOfAce);
+        model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 0);
+        model.move(PileType.OPEN, 0, 0, PileType.OPEN, 0);
       }
     }
   }
@@ -471,8 +505,8 @@ public class FreecellModelTest {
   private List<Card> getValidDeck() {
     List<Card> deck = new ArrayList<>(52);
     for (Suit suit : Suit.values()) {
-      for (Rank rank : Rank.values()) {
-        deck.add(new Card(suit, rank));
+      for (CardValue cardValue : CardValue.values()) {
+        deck.add(new Card(suit, cardValue));
       }
     }
     return deck;
