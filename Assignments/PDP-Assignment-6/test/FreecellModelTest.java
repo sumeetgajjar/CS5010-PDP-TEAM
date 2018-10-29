@@ -382,9 +382,7 @@ public class FreecellModelTest {
                 .build();
 
 
-        List<Card> deck = model.getDeck();
-        //sorting the deck so that all Aces shifts to the end of the deck
-        deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+        List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
 
         model.startGame(deck, false);
 
@@ -492,7 +490,7 @@ public class FreecellModelTest {
     }
   }
 
-  @Test
+  @Test // todo review
   public void isGameOverFalseForNonEmptyCascadePiles() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -562,6 +560,98 @@ public class FreecellModelTest {
 
   @Test
   public void getBuilder() {
+  }
+
+  @Test
+  public void moveCardFromFoundationToFoundationWorks() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+
+        List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
+
+        model.startGame(deck, false);
+
+        //moving last ace to foundation pile
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
+        model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 1);
+        model.move(PileType.FOUNDATION, 1, 0, PileType.FOUNDATION, 2);
+        model.move(PileType.FOUNDATION, 2, 0, PileType.FOUNDATION, 3);
+        model.move(PileType.FOUNDATION, 3, 0, PileType.FOUNDATION, 0);
+      }
+    }
+  }
+
+  @Test
+  public void moveCardFromOpenToOpenWorks() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+
+        List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
+
+        model.startGame(deck, false);
+
+        //moving last ace to open pile
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
+        for (int sourceOpenPile = 0; sourceOpenPile < openPiles; sourceOpenPile++) {
+          model.move(PileType.OPEN, sourceOpenPile,
+                  0, PileType.OPEN,
+                  (sourceOpenPile + 1) % openPiles);
+        }
+      }
+    }
+  }
+
+  @Test
+  public void moveCardAmongstFoundationAndOpen() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+
+        List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
+
+        model.startGame(deck, false);
+
+        //moving last ace to open pile
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.FOUNDATION, 0);
+        for (int foundationPilePosition = 0; foundationPilePosition < 4; foundationPilePosition++) {
+          for (int openPilePosition = 0; openPilePosition < openPiles; openPilePosition++) {
+            model.move(PileType.FOUNDATION, foundationPilePosition, 0, PileType.OPEN, openPilePosition);
+            model.move(PileType.OPEN, openPilePosition, 0, PileType.FOUNDATION, foundationPilePosition);
+          }
+          model.move(PileType.FOUNDATION,
+                  foundationPilePosition,
+                  0, PileType.FOUNDATION,
+                  (foundationPilePosition + 1) % 4);
+        }
+      }
+    }
+  }
+
+  private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
+    List<Card> deck = model.getDeck();
+    //sorting the deck so that all Aces shifts to the end of the deck
+    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+    return deck;
   }
 
   private List<Card> getValidDeck() {
