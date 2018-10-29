@@ -940,6 +940,267 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void cascadeToCascadeInvalidMoveFails() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
+        model.startGame(deckWithAcesInTheEnd, false);
+
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        String gameStateBeforeInvalidMove = model.getGameState();
+        try {
+          model.move(PileType.CASCADE,
+                  lastPileOfAce,
+                  lastCardIndexOfAce,
+                  PileType.CASCADE,
+                  (lastPileOfAce - 1) % cascadingPiles);
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("Invalid move", e.getMessage());
+        }
+        Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+      }
+    }
+  }
+
+  @Test
+  public void cascadeEmptyPileToAny() {
+    for (int cascadingPiles : Arrays.asList(53, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        for (Boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(model.getDeck(), shuffle);
+          String gameStateBeforeInvalidMove = model.getGameState();
+          try {
+            model.move(PileType.CASCADE,
+                    cascadingPiles - 1,
+                    0,
+                    PileType.CASCADE,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.CASCADE,
+                    cascadingPiles - 1,
+                    0,
+                    PileType.CASCADE,
+                    cascadingPiles - 2);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.CASCADE,
+                    cascadingPiles - 1,
+                    0,
+                    PileType.OPEN,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.CASCADE,
+                    cascadingPiles - 1,
+                    0,
+                    PileType.FOUNDATION,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void openEmptyToAny() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        for (Boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(model.getDeck(), shuffle);
+          String gameStateBeforeInvalidMove = model.getGameState();
+          try {
+            model.move(PileType.OPEN,
+                    openPiles - 1,
+                    0,
+                    PileType.OPEN,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.OPEN,
+                    openPiles - 1,
+                    0,
+                    PileType.CASCADE,
+                    cascadingPiles);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.OPEN,
+                    openPiles - 1,
+                    0,
+                    PileType.FOUNDATION,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void foundationEmptyToAny() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        for (Boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(model.getDeck(), shuffle);
+          String gameStateBeforeInvalidMove = model.getGameState();
+          try {
+            model.move(PileType.FOUNDATION,
+                    0,
+                    0,
+                    PileType.FOUNDATION,
+                    1);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.FOUNDATION,
+                    0,
+                    0,
+                    PileType.CASCADE,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+          try {
+            model.move(PileType.FOUNDATION,
+                    0,
+                    0,
+                    PileType.OPEN,
+                    0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+        }
+      }
+    }
+  }
+
+  private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
+    List<Card> deck = model.getDeck();
+    //sorting the deck so that all Aces shifts to the end of the deck
+    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+    return deck;
+  }
+
+  private List<Card> getValidDeck() {
+    List<Card> deck = new ArrayList<>(52);
+    for (Suit suit : Suit.values()) {
+      for (CardValue cardValue : CardValue.values()) {
+        deck.add(new Card(suit, cardValue));
+      }
+    }
+    return deck;
+  }
+
+  private List<List<Card>> getCardsInCascadingPiles(int cascadePileCount, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePileCount);
+    for (int i = 0; i < cascadePileCount; i++) {
+      List<Card> cardsInCascadePile = new LinkedList<>();
+      for (int j = 0; j < validDeck.size(); j += cascadePileCount) {
+        cardsInCascadePile.add(validDeck.get(j));
+      }
+      expectedCascadingPiles.add(i, cardsInCascadePile);
+    }
+    return expectedCascadingPiles;
+  }
+
+  private boolean isValidCascadePileMove(List<List<Card>> cardsInCascadingPiles,
+                                         int fromCascadePile,
+                                         int toCascadePile) {
+    Card lastInSource = Utils.getLast(cardsInCascadingPiles.get(fromCascadePile));
+    Card lastInDestination = Utils.getLast(cardsInCascadingPiles.get(toCascadePile));
+
+    return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
+            && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
+  }
+
+  private String convertPilesIntoString(List<List<Card>> foundationPiles,
+                                        List<List<Card>> openPiles,
+                                        List<List<Card>> cascadePiles) {
+    StringBuilder builder = new StringBuilder();
+    List<String> foundationLists = foundationPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, foundationLists, 'F');
+
+    List<String> openLists = openPiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, openLists, 'O');
+
+    List<String> cascadeLists = cascadePiles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+    addPileStringsToBuilder(builder, cascadeLists, 'C');
+    return builder.toString().trim();
+  }
+
+  private void addPileStringsToBuilder(StringBuilder builder, List<String> strings, char symbol) {
+    for (int i = 0; i < strings.size(); i++) {
+      builder.append(symbol);
+      builder.append(i + 1);
+      builder.append(":");
+      builder.append(strings.get(i));
+      builder.append(System.lineSeparator());
+    }
+  }
+
+  @Test
   public void simulateEntireGame() {
     int cascadePileCount = 4;
     int openPileCount = 4;
