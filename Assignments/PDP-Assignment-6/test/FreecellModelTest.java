@@ -661,6 +661,44 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void moveCardFromCascadeToCascadeWorks() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+
+        List<Card> deck = getValidDeck();
+        Card card1 = new Card(Suit.HEARTS, CardValue.ACE);
+        Card card2 = new Card(Suit.SPADES, CardValue.TWO);
+        deck = deck.stream()
+                .filter(card -> !(card.equals(card1) || card.equals(card2)))
+                .collect(Collectors.toList());
+
+        deck.add(card2);
+        deck.add(card1);
+
+        model.startGame(deck, false);
+
+        int sourceCascadingPileIndex = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
+
+        int destinationCascadingPileIndex = (sourceCascadingPileIndex--) % cascadingPiles;
+
+        Card cardFromSourceCascadingPile = expectedCascadingPiles.get(sourceCascadingPileIndex).get(lastCardIndexOfAce);
+        expectedCascadingPiles.get(destinationCascadingPileIndex).add(cardFromSourceCascadingPile);
+        model.move(PileType.CASCADE, sourceCascadingPileIndex, lastCardIndexOfAce, PileType.CASCADE, destinationCascadingPileIndex);
+
+        Assert.assertEquals(convertPilesIntoString(Collections.emptyList(), Collections.emptyList(), expectedCascadingPiles), model.getGameState());
+        Assert.assertFalse(model.isGameOver());
+      }
+    }
+  }
+
+  @Test
   public void moveCardFromOpenToOpenWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
