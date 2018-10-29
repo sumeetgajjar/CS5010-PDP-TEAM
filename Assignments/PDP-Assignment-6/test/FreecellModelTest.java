@@ -869,7 +869,7 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void cascadeEmptyPileToAny() {
+  public void cascadeEmptyPileToAnyFails() {
     for (int cascadingPiles : Arrays.asList(53, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
@@ -929,7 +929,7 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void openEmptyToAny() {
+  public void openEmptyToAnyFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
@@ -978,7 +978,7 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void foundationEmptyToAny() {
+  public void foundationEmptyToAnyFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
@@ -1017,6 +1017,43 @@ public class FreecellModelTest {
                     0,
                     PileType.OPEN,
                     0);
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void cascadeToFullOpenFails() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
+        model.startGame(deckWithAcesInTheEnd, false);
+
+        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+
+        String gameStateBeforeInvalidMove = model.getGameState();
+
+        for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
+          // filling open
+          model.move(PileType.CASCADE,
+                  lastPileOfAce,
+                  lastCardIndexOfAce - currentOpenPile, PileType.OPEN, currentOpenPile);
+        }
+
+        for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
+          try {
+            model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce - openPiles,
+                    PileType.OPEN, currentOpenPile);
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid move", e.getMessage());
           }

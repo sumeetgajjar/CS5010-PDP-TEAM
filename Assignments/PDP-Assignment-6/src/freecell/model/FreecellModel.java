@@ -101,6 +101,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    *  <p> The following are invalid moves:
    *    <ul>
    *      <li> Any move from an empty pile </li>
+   *      <li> A move to a full open pile is invalid </li>
    *    </ul>
    *
    * @param source         the type of the source pile see @link{PileType}
