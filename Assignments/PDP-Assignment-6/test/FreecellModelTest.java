@@ -736,4 +736,6 @@ public class FreecellModelTest {
     return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
             && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
   }
+
+  //todo check game state string where move is tested
 }
