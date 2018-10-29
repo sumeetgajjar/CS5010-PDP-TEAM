@@ -689,9 +689,10 @@ public class FreecellModelTest {
   @Test
   public void simulateEntireGame() {
     int cascadePileCount = 4;
+    int openPileCount = 4;
     FreecellOperations<Card> model = FreecellModel.getBuilder()
             .cascades(cascadePileCount)
-            .opens(cascadePileCount)
+            .opens(openPileCount)
             .build();
 
 
@@ -771,6 +772,21 @@ public class FreecellModelTest {
     }
 
     Assert.assertTrue(model.isGameOver());
+
+    long countOfFoundationPilesWith13Cards = expectedFoundationPiles.stream()
+            .filter(cards -> cards.size() == 13)
+            .count();
+    Assert.assertEquals(4, countOfFoundationPilesWith13Cards);
+
+    long countOfEmptyCascadingPiles = expectedCascadingPiles.stream()
+            .filter(List::isEmpty)
+            .count();
+    Assert.assertEquals(cascadePileCount, countOfEmptyCascadingPiles);
+
+    long countOfEmptyOpenPiles = expectedOpenPiles.stream()
+            .filter(List::isEmpty)
+            .count();
+    Assert.assertEquals(openPileCount, countOfEmptyOpenPiles);
 
     String expectedGameState = convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles);
     Assert.assertEquals(expectedGameState, model.getGameState());
