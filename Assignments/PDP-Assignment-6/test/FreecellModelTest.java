@@ -592,6 +592,6 @@ public class FreecellModelTest {
     Card lastInDestination = Utils.getLast(cardsInCascadingPiles.get(toCascadePile));
 
     return lastInDestination.getSuit().getColor() != lastInSource.getSuit().getColor()
-            && lastInDestination.getRank().compareTo(lastInSource.getRank()) == 1;
+            && lastInDestination.getCardValue().compareTo(lastInSource.getCardValue()) == 1;
   }
 }
