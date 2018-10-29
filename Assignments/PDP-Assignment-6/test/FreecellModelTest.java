@@ -16,6 +16,7 @@ import freecell.bean.Rank;
 import freecell.bean.Suit;
 import freecell.model.FreecellModel;
 import freecell.model.FreecellOperations;
+import freecell.model.PileType;
 
 /**
  * Created by gajjar.s, on 1:18 PM, 10/28/18
@@ -306,7 +307,82 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void move() {
+  public void moveWithInvalidArguments() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        for (boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(getValidDeck(), shuffle);
+
+          try {
+            model.move(null, 1, 1, PileType.CASCADE, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 1, 1, null, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(null, 1, 1, null, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 0, 1, PileType.FOUNDATION, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, -1, 1, PileType.FOUNDATION, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 1, 0, PileType.FOUNDATION, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 1, -1, PileType.FOUNDATION, 1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 1, 1, PileType.FOUNDATION, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.CASCADE, 1, 1, PileType.FOUNDATION, -1);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid input", e.getMessage());
+          }
+        }
+      }
+    }
   }
 
   @Test
