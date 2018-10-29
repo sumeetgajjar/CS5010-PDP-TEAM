@@ -294,18 +294,6 @@ public class FreecellModelTest {
     }
   }
 
-  private List<List<Card>> getCardsInCascadingPiles(int cascadePile, List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePile);
-    for (int i = 0; i < cascadePile; i++) {
-      List<Card> cardsInCascadePile = new LinkedList<>();
-      for (int j = 0; j < validDeck.size(); j += cascadePile) {
-        cardsInCascadePile.add(validDeck.get(j));
-      }
-      expectedCascadingPiles.add(i, cardsInCascadePile);
-    }
-    return expectedCascadingPiles;
-  }
-
   @Test
   public void moveWithInvalidArguments() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
@@ -340,21 +328,7 @@ public class FreecellModelTest {
           }
 
           try {
-            model.move(PileType.CASCADE, 0, 1, PileType.FOUNDATION, 1);
-            Assert.fail("should have failed");
-          } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
-          }
-
-          try {
             model.move(PileType.CASCADE, -1, 1, PileType.FOUNDATION, 1);
-            Assert.fail("should have failed");
-          } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
-          }
-
-          try {
-            model.move(PileType.CASCADE, 1, 0, PileType.FOUNDATION, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("invalid input", e.getMessage());
@@ -368,17 +342,114 @@ public class FreecellModelTest {
           }
 
           try {
-            model.move(PileType.CASCADE, 1, 1, PileType.FOUNDATION, 0);
-            Assert.fail("should have failed");
-          } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
-          }
-
-          try {
             model.move(PileType.CASCADE, 1, 1, PileType.FOUNDATION, -1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("invalid input", e.getMessage());
+          }
+        }
+      }
+    }
+  }
+
+  @Test
+  public void moveBeforeStartingGame() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        try {
+          model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 0);
+        } catch (IllegalStateException e) {
+          Assert.assertEquals("cannot move before starting game", e.getMessage());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void moveToInvalidPositionOrPile() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        List<Card> deck = model.getDeck();
+        for (boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(deck, shuffle);
+
+          //testing invalid source pileNumber
+          try {
+            model.move(PileType.CASCADE, cascadingPiles, 0, PileType.FOUNDATION, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.FOUNDATION, 4, 0, PileType.OPEN, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.OPEN, openPiles, 0, PileType.CASCADE, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+
+          //testing invalid source card Index
+          List<Card> expectedCardsInFirstCascadingPile = getCardsInCascadingPiles(cascadingPiles, deck).get(0);
+          try {
+            model.move(PileType.CASCADE, 0, expectedCardsInFirstCascadingPile.size(), PileType.FOUNDATION, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.OPEN, 0, 0, PileType.CASCADE, 0);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+
+          //testing invalid destination pileNumber
+          try {
+            model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 4);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, openPiles);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
+          }
+
+          try {
+            model.move(PileType.OPEN, 0, 0, PileType.CASCADE, cascadingPiles);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("invalid move", e.getMessage());
           }
         }
       }
@@ -405,5 +476,17 @@ public class FreecellModelTest {
       }
     }
     return deck;
+  }
+
+  private List<List<Card>> getCardsInCascadingPiles(int cascadePile, List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePile);
+    for (int i = 0; i < cascadePile; i++) {
+      List<Card> cardsInCascadePile = new LinkedList<>();
+      for (int j = 0; j < validDeck.size(); j += cascadePile) {
+        cardsInCascadePile.add(validDeck.get(j));
+      }
+      expectedCascadingPiles.add(i, cardsInCascadePile);
+    }
+    return expectedCascadingPiles;
   }
 }

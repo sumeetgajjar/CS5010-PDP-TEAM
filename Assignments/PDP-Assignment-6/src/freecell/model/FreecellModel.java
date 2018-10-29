@@ -74,7 +74,8 @@ public class FreecellModel implements FreecellOperations<Card> {
   }
 
   /**
-   * Move a card from the given source pile to the given destination pile, if the move is valid.
+   * Move a card from the given source pile to the given destination pile, if the move is valid. If
+   * the destination of the card is same as original position then its a valid move.
    *
    * <p>
    * The following inputs as moves are not allowed:
@@ -84,7 +85,6 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li> pileNumber and cardIndex cannot be negative </li>
    * <li> pileNumber and cardIndex cannot overflow </li>
    * </ul>
-   * </p>
    *
    * @param source         the type of the source pile see @link{PileType}
    * @param pileNumber     the pile number of the given type, starting at 0
