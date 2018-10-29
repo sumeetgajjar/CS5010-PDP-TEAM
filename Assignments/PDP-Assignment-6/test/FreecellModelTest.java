@@ -64,23 +64,25 @@ public class FreecellModelTest {
                 .build();
 
         List<Card> deck = model.getDeck();
-        model.startGame(deck, false);
+        for (boolean shuffle : Arrays.asList(true, false)) {
+          model.startGame(deck, shuffle);
 
-        List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
-        List<List<Card>> expectedOpenPiles = getListOfEmptyLists(4);
-        List<List<Card>> expectedFoundationPiles = getListOfEmptyLists(4);
+          List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
+          List<List<Card>> expectedOpenPiles = getListOfEmptyLists(4);
+          List<List<Card>> expectedFoundationPiles = getListOfEmptyLists(4);
 
-        int lastPile = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndex = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+          int lastPile = ((52 % cascadingPiles) - 1) % cascadingPiles;
+          int lastCardIndex = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
 
-        Card lastCardFromLastPile = expectedCascadingPiles.get(lastPile).remove(lastCardIndex);
-        expectedOpenPiles.get(0).add(lastCardFromLastPile);
-        model.move(PileType.CASCADE, lastPile, lastCardIndex, PileType.OPEN, 0);
+          Card lastCardFromLastPile = expectedCascadingPiles.get(lastPile).remove(lastCardIndex);
+          expectedOpenPiles.get(0).add(lastCardFromLastPile);
+          model.move(PileType.CASCADE, lastPile, lastCardIndex, PileType.OPEN, 0);
 
-        Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
+          Assert.assertEquals(convertPilesIntoString(expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles), model.getGameState());
 
-        model.startGame(deck, false);
-        Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4), getListOfEmptyLists(openPiles), getListOfEmptyLists(cascadingPiles)), model.getGameState());
+          model.startGame(deck, shuffle);
+          Assert.assertEquals(convertPilesIntoString(getListOfEmptyLists(4), getListOfEmptyLists(openPiles), getListOfEmptyLists(cascadingPiles)), model.getGameState());
+        }
       }
     }
   }
