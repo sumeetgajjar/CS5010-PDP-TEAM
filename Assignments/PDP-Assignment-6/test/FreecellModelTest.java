@@ -1216,6 +1216,115 @@ public class FreecellModelTest {
     }
   }
 
+  @Test
+  public void cascadeToFoundationInvalidMoveFails() {
+    for (int cascadingPiles : Collections.singletonList(4)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        List<Card> deck = model.getDeck().stream()
+                .filter(c -> !c.getCardValue().equals(CardValue.TWO))
+                .collect(Collectors.toList());
+
+        Arrays.stream(Suit.values()).forEach(suit -> deck.add(new Card(suit, CardValue.TWO)));
+
+        model.startGame(deck, false);
+        String gameStateWithoutMakingAnyMove = model.getGameState();
+
+        for (int currentCascadePile = 0, currentFoundationPile = 0;
+             currentCascadePile < 4;
+             currentCascadePile++, currentFoundationPile++) {
+          try {
+            model.move(PileType.CASCADE, currentCascadePile,
+                    12,
+                    PileType.FOUNDATION,
+                    currentFoundationPile);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateWithoutMakingAnyMove, model.getGameState());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void unexpectedCardOnFoundationPileFails() {
+    int cascadingPiles = 4;
+    int openPiles = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadingPiles)
+            .opens(openPiles)
+            .build();
+
+    model.startGame(getReverseSortedDeckWithAcesInTheEnd(model), false);
+
+    for (int currentCascadePile = 0, currentFoundationPile = 0;
+         currentCascadePile < 4;
+         currentCascadePile++, currentFoundationPile++) {
+      model.move(PileType.CASCADE, currentCascadePile,
+              12,
+              PileType.FOUNDATION,
+              currentFoundationPile);
+    }
+
+    for (int currentCascadePile = 0, currentOpenPile = 0;
+         currentCascadePile < 4;
+         currentCascadePile++, currentOpenPile++) {
+      model.move(PileType.CASCADE, currentCascadePile,
+              11,
+              PileType.OPEN,
+              currentOpenPile);
+    }
+
+    String gameStateWithoutMakingInvalidMove = model.getGameState();
+    for (int i = 0; i < 4; i++) {
+      try {
+        model.move(PileType.CASCADE, i, 10, PileType.FOUNDATION, i);
+        Assert.fail("should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid move", e.getMessage());
+      }
+      Assert.assertEquals(gameStateWithoutMakingInvalidMove, model.getGameState());
+    }
+  }
+
+  @Test
+  public void foundationToFoundationIllegalMoveFails() {
+    for (int cascadingPiles : Collections.singletonList(4)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> model = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        model.startGame(getReverseSortedDeckWithAcesInTheEnd(model), false);
+        for (int currentCascadePile = 0, currentFoundationPile = 0; currentCascadePile < 4;
+             currentCascadePile++, currentFoundationPile++) {
+          model.move(PileType.CASCADE, currentCascadePile,
+                  12,
+                  PileType.FOUNDATION,
+                  currentFoundationPile);
+        }
+
+        String gameStateWithoutMakingInvalidMove = model.getGameState();
+        for (int i = 0; i < 4; i++) {
+          try {
+            model.move(PileType.FOUNDATION, i, 0, PileType.FOUNDATION, (i + 1) % 4);
+            Assert.fail("should have failed");
+          } catch (IllegalArgumentException e) {
+            Assert.assertEquals("Invalid move", e.getMessage());
+          }
+          Assert.assertEquals(gameStateWithoutMakingInvalidMove, model.getGameState());
+        }
+      }
+    }
+  }
+
   private List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
     List<Card> deck = model.getDeck();
     //sorting the deck so that all Aces shifts to the end of the deck

@@ -92,17 +92,17 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <p> There is no ordering of suits in foundation piles, when a valid move is made from any pile
    * to an empty foundation pile, that pile is now assigned to the suit entering it.
    *
-   * <p> The following are valid moves :
-   *  <ul>
-   *    <li> Open to an empty open pile </li>
-   *    todo
-   *  </ul>
+   * <p> A card can be moved from any pile to any pile if it is an invalid move.
    *
-   *  <p> The following are invalid moves:
-   *    <ul>
-   *      <li> Any move from an empty pile </li>
-   *      <li> A move to a full open pile is invalid </li>
-   *    </ul>
+   * <p> The following are invalid moves:
+   * <ul>
+   * <li> Any move from an empty pile </li>
+   * <li> A move to a full open pile is invalid </li>
+   * <li> A foundation pile cannot start with two </li>
+   * <li> A foundation pile once assigned a suit cannot take a card of other suit </li>
+   * <li> A foundation pile can only take a card of the same suit and exactly one higher in rank
+   * </li>
+   * </ul>
    *
    * @param source         the type of the source pile see @link{PileType}
    * @param pileNumber     the pile number of the given type, starting at 0
