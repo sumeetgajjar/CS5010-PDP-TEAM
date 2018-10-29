@@ -556,11 +556,35 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void getGameState() {
-  }
+  public void sequenceOfMethodInvocationForBuilderDoesNotMatter() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+        FreecellOperations<Card> modelWithCascadeFirst = FreecellModel.getBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
 
-  @Test
-  public void getBuilder() {
+        List<Card> deck = modelWithCascadeFirst.getDeck();
+        modelWithCascadeFirst.startGame(deck, false);
+
+        List<List<Card>> expectedCascadingPile1 = getCardsInCascadingPiles(cascadingPiles, deck);
+        String expectedGameState1 = convertPilesIntoString(Collections.emptyList(), Collections.emptyList(), expectedCascadingPile1);
+        Assert.assertEquals(expectedGameState1, modelWithCascadeFirst.getGameState());
+
+        FreecellOperations<Card> modelWithCascadeAfter = FreecellModel.getBuilder()
+                .opens(openPiles)
+                .cascades(cascadingPiles)
+                .build();
+
+        modelWithCascadeAfter.startGame(deck, false);
+
+        List<List<Card>> expectedCascadingPile2 = getCardsInCascadingPiles(cascadingPiles, deck);
+        String expectedGameState2 = convertPilesIntoString(Collections.emptyList(), Collections.emptyList(), expectedCascadingPile2);
+        Assert.assertEquals(expectedGameState2, modelWithCascadeAfter.getGameState());
+
+        Assert.assertEquals(expectedGameState1, expectedGameState2);
+      }
+    }
   }
 
   @Test
