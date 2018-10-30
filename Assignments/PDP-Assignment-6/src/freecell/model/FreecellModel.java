@@ -11,6 +11,7 @@ import util.Utils;
 public class FreecellModel implements FreecellOperations<Card> {
 
   private static final int FOUNDATION_PILE_COUNT = 4;
+  private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
 
   private final int numberOfCascadePile;
   private final int numberOfOpenPile;
@@ -133,7 +134,21 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   @Override
   public boolean isGameOver() {
-    return false;
+    long emptyCascadingPilesCount = this.cascadingPiles.stream()
+            .filter(List::isEmpty)
+            .count();
+
+    long emptyOpenPilesCount = this.openPiles.stream()
+            .filter(List::isEmpty)
+            .count();
+
+    long fullFoundationPilesCount = this.foundationPiles.stream()
+            .filter(pile -> pile.size() == NUMBER_OF_CARDS_INDIVIDUAL_SUIT)
+            .count();
+
+    return emptyCascadingPilesCount == 0
+            && emptyOpenPilesCount == 0
+            && fullFoundationPilesCount == FOUNDATION_PILE_COUNT;
   }
 
   /**
