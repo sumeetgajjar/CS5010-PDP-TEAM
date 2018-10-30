@@ -290,6 +290,26 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void startGameWithShuffleDoesNotChangeGivenDeck() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+
+        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+                .opens(openPiles)
+                .cascades(cascadingPiles)
+                .build();
+
+        List<Card> validDeck = getValidDeck();
+        List<Card> validDeckCopy = new ArrayList<>(validDeck);
+
+        freeCellOperations.startGame(validDeck, true);
+        Assert.assertEquals(validDeckCopy, validDeck);
+      }
+    }
+  }
+
+  @Test
   public void startGameWithShuffleFalse() {
 
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {

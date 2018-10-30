@@ -1,5 +1,7 @@
 package freecell.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +89,16 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
+    List<Card> deckCopy = new ArrayList<>(deck);
+    if (shuffle) {
+      Collections.shuffle(deck);
+    }
 
+    for (int i = 0; i < this.numberOfCascadePile; i++) {
+      for (int j = 0; j < deckCopy.size(); j += this.numberOfCascadePile) {
+        this.cascadingPiles.get(i).add(deckCopy.get(j));
+      }
+    }
   }
 
   /**
