@@ -1,6 +1,7 @@
 package freecell.model;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import freecell.bean.Card;
 import util.Utils;
@@ -178,7 +179,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public String getGameState() {
-    return null;
+    return this.convertPilesIntoString(foundationPiles, openPiles, cascadingPiles);
   }
 
   public static FreecellOperationsBuilder getBuilder() {
@@ -212,4 +213,34 @@ public class FreecellModel implements FreecellOperations<Card> {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
     }
   }
+
+  private String convertPilesIntoString(List<List<Card>> foundationPiles,
+                                        List<List<Card>> openPiles,
+                                        List<List<Card>> cascadePiles) {
+    return pileToString(foundationPiles, PileType.FOUNDATION) +
+            System.lineSeparator() +
+            pileToString(openPiles, PileType.OPEN) +
+            System.lineSeparator() +
+            pileToString(cascadePiles, PileType.CASCADE);
+  }
+
+  private String pileToString(List<List<Card>> piles, PileType pile) {
+    List<String> listOfStrings = piles.stream()
+            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = 0; i < listOfStrings.size(); i++) {
+      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(i + 1);
+      stringBuilder.append(":");
+      stringBuilder.append(listOfStrings.get(i));
+      stringBuilder.append(System.lineSeparator());
+    }
+    return stringBuilder.toString().trim();
+
+  }
+
+
 }
