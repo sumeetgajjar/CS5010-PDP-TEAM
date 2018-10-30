@@ -72,7 +72,7 @@ public class FreecellModelTest {
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
         int lastPile = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndex = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+        int lastCardIndex = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
 
         Card lastCardFromLastPile = expectedCascadingPiles1.get(lastPile).remove(lastCardIndex);
         expectedOpenPiles.get(0).add(lastCardFromLastPile);
@@ -490,7 +490,7 @@ public class FreecellModelTest {
 
         //moving last ace to foundation pile
         int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
 
         Card cardFromCascadingPile = expectedCascadingCardPiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
         expectedFoundationPiles.get(0).add(cardFromCascadingPile);
@@ -708,7 +708,7 @@ public class FreecellModelTest {
         model.startGame(deck, false);
         //moving last ace to foundation pile
         int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
 
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -892,7 +892,7 @@ public class FreecellModelTest {
         model.startGame(deck, false);
 
         int sourceCascadingPileIndex = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
         List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
 
         int destinationCascadingPileIndex = (sourceCascadingPileIndex--) % cascadingPiles;
@@ -1168,7 +1168,7 @@ public class FreecellModelTest {
 
           //moving last ace to open pile
           int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-          int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+          int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
 
           List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
@@ -1277,7 +1277,7 @@ public class FreecellModelTest {
         model.startGame(deckWithAcesInTheEnd, false);
 
         int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles);
 
         String gameStateBeforeInvalidMove = model.getGameState();
         try {
