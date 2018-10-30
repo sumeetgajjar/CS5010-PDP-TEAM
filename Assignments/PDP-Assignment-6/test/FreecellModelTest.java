@@ -67,7 +67,7 @@ public class FreecellModelTest {
         model.startGame(deck, false);
 
         List<List<Card>> expectedCascadingPiles1 = getCardsInCascadingPiles(cascadingPiles, deck);
-        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
         int lastPile = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
