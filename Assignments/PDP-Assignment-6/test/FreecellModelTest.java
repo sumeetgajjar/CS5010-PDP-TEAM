@@ -178,19 +178,19 @@ public class FreecellModelTest {
                 .opens(openPiles)
                 .build();
 
-        List<Card> deckWith51Cards = getValidDeck().subList(0, 52);
+        List<Card> deckWith51Cards = getValidDeck().subList(0, 51);
         try {
           model.startGame(deckWith51Cards, true);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(deckWith51Cards, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -216,14 +216,14 @@ public class FreecellModelTest {
           model.startGame(deckWith53Cards, true);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(deckWith53Cards, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -246,14 +246,14 @@ public class FreecellModelTest {
           model.startGame(deckWith52Cards, true);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(deckWith52Cards, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -276,14 +276,14 @@ public class FreecellModelTest {
           model.startGame(deckWithDuplicates, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(deckWithDuplicates, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid deck of cards", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -352,15 +352,18 @@ public class FreecellModelTest {
 
         Set<Card> actualCardsInCascadingPiles = new HashSet<>(52);
         for (int i = (4 + openPiles), j = 0; i < stateLines.length; i++, j++) {
-          String actualCascadingPileString = stateLines[i].split(":")[1];
-          Set<Card> actualCardsInCascadingPile = Arrays.stream(actualCascadingPileString.split(","))
-                  .map(Card::parse)
-                  .collect(Collectors.toSet());
+          String[] split = stateLines[i].split(":");
+          if (split.length == 2) {
+            String actualCascadingPileString = split[1];
+            Set<Card> actualCardsInCascadingPile = Arrays.stream(actualCascadingPileString.split(","))
+                    .map(Card::parse)
+                    .collect(Collectors.toSet());
 
-          actualCardsInCascadingPiles.addAll(actualCardsInCascadingPile);
-          List<Card> expectedCardsInCascadingPile = expectedCascadingPiles.get(j);
+            actualCardsInCascadingPiles.addAll(actualCardsInCascadingPile);
+            List<Card> expectedCardsInCascadingPile = expectedCascadingPiles.get(j);
 
-          Assert.assertEquals(expectedCardsInCascadingPile.size(), actualCardsInCascadingPile.size());
+            Assert.assertEquals(expectedCardsInCascadingPile.size(), actualCardsInCascadingPile.size());
+          }
         }
 
         Assert.assertTrue(actualCardsInCascadingPiles.containsAll(validDeck));
@@ -978,7 +981,7 @@ public class FreecellModelTest {
     List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
     model.startGame(deck, false);
 
-    model.move(PileType.CASCADE, 0, 0, PileType.OPEN, 0);
+    model.move(PileType.CASCADE, 0, 12, PileType.OPEN, 0);
 
     String gameStateBeforeInvalidMove = model.getGameState();
     try {
@@ -1003,8 +1006,8 @@ public class FreecellModelTest {
     for (boolean shuffle : Arrays.asList(false, true)) {
       model.startGame(model.getDeck(), shuffle);
 
-      model.move(PileType.CASCADE, 0, 0, PileType.OPEN, 0);
-      model.move(PileType.CASCADE, 1, 0, PileType.OPEN, 1);
+      model.move(PileType.CASCADE, 0, 12, PileType.OPEN, 0);
+      model.move(PileType.CASCADE, 1, 12, PileType.OPEN, 1);
 
       String gameStateBeforeInvalidMove = model.getGameState();
       try {
@@ -1034,12 +1037,12 @@ public class FreecellModelTest {
     //moving ace of diamonds from cascade pile 1 to open pile 1
     model.move(PileType.CASCADE, 1, 12, PileType.OPEN, 1);
     //moving ace of spades to from open pile 0 foundation pile 0
-    model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 1);
+    model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 0);
 
     String gameStateBeforeInvalidMove = model.getGameState();
     try {
       //moving ace of diamonds from open pile 1 to foundation pile 0
-      model.move(PileType.OPEN, 1, 0, PileType.FOUNDATION, 1);
+      model.move(PileType.OPEN, 1, 0, PileType.FOUNDATION, 0);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());

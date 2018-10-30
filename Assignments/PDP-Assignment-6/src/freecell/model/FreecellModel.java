@@ -2,7 +2,10 @@ package freecell.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import freecell.bean.Card;
@@ -15,6 +18,7 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   private static final int FOUNDATION_PILE_COUNT = 4;
   private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
+  private static final int TOTAL_NUMBER_OF_CARDS_IN_DECK = 52;
 
   private final int numberOfCascadePile;
   private final int numberOfOpenPile;
@@ -89,10 +93,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
-    deck = Utils.requireNonNull(deck);
-    if (deck.isEmpty()) {
-      throw new IllegalArgumentException("Invalid input");
-    }
+    deck = performSanityCheckBeforeStartGame(deck);
 
     this.clearPiles();
 
@@ -173,6 +174,9 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   private Card getCardFromPile(int cardIndex, List<Card> pile) {
     try {
+      if (pile.size() - 1 != cardIndex) {
+        throw new IllegalArgumentException("Invalid input");
+      }
       return pile.get(cardIndex);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException("Invalid input");
@@ -246,6 +250,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public String getGameState() {
+    //todo should return empty "" when game has not started
     return this.convertPilesIntoString(foundationPiles, openPiles, cascadingPiles);
   }
 
@@ -254,6 +259,7 @@ public class FreecellModel implements FreecellOperations<Card> {
   }
 
   public static class FreecellModelBuilder implements FreecellOperationsBuilder {
+
     private int numberOfCascadePile;
     private int numberOfOpenPile;
 
@@ -279,12 +285,33 @@ public class FreecellModel implements FreecellOperations<Card> {
     public FreecellOperations build() {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
     }
+
   }
 
   private void clearPiles() {
     this.foundationPiles.forEach(List::clear);
     this.openPiles.forEach(List::clear);
     this.cascadingPiles.forEach(List::clear);
+  }
+
+  private List<Card> performSanityCheckBeforeStartGame(List<Card> deck) {
+    deck = Utils.requireNonNull(deck);
+
+    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    long nullCardCount = deck.stream().filter(Objects::isNull).count();
+    if (nullCardCount == 1) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    Set<Card> cards = new HashSet<>(deck);
+    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    return deck;
   }
 
   //todo review this
@@ -315,6 +342,4 @@ public class FreecellModel implements FreecellOperations<Card> {
     return stringBuilder.toString().trim();
 
   }
-
-
 }
