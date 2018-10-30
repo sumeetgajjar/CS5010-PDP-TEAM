@@ -69,4 +69,16 @@ public class Utils {
     }
     return expectedOpenPiles;
   }
+
+
+  /**
+   * Gets the first element from the list
+   *
+   * @param collect the list from which the first element is needed
+   * @param <T>     the type of the data in the list
+   * @return the first element in the list
+   */
+  public static <T> T getFirst(List<T> collect) {
+    return collect.get(0);
+  }
 }
