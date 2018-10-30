@@ -3,7 +3,6 @@ package freecell.model;
 import java.util.List;
 
 import freecell.bean.Card;
-import freecell.bean.GameState;
 import freecell.bean.PileCategory;
 import util.Utils;
 
@@ -11,7 +10,7 @@ import util.Utils;
  * Created by gajjar.s, on 1:47 PM, 10/28/18
  */
 public class FreecellModel implements FreecellOperations<Card> {
-  private final GameState gameState;
+  private final FreeCellGameState gameState;
   private boolean hasGameStarted;
 
   /**
@@ -32,7 +31,7 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
 
     this.hasGameStarted = false;
-    this.gameState = new GameState(Utils.getListOfEmptyLists(GameState.FOUNDATION_PILE_COUNT),
+    this.gameState = new FreeCellGameState(Utils.getListOfEmptyLists(FreeCellGameState.FOUNDATION_PILE_COUNT),
             Utils.getListOfEmptyLists(numberOfOpenPile),
             Utils.getListOfEmptyLists(numberOfCascadePile));
   }
@@ -79,6 +78,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
+    // todo : call distribute deck?
     this.gameState.startGame(deck, shuffle);
     this.hasGameStarted = true;
   }

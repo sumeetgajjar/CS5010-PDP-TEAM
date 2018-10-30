@@ -1,4 +1,4 @@
-package freecell.bean;
+package freecell.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,9 +8,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import freecell.bean.Card;
+import freecell.bean.PileCategory;
 import util.Utils;
 
-public class GameState {
+public class FreeCellGameState {
   public static final int FOUNDATION_PILE_COUNT = 4;
   private static final int TOTAL_NUMBER_OF_CARDS_IN_DECK = 52;
   private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
@@ -18,9 +20,9 @@ public class GameState {
   private final List<List<Card>> openPiles;
   private final List<List<Card>> cascadePiles;
 
-  public GameState(List<List<Card>> foundationPiles,
-                   List<List<Card>> openPiles,
-                   List<List<Card>> cascadePiles) {
+  public FreeCellGameState(List<List<Card>> foundationPiles,
+                           List<List<Card>> openPiles,
+                           List<List<Card>> cascadePiles) {
     this.foundationPiles = foundationPiles;
     this.openPiles = openPiles;
     this.cascadePiles = cascadePiles;
