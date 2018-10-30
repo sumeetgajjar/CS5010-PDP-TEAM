@@ -900,8 +900,8 @@ public class FreecellModelTest {
                 .filter(card -> !(card.equals(card1) || card.equals(card2)))
                 .collect(Collectors.toList());
 
-        deck.add(card2);
         deck.add(card1);
+        deck.add(card2);
 
         model.startGame(deck, false);
 
@@ -911,7 +911,7 @@ public class FreecellModelTest {
 
         int destinationCascadingPileIndex = (sourceCascadingPileIndex--) % cascadingPiles;
 
-        Card cardFromSourceCascadingPile = expectedCascadingPiles.get(sourceCascadingPileIndex).get(lastCardIndexOfAce);
+        Card cardFromSourceCascadingPile = expectedCascadingPiles.get(sourceCascadingPileIndex).remove(lastCardIndexOfAce);
         expectedCascadingPiles.get(destinationCascadingPileIndex).add(cardFromSourceCascadingPile);
         model.move(PileType.CASCADE, sourceCascadingPileIndex, lastCardIndexOfAce, PileType.CASCADE, destinationCascadingPileIndex);
 
