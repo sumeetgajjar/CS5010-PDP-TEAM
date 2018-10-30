@@ -4,6 +4,7 @@ import java.util.List;
 
 import freecell.bean.Card;
 import freecell.bean.GameState;
+import freecell.bean.PileCategory;
 import util.Utils;
 
 /**
