@@ -1641,7 +1641,7 @@ public class FreecellModelTest {
     for (int cardIndex = 12; cardIndex >= 0; cardIndex--) {
       for (int cascadePileSouceIndex = 0, openPileDestinationIndex = 0; cascadePileSouceIndex < cascadePileCount; cascadePileSouceIndex++, openPileDestinationIndex++) {
 
-        Card cardFromCascadedPile = expectedFoundationPiles.get(cascadePileSouceIndex).remove(cardIndex);
+        Card cardFromCascadedPile = expectedCascadingPiles.get(cascadePileSouceIndex).remove(cardIndex);
         expectedOpenPiles.get(openPileDestinationIndex).add(cardFromCascadedPile);
 
         model.move(PileType.CASCADE, cascadePileSouceIndex, cardIndex, PileType.OPEN, openPileDestinationIndex);
@@ -1653,7 +1653,7 @@ public class FreecellModelTest {
 
       for (int cascadePileIndex = 0, openPileSourceIndex = 0; cascadePileIndex < cascadePileCount; cascadePileIndex++, openPileSourceIndex++) {
 
-        Card cardFromOpenPile = expectedOpenPiles.get(openPileSourceIndex).get(0);
+        Card cardFromOpenPile = expectedOpenPiles.get(openPileSourceIndex).remove(0);
         int cascadePileDestinationIndex = (cascadePileIndex + 1) % cascadePileCount;
         expectedCascadingPiles.get(cascadePileDestinationIndex).add(cardFromOpenPile);
 

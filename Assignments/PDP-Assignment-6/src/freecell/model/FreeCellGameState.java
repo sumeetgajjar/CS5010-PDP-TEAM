@@ -87,8 +87,8 @@ public class FreeCellGameState {
             .filter(pile -> pile.size() == NUMBER_OF_CARDS_INDIVIDUAL_SUIT)
             .count();
 
-    return emptyCascadingPilesCount == 0
-            && emptyOpenPilesCount == 0
+    return emptyCascadingPilesCount == cascadePiles.size()
+            && emptyOpenPilesCount == openPiles.size()
             && fullFoundationPilesCount == FOUNDATION_PILE_COUNT;
   }
 
