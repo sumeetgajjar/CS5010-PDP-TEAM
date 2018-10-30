@@ -111,6 +111,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li> A foundation pile can only take a card of the same suit and exactly one higher in rank
    * </li>
    * <li> If the given cardIndex is not the last card index of the source pile</li>
+   * <li> If move is invoked with destination same as source </li>
    * </ul>
    *
    * @param source         the type of the source pile see @link{PileType}
