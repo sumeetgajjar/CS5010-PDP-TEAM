@@ -287,9 +287,9 @@ public class FreecellModel implements FreecellOperations<Card> {
     this.cascadingPiles.forEach(List::clear);
   }
 
-  private String convertPilesIntoString(List<List<Card>> foundationPiles,
-                                        List<List<Card>> openPiles,
-                                        List<List<Card>> cascadePiles) {
+  public static String convertPilesIntoString(List<List<Card>> foundationPiles,
+                                              List<List<Card>> openPiles,
+                                              List<List<Card>> cascadePiles) {
     return pileToString(foundationPiles, PileType.FOUNDATION) +
             System.lineSeparator() +
             pileToString(openPiles, PileType.OPEN) +
@@ -297,7 +297,7 @@ public class FreecellModel implements FreecellOperations<Card> {
             pileToString(cascadePiles, PileType.CASCADE);
   }
 
-  private String pileToString(List<List<Card>> piles, PileType pile) {
+  private static String pileToString(List<List<Card>> piles, PileType pile) {
     List<String> listOfStrings = piles.stream()
             .map(listOfCards -> listOfCards.stream().map(Card::toString)
                     .collect(Collectors.joining(","))
