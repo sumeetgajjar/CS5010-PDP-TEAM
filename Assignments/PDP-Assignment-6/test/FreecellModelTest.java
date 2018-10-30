@@ -472,9 +472,9 @@ public class FreecellModelTest {
   }
 
   @Test
-  public void moveToSamePositionAsSourcePosition() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
+  public void moveToSamePositionAsSourcePositionFails() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 51)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 51)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -483,7 +483,7 @@ public class FreecellModelTest {
 
         List<Card> deck = getReverseSortedDeckWithAcesInTheEnd(model);
         List<List<Card>> expectedCascadingCardPiles = getCardsInCascadingPiles(cascadingPiles, deck);
-        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
         model.startGame(deck, false);
@@ -502,19 +502,33 @@ public class FreecellModelTest {
         expectedOpenPiles.get(0).add(cardFromCascadingPile);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.OPEN, 0);
 
-        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles).toString(), model.getGameState());
+        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedCascadingCardPiles).toString(), model.getGameState());
 
         //moving cards to same position as source
         lastCardIndexOfAce--;
 
-        model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.CASCADE, lastPileOfAce);
-        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles).toString(), model.getGameState());
+        try {
+          model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce, PileType.CASCADE, lastPileOfAce);
+          Assert.fail("should have failed");
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("Invalid input", e.getMessage());
+        }
 
-        model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 0);
-        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles).toString(), model.getGameState());
+        try {
+          model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 0);
+          Assert.fail("should have failed");
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("Invalid input", e.getMessage());
+        }
 
-        model.move(PileType.OPEN, 0, 0, PileType.OPEN, 0);
-        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedFoundationPiles).toString(), model.getGameState());
+        try {
+          model.move(PileType.OPEN, 0, 0, PileType.OPEN, 0);
+          Assert.fail("should have failed");
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("Invalid input", e.getMessage());
+        }
+
+        Assert.assertEquals(new FreeCellGameState(expectedFoundationPiles, expectedOpenPiles, expectedCascadingCardPiles).toString(), model.getGameState());
       }
     }
   }
