@@ -39,7 +39,7 @@ public class Utils {
    */
   public static <T> T requireNonNull(T input) throws IllegalArgumentException {
     if (Objects.isNull(input)) {
-      throw new IllegalArgumentException("Input was null");
+      throw new IllegalArgumentException("Invalid input");
     }
     return input;
   }

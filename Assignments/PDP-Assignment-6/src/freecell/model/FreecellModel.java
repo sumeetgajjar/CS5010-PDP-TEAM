@@ -91,7 +91,7 @@ public class FreecellModel implements FreecellOperations<Card> {
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
     List<Card> deckCopy = new ArrayList<>(deck);
     if (shuffle) {
-      Collections.shuffle(deck);
+      Collections.shuffle(deckCopy);
     }
 
     for (int i = 0; i < this.numberOfCascadePile; i++) {
@@ -146,6 +146,9 @@ public class FreecellModel implements FreecellOperations<Card> {
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
 
+    source = Utils.requireNonNull(source);
+    destination = Utils.requireNonNull(destination);
+
     List<Card> sourcePile = this.getPiles(source, pileNumber);
     Card cardFromSource = this.getCardFromPile(cardIndex, sourcePile);
 
@@ -164,7 +167,7 @@ public class FreecellModel implements FreecellOperations<Card> {
     try {
       return pile.get(cardIndex);
     } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Invalid move");
+      throw new IllegalArgumentException("Invalid input");
     }
   }
 
@@ -185,7 +188,7 @@ public class FreecellModel implements FreecellOperations<Card> {
     try {
       return listOfCards.get(index);
     } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("invalid input");
+      throw new IllegalArgumentException("Invalid input");
     }
   }
 

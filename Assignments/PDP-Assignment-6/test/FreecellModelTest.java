@@ -29,9 +29,9 @@ public class FreecellModelTest {
   @Test
   public void testInitializationOfGame() {
 
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .opens(openPiles)
@@ -54,9 +54,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameAfterMove() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .opens(openPiles)
@@ -95,9 +95,9 @@ public class FreecellModelTest {
     Assert.assertEquals(52, expectedUnorderedDeck.size());
 
     // cascade piles
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -121,7 +121,7 @@ public class FreecellModelTest {
                   .build();
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("invalid input", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -129,9 +129,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithNullOrEmptyDeck() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -170,9 +170,9 @@ public class FreecellModelTest {
   @Test
   public void startGameFailsWith51Cards() {
 
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -198,9 +198,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWith53Cards() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -231,9 +231,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithCorrectSizeButNullCardInDeck() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -261,9 +261,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameFailsWithDuplicates() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -291,9 +291,9 @@ public class FreecellModelTest {
 
   @Test
   public void startGameWithShuffleDoesNotChangeGivenDeck() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
         FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
                 .opens(openPiles)
@@ -312,9 +312,9 @@ public class FreecellModelTest {
   @Test
   public void startGameWithShuffleFalse() {
 
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
         FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
                 .opens(openPiles)
@@ -333,9 +333,9 @@ public class FreecellModelTest {
   @Test
   public void startGameWithShuffleTrue() {
 
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
         FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
                 .opens(openPiles)
@@ -370,8 +370,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveWithInvalidArguments() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -385,42 +385,42 @@ public class FreecellModelTest {
             model.move(null, 1, 1, PileType.CASCADE, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.CASCADE, 1, 1, null, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(null, 1, 1, null, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.CASCADE, -1, 1, PileType.FOUNDATION, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.CASCADE, 1, -1, PileType.FOUNDATION, 1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.CASCADE, 1, 1, PileType.FOUNDATION, -1);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid input", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
         }
       }
@@ -429,8 +429,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveBeforeStartingGame() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -469,8 +469,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveToSamePositionAsSourcePosition() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -517,8 +517,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveToInvalidPositionOrPile() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -603,8 +603,8 @@ public class FreecellModelTest {
 
   @Test
   public void getGameStateReturnsEmptyStringBeforeStarting() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -617,8 +617,8 @@ public class FreecellModelTest {
 
   @Test
   public void sequenceOfMethodInvocationForBuilderDoesNotMatter() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> modelWithCascadeFirst = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -691,8 +691,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveCardFromFoundationToFoundationWorks() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -843,33 +843,32 @@ public class FreecellModelTest {
 
     List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
 
-    for (boolean shuffle : Arrays.asList(true, false)) {
-      model.startGame(deck, shuffle);
-      model.move(PileType.CASCADE, 0, 12, PileType.FOUNDATION, 0);
 
-      String gameStateBeforeInvalidMove = model.getGameState();
-      try {
-        model.move(PileType.FOUNDATION, 0, 1, PileType.CASCADE, 0);
-        Assert.fail("should have failed");
-      } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
-      }
-      Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+    model.startGame(deck, false);
+    model.move(PileType.CASCADE, 0, 12, PileType.FOUNDATION, 0);
 
-      try {
-        model.move(PileType.FOUNDATION, 0, 1, PileType.OPEN, 0);
-        Assert.fail("should have failed");
-      } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
-      }
-      Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+    String gameStateBeforeInvalidMove = model.getGameState();
+    try {
+      model.move(PileType.FOUNDATION, 0, 1, PileType.CASCADE, 0);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
+
+    try {
+      model.move(PileType.FOUNDATION, 0, 1, PileType.OPEN, 0);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+    Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
 
   @Test
   public void moveCardFromCascadeToCascadeWorks() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1150,8 +1149,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveCardFromOpenToOpenWorks() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1205,8 +1204,8 @@ public class FreecellModelTest {
 
   @Test
   public void moveCardAmongstFoundationAndOpen() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1253,8 +1252,8 @@ public class FreecellModelTest {
 
   @Test
   public void cascadeToCascadeInvalidMoveFails() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1284,8 +1283,8 @@ public class FreecellModelTest {
 
   @Test
   public void cascadeEmptyPileToAnyFails() {
-    for (int cascadingPiles : Arrays.asList(53, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(53, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1348,8 +1347,8 @@ public class FreecellModelTest {
 
   @Test
   public void openEmptyToAnyFails() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1400,8 +1399,8 @@ public class FreecellModelTest {
 
   @Test
   public void foundationEmptyToAnyFails() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1452,8 +1451,8 @@ public class FreecellModelTest {
 
   @Test
   public void cascadeToFullOpenFails() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, Integer.MAX_VALUE)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1491,7 +1490,7 @@ public class FreecellModelTest {
   @Test
   public void cascadeToFoundationInvalidMoveFails() {
     for (int cascadingPiles : Collections.singletonList(4)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
@@ -1568,7 +1567,7 @@ public class FreecellModelTest {
   @Test
   public void foundationToFoundationIllegalMoveFails() {
     for (int cascadingPiles : Collections.singletonList(4)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, Integer.MAX_VALUE)) {
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
         FreecellOperations<Card> model = FreecellModel.getBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
