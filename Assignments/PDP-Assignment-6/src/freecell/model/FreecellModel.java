@@ -36,7 +36,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   private FreecellModel(int numberOfCascadePile, int numberOfOpenPile) {
     if (numberOfCascadePile < 4 || numberOfOpenPile < 1) {
-      throw new IllegalArgumentException("invalid input");
+      throw new IllegalArgumentException("Invalid input");
     }
 
     this.numberOfCascadePile = numberOfCascadePile;
