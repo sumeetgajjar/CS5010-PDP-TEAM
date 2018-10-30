@@ -140,7 +140,11 @@ public class FreecellModel implements FreecellOperations<Card> {
    * @throws IllegalStateException    if a move is attempted before the game has starts
    */
   @Override
-  public void move(PileType source, int pileNumber, int cardIndex, PileType destination, int destPileNumber) throws IllegalArgumentException, IllegalStateException {
+  public void move(PileType source,
+                   int pileNumber,
+                   int cardIndex,
+                   PileType destination,
+                   int destPileNumber) throws IllegalArgumentException, IllegalStateException {
 
   }
 
