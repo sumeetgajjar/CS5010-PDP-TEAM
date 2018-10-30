@@ -287,6 +287,7 @@ public class FreecellModel implements FreecellOperations<Card> {
     this.cascadingPiles.forEach(List::clear);
   }
 
+  //todo review this
   public static String convertPilesIntoString(List<List<Card>> foundationPiles,
                                               List<List<Card>> openPiles,
                                               List<List<Card>> cascadePiles) {
