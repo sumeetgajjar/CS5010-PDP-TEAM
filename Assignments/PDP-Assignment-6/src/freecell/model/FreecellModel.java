@@ -159,7 +159,7 @@ public class FreecellModel implements FreecellOperations<Card> {
       sourcePile.remove(cardIndex);
       destinationPile.add(cardFromSource);
     } else {
-      throw new IllegalArgumentException("Invalid move");
+      throw new IllegalArgumentException("Invalid input");
     }
   }
 

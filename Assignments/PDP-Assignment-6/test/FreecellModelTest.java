@@ -533,21 +533,21 @@ public class FreecellModelTest {
             model.move(PileType.CASCADE, cascadingPiles, 0, PileType.FOUNDATION, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.FOUNDATION, 4, 0, PileType.OPEN, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.OPEN, openPiles, 0, PileType.CASCADE, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
 
@@ -557,21 +557,21 @@ public class FreecellModelTest {
             model.move(PileType.CASCADE, 0, expectedCardsInFirstCascadingPile.size(), PileType.FOUNDATION, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.OPEN, 0, 0, PileType.CASCADE, 0);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
 
@@ -580,21 +580,21 @@ public class FreecellModelTest {
             model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 4);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, openPiles);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
 
           try {
             model.move(PileType.OPEN, 0, 0, PileType.CASCADE, cascadingPiles);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
         }
       }
@@ -765,7 +765,7 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, 0, 11, PileType.OPEN, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -773,7 +773,7 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, 0, 13, PileType.OPEN, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -781,7 +781,7 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, 0, 11, PileType.FOUNDATION, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -789,7 +789,7 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, 0, 13, PileType.FOUNDATION, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
     }
@@ -816,7 +816,7 @@ public class FreecellModelTest {
         model.move(PileType.OPEN, 0, 1, PileType.CASCADE, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -824,7 +824,7 @@ public class FreecellModelTest {
         model.move(PileType.OPEN, 0, 1, PileType.FOUNDATION, 0);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -985,7 +985,7 @@ public class FreecellModelTest {
       model.move(PileType.OPEN, 0, 0, PileType.CASCADE, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
@@ -1011,7 +1011,7 @@ public class FreecellModelTest {
         model.move(PileType.OPEN, 0, 0, PileType.OPEN, 1);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
     }
@@ -1042,7 +1042,7 @@ public class FreecellModelTest {
       model.move(PileType.OPEN, 1, 0, PileType.FOUNDATION, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1055,7 +1055,7 @@ public class FreecellModelTest {
       model.move(PileType.OPEN, 0, 0, PileType.FOUNDATION, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
@@ -1084,7 +1084,7 @@ public class FreecellModelTest {
       model.move(PileType.FOUNDATION, 0, 0, PileType.OPEN, 0);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
@@ -1113,7 +1113,7 @@ public class FreecellModelTest {
       model.move(PileType.FOUNDATION, 0, 0, PileType.CASCADE, 0);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
@@ -1142,7 +1142,7 @@ public class FreecellModelTest {
       model.move(PileType.FOUNDATION, 0, 0, PileType.FOUNDATION, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
     Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
   }
@@ -1274,7 +1274,7 @@ public class FreecellModelTest {
                   (lastPileOfAce - 1) % cascadingPiles);
           Assert.fail("Should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Invalid move", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
         Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
       }
@@ -1301,7 +1301,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1313,7 +1313,7 @@ public class FreecellModelTest {
                     cascadingPiles - 2);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1325,7 +1325,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1337,7 +1337,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
         }
@@ -1365,7 +1365,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1377,7 +1377,7 @@ public class FreecellModelTest {
                     cascadingPiles);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1389,7 +1389,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
         }
@@ -1417,7 +1417,7 @@ public class FreecellModelTest {
                     1);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1429,7 +1429,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
 
@@ -1441,7 +1441,7 @@ public class FreecellModelTest {
                     0);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
         }
@@ -1479,7 +1479,7 @@ public class FreecellModelTest {
                     PileType.OPEN, currentOpenPile);
             Assert.fail("Should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
         }
@@ -1515,7 +1515,7 @@ public class FreecellModelTest {
                     currentFoundationPile);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateWithoutMakingAnyMove, model.getGameState());
         }
@@ -1558,7 +1558,7 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, i, 10, PileType.FOUNDATION, i);
         Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
-        Assert.assertEquals("Invalid move", e.getMessage());
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
       Assert.assertEquals(gameStateWithoutMakingInvalidMove, model.getGameState());
     }
@@ -1588,7 +1588,7 @@ public class FreecellModelTest {
             model.move(PileType.FOUNDATION, i, 0, PileType.FOUNDATION, (i + 1) % 4);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid move", e.getMessage());
+            Assert.assertEquals("Invalid input", e.getMessage());
           }
           Assert.assertEquals(gameStateWithoutMakingInvalidMove, model.getGameState());
         }
@@ -1688,19 +1688,19 @@ public class FreecellModelTest {
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.CASCADE, 0);
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.OPEN, 0);
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.FOUNDATION, 1);
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid move", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
   }
 
