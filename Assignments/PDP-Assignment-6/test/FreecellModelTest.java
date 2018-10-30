@@ -581,7 +581,7 @@ public class FreecellModelTest {
 
           //testing invalid destination pileNumber
           try {
-            model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 4);
+            model.move(PileType.CASCADE, 0, 12, PileType.FOUNDATION, 4);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid input", e.getMessage());
@@ -1465,39 +1465,31 @@ public class FreecellModelTest {
 
   @Test
   public void cascadeToFullOpenFails() {
-    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
-      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
-                .cascades(cascadingPiles)
-                .opens(openPiles)
-                .build();
+    int cascadingPiles = 4;
+    int openPiles = 4;
+    FreecellOperations<Card> model = FreecellModel.getBuilder()
+            .cascades(cascadingPiles)
+            .opens(openPiles)
+            .build();
 
-        List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
-        model.startGame(deckWithAcesInTheEnd, false);
+    List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
+    model.startGame(deckWithAcesInTheEnd, false);
 
-        int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
-        String gameStateBeforeInvalidMove = model.getGameState();
+    int lastCardIndex = 12;
+    for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
+      model.move(PileType.CASCADE, 0, lastCardIndex--, PileType.OPEN, currentOpenPile);
+    }
 
-        for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
-          // filling open
-          model.move(PileType.CASCADE,
-                  lastPileOfAce,
-                  lastCardIndexOfAce - currentOpenPile, PileType.OPEN, currentOpenPile);
-        }
-
-        for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
-          try {
-            model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce - openPiles,
-                    PileType.OPEN, currentOpenPile);
-            Assert.fail("Should have failed");
-          } catch (IllegalArgumentException e) {
-            Assert.assertEquals("Invalid input", e.getMessage());
-          }
-          Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
-        }
+    String gameStateBeforeInvalidMove = model.getGameState();
+    for (int currentOpenPile = 0; currentOpenPile < openPiles; currentOpenPile++) {
+      try {
+        model.move(PileType.CASCADE, 0, lastCardIndex, PileType.OPEN, currentOpenPile);
+        Assert.fail("Should have failed");
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid input", e.getMessage());
       }
+      Assert.assertEquals(gameStateBeforeInvalidMove, model.getGameState());
     }
   }
 

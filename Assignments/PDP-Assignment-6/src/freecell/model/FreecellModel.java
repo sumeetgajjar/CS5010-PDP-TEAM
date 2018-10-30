@@ -127,8 +127,12 @@ public class FreecellModel implements FreecellOperations<Card> {
                    int cardIndex,
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
-    this.gameState.makeMove(PileCategory.getPileCategory(source),
-            pileNumber, cardIndex, PileCategory.getPileCategory(destination), destPileNumber);
+    if (this.hasGameStarted) {
+      this.gameState.makeMove(PileCategory.getPileCategory(source),
+              pileNumber, cardIndex, PileCategory.getPileCategory(destination), destPileNumber);
+    } else {
+      throw new IllegalStateException("cannot move before starting game");
+    }
   }
 
   @Override
