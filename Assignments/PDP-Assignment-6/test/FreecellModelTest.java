@@ -70,8 +70,8 @@ public class FreecellModelTest {
         List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
-        int lastPile = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndex = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int lastPile = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndex = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
         Card lastCardFromLastPile = expectedCascadingPiles1.get(lastPile).remove(lastCardIndex);
         expectedOpenPiles.get(0).add(lastCardFromLastPile);
@@ -140,28 +140,28 @@ public class FreecellModelTest {
           model.startGame(null, true);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Input was null", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(null, false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Input was null", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(Collections.emptyList(), true);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Input was null", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
 
         try {
           model.startGame(Collections.emptyList(), false);
           Assert.fail("should have failed");
         } catch (IllegalArgumentException e) {
-          Assert.assertEquals("Input was null", e.getMessage());
+          Assert.assertEquals("Invalid input", e.getMessage());
         }
       }
     }
@@ -485,8 +485,8 @@ public class FreecellModelTest {
         model.startGame(deck, false);
 
         //moving last ace to foundation pile
-        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
         Card cardFromCascadingPile = expectedCascadingCardPiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
         expectedFoundationPiles.get(0).add(cardFromCascadingPile);
@@ -703,8 +703,8 @@ public class FreecellModelTest {
 
         model.startGame(deck, false);
         //moving last ace to foundation pile
-        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -887,8 +887,8 @@ public class FreecellModelTest {
 
         model.startGame(deck, false);
 
-        int sourceCascadingPileIndex = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int sourceCascadingPileIndex = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
         List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadingPiles, deck);
 
         int destinationCascadingPileIndex = (sourceCascadingPileIndex--) % cascadingPiles;
@@ -1163,8 +1163,8 @@ public class FreecellModelTest {
           model.startGame(deck, shuffle);
 
           //moving last ace to open pile
-          int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-          int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+          int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+          int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
           List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
@@ -1262,8 +1262,8 @@ public class FreecellModelTest {
         List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
         model.startGame(deckWithAcesInTheEnd, false);
 
-        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
         String gameStateBeforeInvalidMove = model.getGameState();
         try {
@@ -1461,8 +1461,8 @@ public class FreecellModelTest {
         List<Card> deckWithAcesInTheEnd = getReverseSortedDeckWithAcesInTheEnd(model);
         model.startGame(deckWithAcesInTheEnd, false);
 
-        int lastPileOfAce = ((52 % cascadingPiles) - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? 52 / cascadingPiles : (52 / cascadingPiles) - 1;
+        int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 : (52 / cascadingPiles) - 2;
 
         String gameStateBeforeInvalidMove = model.getGameState();
 
@@ -1779,14 +1779,15 @@ public class FreecellModelTest {
   }
 
   private List<List<Card>> getCardsInCascadingPiles(int cascadePileCount, List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = new ArrayList<>(cascadePileCount);
-    for (int i = 0; i < cascadePileCount; i++) {
-      List<Card> cardsInCascadePile = new LinkedList<>();
-      for (int j = 0; j < validDeck.size(); j += cascadePileCount) {
-        cardsInCascadePile.add(validDeck.get(j));
-      }
-      expectedCascadingPiles.add(i, cardsInCascadePile);
+    List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
+
+    int i = 0, j = 0;
+    while (i < validDeck.size()) {
+      expectedCascadingPiles.get(j).add(validDeck.get(i));
+      j = (j + 1) % cascadePileCount;
+      i++;
     }
+
     return expectedCascadingPiles;
   }
 
