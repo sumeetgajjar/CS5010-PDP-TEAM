@@ -1,30 +1,17 @@
 package freecell.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import freecell.bean.Card;
+import freecell.bean.GameState;
 import util.Utils;
 
 /**
  * Created by gajjar.s, on 1:47 PM, 10/28/18
  */
 public class FreecellModel implements FreecellOperations<Card> {
-
-  private static final int FOUNDATION_PILE_COUNT = 4;
-  private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
-  private static final int TOTAL_NUMBER_OF_CARDS_IN_DECK = 52;
-
-  private final int numberOfCascadePile;
-  private final int numberOfOpenPile;
-  private final List<List<Card>> foundationPiles;
-  private final List<List<Card>> openPiles;
-  private final List<List<Card>> cascadingPiles;
+  private final GameState gameState;
+  private boolean hasGameStarted;
 
   /**
    * Constructs a {@link FreecellModel} object with the given params. It throws {@link
@@ -43,12 +30,10 @@ public class FreecellModel implements FreecellOperations<Card> {
       throw new IllegalArgumentException("Invalid input");
     }
 
-    this.numberOfCascadePile = numberOfCascadePile;
-    this.numberOfOpenPile = numberOfOpenPile;
-
-    this.foundationPiles = Utils.getListOfEmptyLists(FOUNDATION_PILE_COUNT);
-    this.openPiles = Utils.getListOfEmptyLists(numberOfOpenPile);
-    this.cascadingPiles = Utils.getListOfEmptyLists(numberOfCascadePile);
+    this.hasGameStarted = false;
+    this.gameState = new GameState(Utils.getListOfEmptyLists(GameState.FOUNDATION_PILE_COUNT),
+            Utils.getListOfEmptyLists(numberOfOpenPile),
+            Utils.getListOfEmptyLists(numberOfCascadePile));
   }
 
   /**
@@ -93,21 +78,8 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
-    deck = performSanityCheckBeforeStartGame(deck);
-
-    this.clearPiles();
-
-    List<Card> deckCopy = new ArrayList<>(deck);
-    if (shuffle) {
-      Collections.shuffle(deckCopy);
-    }
-
-    int i = 0, j = 0;
-    while (i < deckCopy.size()) {
-      this.cascadingPiles.get(j).add(deckCopy.get(i));
-      j = (j + 1) % numberOfCascadePile;
-      i++;
-    }
+    this.gameState.startGame(deck, shuffle);
+    this.hasGameStarted = true;
   }
 
   /**
@@ -155,72 +127,16 @@ public class FreecellModel implements FreecellOperations<Card> {
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
 
-    source = Utils.requireNonNull(source);
-    destination = Utils.requireNonNull(destination);
-
-    List<Card> sourcePile = this.getPiles(source, pileNumber);
-    Card cardFromSource = this.getCardFromPile(cardIndex, sourcePile);
-
-    List<Card> destinationPile = this.getPiles(destination, destPileNumber);
-    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
-
-    if (canPutCardInPile) {
-      sourcePile.remove(cardIndex);
-      destinationPile.add(cardFromSource);
+    if (this.hasGameStarted) {
+      gameState.makeMove(source, pileNumber, cardIndex, destination, destPileNumber);
     } else {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  private Card getCardFromPile(int cardIndex, List<Card> pile) {
-    try {
-      if (pile.size() - 1 != cardIndex) {
-        throw new IllegalArgumentException("Invalid input");
-      }
-      return pile.get(cardIndex);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  private List<Card> getPiles(PileType pileType, int index) {
-    List<List<Card>> listOfCards = null;
-    switch (pileType) {
-      case FOUNDATION:
-        listOfCards = this.foundationPiles;
-        break;
-      case OPEN:
-        listOfCards = this.openPiles;
-        break;
-      case CASCADE:
-        listOfCards = this.cascadingPiles;
-        break;
-    }
-
-    try {
-      return listOfCards.get(index);
-    } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException("Invalid input");
     }
   }
 
   @Override
   public boolean isGameOver() {
-    long emptyCascadingPilesCount = this.cascadingPiles.stream()
-            .filter(List::isEmpty)
-            .count();
-
-    long emptyOpenPilesCount = this.openPiles.stream()
-            .filter(List::isEmpty)
-            .count();
-
-    long fullFoundationPilesCount = this.foundationPiles.stream()
-            .filter(pile -> pile.size() == NUMBER_OF_CARDS_INDIVIDUAL_SUIT)
-            .count();
-
-    return emptyCascadingPilesCount == 0
-            && emptyOpenPilesCount == 0
-            && fullFoundationPilesCount == FOUNDATION_PILE_COUNT;
+    return gameState.hasGameCompleted(this);
   }
 
   /**
@@ -250,8 +166,11 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public String getGameState() {
-    //todo should return empty "" when game has not started
-    return this.convertPilesIntoString(foundationPiles, openPiles, cascadingPiles);
+    if (this.hasGameStarted) {
+      return this.gameState.toString();
+    } else {
+      return "";
+    }
   }
 
   public static FreecellOperationsBuilder getBuilder() {
@@ -288,58 +207,4 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   }
 
-  private void clearPiles() {
-    this.foundationPiles.forEach(List::clear);
-    this.openPiles.forEach(List::clear);
-    this.cascadingPiles.forEach(List::clear);
-  }
-
-  private List<Card> performSanityCheckBeforeStartGame(List<Card> deck) {
-    deck = Utils.requireNonNull(deck);
-
-    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    long nullCardCount = deck.stream().filter(Objects::isNull).count();
-    if (nullCardCount == 1) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    Set<Card> cards = new HashSet<>(deck);
-    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    return deck;
-  }
-
-  //todo review this
-  public static String convertPilesIntoString(List<List<Card>> foundationPiles,
-                                              List<List<Card>> openPiles,
-                                              List<List<Card>> cascadePiles) {
-    return pileToString(foundationPiles, PileType.FOUNDATION) +
-            System.lineSeparator() +
-            pileToString(openPiles, PileType.OPEN) +
-            System.lineSeparator() +
-            pileToString(cascadePiles, PileType.CASCADE);
-  }
-
-  private static String pileToString(List<List<Card>> piles, PileType pile) {
-    List<String> listOfStrings = piles.stream()
-            .map(listOfCards -> listOfCards.stream().map(Card::toString)
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
-
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
-      stringBuilder.append(i + 1);
-      stringBuilder.append(":");
-      stringBuilder.append(listOfStrings.get(i));
-      stringBuilder.append(System.lineSeparator());
-    }
-    return stringBuilder.toString().trim();
-
-  }
 }
