@@ -1,5 +1,11 @@
 package freecell.bean;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import util.Utils;
+
 public enum Suit {
   SPADES('♠', SuiteColor.BLACK),
   DIAMONDS('♦', SuiteColor.RED),
@@ -20,5 +26,16 @@ public enum Suit {
 
   public SuiteColor getColor() {
     return color;
+  }
+
+  public static Suit parse(char symbol) {
+    List<Suit> suits = Arrays.stream(Suit.values())
+            .filter(cardValue -> cardValue.getSymbol() == symbol)
+            .collect(Collectors.toList());
+    try {
+      return Utils.getFirst(suits);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Invalid input");
+    }
   }
 }

@@ -1,5 +1,11 @@
 package freecell.bean;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import util.Utils;
+
 public enum CardValue {
   ACE("A", 1),
   TWO("2", 2),
@@ -33,5 +39,16 @@ public enum CardValue {
 
   public int getPriority() {
     return priority;
+  }
+
+  public static CardValue parse(String symbol) {
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .filter(cardValue -> cardValue.getSymbol().equals(symbol))
+            .collect(Collectors.toList());
+    try {
+      return Utils.getFirst(cardValues);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("Invalid input");
+    }
   }
 }

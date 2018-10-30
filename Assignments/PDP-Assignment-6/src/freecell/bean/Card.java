@@ -7,7 +7,7 @@ import util.Utils;
 /**
  * Created by gajjar.s, on 1:47 PM, 10/28/18
  */
-public class Card implements Comparable<Card> {
+public class Card {
 
   private final Suit suit;
   private final CardValue cardValue;
@@ -26,13 +26,13 @@ public class Card implements Comparable<Card> {
   }
 
   public static Card parse(String cardString) {
-    return new Card(null, null);
-  }
-
-  @Override
-  public int compareTo(Card o) {
-    //todo
-    return 0;
+    cardString = cardString.trim();
+    if (cardString.length() > 3 || cardString.length() < 2) {
+      throw new IllegalArgumentException("Invalid string");
+    }
+    char suitSymbol = cardString.charAt(cardString.length() - 1);
+    String cardValueString = cardString.substring(0, cardString.length() - 1);
+    return new Card(Suit.parse(suitSymbol), CardValue.parse(cardValueString));
   }
 
   @Override
@@ -47,5 +47,10 @@ public class Card implements Comparable<Card> {
   @Override
   public int hashCode() {
     return Objects.hash(getSuit(), getCardValue());
+  }
+
+  @Override
+  public String toString() {
+    return " " + this.getCardValue().getSymbol() + this.getSuit().getSymbol();
   }
 }
