@@ -127,17 +127,13 @@ public class FreecellModel implements FreecellOperations<Card> {
                    int cardIndex,
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
-
-    if (this.hasGameStarted) {
-      gameState.makeMove(source, pileNumber, cardIndex, destination, destPileNumber);
-    } else {
-      throw new IllegalArgumentException("Invalid input");
-    }
+    this.gameState.makeMove(PileCategory.getPileCategory(source),
+            pileNumber, cardIndex, PileCategory.getPileCategory(destination), destPileNumber);
   }
 
   @Override
   public boolean isGameOver() {
-    return gameState.hasGameCompleted(this);
+    return gameState.hasGameCompleted();
   }
 
   /**

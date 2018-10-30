@@ -8,8 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import freecell.model.FreecellModel;
-import freecell.model.PileType;
 import util.Utils;
 
 public class GameState {
@@ -28,7 +26,7 @@ public class GameState {
     this.cascadePiles = cascadePiles;
   }
 
-  private static String pileToString(List<List<Card>> piles, PileType pile) {
+  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
     List<String> listOfStrings = piles.stream()
             .map(listOfCards -> listOfCards.stream().map(Card::toString)
                     .collect(Collectors.joining(","))
@@ -48,14 +46,14 @@ public class GameState {
 
   @Override
   public String toString() {
-    return pileToString(foundationPiles, PileType.FOUNDATION) +
+    return pileToString(foundationPiles, PileCategory.FOUNDATION) +
             System.lineSeparator() +
-            pileToString(openPiles, PileType.OPEN) +
+            pileToString(openPiles, PileCategory.OPEN) +
             System.lineSeparator() +
-            pileToString(cascadePiles, PileType.CASCADE);
+            pileToString(cascadePiles, PileCategory.CASCADE);
   }
 
-  public void makeMove(PileType source, int pileNumber, int cardIndex, PileType destination, int destPileNumber) {
+  public void makeMove(PileCategory source, int pileNumber, int cardIndex, PileCategory destination, int destPileNumber) {
     source = Utils.requireNonNull(source);
 
     destination = Utils.requireNonNull(destination);
@@ -74,7 +72,7 @@ public class GameState {
     }
   }
 
-  public boolean hasGameCompleted(FreecellModel freecellModel) {
+  public boolean hasGameCompleted() {
     long emptyCascadingPilesCount = cascadePiles.stream()
             .filter(List::isEmpty)
             .count();
@@ -138,7 +136,7 @@ public class GameState {
     return deck;
   }
 
-  private List<Card> getPiles(PileType pileType, int index) {
+  private List<Card> getPiles(PileCategory pileType, int index) {
     List<List<Card>> listOfCards = null;
     switch (pileType) {
       case FOUNDATION:

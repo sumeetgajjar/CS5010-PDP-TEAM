@@ -64,6 +64,6 @@ public enum PileCategory {
         return pileCategory;
       }
     }
-    throw new IllegalArgumentException("PileCategory not found");
+    throw new IllegalArgumentException("Invalid input");
   }
 }
