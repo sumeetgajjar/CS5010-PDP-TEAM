@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import freecell.bean.Card;
+import freecell.bean.PileCategory;
 import util.Utils;
 
 /**
@@ -162,7 +163,7 @@ public class FreecellModel implements FreecellOperations<Card> {
     Card cardFromSource = this.getCardFromPile(cardIndex, sourcePile);
 
     List<Card> destinationPile = this.getPiles(destination, destPileNumber);
-    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
+    boolean canPutCardInPile = PileCategory.getPileCategory(destination).canPutCardInPile(cardFromSource, destinationPile);
 
     if (canPutCardInPile) {
       sourcePile.remove(cardIndex);
@@ -331,9 +332,11 @@ public class FreecellModel implements FreecellOperations<Card> {
                     .collect(Collectors.joining(","))
             ).collect(Collectors.toList());
 
+    PileCategory pileCategory = PileCategory.getPileCategory(pile);
+
     StringBuilder stringBuilder = new StringBuilder();
     for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(pileCategory.getSymbol());
       stringBuilder.append(i + 1);
       stringBuilder.append(":");
       stringBuilder.append(listOfStrings.get(i));
