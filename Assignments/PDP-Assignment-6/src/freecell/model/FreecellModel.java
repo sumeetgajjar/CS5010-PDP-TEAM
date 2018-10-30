@@ -146,6 +146,47 @@ public class FreecellModel implements FreecellOperations<Card> {
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
 
+    List<Card> sourcePile = this.getPiles(source, pileNumber);
+    Card cardFromSource = this.getCardFromPile(cardIndex, sourcePile);
+
+    List<Card> destinationPile = this.getPiles(destination, destPileNumber);
+    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
+
+    if (canPutCardInPile) {
+      sourcePile.remove(cardIndex);
+      destinationPile.add(cardFromSource);
+    } else {
+      throw new IllegalArgumentException("Invalid move");
+    }
+  }
+
+  private Card getCardFromPile(int cardIndex, List<Card> pile) {
+    try {
+      return pile.get(cardIndex);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("Invalid move");
+    }
+  }
+
+  private List<Card> getPiles(PileType pileType, int index) {
+    List<List<Card>> listOfCards = null;
+    switch (pileType) {
+      case FOUNDATION:
+        listOfCards = this.foundationPiles;
+        break;
+      case OPEN:
+        listOfCards = this.openPiles;
+        break;
+      case CASCADE:
+        listOfCards = this.cascadingPiles;
+        break;
+    }
+
+    try {
+      return listOfCards.get(index);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("invalid input");
+    }
   }
 
   @Override
