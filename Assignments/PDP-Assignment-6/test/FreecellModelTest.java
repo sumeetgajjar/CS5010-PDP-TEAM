@@ -581,7 +581,7 @@ public class FreecellModelTest {
 
           //testing invalid destination pileNumber
           try {
-            model.move(PileType.CASCADE, 0, 0, PileType.FOUNDATION, 4);
+            model.move(PileType.CASCADE, 0, 12, PileType.FOUNDATION, 4);
             Assert.fail("should have failed");
           } catch (IllegalArgumentException e) {
             Assert.assertEquals("Invalid input", e.getMessage());
