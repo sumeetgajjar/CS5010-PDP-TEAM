@@ -10,8 +10,13 @@ import util.Utils;
  */
 public class FreecellModel implements FreecellOperations<Card> {
 
+  private static final int FOUNDATION_PILE_COUNT = 4;
+
   private final int numberOfCascadePile;
   private final int numberOfOpenPile;
+  private final List<List<Card>> foundationPiles;
+  private final List<List<Card>> openPiles;
+  private final List<List<Card>> cascadingPiles;
 
   /**
    * Constructs a {@link FreecellModel} object with the given params. It throws {@link
@@ -26,8 +31,16 @@ public class FreecellModel implements FreecellOperations<Card> {
    * @throws IllegalArgumentException if the given params are invalid
    */
   private FreecellModel(int numberOfCascadePile, int numberOfOpenPile) {
+    if (numberOfCascadePile < 4 || numberOfOpenPile < 1) {
+      throw new IllegalArgumentException("invalid input");
+    }
+
     this.numberOfCascadePile = numberOfCascadePile;
     this.numberOfOpenPile = numberOfOpenPile;
+
+    this.foundationPiles = Utils.getListOfEmptyLists(FOUNDATION_PILE_COUNT);
+    this.openPiles = Utils.getListOfEmptyLists(numberOfOpenPile);
+    this.cascadingPiles = Utils.getListOfEmptyLists(numberOfCascadePile);
   }
 
   /**

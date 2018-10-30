@@ -54,4 +54,19 @@ public class Utils {
   public static <T> T getLast(List<T> list) throws IndexOutOfBoundsException {
     return list.get(list.size() - 1);
   }
+
+  /**
+   * Returns a list of empty lists
+   *
+   * @param listSize number of empty list
+   * @param <T>      type of the empty lists
+   * @return a list of empty lists
+   */
+  public static <T> List<List<T>> getListOfEmptyLists(int listSize) {
+    List<List<T>> expectedOpenPiles = new ArrayList<>(listSize);
+    for (int i = 0; i < listSize; i++) {
+      expectedOpenPiles.add(new ArrayList<>());
+    }
+    return expectedOpenPiles;
+  }
 }
