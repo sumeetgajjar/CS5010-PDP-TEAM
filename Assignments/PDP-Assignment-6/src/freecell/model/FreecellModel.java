@@ -89,6 +89,8 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
+    this.clearPiles();
+
     List<Card> deckCopy = new ArrayList<>(deck);
     if (shuffle) {
       Collections.shuffle(deckCopy);
@@ -271,6 +273,12 @@ public class FreecellModel implements FreecellOperations<Card> {
     public FreecellOperations build() {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
     }
+  }
+
+  private void clearPiles() {
+    this.foundationPiles.forEach(List::clear);
+    this.openPiles.forEach(List::clear);
+    this.cascadingPiles.forEach(List::clear);
   }
 
   private String convertPilesIntoString(List<List<Card>> foundationPiles,
