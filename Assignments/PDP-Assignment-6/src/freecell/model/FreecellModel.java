@@ -22,12 +22,15 @@ import util.Utils;
   //todo review tests
   //todo add comments in test
 public class FreecellModel implements FreecellOperations<Card> {
+
   private static final int FOUNDATION_PILE_COUNT = 4;
   private static final int TOTAL_NUMBER_OF_CARDS_IN_DECK = 52;
   private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
+
   private final List<List<Card>> foundationPiles;
   private final List<List<Card>> openPiles;
   private final List<List<Card>> cascadePiles;
+
   private boolean hasGameStarted;
 
   /**
@@ -66,55 +69,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public List<Card> getDeck() {
-    //todo discuss about returning the same order for a given instance
     return Utils.getShuffledDeck();
-  }
-
-  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
-    List<String> listOfStrings = piles.stream()
-            .map(listOfCards -> listOfCards.stream().map(card -> " " + card.toString())
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
-
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
-      stringBuilder.append(i + 1);
-      stringBuilder.append(":");
-      stringBuilder.append(listOfStrings.get(i));
-      stringBuilder.append(System.lineSeparator());
-    }
-    return stringBuilder.toString().trim();
-
-  }
-
-  private static void requireValidDeck(List<Card> deck) {
-    Utils.requireNonNull(deck);
-
-    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    long nullCardCount = deck.stream().filter(Objects::isNull).count();
-    if (nullCardCount == 1) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    Set<Card> cards = new HashSet<>(deck);
-    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  private static Card getCardFromPile(int cardIndex, List<Card> pile) {
-    try {
-      if (pile.size() - 1 != cardIndex) {
-        throw new IllegalArgumentException("Invalid input");
-      }
-      return pile.get(cardIndex);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Invalid input");
-    }
   }
 
   /**
@@ -155,8 +110,8 @@ public class FreecellModel implements FreecellOperations<Card> {
   public static class FreecellModelBuilder implements FreecellOperationsBuilder {
 
     private int numberOfCascadePile;
-    private int numberOfOpenPile;
 
+    private int numberOfOpenPile;
     private FreecellModelBuilder() {
       this.numberOfCascadePile = 8;
       this.numberOfOpenPile = 4;
@@ -180,8 +135,8 @@ public class FreecellModel implements FreecellOperations<Card> {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
     }
 
-  }
 
+  }
   /**
    * Move a card from the given source pile to the given destination pile, if the move is valid. If
    * the destination of the card is same as original position then its a valid move.
@@ -352,6 +307,53 @@ public class FreecellModel implements FreecellOperations<Card> {
       cascadePiles.get(j).add(deckCopy.get(i));
       j = (j + 1) % cascadePiles.size();
       i++;
+    }
+  }
+
+  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
+    List<String> listOfStrings = piles.stream()
+            .map(listOfCards -> listOfCards.stream().map(card -> " " + card.toString())
+                    .collect(Collectors.joining(","))
+            ).collect(Collectors.toList());
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = 0; i < listOfStrings.size(); i++) {
+      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(i + 1);
+      stringBuilder.append(":");
+      stringBuilder.append(listOfStrings.get(i));
+      stringBuilder.append(System.lineSeparator());
+    }
+    return stringBuilder.toString().trim();
+
+  }
+
+  private static void requireValidDeck(List<Card> deck) {
+    Utils.requireNonNull(deck);
+
+    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    long nullCardCount = deck.stream().filter(Objects::isNull).count();
+    if (nullCardCount == 1) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    Set<Card> cards = new HashSet<>(deck);
+    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  private static Card getCardFromPile(int cardIndex, List<Card> pile) {
+    try {
+      if (pile.size() - 1 != cardIndex) {
+        throw new IllegalArgumentException("Invalid input");
+      }
+      return pile.get(cardIndex);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("Invalid input");
     }
   }
 }
