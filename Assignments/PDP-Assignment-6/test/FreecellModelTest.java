@@ -26,37 +26,8 @@ import util.Utils;
  * <code>FreeCellOperations</code>.
  */
 public class FreecellModelTest {
+
   private final Random randomGenerator = new Random();
-
-  private static String convertPilesToString(List<List<Card>> foundationPiles,
-                                             List<List<Card>> openPiles,
-                                             List<List<Card>> cascadePiles) {
-    return pileToString(foundationPiles, PileCategory.FOUNDATION)
-            + System.lineSeparator()
-            + pileToString(openPiles, PileCategory.OPEN)
-            + System.lineSeparator()
-            + pileToString(cascadePiles, PileCategory.CASCADE);
-  }
-
-  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
-    List<String> listOfStrings = new ArrayList<>();
-    for (List<Card> cards : piles) {
-      StringBuilder lineString = new StringBuilder();
-      for (Card card : cards) {
-        lineString.append(" ").append(card).append(",");
-      }
-      listOfStrings.add(Utils.removeTheLastCharacterFrom(lineString.toString()));
-    }
-
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
-      stringBuilder.append(i + 1).append(":");
-      stringBuilder.append(listOfStrings.get(i));
-      stringBuilder.append(System.lineSeparator());
-    }
-    return stringBuilder.toString().trim();
-  }
 
   @Test
   public void deckIsNotInvalid() {
@@ -279,21 +250,6 @@ public class FreecellModelTest {
     }
   }
 
-  private static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
-    List<Card> deck = new ArrayList<>(52);
-    List<CardValue> cardValues = Arrays.stream(CardValue.values())
-            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
-            .collect(Collectors.toList());
-
-    for (CardValue cardValue : cardValues) {
-      deck.add(new Card(Suit.SPADES, cardValue));
-      deck.add(new Card(Suit.DIAMONDS, cardValue));
-      deck.add(new Card(Suit.CLUBS, cardValue));
-      deck.add(new Card(Suit.HEARTS, cardValue));
-    }
-    return deck;
-  }
-
   @Test
   public void startGameWithShuffleTrueShufflesTheDeck() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
@@ -472,14 +428,6 @@ public class FreecellModelTest {
     }
   }
 
-  private static List<List<Card>> getListOfEmptyLists(int listSize) {
-    List<List<Card>> expectedOpenPiles = new ArrayList<>(listSize);
-    for (int i = 0; i < listSize; i++) {
-      expectedOpenPiles.add(new LinkedList<>());
-    }
-    return expectedOpenPiles;
-  }
-
   @Test
   public void moveToInvalidPositionOrPile() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
@@ -580,38 +528,6 @@ public class FreecellModelTest {
         Assert.assertEquals("", model.getGameState());
       }
     }
-  }
-
-  private static List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
-    List<Card> deck = model.getDeck();
-    //sorting the deck so that all Aces shifts to the end of the deck
-    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
-    return deck;
-  }
-
-  private static List<Card> getValidDeck() {
-    List<Card> deck = new ArrayList<>(52);
-    for (Suit suit : Suit.values()) {
-      for (CardValue cardValue : CardValue.values()) {
-        deck.add(new Card(suit, cardValue));
-      }
-    }
-    return deck;
-  }
-
-  private static List<List<Card>> getCardsInCascadingPiles(int cascadePileCount,
-                                                           List<Card> validDeck) {
-    List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
-
-    int i = 0;
-    int j = 0;
-    while (i < validDeck.size()) {
-      expectedCascadingPiles.get(j).add(validDeck.get(i));
-      j = (j + 1) % cascadePileCount;
-      i++;
-    }
-
-    return expectedCascadingPiles;
   }
 
   @Test
@@ -1922,5 +1838,90 @@ public class FreecellModelTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+  }
+
+  private static String convertPilesToString(List<List<Card>> foundationPiles,
+                                             List<List<Card>> openPiles,
+                                             List<List<Card>> cascadePiles) {
+    return pileToString(foundationPiles, PileCategory.FOUNDATION)
+            + System.lineSeparator()
+            + pileToString(openPiles, PileCategory.OPEN)
+            + System.lineSeparator()
+            + pileToString(cascadePiles, PileCategory.CASCADE);
+  }
+
+  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
+    List<String> listOfStrings = new ArrayList<>();
+    for (List<Card> cards : piles) {
+      StringBuilder lineString = new StringBuilder();
+      for (Card card : cards) {
+        lineString.append(" ").append(card).append(",");
+      }
+      listOfStrings.add(Utils.removeTheLastCharacterFrom(lineString.toString()));
+    }
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = 0; i < listOfStrings.size(); i++) {
+      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(i + 1).append(":");
+      stringBuilder.append(listOfStrings.get(i));
+      stringBuilder.append(System.lineSeparator());
+    }
+    return stringBuilder.toString().trim();
+  }
+
+  private static List<List<Card>> getListOfEmptyLists(int listSize) {
+    List<List<Card>> expectedOpenPiles = new ArrayList<>(listSize);
+    for (int i = 0; i < listSize; i++) {
+      expectedOpenPiles.add(new LinkedList<>());
+    }
+    return expectedOpenPiles;
+  }
+
+  private static List<Card> getReverseSortedDeckWithAcesInTheEnd(FreecellOperations<Card> model) {
+    List<Card> deck = model.getDeck();
+    //sorting the deck so that all Aces shifts to the end of the deck
+    deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
+    return deck;
+  }
+
+  private static List<Card> getValidDeck() {
+    List<Card> deck = new ArrayList<>(52);
+    for (Suit suit : Suit.values()) {
+      for (CardValue cardValue : CardValue.values()) {
+        deck.add(new Card(suit, cardValue));
+      }
+    }
+    return deck;
+  }
+
+  private static List<List<Card>> getCardsInCascadingPiles(int cascadePileCount,
+                                                           List<Card> validDeck) {
+    List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
+
+    int i = 0;
+    int j = 0;
+    while (i < validDeck.size()) {
+      expectedCascadingPiles.get(j).add(validDeck.get(i));
+      j = (j + 1) % cascadePileCount;
+      i++;
+    }
+
+    return expectedCascadingPiles;
+  }
+
+  private static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    for (CardValue cardValue : cardValues) {
+      deck.add(new Card(Suit.SPADES, cardValue));
+      deck.add(new Card(Suit.DIAMONDS, cardValue));
+      deck.add(new Card(Suit.CLUBS, cardValue));
+      deck.add(new Card(Suit.HEARTS, cardValue));
+    }
+    return deck;
   }
 }
