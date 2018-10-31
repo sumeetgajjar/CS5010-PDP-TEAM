@@ -113,16 +113,15 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <p>The following inputs as moves are not allowed and results in throwing an
    * IllegalArgumentException:
    * <ul>
-   * <li> A card cannot be moved from Foundation pile to another Foundation pile. </li>
    * <li> PileType cannot be null </li>
    * <li> pileNumber and cardIndex cannot be negative </li>
-   * <li> pileNumber and cardIndex cannot overflow </li>
+   * <li> pileNumber and cardIndex cannot overflow the capacity of the pile </li>
    * <li> Any move from an empty pile </li>
    * <li> A move to a full open pile is invalid </li>
    * <li> A foundation pile cannot start with two </li>
-   * <li> A foundation pile once assigned a suit cannot take a card of other suit </li>
+   * <li> A foundation pile once assigned a suit given a card of other suit </li>
    * <li> A foundation pile can only take a card of the same suit and exactly one higher in
-   * rank</li>
+   * rank, if it's given another card - it is an invalid move </li>
    * <li> If the given cardIndex is not the last card index of the source pile</li>
    * <li> If move is invoked with destination same as source </li>
    * </ul>
@@ -168,6 +167,12 @@ public class FreecellModel implements FreecellOperations<Card> {
   /**
    * Signal if the game is over or not. If this method is invoked before starting the game then it
    * returns false.
+   *
+   * <p>A game is over when all these conditions are fulfilled:
+   * <ul>
+   * <li> If the all 4 foundation piles have 13 cards each </li>
+   * <li> If all other types of piles are empty </li>
+   * </ul>
    *
    * @return true if game is over, false otherwise
    */
