@@ -108,31 +108,33 @@ public class FreecellModel implements FreecellOperations<Card> {
    * Move a card from the given source pile to the given destination pile, if the move is valid. If
    * the destination of the card is same as original position then its a valid move.
    *
-   * <p>The following inputs as moves are not allowed:
+   * <p>The following inputs as moves are not allowed and results in throwing an
+   * IllegalArgumentException:
    * <ul>
    * <li> A card cannot be moved from Foundation pile to another Foundation pile. </li>
    * <li> PileType cannot be null </li>
    * <li> pileNumber and cardIndex cannot be negative </li>
    * <li> pileNumber and cardIndex cannot overflow </li>
-   * <li> A move invoked after game is over </li>
-   * </ul>
-   *
-   * <p>There is no ordering of suits in foundation piles, when a valid move is made from any pile
-   * to an empty foundation pile, that pile is now assigned to the suit entering it.
-   *
-   * <p>A card can be moved from any pile to any pile if it is an invalid move.
-   *
-   * <p>The following are invalid moves:
-   * <ul>
    * <li> Any move from an empty pile </li>
    * <li> A move to a full open pile is invalid </li>
    * <li> A foundation pile cannot start with two </li>
    * <li> A foundation pile once assigned a suit cannot take a card of other suit </li>
-   * <li> A foundation pile can only take a card of the same suit and exactly one higher in rank
-   * </li>
+   * <li> A foundation pile can only take a card of the same suit and exactly one higher in
+   * rank</li>
    * <li> If the given cardIndex is not the last card index of the source pile</li>
    * <li> If move is invoked with destination same as source </li>
    * </ul>
+   *
+   * <p>The following moves even if they have valid input parameters will result in throwing an
+   * IllegalStateException
+   * <ul>
+   * <li> A move invoked before the game has started </li>
+   * <li> A move invoked after game is over </li>
+   * </ul>
+   * <p>There is no ordering of suits in foundation piles, when a valid move is made from any pile
+   * to an empty foundation pile, that pile is now assigned to the suit entering it.
+   *
+   * <p>A card can be moved from any pile to any pile if it is not an invalid move.
    *
    * @param source         the type of the source pile see @link{PileType}
    * @param pileNumber     the pile number of the given type, starting at 0
@@ -140,7 +142,8 @@ public class FreecellModel implements FreecellOperations<Card> {
    * @param destination    the type of the destination pile (see
    * @param destPileNumber the pile number of the given type, starting at 0
    * @throws IllegalArgumentException if the move is not possible {@link PileType})
-   * @throws IllegalStateException    if a move is attempted before the game has starts
+   * @throws IllegalStateException    if a move is attempted before the game has starts or after
+   *                                  game is over
    */
   @Override
   public void move(PileType source,
@@ -148,14 +151,14 @@ public class FreecellModel implements FreecellOperations<Card> {
                    int cardIndex,
                    PileType destination,
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
-    if (this.hasGameStarted) {
+    if (this.hasGameStarted && !this.isGameOver()) {
       this.makeMove(PileCategory.getPileCategory(source),
               pileNumber,
               cardIndex,
               PileCategory.getPileCategory(destination),
               destPileNumber);
     } else {
-      throw new IllegalStateException("cannot move before starting game");
+      throw new IllegalStateException("cannot move before starting game or after game is over");
     }
   }
 
