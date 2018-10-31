@@ -274,7 +274,7 @@ public class FreecellModel implements FreecellOperations<Card> {
   }
 
   private List<Card> getPile(PileCategory pileType, int index) {
-    List<List<Card>> listOfCards = null;
+    List<List<Card>> listOfCards;
     switch (pileType) {
       case FOUNDATION:
         listOfCards = this.foundationPiles;

@@ -31,11 +31,11 @@ public class FreecellModelTest {
   private static String convertPilesToString(List<List<Card>> foundationPiles,
                                              List<List<Card>> openPiles,
                                              List<List<Card>> cascadePiles) {
-    return pileToString(foundationPiles, PileCategory.FOUNDATION) +
-            System.lineSeparator() +
-            pileToString(openPiles, PileCategory.OPEN) +
-            System.lineSeparator() +
-            pileToString(cascadePiles, PileCategory.CASCADE);
+    return pileToString(foundationPiles, PileCategory.FOUNDATION)
+            + System.lineSeparator()
+            + pileToString(openPiles, PileCategory.OPEN)
+            + System.lineSeparator()
+            + pileToString(cascadePiles, PileCategory.CASCADE);
   }
 
   private static String pileToString(List<List<Card>> piles, PileCategory pile) {
@@ -603,7 +603,8 @@ public class FreecellModelTest {
                                                            List<Card> validDeck) {
     List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
 
-    int i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     while (i < validDeck.size()) {
       expectedCascadingPiles.get(j).add(validDeck.get(i));
       j = (j + 1) % cascadePileCount;
@@ -1696,9 +1697,9 @@ public class FreecellModelTest {
 
         //moving last ace to open pile
         int lastPileOfAce = ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
-        int lastCardIndexOfAce = 52 % cascadingPiles == 0 ?
-                (52 / cascadingPiles) - 1 :
-                (52 / cascadingPiles);
+        int lastCardIndexOfAce = 52 % cascadingPiles == 0
+                ? (52 / cascadingPiles) - 1
+                : (52 / cascadingPiles);
 
         List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 

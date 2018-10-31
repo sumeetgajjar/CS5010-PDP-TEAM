@@ -45,7 +45,7 @@ public class Utils {
   }
 
   /**
-   * Gets the last element from the list
+   * Gets the last element from the list.
    *
    * @param list the list from which to get the last element from
    * @param <T>  the type of data in the list
@@ -56,7 +56,7 @@ public class Utils {
   }
 
   /**
-   * Returns a list of empty lists
+   * Returns a list of empty lists.
    *
    * @param listSize number of empty list
    * @param <T>      type of the empty lists
@@ -72,7 +72,7 @@ public class Utils {
 
 
   /**
-   * Gets the first element from the list
+   * Gets the first element from the list.
    *
    * @param collect the list from which the first element is needed
    * @param <T>     the type of the data in the list
@@ -84,7 +84,7 @@ public class Utils {
   }
 
   /**
-   * Returns a string minus it's last character
+   * Returns a string minus it's last character.
    *
    * @param string string from which last character is to be removed
    * @return string minus it's last character
