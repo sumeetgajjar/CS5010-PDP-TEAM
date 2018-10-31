@@ -45,7 +45,7 @@ public class Utils {
   }
 
   /**
-   * Gets the last element from the list
+   * Gets the last element from the list.
    *
    * @param list the list from which to get the last element from
    * @param <T>  the type of data in the list
@@ -56,7 +56,7 @@ public class Utils {
   }
 
   /**
-   * Returns a list of empty lists
+   * Returns a list of empty lists.
    *
    * @param listSize number of empty list
    * @param <T>      type of the empty lists
