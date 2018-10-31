@@ -18,11 +18,11 @@ public class Card {
   }
 
   public Suit getSuit() {
-    return suit;
+    return this.suit;
   }
 
   public CardValue getCardValue() {
-    return cardValue;
+    return this.cardValue;
   }
 
   public static Card parse(String cardString) {
@@ -46,13 +46,13 @@ public class Card {
     }
 
     Card card = (Card) o;
-    return getSuit() == card.getSuit() &&
-            getCardValue() == card.getCardValue();
+    return this.getSuit() == card.getSuit() &&
+            this.getCardValue() == card.getCardValue();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getSuit(), getCardValue());
+    return Objects.hash(this.getSuit(), this.getCardValue());
   }
 
   @Override
