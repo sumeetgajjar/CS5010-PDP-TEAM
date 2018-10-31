@@ -30,7 +30,7 @@ public class FreeCellGameState {
 
   private static String pileToString(List<List<Card>> piles, PileCategory pile) {
     List<String> listOfStrings = piles.stream()
-            .map(listOfCards -> listOfCards.stream().map(Card::toString)
+            .map(listOfCards -> listOfCards.stream().map(card -> " " + card.toString())
                     .collect(Collectors.joining(","))
             ).collect(Collectors.toList());
 

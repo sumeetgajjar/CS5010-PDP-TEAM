@@ -51,6 +51,6 @@ public class Card {
 
   @Override
   public String toString() {
-    return " " + this.getCardValue().getSymbol() + this.getSuit().getSymbol();
+    return this.getCardValue().getSymbol() + this.getSuit().getSymbol();
   }
 }
