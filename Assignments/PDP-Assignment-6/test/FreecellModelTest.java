@@ -180,7 +180,7 @@ public class FreecellModelTest {
                 .opens(openPiles)
                 .build();
 
-        List<Card> deckWith52Cards = getValidDeck().subList(0, 52);
+        List<Card> deckWith52Cards = getValidDeck().subList(0, 51);
         deckWith52Cards.add(null);
 
         try {
@@ -210,7 +210,7 @@ public class FreecellModelTest {
                 .opens(openPiles)
                 .build();
 
-        List<Card> deckWithDuplicates = getValidDeck().subList(0, 52);
+        List<Card> deckWithDuplicates = getValidDeck().subList(0, 51);
         deckWithDuplicates.add(deckWithDuplicates.get(randomGenerator.nextInt(51)));
 
         try {
