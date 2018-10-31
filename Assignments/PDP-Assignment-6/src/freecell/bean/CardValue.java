@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import util.Utils;
 
+/**
+ * This enum represents all the values a card can have.
+ */
 public enum CardValue {
   ACE("A", 1),
   TWO("2", 2),
@@ -28,22 +31,48 @@ public enum CardValue {
    */
   private final int priority;
 
+  /**
+   * Constructs a CardValue object with given symbol and priority.
+   *
+   * @param symbol   the symbol of the value
+   * @param priority the priority of the value
+   */
   CardValue(String symbol, int priority) {
     this.symbol = symbol;
     this.priority = priority;
   }
 
+  /**
+   * Returns the symbol of this CardValue.
+   *
+   * @return the symbol of this CardValue
+   */
   public String getSymbol() {
     return symbol;
   }
 
+  /**
+   * Returns the priority of this CardValue.
+   *
+   * @return the priority of this CardValue
+   */
   public int getPriority() {
     return priority;
   }
 
-  public static CardValue parse(String symbol) throws IllegalArgumentException {
+  /**
+   * Returns a CardValue by parsing the given string. It throws a {@link IllegalArgumentException}
+   * if the given string is null or non-parsable.
+   *
+   * @param cardValueString the string to parse
+   * @return a CardValue by parsing the given string
+   * @throws IllegalArgumentException if the given string is null or non-parsable.
+   */
+  public static CardValue parse(String cardValueString) throws IllegalArgumentException {
+    Utils.requireNonNull(cardValueString);
+
     List<CardValue> cardValues = Arrays.stream(CardValue.values())
-            .filter(cardValue -> cardValue.getSymbol().equals(symbol))
+            .filter(cardValue -> cardValue.getSymbol().equals(cardValueString))
             .collect(Collectors.toList());
     try {
       return Utils.getFirst(cardValues);
