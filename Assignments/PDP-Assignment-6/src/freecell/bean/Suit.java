@@ -28,7 +28,7 @@ public enum Suit {
     return color;
   }
 
-  public static Suit parse(char symbol) {
+  public static Suit parse(char symbol) throws IllegalArgumentException {
     List<Suit> suits = Arrays.stream(Suit.values())
             .filter(cardValue -> cardValue.getSymbol() == symbol)
             .collect(Collectors.toList());

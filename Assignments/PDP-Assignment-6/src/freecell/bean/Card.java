@@ -25,13 +25,13 @@ public class Card {
     return this.cardValue;
   }
 
-  public static Card parse(String cardString) {
+  public static Card parse(String cardString) throws IllegalArgumentException {
     cardString = cardString.trim();
     if (cardString.length() > 3 || cardString.length() < 2) {
       throw new IllegalArgumentException("Invalid string");
     }
     char suitSymbol = cardString.charAt(cardString.length() - 1);
-    String cardValueString = cardString.substring(0, cardString.length() - 1);
+    String cardValueString = Utils.removeTheLastCharacterFrom(cardString);
     return new Card(Suit.parse(suitSymbol), CardValue.parse(cardValueString));
   }
 

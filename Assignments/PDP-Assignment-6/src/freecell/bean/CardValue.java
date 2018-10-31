@@ -41,7 +41,7 @@ public enum CardValue {
     return priority;
   }
 
-  public static CardValue parse(String symbol) {
+  public static CardValue parse(String symbol) throws IllegalArgumentException {
     List<CardValue> cardValues = Arrays.stream(CardValue.values())
             .filter(cardValue -> cardValue.getSymbol().equals(symbol))
             .collect(Collectors.toList());
