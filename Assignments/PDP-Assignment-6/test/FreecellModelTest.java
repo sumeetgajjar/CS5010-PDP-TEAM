@@ -1823,19 +1823,22 @@ public class FreecellModelTest {
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.CASCADE, 0);
-    } catch (IllegalArgumentException e) {
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.OPEN, 0);
-    } catch (IllegalArgumentException e) {
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.FOUNDATION, 1);
-    } catch (IllegalArgumentException e) {
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
   }

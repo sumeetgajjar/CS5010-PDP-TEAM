@@ -162,6 +162,12 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
   }
 
+  /**
+   * Signal if the game is over or not. If this method is invoked before starting the game then it
+   * returns false.
+   *
+   * @return true if game is over, false otherwise
+   */
   @Override
   public boolean isGameOver() {
     long emptyCascadingPilesCount = cascadePiles.stream()
