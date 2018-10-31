@@ -59,7 +59,7 @@ public enum PileCategory {
     return pileType;
   }
 
-  public static PileCategory getPileCategory(PileType pileType) {
+  public static PileCategory getPileCategory(PileType pileType) throws IllegalArgumentException {
     for (PileCategory pileCategory : PileCategory.values()) {
       if (pileCategory.getPileType().equals(pileType)) {
         return pileCategory;
