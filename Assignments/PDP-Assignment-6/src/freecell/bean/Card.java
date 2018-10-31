@@ -36,8 +36,8 @@ public class Card {
     }
 
     Card card = (Card) o;
-    return this.getSuit() == card.getSuit() &&
-            this.getCardValue() == card.getCardValue();
+    return this.getSuit() == card.getSuit()
+            && this.getCardValue() == card.getCardValue();
   }
 
   @Override
