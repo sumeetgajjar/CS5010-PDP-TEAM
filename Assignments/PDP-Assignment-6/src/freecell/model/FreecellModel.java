@@ -131,6 +131,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li> A move invoked before the game has started </li>
    * <li> A move invoked after game is over </li>
    * </ul>
+   *
    * <p>There is no ordering of suits in foundation piles, when a valid move is made from any pile
    * to an empty foundation pile, that pile is now assigned to the suit entering it.
    *

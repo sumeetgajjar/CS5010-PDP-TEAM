@@ -1828,21 +1828,24 @@ public class FreecellModelTest {
       model.move(PileType.FOUNDATION, 0, 12, PileType.CASCADE, 0);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("cannot move before starting game or after game is over",
+              e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.OPEN, 0);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("cannot move before starting game or after game is over",
+              e.getMessage());
     }
 
     try {
       model.move(PileType.FOUNDATION, 0, 12, PileType.FOUNDATION, 1);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("cannot move before starting game or after game is over",
+              e.getMessage());
     }
   }
 
