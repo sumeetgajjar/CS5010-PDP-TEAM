@@ -79,6 +79,21 @@ public class Utils {
    * @return the first element in the list
    */
   public static <T> T getFirst(List<T> collect) {
+    Utils.requireNonNull(collect);
     return collect.get(0);
+  }
+
+  /**
+   * Returns a string minus it's last character
+   *
+   * @param string string from which last character is to be removed
+   * @return string minus it's last character
+   */
+  public static String removeTheLastCharacterFrom(String string) {
+    Utils.requireNonNull(string);
+    if (string.isEmpty()) {
+      return string;
+    }
+    return string.substring(0, string.length() - 1);
   }
 }
