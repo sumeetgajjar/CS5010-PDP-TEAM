@@ -108,8 +108,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * Move a card from the given source pile to the given destination pile, if the move is valid. If
    * the destination of the card is same as original position then its a valid move.
    *
-   * <p>
-   * The following inputs as moves are not allowed:
+   * <p>The following inputs as moves are not allowed:
    * <ul>
    * <li> A card cannot be moved from Foundation pile to another Foundation pile. </li>
    * <li> PileType cannot be null </li>
@@ -308,7 +307,8 @@ public class FreecellModel implements FreecellOperations<Card> {
       Collections.shuffle(deckCopy);
     }
 
-    int i = 0, j = 0;
+    int i = 0;
+    int j = 0;
     while (i < deckCopy.size()) {
       cascadePiles.get(j).add(deckCopy.get(i));
       j = (j + 1) % cascadePiles.size();

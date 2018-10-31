@@ -31,8 +31,8 @@ public enum PileCategory {
       } else {
         Card lastCardInPile = Utils.getLast(pile);
         return (lastCardInPile.getSuit().getColor() != card.getSuit().getColor())
-                && (lastCardInPile.getCardValue().getPriority() -
-                card.getCardValue().getPriority() == 1);
+                && (lastCardInPile.getCardValue().getPriority() - card.getCardValue().getPriority()
+                == 1);
       }
     }
   },
@@ -44,8 +44,9 @@ public enum PileCategory {
         return card.getCardValue().equals(CardValue.ACE);
       } else {
         Card lastCardInPile = Utils.getLast(pile);
-        return (lastCardInPile.getSuit() == card.getSuit()) &&
-                card.getCardValue().getPriority() - lastCardInPile.getCardValue().getPriority() == 1;
+        return (lastCardInPile.getSuit() == card.getSuit())
+                && (card.getCardValue().getPriority() - lastCardInPile.getCardValue().getPriority()
+                == 1);
       }
     }
   };
