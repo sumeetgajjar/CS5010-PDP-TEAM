@@ -17,6 +17,12 @@ import util.Utils;
 public enum PileCategory {
 
   OPEN('O', PileType.OPEN) {
+    /**
+     * Returns true if the given list is empty, false otherwise.
+     * @param card the card to check
+     * @param pile the list to check against given card
+     * @return true if the given pile is empty, false otherwise
+     */
     @Override
     public boolean canPutCardInPile(Card card, List<Card> pile) {
       return pile.isEmpty();
@@ -24,6 +30,17 @@ public enum PileCategory {
   },
 
   CASCADE('C', PileType.CASCADE) {
+    /**
+     * Returns true if the given card can be placed at the end of the given list, false otherwise.
+     * The given card can only be placed at the end of the given list if and only if its color is
+     * different from that of the last card in the given list, and its value is exactly one less
+     * than that of the last card in the given list. If the given list is empty any card can be
+     * placed at the end.
+     *
+     * @param card the card to check
+     * @param pile the list to check against given card
+     * @return true if the given card can be placed at the end of the given list, false otherwise
+     */
     @Override
     public boolean canPutCardInPile(Card card, List<Card> pile) {
       if (pile.isEmpty()) {
@@ -37,7 +54,19 @@ public enum PileCategory {
     }
   },
 
+
   FOUNDATION('F', PileType.FOUNDATION) {
+    /**
+     * Returns true if the given card can be placed at the end of the given list, false otherwise.
+     * The given card can only be placed at the end of the given list if and only if its suit
+     * matches that of the list, and its value is one more than that of
+     * the last card of the given list. If the given list is empty any card can be placed at the
+     * end.
+     *
+     * @param card the card to check
+     * @param pile the list to check against given card
+     * @return true if the given card can be placed at the end of the given list, false otherwise
+     */
     @Override
     public boolean canPutCardInPile(Card card, List<Card> pile) {
       if (pile.isEmpty()) {
