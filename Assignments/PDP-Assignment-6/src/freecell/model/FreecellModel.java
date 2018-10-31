@@ -66,6 +66,8 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li>It has at least one invalid card (invalid suit or invalid number or null)</li>
    * </ul>
    *
+   * <p>The implementation returns a shuffled deck on each invocation.
+   *
    * @return the deck of cards as a list
    */
   @Override
