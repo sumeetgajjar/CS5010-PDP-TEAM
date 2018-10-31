@@ -16,7 +16,7 @@ import util.Utils;
  * <code>FreecellModel</code> implements the <code>FreecellOperations</code> interface and
  * represents the operations that can be helpful in playing an entire game of FreeCell.
  *
- * <p> We are flexible in this implementation and we allow as few as 1 open pile and as few as 4
+ * <p>We are flexible in this implementation and we allow as few as 1 open pile and as few as 4
  * cascade piles. We mandate 4 foundation piles and allow the user to play the game of freeCell by
  * allowing the user to get a deck of <b>valid</b> cards, making <b>valid</b> moves and viewing the
  * game state at any time. The game can be started by the user by passing a valid deck of cards and
@@ -81,7 +81,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * the 4th pile will get cards 3, 7, 11, .... Depending on the number of cascade piles, they may
    * have a different number of cards
    *
-   * <p> The method will throw an IllegalArgumentException in the following cases:
+   * <p>The method will throw an IllegalArgumentException in the following cases:
    * <ul>
    * <li> If the deck is empty or null </li>
    * <li> If the deck size is not 52 </li>
@@ -90,7 +90,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * </ul>
    * </p>
    *
-   * <p> The deck passed as input will not be mutated by <code>startGame</code></p>
+   * <p>The deck passed as input will not be mutated by <code>startGame</code></p>
    *
    * @param deck    the deck to be dealt
    * @param shuffle if true, shuffle the deck else deal the deck as-is
@@ -118,12 +118,12 @@ public class FreecellModel implements FreecellOperations<Card> {
    * <li> A move invoked after game is over </li>
    * </ul>
    *
-   * <p> There is no ordering of suits in foundation piles, when a valid move is made from any pile
+   * <p>There is no ordering of suits in foundation piles, when a valid move is made from any pile
    * to an empty foundation pile, that pile is now assigned to the suit entering it.
    *
-   * <p> A card can be moved from any pile to any pile if it is an invalid move.
+   * <p>A card can be moved from any pile to any pile if it is an invalid move.
    *
-   * <p> The following are invalid moves:
+   * <p>The following are invalid moves:
    * <ul>
    * <li> Any move from an empty pile </li>
    * <li> A move to a full open pile is invalid </li>
@@ -200,7 +200,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * newline on the last line
    * </pre>
    *
-   * <p> If getGameState is invoked before starting the game it returns an empty string.
+   * <p>If getGameState is invoked before starting the game it returns an empty string.
    *
    * @return the formatted string as above
    */
@@ -223,7 +223,6 @@ public class FreecellModel implements FreecellOperations<Card> {
   }
 
   public static class FreecellModelBuilder implements FreecellOperationsBuilder {
-
     private int numberOfCascadePile;
     private int numberOfOpenPile;
 
@@ -286,6 +285,8 @@ public class FreecellModel implements FreecellOperations<Card> {
       case CASCADE:
         listOfCards = this.cascadePiles;
         break;
+      default:
+        throw new IllegalArgumentException("Invalid pile category");
     }
 
     try {
