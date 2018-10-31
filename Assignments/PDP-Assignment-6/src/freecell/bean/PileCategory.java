@@ -6,13 +6,13 @@ import freecell.model.PileType;
 import util.Utils;
 
 /**
- * Category for the three types of piles in a game of Freecell. <br> Open: This pile can hold only
- * one card. It is like a buffer to temporarily hold cards <br> Cascade: This is a pile of face-up
- * cards. A build within a cascade pile is a subset of cards that has monotonically decreasing
- * values and suits of alternating colors<br> Foundation: Initially empty, there are 4 foundation
- * piles, one for each suit. Each foundation pile collects cards in increasing order of value for
- * one suit (Ace being the lowest). <br> The goal of the game is to fill up all the foundation
- * piles
+ * This enum represents Category for the three types of piles in a game of Freecell. <br> Open: This
+ * pile can hold only one card. It is like a buffer to temporarily hold cards <br> Cascade: This is
+ * a pile of face-up cards. A build within a cascade pile is a subset of cards that has
+ * monotonically decreasing values and suits of alternating colors<br> Foundation: Initially empty,
+ * there are 4 foundation piles, one for each suit. Each foundation pile collects cards in
+ * increasing order of value for one suit (Ace being the lowest). <br> The goal of the game is to
+ * fill up all the foundation piles
  */
 public enum PileCategory {
 
@@ -34,8 +34,7 @@ public enum PileCategory {
      * Returns true if the given card can be placed at the end of the given list, false otherwise.
      * The given card can only be placed at the end of the given list if and only if its color is
      * different from that of the last card in the given list, and its value is exactly one less
-     * than that of the last card in the given list. If the given list is empty any card can be
-     * placed at the end.
+     * than that of the last card in the given list. If the given list is empty it will return true.
      *
      * @param card the card to check
      * @param pile the list to check against given card
@@ -59,9 +58,8 @@ public enum PileCategory {
     /**
      * Returns true if the given card can be placed at the end of the given list, false otherwise.
      * The given card can only be placed at the end of the given list if and only if its suit
-     * matches that of the list, and its value is one more than that of
-     * the last card of the given list. If the given list is empty any card can be placed at the
-     * end.
+     * matches to that of the last card in the given list, and its value is one more than that of
+     * the last card of the given list. If the given list is empty it returns true.
      *
      * @param card the card to check
      * @param pile the list to check against given card
