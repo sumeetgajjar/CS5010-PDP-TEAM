@@ -275,27 +275,21 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
   }
 
-  private void makeMove(PileCategory source,
-                        int pileNumber,
-                        int cardIndex,
-                        PileCategory destination,
-                        int destPileNumber) {
+  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
+    List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
+            .map(card -> " " + card.toString()).collect(Collectors.joining(","))
+    ).collect(Collectors.toList());
 
-    Utils.requireNonNull(source);
-    Utils.requireNonNull(destination);
-
-    List<Card> sourcePile = getPile(source, pileNumber);
-    Card cardFromSource = getCardFromPile(cardIndex, sourcePile);
-
-    List<Card> destinationPile = getPile(destination, destPileNumber);
-    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
-
-    if (canPutCardInPile) {
-      sourcePile.remove(cardIndex);
-      destinationPile.add(cardFromSource);
-    } else {
-      throw new IllegalArgumentException("Invalid input");
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int pileIndex = 0; pileIndex < listOfStrings.size(); pileIndex++) {
+      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(pileIndex + 1);
+      stringBuilder.append(":");
+      stringBuilder.append(listOfStrings.get(pileIndex));
+      stringBuilder.append(System.lineSeparator());
     }
+    return stringBuilder.toString().trim();
+
   }
 
   private List<Card> getPile(PileCategory pileType, int index) {
@@ -327,50 +321,21 @@ public class FreecellModel implements FreecellOperations<Card> {
     this.cascadePiles.forEach(List::clear);
   }
 
-  private void distributeDeck(List<Card> deck, boolean shuffle) {
-    List<Card> deckCopy = new ArrayList<>(deck);
-    if (shuffle) {
-      Collections.shuffle(deckCopy);
-    }
-
-    int i = 0;
-    int j = 0;
-    while (i < deckCopy.size()) {
-      cascadePiles.get(j).add(deckCopy.get(i));
-      j = (j + 1) % cascadePiles.size();
-      i++;
-    }
-  }
-
-  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
-    List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
-            .map(card -> " " + card.toString()).collect(Collectors.joining(","))
-    ).collect(Collectors.toList());
-
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
-      stringBuilder.append(i + 1);
-      stringBuilder.append(":");
-      stringBuilder.append(listOfStrings.get(i));
-      stringBuilder.append(System.lineSeparator());
-    }
-    return stringBuilder.toString().trim();
-
-  }
-
   private static void requireValidDeck(List<Card> deck) {
     Utils.requireNonNull(deck);
 
+    // deck has an incorrect size
     if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
       throw new IllegalArgumentException("Invalid input");
     }
 
+    // deck has null cards
     long nullCardCount = deck.stream().filter(Objects::isNull).count();
-    if (nullCardCount == 1) {
+    if (nullCardCount > 0) {
       throw new IllegalArgumentException("Invalid input");
     }
 
+    // deck has duplicates
     Set<Card> cards = new HashSet<>(deck);
     if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
       throw new IllegalArgumentException("Invalid input");
@@ -379,12 +344,53 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   private static Card getCardFromPile(int cardIndex, List<Card> pile) {
     try {
+      // can only get last card and no other card
       if (pile.size() - 1 != cardIndex) {
         throw new IllegalArgumentException("Invalid input");
       }
       return pile.get(cardIndex);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  private void makeMove(PileCategory source,
+                        int pileNumber,
+                        int cardIndex,
+                        PileCategory destination,
+                        int destPileNumber) {
+
+    Utils.requireNonNull(source);
+    Utils.requireNonNull(destination);
+
+    List<Card> sourcePile = getPile(source, pileNumber);
+    Card cardFromSource = getCardFromPile(cardIndex, sourcePile);
+
+    List<Card> destinationPile = getPile(destination, destPileNumber);
+    // we ask if the destination can put the card in it's pile, if it can't then it is an invalid
+    // input
+    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
+
+    if (canPutCardInPile) {
+      sourcePile.remove(cardIndex);
+      destinationPile.add(cardFromSource);
+    } else {
+      throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  private void distributeDeck(List<Card> deck, boolean shuffle) {
+    List<Card> deckCopy = new ArrayList<>(deck);
+    if (shuffle) {
+      Collections.shuffle(deckCopy);
+    }
+
+    int cardIndex = 0;
+    int pileNumber = 0;
+    while (cardIndex < deckCopy.size()) {
+      this.cascadePiles.get(pileNumber).add(deckCopy.get(cardIndex));
+      pileNumber = (pileNumber + 1) % this.cascadePiles.size();
+      cardIndex++;
     }
   }
 }
