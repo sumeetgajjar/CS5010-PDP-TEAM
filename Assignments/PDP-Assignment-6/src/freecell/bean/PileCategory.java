@@ -48,7 +48,8 @@ public enum PileCategory {
     this.pileType = pileType;
   }
 
-  public abstract boolean canPutCardInPile(Card card, List<Card> pile) throws IllegalArgumentException;
+  public abstract boolean canPutCardInPile(Card card, List<Card> pile)
+          throws IllegalArgumentException;
 
   public char getSymbol() {
     return symbol;
