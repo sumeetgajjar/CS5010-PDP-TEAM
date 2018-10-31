@@ -15,12 +15,9 @@ import util.Utils;
 /**
  * Created by gajjar.s, on 1:47 PM, 10/28/18
  */
-//todo move everything here
-  //todo separate logic for game state string creation in test and here
-  //todo documentation
-  //todo isolate unrelated parts
-  //todo review tests
-  //todo add comments in test
+//todo documentation
+//todo review tests
+//todo add comments in test
 public class FreecellModel implements FreecellOperations<Card> {
 
   private static final int FOUNDATION_PILE_COUNT = 4;
@@ -98,45 +95,11 @@ public class FreecellModel implements FreecellOperations<Card> {
   @Override
   public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
     requireValidDeck(deck);
-    clearPiles();
-    distributeDeck(deck, shuffle);
+    this.clearPiles();
+    this.distributeDeck(deck, shuffle);
     this.hasGameStarted = true;
   }
 
-  public static FreecellOperationsBuilder getBuilder() {
-    return new FreecellModelBuilder();
-  }
-
-  public static class FreecellModelBuilder implements FreecellOperationsBuilder {
-
-    private int numberOfCascadePile;
-
-    private int numberOfOpenPile;
-    private FreecellModelBuilder() {
-      this.numberOfCascadePile = 8;
-      this.numberOfOpenPile = 4;
-    }
-
-    @Override
-    public FreecellOperationsBuilder cascades(int c) {
-      this.numberOfCascadePile = c;
-      return this;
-    }
-
-    @Override
-    public FreecellOperationsBuilder opens(int o) {
-      this.numberOfOpenPile = o;
-      return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public FreecellOperations build() {
-      return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
-    }
-
-
-  }
   /**
    * Move a card from the given source pile to the given destination pile, if the move is valid. If
    * the destination of the card is same as original position then its a valid move.
@@ -184,7 +147,10 @@ public class FreecellModel implements FreecellOperations<Card> {
                    int destPileNumber) throws IllegalArgumentException, IllegalStateException {
     if (this.hasGameStarted) {
       this.makeMove(PileCategory.getPileCategory(source),
-              pileNumber, cardIndex, PileCategory.getPileCategory(destination), destPileNumber);
+              pileNumber,
+              cardIndex,
+              PileCategory.getPileCategory(destination),
+              destPileNumber);
     } else {
       throw new IllegalStateException("cannot move before starting game");
     }
@@ -237,13 +203,47 @@ public class FreecellModel implements FreecellOperations<Card> {
   @Override
   public String getGameState() {
     if (this.hasGameStarted) {
-      return pileToString(foundationPiles, PileCategory.FOUNDATION) +
-              System.lineSeparator() +
-              pileToString(openPiles, PileCategory.OPEN) +
-              System.lineSeparator() +
-              pileToString(cascadePiles, PileCategory.CASCADE);
+      return String.format("%s%s%s%s%s",
+              pilesToString(foundationPiles, PileCategory.FOUNDATION),
+              System.lineSeparator(),
+              pilesToString(openPiles, PileCategory.OPEN),
+              System.lineSeparator(),
+              pilesToString(cascadePiles, PileCategory.CASCADE));
     } else {
       return "";
+    }
+  }
+
+  public static FreecellOperationsBuilder getBuilder() {
+    return new FreecellModelBuilder();
+  }
+
+  public static class FreecellModelBuilder implements FreecellOperationsBuilder {
+
+    private int numberOfCascadePile;
+    private int numberOfOpenPile;
+
+    private FreecellModelBuilder() {
+      this.numberOfCascadePile = 8;
+      this.numberOfOpenPile = 4;
+    }
+
+    @Override
+    public FreecellOperationsBuilder cascades(int c) {
+      this.numberOfCascadePile = c;
+      return this;
+    }
+
+    @Override
+    public FreecellOperationsBuilder opens(int o) {
+      this.numberOfOpenPile = o;
+      return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public FreecellOperations build() {
+      return new FreecellModel(numberOfCascadePile, numberOfOpenPile);
     }
   }
 
@@ -252,6 +252,7 @@ public class FreecellModel implements FreecellOperations<Card> {
                         int cardIndex,
                         PileCategory destination,
                         int destPileNumber) {
+
     Utils.requireNonNull(source);
     Utils.requireNonNull(destination);
 
@@ -310,11 +311,10 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
   }
 
-  private static String pileToString(List<List<Card>> piles, PileCategory pile) {
-    List<String> listOfStrings = piles.stream()
-            .map(listOfCards -> listOfCards.stream().map(card -> " " + card.toString())
-                    .collect(Collectors.joining(","))
-            ).collect(Collectors.toList());
+  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
+    List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
+            .map(card -> " " + card.toString()).collect(Collectors.joining(","))
+    ).collect(Collectors.toList());
 
     StringBuilder stringBuilder = new StringBuilder();
     for (int i = 0; i < listOfStrings.size(); i++) {
