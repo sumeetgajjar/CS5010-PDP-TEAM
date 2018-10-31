@@ -9,6 +9,12 @@ import util.Utils;
 /**
  * Created by gajjar.s, on 1:47 PM, 10/28/18
  */
+//todo move everything here
+  //todo separate logic for game state string creation in test and here
+  //todo documentation
+  //todo isolate unrelated parts
+  //todo review tests
+  //todo add comments in test
 public class FreecellModel implements FreecellOperations<Card> {
   private final FreeCellGameState gameState;
   private boolean hasGameStarted;
