@@ -326,36 +326,18 @@ public class FreecellModel implements FreecellOperations<Card> {
     this.cascadePiles.forEach(List::clear);
   }
 
-  private static void requireValidDeck(List<Card> deck) {
-    Utils.requireNonNull(deck);
-
-    // deck has an incorrect size
-    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
+  private void distributeDeck(List<Card> deck, boolean shuffle) {
+    List<Card> deckCopy = new ArrayList<>(deck);
+    if (shuffle) {
+      Collections.shuffle(deckCopy);
     }
 
-    // deck has null cards
-    long nullCardCount = deck.stream().filter(Objects::isNull).count();
-    if (nullCardCount > 0) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    // deck has duplicates
-    Set<Card> cards = new HashSet<>(deck);
-    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  private static Card getCardFromPile(int cardIndex, List<Card> pile) {
-    try {
-      // can only get last card and no other card
-      if (pile.size() - 1 != cardIndex) {
-        throw new IllegalArgumentException("Invalid input");
-      }
-      return pile.get(cardIndex);
-    } catch (IndexOutOfBoundsException e) {
-      throw new IllegalArgumentException("Invalid input");
+    int cardIndex = 0;
+    int pileNumber = 0;
+    while (cardIndex < deckCopy.size()) {
+      this.cascadePiles.get(pileNumber).add(deckCopy.get(cardIndex));
+      pileNumber = (pileNumber + 1) % this.cascadePiles.size();
+      cardIndex++;
     }
   }
 
@@ -384,18 +366,36 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
   }
 
-  private void distributeDeck(List<Card> deck, boolean shuffle) {
-    List<Card> deckCopy = new ArrayList<>(deck);
-    if (shuffle) {
-      Collections.shuffle(deckCopy);
+  private static Card getCardFromPile(int cardIndex, List<Card> pile) {
+    try {
+      // can only get last card and no other card
+      if (pile.size() - 1 != cardIndex) {
+        throw new IllegalArgumentException("Invalid input");
+      }
+      return pile.get(cardIndex);
+    } catch (IndexOutOfBoundsException e) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  private static void requireValidDeck(List<Card> deck) {
+    Utils.requireNonNull(deck);
+
+    // deck has an incorrect size
+    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
     }
 
-    int cardIndex = 0;
-    int pileNumber = 0;
-    while (cardIndex < deckCopy.size()) {
-      this.cascadePiles.get(pileNumber).add(deckCopy.get(cardIndex));
-      pileNumber = (pileNumber + 1) % this.cascadePiles.size();
-      cardIndex++;
+    // deck has null cards
+    long nullCardCount = deck.stream().filter(Objects::isNull).count();
+    if (nullCardCount > 0) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    // deck has duplicates
+    Set<Card> cards = new HashSet<>(deck);
+    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
     }
   }
 }
