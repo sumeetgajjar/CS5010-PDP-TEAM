@@ -31,24 +31,6 @@ public enum Suit {
   }
 
   /**
-   * Parses a given character into the appropriate Suit if it's a valid symbol.
-   *
-   * @param symbol the character representation of the suit
-   * @return Suit parsed from the character representation of it's symbol
-   * @throws IllegalArgumentException if the symbol passed is not one of the valid suit symbols
-   */
-  public static Suit parse(char symbol) throws IllegalArgumentException {
-    List<Suit> suits = Arrays.stream(Suit.values())
-            .filter(cardValue -> cardValue.getSymbol() == symbol)
-            .collect(Collectors.toList());
-    try {
-      return Utils.getFirst(suits);
-    } catch (Exception e) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  /**
    * Gets the symbol of the Suit.
    *
    * @return the symbol of the suit
@@ -64,5 +46,23 @@ public enum Suit {
    */
   public SuitColor getColor() {
     return color;
+  }
+
+  /**
+   * Parses a given character into the appropriate Suit if it's a valid symbol.
+   *
+   * @param symbol the character representation of the suit
+   * @return Suit parsed from the character representation of it's symbol
+   * @throws IllegalArgumentException if the symbol passed is not one of the valid suit symbols
+   */
+  public static Suit parse(char symbol) throws IllegalArgumentException {
+    List<Suit> suits = Arrays.stream(Suit.values())
+            .filter(cardValue -> cardValue.getSymbol() == symbol)
+            .collect(Collectors.toList());
+    try {
+      return Utils.getFirst(suits);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Invalid input");
+    }
   }
 }

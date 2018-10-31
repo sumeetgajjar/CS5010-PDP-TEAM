@@ -2,7 +2,8 @@ package freecell.model;
 
 /**
  * <code>FreecellOperationsBuilder</code> provides functionality to build a
- * <code>FreecellOperations</code> instance using a variable number of cascades and open piles.
+ * <code>FreecellOperations</code> instance using a various combinations of number of cascades and
+ * number of open piles.
  */
 public interface FreecellOperationsBuilder {
 
