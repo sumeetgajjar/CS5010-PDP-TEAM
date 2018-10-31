@@ -13,11 +13,15 @@ import freecell.bean.PileCategory;
 import util.Utils;
 
 /**
- * Created by gajjar.s, on 1:47 PM, 10/28/18
+ * <code>FreecellModel</code> implements the <code>FreecellOperations</code> interface and
+ * represents the operations that can be helpful in playing an entire game of FreeCell.
+ *
+ * <p> We are flexible in this implementation and we allow as few as 1 open pile and as few as 4
+ * cascade piles. We mandate 4 foundation piles and allow the user to play the game of freeCell by
+ * allowing the user to get a deck of <b>valid</b> cards, making <b>valid</b> moves and viewing the
+ * game state at any time. The game can be started by the user by passing a valid deck of cards and
+ * a parameter that tells the game whether to shuffle cards or not.
  */
-//todo documentation
-//todo review tests
-//todo add comments in test
 public class FreecellModel implements FreecellOperations<Card> {
 
   private static final int FOUNDATION_PILE_COUNT = 4;
@@ -59,7 +63,7 @@ public class FreecellModel implements FreecellOperations<Card> {
    * has one or more of these flaws:
    * <ul>
    * <li>It does not have 52 cards</li> <li>It has duplicate cards</li>
-   * <li>It has at least one invalid card (invalid suit or invalid number)</li>
+   * <li>It has at least one invalid card (invalid suit or invalid number or null)</li>
    * </ul>
    *
    * @return the deck of cards as a list

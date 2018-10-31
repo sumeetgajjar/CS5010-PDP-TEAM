@@ -10,7 +10,7 @@ import freecell.bean.CardValue;
 import freecell.bean.Suit;
 
 /**
- * Represents utility functions that are independent of the state of the application
+ * Represents utility functions that are independent of the state of the application.
  */
 public class Utils {
   /**
