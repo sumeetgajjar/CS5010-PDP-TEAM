@@ -217,14 +217,28 @@ public class FreecellModel implements FreecellOperations<Card> {
     }
   }
 
+  /**
+   * Gets a new instance of the <code>FreeCellOperationsBuilder</code>.
+   *
+   * @return instance of the <code>FreeCellOperationsBuilder</code>
+   */
   public static FreecellOperationsBuilder getBuilder() {
     return new FreecellModelBuilder();
   }
 
+  /**
+   * <code>FreecellModelBuilder</code> implements <code>FreecellOperationsBuilder</code> and
+   * provides the ability to configure the number of cascade and open piles for the builder to build
+   * a FreeCellModel with the specified number of open and cascade piles.
+   */
   public static class FreecellModelBuilder implements FreecellOperationsBuilder {
     private int numberOfCascadePile;
     private int numberOfOpenPile;
 
+    /**
+     * Constructs a <code>FreecellModelBuilder</code> with default 8 cascadePiles and 4 openPiles
+     * since those are default values for the popular online version of the game.
+     */
     private FreecellModelBuilder() {
       this.numberOfCascadePile = 8;
       this.numberOfOpenPile = 4;
