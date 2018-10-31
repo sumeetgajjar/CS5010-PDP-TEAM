@@ -332,6 +332,40 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void startGameWithShuffleTrueShufflesTheDeck() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
+
+        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+                .opens(openPiles)
+                .cascades(cascadingPiles)
+                .build();
+
+        List<Card> deck = freeCellOperations.getDeck();
+        freeCellOperations.startGame(deck, true);
+
+        List<Card> shuffledDeck = new ArrayList<>();
+        String gameState = freeCellOperations.getGameState();
+        String[] stateLines = gameState.split(System.lineSeparator());
+        for (int i = (4 + openPiles), j = 0; i < stateLines.length; i++, j++) {
+          String[] split = stateLines[i].split(":");
+          if (split.length == 2) {
+            String actualCascadingPileString = split[1];
+            List<Card> actualCardsInCascadingPile = Arrays.stream(actualCascadingPileString.split(","))
+                    .map(Card::parse)
+                    .collect(Collectors.toList());
+
+            shuffledDeck.addAll(actualCardsInCascadingPile);
+          }
+        }
+
+        Assert.assertNotEquals(deck, shuffledDeck);
+      }
+    }
+  }
+
+  @Test
   public void startGameWithShuffleTrue() {
 
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
