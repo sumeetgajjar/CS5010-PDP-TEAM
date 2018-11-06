@@ -165,6 +165,47 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             expectedCascadingPiles), freecellOperations.getGameState());
   }
 
+  @Test
+  public void movingMultipleCascadeCardFailsDueToLessNumberOfEmptyPiles() {
+    int cascadePiles = 4;
+    int openPiles = 13;
+
+    FreecellOperations<Card> freecellOperations = getFreecellOperationsBuilder()
+            .opens(openPiles)
+            .cascades(cascadePiles)
+            .build();
+
+    List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+    List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
+
+    freecellOperations.startGame(deck, false);
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+
+    //moving cards from cascade pile 3 to all open piles
+    for (int i = 12; i >= 0; i--) {
+      Card cardFromCascadePile = expectedCascadingPiles.get(3).remove(i);
+      expectedOpenPiles.get(i).add(cardFromCascadePile);
+      freecellOperations.move(PileType.CASCADE, 3, i, PileType.OPEN, i);
+    }
+    //cascade pile 3 is empty and all open piles are full
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+
+    try {
+      freecellOperations.move(PileType.CASCADE, 0, 0, PileType.CASCADE, 3);
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+  }
+
   private void moveCardsFromCascadePileToFoundationPile(FreecellOperations<Card> freecellOperations, List<List<Card>> expectedCascadingPiles, List<List<Card>> expectedFoundationPiles) {
     //moving cards from cascade pile 0 and 1 to foundation piles.
     for (int i = 12; i >= 0; i--) {
