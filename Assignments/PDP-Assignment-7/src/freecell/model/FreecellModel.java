@@ -2,14 +2,20 @@ package freecell.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import freecell.bean.Card;
 import freecell.bean.PileCategory;
+import freecell.model.rulechecker.FoundationPileRuleChecker;
+import freecell.model.rulechecker.OpenPileRuleChecker;
+import freecell.model.rulechecker.RuleChecker;
+import freecell.model.rulechecker.SingleMoveCascadePileRuleChecker;
 import util.Utils;
 
 /**
@@ -28,9 +34,8 @@ public class FreecellModel implements FreecellOperations<Card> {
   private static final int TOTAL_NUMBER_OF_CARDS_IN_DECK = 52;
   private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
 
-  private final List<List<Card>> foundationPiles;
-  private final List<List<Card>> openPiles;
-  private final List<List<Card>> cascadePiles;
+  private final Map<PileCategory, List<List<Card>>> pilesMap;
+  private final Map<PileCategory, RuleChecker<Card>> ruleCheckerMap;
 
   private boolean hasGameStarted;
 
@@ -51,10 +56,28 @@ public class FreecellModel implements FreecellOperations<Card> {
       throw new IllegalArgumentException("Invalid input");
     }
 
-    this.foundationPiles = Utils.getListOfEmptyLists(FOUNDATION_PILE_COUNT);
-    this.openPiles = Utils.getListOfEmptyLists(numberOfOpenPile);
-    this.cascadePiles = Utils.getListOfEmptyLists(numberOfCascadePile);
+    this.pilesMap = getPilesMap(numberOfCascadePile, numberOfOpenPile);
+    this.ruleCheckerMap = getRuleCheckerMap();
+
     this.hasGameStarted = false;
+  }
+
+  private Map<PileCategory, List<List<Card>>> getPilesMap(int numberOfCascadePile,
+                                                          int numberOfOpenPile) {
+
+    Map<PileCategory, List<List<Card>>> map = new EnumMap<>(PileCategory.class);
+    map.put(PileCategory.FOUNDATION, Utils.getListOfEmptyLists(FOUNDATION_PILE_COUNT));
+    map.put(PileCategory.OPEN, Utils.getListOfEmptyLists(numberOfOpenPile));
+    map.put(PileCategory.CASCADE, Utils.getListOfEmptyLists(numberOfCascadePile));
+    return map;
+  }
+
+  private Map<PileCategory, RuleChecker<Card>> getRuleCheckerMap() {
+    Map<PileCategory, RuleChecker<Card>> map = new EnumMap<>(PileCategory.class);
+    map.put(PileCategory.FOUNDATION, new FoundationPileRuleChecker());
+    map.put(PileCategory.OPEN, new OpenPileRuleChecker());
+    map.put(PileCategory.CASCADE, new SingleMoveCascadePileRuleChecker());
+    return map;
   }
 
   /**
@@ -177,21 +200,28 @@ public class FreecellModel implements FreecellOperations<Card> {
    */
   @Override
   public boolean isGameOver() {
+    List<List<Card>> cascadePiles = this.getPiles(PileCategory.CASCADE);
     long emptyCascadingPilesCount = cascadePiles.stream()
             .filter(List::isEmpty)
             .count();
 
+    List<List<Card>> openPiles = this.getPiles(PileCategory.OPEN);
     long emptyOpenPilesCount = openPiles.stream()
             .filter(List::isEmpty)
             .count();
 
-    long fullFoundationPilesCount = foundationPiles.stream()
+    long fullFoundationPilesCount = this.getPiles(PileCategory.FOUNDATION).stream()
             .filter(pile -> pile.size() == NUMBER_OF_CARDS_INDIVIDUAL_SUIT)
             .count();
 
     return emptyCascadingPilesCount == cascadePiles.size()
             && emptyOpenPilesCount == openPiles.size()
             && fullFoundationPilesCount == FOUNDATION_PILE_COUNT;
+  }
+
+  private List<List<Card>> getPiles(PileCategory pileCategory) {
+    List<List<Card>> list = this.pilesMap.get(pileCategory);
+    return Utils.requireNonNull(list);
   }
 
   /**
@@ -223,11 +253,11 @@ public class FreecellModel implements FreecellOperations<Card> {
   public String getGameState() {
     if (this.hasGameStarted) {
       return String.format("%s%s%s%s%s",
-              pilesToString(foundationPiles, PileCategory.FOUNDATION),
+              pilesToString(this.getPiles(PileCategory.FOUNDATION), PileCategory.FOUNDATION),
               System.lineSeparator(),
-              pilesToString(openPiles, PileCategory.OPEN),
+              pilesToString(this.getPiles(PileCategory.OPEN), PileCategory.OPEN),
               System.lineSeparator(),
-              pilesToString(cascadePiles, PileCategory.CASCADE));
+              pilesToString(this.getPiles(PileCategory.CASCADE), PileCategory.CASCADE));
     } else {
       return "";
     }
@@ -296,33 +326,24 @@ public class FreecellModel implements FreecellOperations<Card> {
 
   }
 
-  private List<Card> getPile(PileCategory pileType, int index) {
-    List<List<Card>> listOfCards;
-    switch (pileType) {
-      case FOUNDATION:
-        listOfCards = this.foundationPiles;
-        break;
-      case OPEN:
-        listOfCards = this.openPiles;
-        break;
-      case CASCADE:
-        listOfCards = this.cascadePiles;
-        break;
-      default:
-        throw new IllegalArgumentException("Invalid pile category");
-    }
-
+  private List<Card> getPile(PileCategory pileCategory, int index) {
+    List<List<Card>> piles = this.getPiles(pileCategory);
     try {
-      return listOfCards.get(index);
+      return piles.get(index);
     } catch (IndexOutOfBoundsException e) {
       throw new IllegalArgumentException("Invalid input");
     }
   }
 
+  private RuleChecker<Card> getRuleChecker(PileCategory pileCategory) {
+    RuleChecker<Card> ruleChecker = this.ruleCheckerMap.get(pileCategory);
+    return Utils.requireNonNull(ruleChecker);
+  }
+
   private void clearPiles() {
-    this.foundationPiles.forEach(List::clear);
-    this.openPiles.forEach(List::clear);
-    this.cascadePiles.forEach(List::clear);
+    this.getPiles(PileCategory.FOUNDATION).forEach(List::clear);
+    this.getPiles(PileCategory.CASCADE).forEach(List::clear);
+    this.getPiles(PileCategory.OPEN).forEach(List::clear);
   }
 
   private void distributeDeck(List<Card> deck, boolean shuffle) {
@@ -334,8 +355,9 @@ public class FreecellModel implements FreecellOperations<Card> {
     int cardIndex = 0;
     int pileNumber = 0;
     while (cardIndex < deckCopy.size()) {
-      this.cascadePiles.get(pileNumber).add(deckCopy.get(cardIndex));
-      pileNumber = (pileNumber + 1) % this.cascadePiles.size();
+      List<List<Card>> cascadePiles = this.getPiles(PileCategory.CASCADE);
+      cascadePiles.get(pileNumber).add(deckCopy.get(cardIndex));
+      pileNumber = (pileNumber + 1) % cascadePiles.size();
       cardIndex++;
     }
   }
@@ -350,12 +372,21 @@ public class FreecellModel implements FreecellOperations<Card> {
     Utils.requireNonNull(destination);
 
     List<Card> sourcePile = getPile(source, pileNumber);
-    Card cardFromSource = getCardFromPile(cardIndex, sourcePile);
+    boolean canGetCardFromThePile = this.getRuleChecker(source)
+            .canGetCardFromThePile(cardIndex, sourcePile);
 
-    List<Card> destinationPile = getPile(destination, destPileNumber);
+    Card cardFromSource;
+    if (canGetCardFromThePile) {
+      cardFromSource = sourcePile.get(cardIndex);
+    } else {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    List<Card> destinationPile = this.getPile(destination, destPileNumber);
     // we ask if the destination can put the card in it's pile, if it can't then it is an invalid
     // input
-    boolean canPutCardInPile = destination.canPutCardInPile(cardFromSource, destinationPile);
+    boolean canPutCardInPile = this.getRuleChecker(destination)
+            .canPutCardInPile(cardFromSource, destinationPile);
 
     if (canPutCardInPile) {
       sourcePile.remove(cardIndex);
