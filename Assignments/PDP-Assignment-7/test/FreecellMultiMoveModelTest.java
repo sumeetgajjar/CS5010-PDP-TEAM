@@ -49,7 +49,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
 
       boolean flag = true;
       //moving cards from cascade pile 0 and 1 to foundation piles.
-      for (int i = 12; i >= 0; i--) {
+      for (int i = 11; i >= 0; i--) {
         int sourceCascadePile1 = 0;
         int sourceCascadePile2 = 1;
         int destinationFoundationPile1 = 0;
@@ -120,6 +120,12 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     for (int i = 11; i >= 0; i--) {
       try {
         freecellOperations.move(PileType.CASCADE, 2, i, PileType.CASCADE, 0);
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid input", e.getMessage());
+      }
+
+      try {
+        freecellOperations.move(PileType.CASCADE, 3, i, PileType.CASCADE, 0);
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid input", e.getMessage());
       }
