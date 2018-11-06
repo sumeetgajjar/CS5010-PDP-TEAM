@@ -14,11 +14,18 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
   }
 
   public static FreecellOperationsBuilder getBuilder() {
-    return null;
+    return new FreecellModelBuilder();
   }
 
   @Override
   protected void commitMove(List<Card> sourcePile, int cardIndex, List<Card> destinationPile) {
 
+  }
+
+  public static class FreecellModelBuilder extends AbstractFreecellOperationsBuilder {
+    @Override
+    protected FreecellOperations<Card> getFreeCellOperationsInstance() {
+      return new FreecellMultiMoveModel(numberOfCascadePile, numberOfOpenPile);
+    }
   }
 }
