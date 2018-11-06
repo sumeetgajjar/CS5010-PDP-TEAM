@@ -89,6 +89,42 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
 
   }
 
+  @Test
+  public void multipleCascadeCardMoveFailsSinceCardAreNotOfAlternatingSuite() {
+    int cascadePiles = 4;
+    int openPiles = 5;
+
+    FreecellOperations<Card> freecellOperations = getFreecellOperationsBuilder()
+            .opens(openPiles)
+            .cascades(cascadePiles)
+            .build();
+
+    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+
+    freecellOperations.startGame(deck, false);
+
+    //moving cards from cascade pile 0 and 1 to foundation piles.
+    for (int i = 12; i >= 0; i--) {
+      Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(0).remove(i);
+      expectedFoundationPiles.get(0).add(cardFromSourceCascadePile1);
+      freecellOperations.move(PileType.CASCADE, 0, i, PileType.FOUNDATION, 0);
+
+      Card cardFromSourceCascadePile2 = expectedCascadingPiles.get(1).remove(i);
+      expectedFoundationPiles.get(1).add(cardFromSourceCascadePile2);
+      freecellOperations.move(PileType.CASCADE, 1, i, PileType.FOUNDATION, 1);
+    }
+    //now cascade piles 0 and 1 are empty.
+
+    for (int i = 11; i >= 0; i--) {
+      try {
+        freecellOperations.move(PileType.CASCADE, 2, i, PileType.CASCADE, 0);
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid input", e.getMessage());
+      }
+    }
+  }
 
   private static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
     List<Card> deck = new ArrayList<>(52);

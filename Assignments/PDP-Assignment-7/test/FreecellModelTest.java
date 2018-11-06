@@ -1924,7 +1924,7 @@ public class FreecellModelTest {
     return expectedCascadingPiles;
   }
 
-  private static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
+  protected static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
     List<Card> deck = new ArrayList<>(52);
     List<CardValue> cardValues = Arrays.stream(CardValue.values())
             .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
