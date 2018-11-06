@@ -18,6 +18,7 @@ import freecell.bean.PileCategory;
 import freecell.bean.Suit;
 import freecell.model.FreecellModel;
 import freecell.model.FreecellOperations;
+import freecell.model.FreecellOperationsBuilder;
 import freecell.model.PileType;
 import util.Utils;
 
@@ -39,7 +40,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -56,7 +57,7 @@ public class FreecellModelTest {
     for (int openPileCount : Arrays.asList(-1, 0)) {
       for (int cascadingPileCount : Arrays.asList(-1, 0, 1, 2, 3)) {
         try {
-          FreecellModel.getBuilder()
+          getFreecellOperationsBuilder()
                   .cascades(cascadingPileCount)
                   .opens(openPileCount)
                   .build();
@@ -73,7 +74,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -114,7 +115,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -142,7 +143,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -175,7 +176,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -205,7 +206,7 @@ public class FreecellModelTest {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -236,7 +237,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+        FreecellOperations<Card> freeCellOperations = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -256,7 +257,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+        FreecellOperations<Card> freeCellOperations = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -292,7 +293,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+        FreecellOperations<Card> freeCellOperations = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -333,7 +334,7 @@ public class FreecellModelTest {
   public void moveWithInvalidArguments() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -392,7 +393,7 @@ public class FreecellModelTest {
   public void moveBeforeStartingGame() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -435,7 +436,7 @@ public class FreecellModelTest {
   public void moveToInvalidPositionOrPile() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -523,7 +524,7 @@ public class FreecellModelTest {
   public void getGameStateReturnsEmptyStringBeforeStarting() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -537,7 +538,7 @@ public class FreecellModelTest {
   public void moveCardFromCascadePileWithWrongCardIndexFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -587,7 +588,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenPileWithWrongCardIndexFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -623,7 +624,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationPileWithWrongCardIndexFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -660,7 +661,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -688,7 +689,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -729,7 +730,7 @@ public class FreecellModelTest {
 
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
 
-        FreecellOperations<Card> freeCellOperations = FreecellModel.getBuilder()
+        FreecellOperations<Card> freeCellOperations = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -750,7 +751,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenPileToCascadePileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -775,7 +776,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenPileToOpenPileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -802,7 +803,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenPileToFoundationPileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -845,7 +846,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationPileToOpenPileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -874,7 +875,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationPileToCascadePileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -903,7 +904,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationPileToFoundationPileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -933,7 +934,7 @@ public class FreecellModelTest {
   public void moveToSamePositionAsSourcePositionFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 51)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 51)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1005,7 +1006,7 @@ public class FreecellModelTest {
   public void sequenceOfMethodInvocationForBuilderDoesNotMatter() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> modelWithCascadeFirst = FreecellModel.getBuilder()
+        FreecellOperations<Card> modelWithCascadeFirst = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1018,7 +1019,7 @@ public class FreecellModelTest {
                 Utils.getListOfEmptyLists(openPiles), expectedCascadingPile1);
         Assert.assertEquals(expectedGameState1, modelWithCascadeFirst.getGameState());
 
-        FreecellOperations<Card> modelWithCascadeAfter = FreecellModel.getBuilder()
+        FreecellOperations<Card> modelWithCascadeAfter = this.getFreecellOperationsBuilder()
                 .opens(openPiles)
                 .cascades(cascadingPiles)
                 .build();
@@ -1039,7 +1040,7 @@ public class FreecellModelTest {
   public void cascadeToCascadeInvalidMoveFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1071,7 +1072,7 @@ public class FreecellModelTest {
   public void cascadeEmptyPileToAnyFails() {
     for (int cascadingPiles : Arrays.asList(53, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1135,7 +1136,7 @@ public class FreecellModelTest {
   public void openEmptyToAnyFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1187,7 +1188,7 @@ public class FreecellModelTest {
   public void foundationEmptyToAnyFails() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1239,7 +1240,7 @@ public class FreecellModelTest {
   public void cascadeToFullOpenFails() {
     int cascadingPiles = 4;
     int openPiles = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadingPiles)
             .opens(openPiles)
             .build();
@@ -1269,7 +1270,7 @@ public class FreecellModelTest {
   public void cascadeToFoundationInvalidMoveFails() {
     for (int cascadingPiles : Collections.singletonList(4)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1305,7 +1306,7 @@ public class FreecellModelTest {
   public void unexpectedCardOnFoundationPileFails() {
     int cascadingPiles = 4;
     int openPiles = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadingPiles)
             .opens(openPiles)
             .build();
@@ -1346,7 +1347,7 @@ public class FreecellModelTest {
   public void foundationToFoundationIllegalMoveFails() {
     for (int cascadingPiles : Collections.singletonList(4)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1379,7 +1380,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationToCascadeWorks() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -1425,7 +1426,7 @@ public class FreecellModelTest {
   public void moveCardFromFoundationToFoundationWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1492,7 +1493,7 @@ public class FreecellModelTest {
   public void moveCardFromCascadeToCascadeWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1536,7 +1537,7 @@ public class FreecellModelTest {
   public void moveCascadeToEmptyCascadeWorks() {
     int cascadePileCount = 53;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -1567,7 +1568,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenPileToEmptyCascadePileWorks() {
     int cascadePileCount = 53;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -1605,7 +1606,7 @@ public class FreecellModelTest {
   public void moveCardFromOpenToOpenWorks() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(2, 4, 10, 20, 100, 1000)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1659,7 +1660,7 @@ public class FreecellModelTest {
   public void moveCardAmongstFoundationAndOpen() {
     for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
       for (int openPiles : Arrays.asList(1, 4, 10)) {
-        FreecellOperations<Card> model = FreecellModel.getBuilder()
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
                 .cascades(cascadingPiles)
                 .opens(openPiles)
                 .build();
@@ -1724,7 +1725,7 @@ public class FreecellModelTest {
   public void simulateEntireGame() {
     int cascadePileCount = 4;
     int openPileCount = 4;
-    FreecellOperations<Card> model = FreecellModel.getBuilder()
+    FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
             .cascades(cascadePileCount)
             .opens(openPileCount)
             .build();
@@ -1849,9 +1850,13 @@ public class FreecellModelTest {
     }
   }
 
-  private static String convertPilesToString(List<List<Card>> foundationPiles,
-                                             List<List<Card>> openPiles,
-                                             List<List<Card>> cascadePiles) {
+  protected FreecellOperationsBuilder getFreecellOperationsBuilder() {
+    return FreecellModel.getBuilder();
+  }
+
+  protected static String convertPilesToString(List<List<Card>> foundationPiles,
+                                               List<List<Card>> openPiles,
+                                               List<List<Card>> cascadePiles) {
     return pileToString(foundationPiles, PileCategory.FOUNDATION)
             + System.lineSeparator()
             + pileToString(openPiles, PileCategory.OPEN)
@@ -1904,8 +1909,8 @@ public class FreecellModelTest {
     return deck;
   }
 
-  private static List<List<Card>> getCardsInCascadingPiles(int cascadePileCount,
-                                                           List<Card> validDeck) {
+  protected static List<List<Card>> getCardsInCascadingPiles(int cascadePileCount,
+                                                             List<Card> validDeck) {
     List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
 
     int i = 0;

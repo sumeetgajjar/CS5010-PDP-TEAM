@@ -1,6 +1,113 @@
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import freecell.bean.Card;
+import freecell.bean.CardValue;
+import freecell.bean.Suit;
+import freecell.model.FreecellMultiMoveModel;
+import freecell.model.FreecellOperations;
+import freecell.model.FreecellOperationsBuilder;
+import freecell.model.PileType;
+import util.Utils;
+
 /**
  * Represents tests that are run on the <code>FreecellMultiMoveModel</code> that implements
  * <code>FreeCellOperations</code>.
  */
-public class FreecellMultiMoveModelTest {
+public class FreecellMultiMoveModelTest extends FreecellModelTest {
+
+  @Override
+  protected FreecellOperationsBuilder getFreecellOperationsBuilder() {
+    return FreecellMultiMoveModel.getBuilder();
+  }
+
+  @Test
+  public void moveMultipleCardFromCascadeToCascadeWorks() {
+    int cascadePiles = 4;
+    int openPiles = 5;
+
+    for (int j = 12; j >= 0; j--) {
+      FreecellOperations<Card> freecellOperations = getFreecellOperationsBuilder()
+              .opens(openPiles)
+              .cascades(cascadePiles)
+              .build();
+
+      List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+      List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePiles, deck);
+      freecellOperations.startGame(deck, false);
+
+      List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+      Assert.assertEquals(convertPilesToString(expectedCascadingPiles,
+              Utils.getListOfEmptyLists(openPiles), expectedCascadingPiles),
+              freecellOperations.getGameState());
+
+      boolean flag = true;
+      for (int i = 12; i >= 0; i--) {
+        int sourceCascadePile1 = 0;
+        int sourceCascadePile2 = 1;
+        int destinationCascadePile1 = 0;
+        int destinationCascadePile2 = 1;
+
+        if (flag) {
+          sourceCascadePile1 = 1;
+          sourceCascadePile2 = 0;
+          destinationCascadePile1 = 1;
+          destinationCascadePile2 = 0;
+        }
+
+        Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(sourceCascadePile1).remove(i);
+        expectedFoundationPiles.get(destinationCascadePile1).add(cardFromSourceCascadePile1);
+        freecellOperations.move(PileType.CASCADE, sourceCascadePile1, i, PileType.FOUNDATION,
+                destinationCascadePile1);
+
+        Card cardFromSourceCascadePile2 = expectedCascadingPiles.get(sourceCascadePile2).remove(i);
+        expectedFoundationPiles.get(destinationCascadePile2).add(cardFromSourceCascadePile2);
+        freecellOperations.move(PileType.CASCADE, sourceCascadePile2, i, PileType.FOUNDATION,
+                destinationCascadePile2);
+        flag = !flag;
+      }
+
+      for (int i = j; i < 13; i++) {
+        Card cardFromCascadePile = expectedCascadingPiles.get(2).remove(i);
+        expectedCascadingPiles.get(0).add(cardFromCascadePile);
+      }
+      freecellOperations.move(PileType.CASCADE, 2, j, PileType.CASCADE, 0);
+
+      Assert.assertEquals(convertPilesToString(expectedCascadingPiles,
+              Utils.getListOfEmptyLists(openPiles), expectedCascadingPiles),
+              freecellOperations.getGameState());
+    }
+
+  }
+
+  private static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    boolean flag = true;
+    for (CardValue cardValue : cardValues) {
+
+      if (flag) {
+        deck.add(new Card(Suit.SPADES, cardValue));
+        deck.add(new Card(Suit.DIAMONDS, cardValue));
+        deck.add(new Card(Suit.CLUBS, cardValue));
+        deck.add(new Card(Suit.HEARTS, cardValue));
+      } else {
+        deck.add(new Card(Suit.DIAMONDS, cardValue));
+        deck.add(new Card(Suit.SPADES, cardValue));
+        deck.add(new Card(Suit.HEARTS, cardValue));
+        deck.add(new Card(Suit.CLUBS, cardValue));
+      }
+      flag = !flag;
+    }
+    return deck;
+  }
 }
