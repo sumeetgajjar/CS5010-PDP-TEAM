@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import freecell.bean.Card;
@@ -27,7 +28,7 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
   private static final int NUMBER_OF_CARDS_INDIVIDUAL_SUIT = 13;
 
   protected final Map<PileCategory, List<List<Card>>> pilesMap;
-  protected final Map<PileCategory, RuleChecker<Card>> ruleCheckerMap;
+  protected final Map<PileCategory, Supplier<RuleChecker<Card>>> ruleCheckerMap;
   protected boolean hasGameStarted;
 
   protected AbstractFreecellModel(int numberOfCascadePile, int numberOfOpenPile) {
@@ -100,11 +101,11 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     return map;
   }
 
-  private Map<PileCategory, RuleChecker<Card>> getRuleCheckerMap() {
-    Map<PileCategory, RuleChecker<Card>> map = new EnumMap<>(PileCategory.class);
-    map.put(PileCategory.FOUNDATION, new FoundationPileRuleChecker());
-    map.put(PileCategory.OPEN, new OpenPileRuleChecker());
-    map.put(PileCategory.CASCADE, getCascadePileRuleChecker());
+  private Map<PileCategory, Supplier<RuleChecker<Card>>> getRuleCheckerMap() {
+    Map<PileCategory, Supplier<RuleChecker<Card>>> map = new EnumMap<>(PileCategory.class);
+    map.put(PileCategory.FOUNDATION, FoundationPileRuleChecker::new);
+    map.put(PileCategory.OPEN, OpenPileRuleChecker::new);
+    map.put(PileCategory.CASCADE, this::getCascadePileRuleChecker);
     return map;
   }
 
@@ -305,7 +306,7 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
   }
 
   private RuleChecker<Card> getRuleChecker(PileCategory pileCategory) {
-    RuleChecker<Card> ruleChecker = this.ruleCheckerMap.get(pileCategory);
+    RuleChecker<Card> ruleChecker = this.ruleCheckerMap.get(pileCategory).get();
     return Utils.requireNonNull(ruleChecker);
   }
 

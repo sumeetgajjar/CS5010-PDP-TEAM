@@ -9,10 +9,10 @@ import util.Utils;
  * Created by gajjar.s, on 12:37 PM, 11/6/18
  */
 public class MultiMoveCascadePileRuleChecker extends SingleMoveCascadePileRuleChecker {
-  private final int cascadePileCount;
-  private final int openPileCount;
+  private final long cascadePileCount;
+  private final long openPileCount;
 
-  public MultiMoveCascadePileRuleChecker(int cascadePileCount, int openPileCount) {
+  public MultiMoveCascadePileRuleChecker(long cascadePileCount, long openPileCount) {
     this.cascadePileCount = cascadePileCount;
     this.openPileCount = openPileCount;
   }

@@ -154,7 +154,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
             expectedCascadingPiles), freecellOperations.getGameState());
 
-    for (int i = 1; i < 13; i++) {
+    for (int i = 0; i < 12; i++) {
       try {
         freecellOperations.move(PileType.CASCADE, 0, i, PileType.CASCADE, 3);
         Assert.fail("should have failed");

@@ -5,7 +5,6 @@ import java.util.List;
 import freecell.bean.Card;
 import freecell.bean.PileCategory;
 import freecell.model.rulechecker.MultiMoveCascadePileRuleChecker;
-import freecell.model.rulechecker.RuleChecker;
 import util.Utils;
 
 /**
@@ -22,9 +21,12 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
   }
 
   @Override
-  protected RuleChecker getCascadePileRuleChecker() {
-    return new MultiMoveCascadePileRuleChecker(this.getPiles(PileCategory.CASCADE).size(),
-            this.getPiles(PileCategory.OPEN).size());
+  protected MultiMoveCascadePileRuleChecker getCascadePileRuleChecker() {
+    long emptyCascadePileCount =
+            this.getPiles(PileCategory.CASCADE).stream().filter(List::isEmpty).count();
+    long emptyOpenPileCount =
+            this.getPiles(PileCategory.OPEN).stream().filter(List::isEmpty).count();
+    return new MultiMoveCascadePileRuleChecker(emptyCascadePileCount, emptyOpenPileCount);
   }
 
   @Override
