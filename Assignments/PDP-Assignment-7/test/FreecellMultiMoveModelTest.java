@@ -91,7 +91,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
   }
 
   @Test
-  public void multipleCascadeCardMoveFailsSinceCardAreNotOfAlternatingSuite() {
+  public void multipleCascadeCardMoveFailsSinceCardsAreNotOfAlternatingSuite() {
     int cascadePiles = 4;
     int openPiles = 5;
 
