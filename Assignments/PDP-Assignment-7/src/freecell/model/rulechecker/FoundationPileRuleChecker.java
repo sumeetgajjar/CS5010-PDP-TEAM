@@ -12,7 +12,7 @@ import util.Utils;
 public class FoundationPileRuleChecker extends AbstractRuleChecker<Card> {
 
   @Override
-  public boolean canPutCardInPile(Card card, List<Card> pile) {
+  public boolean canPutCardsInPile(Card card, List<Card> pile) {
     if (pile.isEmpty()) {
       return card.getCardValue().equals(CardValue.ACE);
     } else {

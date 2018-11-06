@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class AbstractRuleChecker<K> implements RuleChecker<K> {
 
   @Override
-  public boolean canGetCardFromThePile(int cardIndex, List<K> pile) {
+  public boolean canGetCardsFromThePile(int cardIndex, List<K> pile) {
     // can only get last card and no other card
     return pile.size() != 0 && pile.size() - 1 == cardIndex;
   }

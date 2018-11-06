@@ -11,7 +11,7 @@ import util.Utils;
 public class SingleMoveCascadePileRuleChecker extends AbstractRuleChecker<Card> {
 
   @Override
-  public boolean canPutCardInPile(Card card, List<Card> pile) {
+  public boolean canPutCardsInPile(Card card, List<Card> pile) {
     if (pile.isEmpty()) {
       return true;
     } else {

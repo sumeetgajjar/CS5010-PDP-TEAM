@@ -9,7 +9,7 @@ import freecell.bean.Card;
  */
 public class OpenPileRuleChecker  extends AbstractRuleChecker<Card>{
   @Override
-  public boolean canPutCardInPile(Card card, List<Card> pile) {
+  public boolean canPutCardsInPile(Card card, List<Card> pile) {
     return pile.isEmpty();
   }
 }
