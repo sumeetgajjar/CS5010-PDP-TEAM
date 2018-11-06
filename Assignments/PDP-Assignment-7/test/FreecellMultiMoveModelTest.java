@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,7 +50,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
 
       boolean flag = true;
       //moving cards from cascade pile 0 and 1 to foundation piles.
-      for (int i = 11; i >= 0; i--) {
+      for (int i = 12; i >= 0; i--) {
         int sourceCascadePile1 = 0;
         int sourceCascadePile2 = 1;
         int destinationFoundationPile1 = 0;
@@ -104,18 +105,8 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
     freecellOperations.startGame(deck, false);
-
-    //moving cards from cascade pile 0 and 1 to foundation piles.
-    for (int i = 12; i >= 0; i--) {
-      Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(0).remove(i);
-      expectedFoundationPiles.get(0).add(cardFromSourceCascadePile1);
-      freecellOperations.move(PileType.CASCADE, 0, i, PileType.FOUNDATION, 0);
-
-      Card cardFromSourceCascadePile2 = expectedCascadingPiles.get(1).remove(i);
-      expectedFoundationPiles.get(1).add(cardFromSourceCascadePile2);
-      freecellOperations.move(PileType.CASCADE, 1, i, PileType.FOUNDATION, 1);
-    }
-    //now cascade piles 0 and 1 are empty.
+    moveCardsFromCascadePileToFoundationPile(freecellOperations, expectedCascadingPiles,
+            expectedFoundationPiles);
 
     for (int i = 11; i >= 0; i--) {
       try {
@@ -130,6 +121,62 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
         Assert.assertEquals("Invalid input", e.getMessage());
       }
     }
+  }
+
+  @Test
+  public void multipleCascadeCardMoveFailsSinceCardsAreNotInDecreasingOrder() {
+    int cascadePiles = 4;
+    int openPiles = 24;
+
+    FreecellOperations<Card> freecellOperations = getFreecellOperationsBuilder()
+            .opens(openPiles)
+            .cascades(cascadePiles)
+            .build();
+
+    List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+    Collections.reverse(deck);
+    List<List<Card>> expectedCascadingPiles = getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
+
+    freecellOperations.startGame(deck, false);
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+
+    for (int i = 12; i >= 0; i--) {
+      Card cardFromCascadePile = expectedCascadingPiles.get(3).remove(i);
+      expectedOpenPiles.get(i).add(cardFromCascadePile);
+      freecellOperations.move(PileType.CASCADE, 3, i, PileType.OPEN, i);
+    }
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+
+    for (int i = 1; i < 13; i++) {
+      try {
+        freecellOperations.move(PileType.CASCADE, 0, i, PileType.CASCADE, 3);
+      } catch (IllegalArgumentException e) {
+        Assert.assertEquals("Invalid input", e.getMessage());
+      }
+    }
+
+    Assert.assertEquals(convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            expectedCascadingPiles), freecellOperations.getGameState());
+  }
+
+  private void moveCardsFromCascadePileToFoundationPile(FreecellOperations<Card> freecellOperations, List<List<Card>> expectedCascadingPiles, List<List<Card>> expectedFoundationPiles) {
+    //moving cards from cascade pile 0 and 1 to foundation piles.
+    for (int i = 12; i >= 0; i--) {
+      Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(0).remove(i);
+      expectedFoundationPiles.get(0).add(cardFromSourceCascadePile1);
+      freecellOperations.move(PileType.CASCADE, 0, i, PileType.FOUNDATION, 0);
+
+      Card cardFromSourceCascadePile2 = expectedCascadingPiles.get(1).remove(i);
+      expectedFoundationPiles.get(1).add(cardFromSourceCascadePile2);
+      freecellOperations.move(PileType.CASCADE, 1, i, PileType.FOUNDATION, 1);
+    }
+    //now cascade piles 0 and 1 are empty.
   }
 
   private static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {

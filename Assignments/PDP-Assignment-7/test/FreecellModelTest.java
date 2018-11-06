@@ -800,6 +800,28 @@ public class FreecellModelTest {
   }
 
   @Test
+  public void getGameStateReturnsEmptyIfStartGameFails() {
+    for (int cascadingPiles : Arrays.asList(4, 8, 10, 20, 100, 1000)) {
+
+      for (int openPiles : Arrays.asList(1, 4, 10, 20, 100, 1000)) {
+        FreecellOperations<Card> model = this.getFreecellOperationsBuilder()
+                .cascades(cascadingPiles)
+                .opens(openPiles)
+                .build();
+
+        Assert.assertEquals("", model.getGameState());
+        try {
+          model.startGame(null, true);
+          Assert.fail("should have failed");
+        } catch (IllegalArgumentException e) {
+          Assert.assertEquals("Invalid input", e.getMessage());
+        }
+        Assert.assertEquals("", model.getGameState());
+      }
+    }
+  }
+
+  @Test
   public void moveCardFromOpenPileToFoundationPileFails() {
     int cascadePileCount = 4;
     int openPileCount = 4;
