@@ -1,6 +1,5 @@
 package freecell.controller;
 
-import java.io.Reader;
 import java.util.List;
 
 import freecell.bean.Card;
@@ -11,7 +10,7 @@ import freecell.model.FreecellOperations;
  */
 public class FreecellController implements IFreecellController<Card> {
 
-  public FreecellController(Reader stringReader, StringBuffer out) {
+  public FreecellController(Readable readable, Appendable appendable) {
 
   }
 
