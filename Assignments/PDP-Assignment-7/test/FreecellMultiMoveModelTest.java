@@ -48,31 +48,34 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
               freecellOperations.getGameState());
 
       boolean flag = true;
+      //moving cards from cascade pile 0 and 1 to foundation piles.
       for (int i = 12; i >= 0; i--) {
         int sourceCascadePile1 = 0;
         int sourceCascadePile2 = 1;
-        int destinationCascadePile1 = 0;
-        int destinationCascadePile2 = 1;
+        int destinationFoundationPile1 = 0;
+        int destinationFoundationPile2 = 1;
 
         if (flag) {
           sourceCascadePile1 = 1;
           sourceCascadePile2 = 0;
-          destinationCascadePile1 = 1;
-          destinationCascadePile2 = 0;
+          destinationFoundationPile1 = 1;
+          destinationFoundationPile2 = 0;
         }
 
         Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(sourceCascadePile1).remove(i);
-        expectedFoundationPiles.get(destinationCascadePile1).add(cardFromSourceCascadePile1);
+        expectedFoundationPiles.get(destinationFoundationPile1).add(cardFromSourceCascadePile1);
         freecellOperations.move(PileType.CASCADE, sourceCascadePile1, i, PileType.FOUNDATION,
-                destinationCascadePile1);
+                destinationFoundationPile1);
 
         Card cardFromSourceCascadePile2 = expectedCascadingPiles.get(sourceCascadePile2).remove(i);
-        expectedFoundationPiles.get(destinationCascadePile2).add(cardFromSourceCascadePile2);
+        expectedFoundationPiles.get(destinationFoundationPile2).add(cardFromSourceCascadePile2);
         freecellOperations.move(PileType.CASCADE, sourceCascadePile2, i, PileType.FOUNDATION,
-                destinationCascadePile2);
+                destinationFoundationPile2);
         flag = !flag;
       }
+      //now cascade piles 0 and 1 are empty.
 
+      //moving multiple cards from cascade pile 2 to 0
       for (int i = j; i < 13; i++) {
         Card cardFromCascadePile = expectedCascadingPiles.get(2).remove(i);
         expectedCascadingPiles.get(0).add(cardFromCascadePile);
@@ -85,6 +88,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     }
 
   }
+
 
   private static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
     List<Card> deck = new ArrayList<>(52);
