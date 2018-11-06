@@ -44,7 +44,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
       freecellOperations.startGame(deck, false);
 
       List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
-      Assert.assertEquals(convertPilesToString(expectedCascadingPiles,
+      Assert.assertEquals(convertPilesToString(expectedFoundationPiles,
               Utils.getListOfEmptyLists(openPiles), expectedCascadingPiles),
               freecellOperations.getGameState());
 
@@ -59,8 +59,6 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
         if (flag) {
           sourceCascadePile1 = 1;
           sourceCascadePile2 = 0;
-          destinationFoundationPile1 = 1;
-          destinationFoundationPile2 = 0;
         }
 
         Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(sourceCascadePile1).remove(i);
@@ -77,13 +75,14 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
       //now cascade piles 0 and 1 are empty.
 
       //moving multiple cards from cascade pile 2 to 0
-      for (int i = j; i < 13; i++) {
-        Card cardFromCascadePile = expectedCascadingPiles.get(2).remove(i);
+      List<Card> cascadePile2 = expectedCascadingPiles.get(2);
+      while (j < cascadePile2.size()) {
+        Card cardFromCascadePile = cascadePile2.remove(j);
         expectedCascadingPiles.get(0).add(cardFromCascadePile);
       }
       freecellOperations.move(PileType.CASCADE, 2, j, PileType.CASCADE, 0);
 
-      Assert.assertEquals(convertPilesToString(expectedCascadingPiles,
+      Assert.assertEquals(convertPilesToString(expectedFoundationPiles,
               Utils.getListOfEmptyLists(openPiles), expectedCascadingPiles),
               freecellOperations.getGameState());
     }
@@ -111,12 +110,14 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     for (int i = 11; i >= 0; i--) {
       try {
         freecellOperations.move(PileType.CASCADE, 2, i, PileType.CASCADE, 0);
+        Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid input", e.getMessage());
       }
 
       try {
         freecellOperations.move(PileType.CASCADE, 3, i, PileType.CASCADE, 0);
+        Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid input", e.getMessage());
       }
@@ -156,6 +157,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     for (int i = 1; i < 13; i++) {
       try {
         freecellOperations.move(PileType.CASCADE, 0, i, PileType.CASCADE, 3);
+        Assert.fail("should have failed");
       } catch (IllegalArgumentException e) {
         Assert.assertEquals("Invalid input", e.getMessage());
       }
@@ -198,6 +200,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
 
     try {
       freecellOperations.move(PileType.CASCADE, 0, 0, PileType.CASCADE, 3);
+      Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }

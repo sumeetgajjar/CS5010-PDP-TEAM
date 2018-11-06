@@ -96,4 +96,9 @@ public class Utils {
     }
     return string.substring(0, string.length() - 1);
   }
+
+  public static <T> List<T> sliceList(List<T> fullList, int startIndex) {
+    Utils.requireNonNull(fullList);
+    return new ArrayList<>(fullList.subList(startIndex, fullList.size()));
+  }
 }

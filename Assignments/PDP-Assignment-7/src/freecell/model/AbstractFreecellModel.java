@@ -90,8 +90,8 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     }
   }
 
-  protected Map<PileCategory, List<List<Card>>> getPilesMap(int numberOfCascadePile,
-                                                            int numberOfOpenPile) {
+  private Map<PileCategory, List<List<Card>>> getPilesMap(int numberOfCascadePile,
+                                                          int numberOfOpenPile) {
 
     Map<PileCategory, List<List<Card>>> map = new EnumMap<>(PileCategory.class);
     map.put(PileCategory.FOUNDATION, Utils.getListOfEmptyLists(FOUNDATION_PILE_COUNT));
@@ -100,12 +100,16 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     return map;
   }
 
-  protected Map<PileCategory, RuleChecker<Card>> getRuleCheckerMap() {
+  private Map<PileCategory, RuleChecker<Card>> getRuleCheckerMap() {
     Map<PileCategory, RuleChecker<Card>> map = new EnumMap<>(PileCategory.class);
     map.put(PileCategory.FOUNDATION, new FoundationPileRuleChecker());
     map.put(PileCategory.OPEN, new OpenPileRuleChecker());
-    map.put(PileCategory.CASCADE, new SingleMoveCascadePileRuleChecker());
+    map.put(PileCategory.CASCADE, getCascadePileRuleChecker());
     return map;
+  }
+
+  protected RuleChecker<Card> getCascadePileRuleChecker() {
+    return new SingleMoveCascadePileRuleChecker();
   }
 
   /**
@@ -247,7 +251,7 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
             && fullFoundationPilesCount == FOUNDATION_PILE_COUNT;
   }
 
-  private List<List<Card>> getPiles(PileCategory pileCategory) {
+  protected List<List<Card>> getPiles(PileCategory pileCategory) {
     List<List<Card>> list = this.pilesMap.get(pileCategory);
     return Utils.requireNonNull(list);
   }
