@@ -97,6 +97,14 @@ public class Utils {
     return string.substring(0, string.length() - 1);
   }
 
+  /**
+   * Returns a sliced list of the given list from the given start index.
+   *
+   * @param fullList   the list to slice
+   * @param startIndex the index of the list to start slicing
+   * @param <T>        the type of the list
+   * @return a sliced list of the given list from the given start index
+   */
   public static <T> List<T> sliceList(List<T> fullList, int startIndex) {
     Utils.requireNonNull(fullList);
     return new ArrayList<>(fullList.subList(startIndex, fullList.size()));

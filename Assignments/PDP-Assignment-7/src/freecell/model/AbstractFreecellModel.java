@@ -46,7 +46,7 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
   protected boolean hasGameStarted;
 
   /**
-   * Constructs a {@link FreecellModel} object with the given params. It throws {@link
+   * Protected Constructor for invocation by subclass constructors. It throws {@link
    * IllegalArgumentException} for following given cases.
    * <ul>
    * <li>If the given numberOfCascadePile is less than 4 or is greater than 8</li>
@@ -113,17 +113,21 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
   }
 
   /**
-   * <code>FreecellModelBuilder</code> implements <code>FreecellOperationsBuilder</code> and
-   * provides the ability to configure the number of cascade and open piles for the builder to build
-   * a FreeCellModel with the specified number of open and cascade piles.
+   * <code>AbstractFreecellOperationsBuilder</code> implements
+   * <code>FreecellOperationsBuilder</code>
+   * and provides the ability to configure the number of cascade and open piles for the builder to
+   * build a concrete implementation of FreecellOperations with the specified number of open and
+   * cascade piles.
    */
-  protected abstract static class AbstractFreecellOperationsBuilder implements FreecellOperationsBuilder {
+  protected abstract static class AbstractFreecellOperationsBuilder
+          implements FreecellOperationsBuilder {
 
     protected int numberOfCascadePile;
     protected int numberOfOpenPile;
 
     /**
-     * Constructs a <code>FreecellModelBuilder</code> with default 8 cascadePiles and 4 openPiles
+     * Protected Constructor for invocation by subclass constructors. Constructs a
+     * <code>AbstractFreecellOperationsBuilder</code> with default 8 cascadePiles and 4 openPiles
      * since those are default values for the popular online version of the game.
      */
     protected AbstractFreecellOperationsBuilder() {
