@@ -48,6 +48,9 @@ public class FreecellController implements IFreecellController<Card> {
    * deck is invalid in terms of Card then controller will transmit following message "Cannot start
    * the game" and return control to the caller.
    *
+   * <p>If the index of the pile is less than 1, then this method will throw an
+   * IllegalArgumentException.
+   *
    * @param deck    the deck to be used to play this game
    * @param model   the model for the game
    * @param shuffle shuffle the deck if true, false otherwise
