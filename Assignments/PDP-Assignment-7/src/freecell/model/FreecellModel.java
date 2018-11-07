@@ -32,6 +32,13 @@ public class FreecellModel extends AbstractFreecellModel {
     super(numberOfCascadePile, numberOfOpenPile);
   }
 
+  /**
+   * Removes the card at given index from the source pile and pushes it into the destinationPile.
+   *
+   * @param sourcePile      source pile of cards
+   * @param cardIndex       the index in the source pile of cards
+   * @param destinationPile the destination pile of cards
+   */
   @Override
   protected void commitMove(List<Card> sourcePile, int cardIndex, List<Card> destinationPile) {
     Card cardFromSource = sourcePile.remove(cardIndex);
@@ -47,7 +54,19 @@ public class FreecellModel extends AbstractFreecellModel {
     return new FreecellModelBuilder();
   }
 
+  /**
+   * This class represents a builder for instantiating {@link FreecellModel} objects. <code
+   * >FreecellModelBuilder</code> extends <code>AbstractFreecellOperationsBuilder</code> and
+   * provides the ability to configure the number of cascade and open piles for the builder to build
+   * a FreeCellModel with the specified number of open and cascade piles.
+   */
   public static class FreecellModelBuilder extends AbstractFreecellOperationsBuilder {
+
+    /**
+     * Returns a Instance of {@link FreecellModel}.
+     *
+     * @return a Instance of {@link FreecellModel}
+     */
     @Override
     protected FreecellOperations<Card> getFreeCellOperationsInstance() {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);

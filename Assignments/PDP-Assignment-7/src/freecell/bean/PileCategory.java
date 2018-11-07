@@ -137,6 +137,14 @@ public enum PileCategory {
     throw new IllegalArgumentException("Invalid input");
   }
 
+  /**
+   * Returns a PileCategory for the given symbol. It throws an {@link IllegalArgumentException} if
+   * there is no PileCategory associated with the given symbol.
+   *
+   * @param symbol the given symbol
+   * @return a PileCategory for the given symbol
+   * @throws IllegalArgumentException if there is not PileCategory associated with the given symbol
+   */
   public static PileCategory getPileCategory(char symbol) throws IllegalArgumentException {
     for (PileCategory pileCategory : PileCategory.values()) {
       if (pileCategory.getSymbol() == symbol) {
