@@ -49,8 +49,8 @@ public class FreecellControllerIsolationTest {
       expectedLog.append(deckInMockModel).append(System.lineSeparator());
       expectedLog.append(shuffle).append(System.lineSeparator());
 
-      for (String string : Arrays.asList("CASCADE1 11 FOUNDATION1", "CASCADE2 10 FOUNDATION2",
-              "CASCADE3 9 FOUNDATION3")) {
+      for (String string : Arrays.asList("CASCADE0 10 FOUNDATION0", "CASCADE1 9 FOUNDATION1",
+              "CASCADE2 8 FOUNDATION2")) {
         expectedLog.append(codeForGameState).append(System.lineSeparator());
 
         expectedLog.append(codeForIsGameOver).append(System.lineSeparator());
