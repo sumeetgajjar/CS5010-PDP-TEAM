@@ -5,7 +5,6 @@ import java.util.List;
 import freecell.bean.Card;
 import freecell.bean.PileCategory;
 import freecell.model.rulechecker.MultiMoveCascadePileRuleChecker;
-import freecell.model.rulechecker.RuleChecker;
 import util.Utils;
 
 /**
@@ -46,9 +45,9 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
   }
 
   /**
-   * Returns a {@link RuleChecker<Card>} for cascade pile.
+   * Returns a RuleChecker of type card for cascade pile.
    *
-   * @return a {@link RuleChecker<Card>} for cascade pile
+   * @return a RuleChecker of type card for cascade pile
    */
   @Override
   protected MultiMoveCascadePileRuleChecker getCascadePileRuleChecker() {

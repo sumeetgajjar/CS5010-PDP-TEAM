@@ -265,9 +265,9 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
 
 
   /**
-   * Returns a {@link RuleChecker<Card>} for Cascade Pile.
+   * Returns a {@link RuleChecker} of type card for Cascade Pile.
    *
-   * @return a {@link RuleChecker<Card>} for Cascade Pile
+   * @return a {@link RuleChecker} of type card for Cascade Pile
    */
   protected RuleChecker<Card> getCascadePileRuleChecker() {
     return new SingleMoveCascadePileRuleChecker();
