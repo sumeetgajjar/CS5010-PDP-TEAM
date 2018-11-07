@@ -74,93 +74,6 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     this.hasGameStarted = false;
   }
 
-  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
-    List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
-            .map(card -> " " + card.toString()).collect(Collectors.joining(","))
-    ).collect(Collectors.toList());
-
-    StringBuilder stringBuilder = new StringBuilder();
-    for (int pileIndex = 0; pileIndex < listOfStrings.size(); pileIndex++) {
-      stringBuilder.append(pile.getSymbol());
-      stringBuilder.append(pileIndex + 1);
-      stringBuilder.append(":");
-      stringBuilder.append(listOfStrings.get(pileIndex));
-      stringBuilder.append(System.lineSeparator());
-    }
-    return stringBuilder.toString().trim();
-
-  }
-
-  private static void requireValidDeck(List<Card> deck) {
-    Utils.requireNonNull(deck);
-
-    // deck has an incorrect size
-    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    // deck has null cards
-    long nullCardCount = deck.stream().filter(Objects::isNull).count();
-    if (nullCardCount > 0) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-
-    // deck has duplicates
-    Set<Card> cards = new HashSet<>(deck);
-    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
-      throw new IllegalArgumentException("Invalid input");
-    }
-  }
-
-  /**
-   * <code>AbstractFreecellOperationsBuilder</code> implements
-   * <code>FreecellOperationsBuilder</code>
-   * and provides the ability to configure the number of cascade and open piles for the builder to
-   * build a concrete implementation of FreecellOperations with the specified number of open and
-   * cascade piles.
-   */
-  protected abstract static class AbstractFreecellOperationsBuilder
-          implements FreecellOperationsBuilder {
-
-    protected int numberOfCascadePile;
-    protected int numberOfOpenPile;
-
-    /**
-     * Protected Constructor for invocation by subclass constructors. Constructs a
-     * <code>AbstractFreecellOperationsBuilder</code> with default 8 cascadePiles and 4 openPiles
-     * since those are default values for the popular online version of the game.
-     */
-    protected AbstractFreecellOperationsBuilder() {
-      this.numberOfCascadePile = 8;
-      this.numberOfOpenPile = 4;
-    }
-
-    @Override
-    public FreecellOperationsBuilder cascades(int c) {
-      this.numberOfCascadePile = c;
-      return this;
-    }
-
-    @Override
-    public FreecellOperationsBuilder opens(int o) {
-      this.numberOfOpenPile = o;
-      return this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public FreecellOperations<Card> build() {
-      return getFreeCellOperationsInstance();
-    }
-
-    /**
-     * Return a concrete instance of a freeCellOperations model.
-     *
-     * @return freeCellOperations model
-     */
-    protected abstract FreecellOperations<Card> getFreeCellOperationsInstance();
-  }
-
   /**
    * Return a valid and complete deck of cards for a game of Freecell. There is no restriction
    * imposed on the ordering of these cards in the deck. An invalid deck is defined as a deck that
@@ -339,6 +252,23 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     }
   }
 
+  /**
+   * Commits a move and mutates the state in the piles. This method is supposed to be called after
+   * move validation is complete, however this method should not be public.
+   *
+   * @param sourcePile      source pile of cards
+   * @param cardIndex       the index in the source pile of cards
+   * @param destinationPile the destination pile of cards
+   */
+  protected abstract void commitMove(List<Card> sourcePile, int cardIndex,
+                                     List<Card> destinationPile);
+
+
+  /**
+   * Returns a {@link RuleChecker<Card>} for Cascade Pile.
+   *
+   * @return a {@link RuleChecker<Card>} for Cascade Pile
+   */
   protected RuleChecker<Card> getCascadePileRuleChecker() {
     return new SingleMoveCascadePileRuleChecker();
   }
@@ -353,17 +283,6 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     List<List<Card>> list = this.pilesMap.get(pileCategory);
     return Utils.requireNonNull(list);
   }
-
-  /**
-   * Commits a move and mutates the state in the piles. This method is supposed to be called after
-   * move validation is complete, however this method should not be public.
-   *
-   * @param sourcePile      source pile of cards
-   * @param cardIndex       the index in the source pile of cards
-   * @param destinationPile the destination pile of cards
-   */
-  protected abstract void commitMove(List<Card> sourcePile, int cardIndex,
-                                     List<Card> destinationPile);
 
   private Map<PileCategory, List<List<Card>>> getPilesMap(int numberOfCascadePile,
                                                           int numberOfOpenPile) {
@@ -450,5 +369,100 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     } else {
       throw new IllegalArgumentException("Invalid input");
     }
+  }
+
+  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
+    List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
+            .map(card -> " " + card.toString()).collect(Collectors.joining(","))
+    ).collect(Collectors.toList());
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int pileIndex = 0; pileIndex < listOfStrings.size(); pileIndex++) {
+      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(pileIndex + 1);
+      stringBuilder.append(":");
+      stringBuilder.append(listOfStrings.get(pileIndex));
+      stringBuilder.append(System.lineSeparator());
+    }
+    return stringBuilder.toString().trim();
+
+  }
+
+  /**
+   * Checks if the given deck is valid, throws {@link IllegalArgumentException} otherwise. It throws
+   * {@link IllegalArgumentException} if the given deck does not contains 52 card or if the given
+   * deck contains a null card or if the given deck contains a duplicate card.
+   *
+   * @param deck the deck to check
+   * @throws IllegalArgumentException if the given deck is invalid
+   */
+  private static void requireValidDeck(List<Card> deck) throws IllegalArgumentException {
+    Utils.requireNonNull(deck);
+
+    // deck has an incorrect size
+    if (deck.isEmpty() || deck.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    // deck has null cards
+    long nullCardCount = deck.stream().filter(Objects::isNull).count();
+    if (nullCardCount > 0) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    // deck has duplicates
+    Set<Card> cards = new HashSet<>(deck);
+    if (cards.size() != TOTAL_NUMBER_OF_CARDS_IN_DECK) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  /**
+   * <code>AbstractFreecellOperationsBuilder</code> implements
+   * <code>FreecellOperationsBuilder</code>
+   * and provides the ability to configure the number of cascade and open piles for the builder to
+   * build a concrete implementation of FreecellOperations with the specified number of open and
+   * cascade piles.
+   */
+  protected abstract static class AbstractFreecellOperationsBuilder
+          implements FreecellOperationsBuilder {
+
+    protected int numberOfCascadePile;
+    protected int numberOfOpenPile;
+
+    /**
+     * Protected Constructor for invocation by subclass constructors. Constructs a
+     * <code>AbstractFreecellOperationsBuilder</code> with default 8 cascadePiles and 4 openPiles
+     * since those are default values for the popular online version of the game.
+     */
+    protected AbstractFreecellOperationsBuilder() {
+      this.numberOfCascadePile = 8;
+      this.numberOfOpenPile = 4;
+    }
+
+    @Override
+    public FreecellOperationsBuilder cascades(int c) {
+      this.numberOfCascadePile = c;
+      return this;
+    }
+
+    @Override
+    public FreecellOperationsBuilder opens(int o) {
+      this.numberOfOpenPile = o;
+      return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public FreecellOperations<Card> build() {
+      return getFreeCellOperationsInstance();
+    }
+
+    /**
+     * Return a concrete instance of a freeCellOperations model.
+     *
+     * @return freeCellOperations model
+     */
+    protected abstract FreecellOperations<Card> getFreeCellOperationsInstance();
   }
 }
