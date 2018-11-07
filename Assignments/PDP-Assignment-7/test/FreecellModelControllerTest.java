@@ -25,17 +25,6 @@ import util.Utils;
  */
 public class FreecellModelControllerTest {
 
-  private static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
-          "destination pile again.";
-  private static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
-          "index again.";
-  private static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
-  protected static String GAME_QUIT_STRING = "Game quit prematurely.";
-  private static final String GAME_OVER_STRING = "Game over.";
-  private static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
-          "pile again.";
-
-
   @Test
   public void constructingControllerWithNullParamsFails() {
     StringReader readable = new StringReader("C1 8 F1 q");
@@ -105,7 +94,7 @@ public class FreecellModelControllerTest {
 
     freecellController.playGame(deck, freecellOperations, false);
     expectedOutput.append(System.lineSeparator());
-    expectedOutput.append("Cannot start the game");
+    expectedOutput.append(TestUtils.CANNOT_START_THE_GAME_STRING);
     expectedOutput.append(System.lineSeparator());
 
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -132,7 +121,7 @@ public class FreecellModelControllerTest {
       expectedOutput.append(TestUtils.convertPilesToString(
               expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
       expectedOutput.append(System.lineSeparator());
-      expectedOutput.append(GAME_QUIT_STRING);
+      expectedOutput.append(TestUtils.GAME_QUIT_STRING);
       expectedOutput.append(System.lineSeparator());
 
       Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -159,7 +148,7 @@ public class FreecellModelControllerTest {
       expectedOutput.append(TestUtils.convertPilesToString(
               expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
       expectedOutput.append(System.lineSeparator());
-      expectedOutput.append(GAME_QUIT_STRING);
+      expectedOutput.append(TestUtils.GAME_QUIT_STRING);
       expectedOutput.append(System.lineSeparator());
 
       Assert.assertNotEquals(expectedOutput.toString(), appendable.toString());
@@ -299,7 +288,7 @@ public class FreecellModelControllerTest {
       }
     }
 
-    expectedOutput.append(GAME_OVER_STRING);
+    expectedOutput.append(TestUtils.GAME_OVER_STRING);
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
   }
@@ -332,7 +321,7 @@ public class FreecellModelControllerTest {
       expectedOutput.append(TestUtils.convertPilesToString(
               expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
       expectedOutput.append(System.lineSeparator());
-      expectedOutput.append(GAME_QUIT_STRING);
+      expectedOutput.append(TestUtils.GAME_QUIT_STRING);
       expectedOutput.append(System.lineSeparator());
 
       Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -363,7 +352,7 @@ public class FreecellModelControllerTest {
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
 
-        expectedOutput.append(INVALID_SOURCE_PILE_MESSAGE);
+        expectedOutput.append(TestUtils.INVALID_SOURCE_PILE_MESSAGE);
         expectedOutput.append(System.lineSeparator());
 
         Card removedCard = expectedCascadingPiles.get(0).remove(12);
@@ -372,7 +361,7 @@ public class FreecellModelControllerTest {
         expectedOutput.append(TestUtils.convertPilesToString(
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
-        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(TestUtils.GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
 
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -405,7 +394,7 @@ public class FreecellModelControllerTest {
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
 
-        expectedOutput.append(INVALID_DESTINATION_PILE_MESSAGE);
+        expectedOutput.append(TestUtils.INVALID_DESTINATION_PILE_MESSAGE);
         expectedOutput.append(System.lineSeparator());
 
         Card removedCard = expectedCascadingPiles.get(0).remove(12);
@@ -414,7 +403,7 @@ public class FreecellModelControllerTest {
         expectedOutput.append(TestUtils.convertPilesToString(
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
-        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(TestUtils.GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());
       }
@@ -446,7 +435,7 @@ public class FreecellModelControllerTest {
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
 
-        expectedOutput.append(INVALID_CARD_INDEX_MESSAGE);
+        expectedOutput.append(TestUtils.INVALID_CARD_INDEX_MESSAGE);
         expectedOutput.append(System.lineSeparator());
 
         Card removedCard = expectedCascadingPiles.get(0).remove(12);
@@ -455,7 +444,7 @@ public class FreecellModelControllerTest {
         expectedOutput.append(TestUtils.convertPilesToString(
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
-        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(TestUtils.GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());
       }
@@ -489,7 +478,7 @@ public class FreecellModelControllerTest {
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
 
-        expectedOutput.append(INVALID_MOVE_MESSAGE_STRING + ": Invalid input");
+        expectedOutput.append(TestUtils.INVALID_MOVE_MESSAGE_STRING + ": Invalid input");
         expectedOutput.append(System.lineSeparator());
 
         Card removedCard = expectedCascadingPiles.get(0).remove(12);
@@ -498,7 +487,7 @@ public class FreecellModelControllerTest {
         expectedOutput.append(TestUtils.convertPilesToString(
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
-        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(TestUtils.GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
 
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());

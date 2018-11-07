@@ -3,6 +3,7 @@ import org.junit.Test;
 
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import freecell.bean.Suit;
 import freecell.controller.FreecellController;
 import freecell.model.FreecellOperations;
 import freecell.model.PileType;
+import util.TestUtils;
 
 /**
  * Created by gajjar.s, on 4:42 PM, 11/6/18
@@ -34,7 +36,8 @@ public class FreecellControllerIsolationTest {
       int codeForGameState = random.nextInt();
       int codeForIsGameOver = random.nextInt();
       int codeForGetDeck = random.nextInt();
-      MockModel mockModel = new MockModel(mockModelLog, codeForStartGame, codeForMove,
+      FreecellOperations<Card> mockModelWithLogger = new MockModelWithLogger(mockModelLog,
+              codeForStartGame, codeForMove,
               codeForGameState,
               codeForIsGameOver, codeForGetDeck);
       List<Card> deckInMockModel = Arrays.asList(
@@ -42,9 +45,10 @@ public class FreecellControllerIsolationTest {
               new Card(Suit.DIAMONDS, CardValue.ACE));
 
       FreecellController freecellController = new FreecellController(actualInput, actualOutput);
-      freecellController.playGame(mockModel.getDeck(), mockModel, shuffle);
-
+      List<Card> deck = mockModelWithLogger.getDeck();
       expectedLog.append(codeForGetDeck).append(System.lineSeparator());
+
+      freecellController.playGame(deck, mockModelWithLogger, shuffle);
       expectedLog.append(codeForStartGame).append(System.lineSeparator());
       expectedLog.append(deckInMockModel).append(System.lineSeparator());
       expectedLog.append(shuffle).append(System.lineSeparator());
@@ -72,7 +76,92 @@ public class FreecellControllerIsolationTest {
     }
   }
 
-  public static class MockModel implements FreecellOperations<Card> {
+  @Test
+  public void testIfControllerDoesNotPropagateStartGameExceptionToCaller() {
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      StringReader actualInput = new StringReader("C1 11 F1 C2 10 F2 C3 9 F3 Q");
+      StringBuffer actualOutput = new StringBuffer();
+
+      StringBuilder expectedOutput = new StringBuilder();
+
+      FreecellOperations<Card> mockModel = new MockModelWhichThrowsException1();
+
+      FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+      freecellController.playGame(mockModel.getDeck(), mockModel, shuffle);
+
+      expectedOutput.append("YOLO").append(System.lineSeparator());
+      expectedOutput.append(TestUtils.CANNOT_START_THE_GAME_STRING).append(System.lineSeparator());
+      Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
+    }
+  }
+
+  @Test
+  public void testIfControllerDoesNotPropagateIllegalArgumentExceptionOfMoveToCaller() {
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      StringReader actualInput = new StringReader("C1 11 F1 C2 10 F2 C3 9 F3 Q");
+      StringBuffer actualOutput = new StringBuffer();
+
+      StringBuilder expectedOutput = new StringBuilder();
+
+      FreecellOperations<Card> mockModel = new MockModelWhichThrowsException2();
+
+      FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+      freecellController.playGame(mockModel.getDeck(),
+              mockModel, shuffle);
+
+      expectedOutput.append("YOLO").append(System.lineSeparator());
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
+              .append(System.lineSeparator());
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
+              .append(System.lineSeparator());
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
+              .append(System.lineSeparator());
+      expectedOutput.append(TestUtils.GAME_QUIT_STRING).append(System.lineSeparator());
+      Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
+    }
+  }
+
+  private static class MockModelWhichThrowsException1 implements FreecellOperations<Card> {
+
+    @Override
+    public List<Card> getDeck() {
+      return Collections.emptyList();
+    }
+
+    @Override
+    public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
+      throw new IllegalArgumentException("mock illegal argument exception in startGame");
+    }
+
+    @Override
+    public void move(PileType source, int pileNumber, int cardIndex, PileType destination,
+                     int destPileNumber) throws IllegalArgumentException, IllegalStateException {
+      throw new IllegalArgumentException("mock illegal argument exception in move");
+    }
+
+    @Override
+    public boolean isGameOver() {
+      return false;
+    }
+
+    @Override
+    public String getGameState() {
+      return "YOLO";
+    }
+  }
+
+  private static class MockModelWhichThrowsException2 extends MockModelWhichThrowsException1 {
+
+    @Override
+    public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
+
+    }
+  }
+
+  private static class MockModelWithLogger implements FreecellOperations<Card> {
 
     private final StringBuilder log;
     private final int codeForStartGame;
@@ -81,8 +170,8 @@ public class FreecellControllerIsolationTest {
     private final int codeForIsGameOver;
     private final int codeForGetDeck;
 
-    public MockModel(StringBuilder log, int codeForStartGame, int codeForMove,
-                     int codeForGameState, int codeForIsGameOver, int codeForGetDeck) {
+    public MockModelWithLogger(StringBuilder log, int codeForStartGame, int codeForMove,
+                               int codeForGameState, int codeForIsGameOver, int codeForGetDeck) {
       this.log = log;
       this.codeForStartGame = codeForStartGame;
       this.codeForMove = codeForMove;

@@ -17,6 +17,17 @@ import freecell.bean.Suit;
  */
 public class TestUtils {
 
+  public static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
+          "destination pile again.";
+  public static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
+          "index again.";
+  public static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
+  public static final String GAME_OVER_STRING = "Game over.";
+  public static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
+          "pile again.";
+  public static final String CANNOT_START_THE_GAME_STRING = "Cannot start the game";
+  public static final String GAME_QUIT_STRING = "Game quit prematurely.";
+
   public static List<List<Card>> getListOfEmptyLists(int listSize) {
     List<List<Card>> expectedOpenPiles = new ArrayList<>(listSize);
     for (int i = 0; i < listSize; i++) {
