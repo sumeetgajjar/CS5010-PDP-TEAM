@@ -11,7 +11,14 @@ import freecell.model.FreecellOperations;
 import util.Utils;
 
 /**
- * Created by gajjar.s, on 6:58 PM, 11/3/18
+ * <code>FreecellController</code> implements the FreecellController interface and provides the
+ * facility to play the game of freeCell via a generic input and output streams mechanism.
+ *
+ * <p>The controller “runs” the program, effectively facilitating it through a sequence of
+ * operations using inputs in source-independent/destination dependent manner. This implementation
+ * of the controller gets inputs from a <code>Readable</code> which is an abstraction over a stream
+ * of input "characters" and it passes it's output to an <code>Appendable</code> which is an
+ * abstraction over a stream of output "characters".
  */
 public class FreecellController implements IFreecellController<Card> {
 
@@ -33,9 +40,16 @@ public class FreecellController implements IFreecellController<Card> {
   private final Readable readable;
   private final Appendable appendable;
 
+  /**
+   * Constructs a <code>FreecellController</code> that takes in a Readable and Appendable object
+   * that it uses to play the game of freeCell.
+   *
+   * @param readable   the readable object that is the source of characters
+   * @param appendable the appendable object that is the destination of characters
+   * @throws IllegalArgumentException if readable or appendable is null
+   */
   public FreecellController(Readable readable, Appendable appendable)
           throws IllegalArgumentException {
-
     Utils.requireNonNull(readable);
     Utils.requireNonNull(appendable);
     this.readable = readable;
@@ -50,6 +64,36 @@ public class FreecellController implements IFreecellController<Card> {
    *
    * <p>If the index of the pile is less than 1, then this method will throw an
    * IllegalArgumentException.
+   *
+   * <p>The controller “run” the game in the following sequence until the game is over:
+   * Each transmission below should end with a newline.
+   * <ul>
+   * <li>Transmit game state to the Appendable object exactly as the model provides it.</li>
+   * <li>If the game is ongoing, wait for user input from the Readable object. A valid user
+   * input for a move is a sequence of three inputs (separated by spaces or newlines), asked one at
+   * a time.</li>
+   * <li>The source pile (e.g., "C1", as a single word). The pile number begins at 1, so that it is
+   * more human-friendly.</li>
+   * <li>If the game has been won, we pass the mesage "Game over." and end the game play. </li>
+   * <li>The card index, again with the index beginning at 1.</li>
+   * <li>The destination pile (e.g., "F2", as a single word). The pile number is again counted from
+   * 1.</li>
+   * <li>The controller will parse these inputs and pass the information on to the model to make
+   * the move.</li>
+   * <li>In case a move is invalid, then the controller passes a message to the appendable
+   * object that the move was invalid and why. </li>
+   * <li>If at any point, the input is either the letter 'q' or the letter 'Q', the controller
+   * should transmit “Game quit prematurely.” and return.</li>
+   * <li> If an input is unexpected (i.e. something other than 'q' or 'Q' to quit the game; a
+   * letter other than 'C', 'F', 'O' to name a pile; anything that cannot be parsed to a valid
+   * number after the pile letter; anything that is not a number for the card index) it should ask
+   * the user to input it again.</li>
+   * <li> If the user entered the source pile correctly but the card index incorrectly, the
+   * controller should ask for only the card index again, not the source pile, and likewise for the
+   * destination pile.</li>
+   * </ul></p>
+   *
+   * <p>The controller will not propagate any exceptions thrown by the model to its caller.
    *
    * @param deck    the deck to be used to play this game
    * @param model   the model for the game
@@ -70,30 +114,38 @@ public class FreecellController implements IFreecellController<Card> {
 
     Scanner scanner = new Scanner(this.readable);
     while (true) {
+      // while the game is not over, keep waiting till game is not over.
       if (!model.isGameOver()) {
-
+        // try and read the source pile first
         Optional<PileInfo> sourcePileInfoOptional = readPileInfo(scanner,
                 INVALID_SOURCE_PILE_MESSAGE);
         if (!sourcePileInfoOptional.isPresent()) {
+          // this means "q" was input
           break;
         }
         PileInfo sourcePileInfo = sourcePileInfoOptional.get();
 
+        // try and read the card index next
         Optional<Integer> cardIndexOptional = readCardIndex(scanner);
         if (!cardIndexOptional.isPresent()) {
+          // this means "q" was input
           break;
         }
         Integer cardIndex = cardIndexOptional.get();
 
+        // try and read the destination pile in the end
         Optional<PileInfo> destinationPileInfoOptional = readPileInfo(scanner,
                 INVALID_DESTINATION_PILE_MESSAGE);
         if (!destinationPileInfoOptional.isPresent()) {
+          // this means "q" was input
           break;
         }
         PileInfo destinationPileInfo = destinationPileInfoOptional.get();
 
+        // finally make a move
         this.makeMove(model, sourcePileInfo, destinationPileInfo, cardIndex);
       } else {
+        // game is over, transmit message and then break
         this.transmitMessage(GAME_OVER_STRING);
         break;
       }
