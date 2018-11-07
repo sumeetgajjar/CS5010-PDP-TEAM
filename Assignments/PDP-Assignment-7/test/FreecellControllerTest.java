@@ -314,6 +314,11 @@ public class FreecellControllerTest {
     }
   }
 
+  @Test
+  public void badInputsGivenToController() {
+
+  }
+
   private FreecellOperations<Card> getFreecellOperation() {
     return FreecellMultiMoveModel.getBuilder().cascades(4).opens(4).build();
   }
