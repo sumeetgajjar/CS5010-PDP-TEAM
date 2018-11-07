@@ -98,7 +98,7 @@ public class FreecellControllerTest {
 
     freecellController.playGame(deck, freecellOperations, false);
     expectedOutput.append(System.lineSeparator());
-    expectedOutput.append("Invalid move. Try again.");
+    expectedOutput.append("Cannot start the game");
     expectedOutput.append(System.lineSeparator());
     expectedOutput.append(GAME_QUIT_STRING);
     expectedOutput.append(System.lineSeparator());
