@@ -27,6 +27,8 @@ public class FreecellControllerTest {
 
   private static String GAME_QUIT_STRING = "Game quit prematurely.";
   private static final String GAME_OVER_STRING = "Game over.";
+  private final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source pile " +
+          "again.";
 
 
   @Test
@@ -234,7 +236,6 @@ public class FreecellControllerTest {
         stringBuilder.append("F").append(pileIndex);
       }
     }
-    stringBuilder.append("q");
 
     StringReader actualInput = new StringReader(stringBuilder.toString());
     StringBuffer actualOutput = new StringBuffer();
@@ -310,13 +311,48 @@ public class FreecellControllerTest {
       expectedOutput.append(GAME_QUIT_STRING);
       expectedOutput.append(System.lineSeparator());
 
-      Assert.assertNotEquals(expectedOutput.toString(), appendable.toString());
+      Assert.assertEquals(expectedOutput.toString(), appendable.toString());
     }
   }
 
   @Test
-  public void badInputsGivenToController() {
+  public void badSourcePileGivenToController() {
+    for (String quitString : Arrays.asList("Q", "q")) {
+      for (String badInput : Arrays.asList("1", "m", "@")) {
+        StringReader readable = new StringReader(badInput + " C1 12 O1 " + quitString);
+        StringBuffer appendable = new StringBuffer();
 
+        StringBuilder expectedOutput = new StringBuilder();
+
+        FreecellController freecellController = new FreecellController(readable, appendable);
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+
+        List<Card> deck = TestUtils.getValidDeck();
+        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+        List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+        freecellController.playGame(deck, freecellOperations, false);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+
+        expectedOutput.append(INVALID_SOURCE_PILE_MESSAGE);
+        expectedOutput.append(System.lineSeparator());
+
+        Card removedCard = expectedCascadingPiles.get(0).remove(12);
+        expectedOpenPiles.get(0).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(System.lineSeparator());
+
+        Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+      }
+    }
   }
 
   private FreecellOperations<Card> getFreecellOperation() {
