@@ -23,7 +23,7 @@ import util.Utils;
  * Represents tests that are run on the <code>FreecellController</code> that implements
  * <code>IFreecellController</code>.
  */
-public class FreecellControllerTest {
+public class FreecellModelControllerTest {
 
   private static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
           "destination pile again.";
@@ -508,7 +508,7 @@ public class FreecellControllerTest {
     }
   }
 
-  private FreecellOperations<Card> getFreecellOperation() {
+  protected FreecellOperations<Card> getFreecellOperation() {
     return FreecellMultiMoveModel.getBuilder().cascades(4).opens(4).build();
   }
 
