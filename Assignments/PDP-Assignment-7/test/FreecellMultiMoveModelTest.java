@@ -23,8 +23,7 @@ import util.Utils;
  * <code>FreeCellOperations</code>.
  */
 public class FreecellMultiMoveModelTest extends FreecellModelTest {
-
-  @Override
+  //  @Override
   protected FreecellOperationsBuilder getFreecellOperationsBuilder() {
     return FreecellMultiMoveModel.getBuilder();
   }
