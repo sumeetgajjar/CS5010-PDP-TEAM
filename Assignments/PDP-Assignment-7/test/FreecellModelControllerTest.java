@@ -30,7 +30,7 @@ public class FreecellModelControllerTest {
   private static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
           "index again.";
   private static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
-  private static String GAME_QUIT_STRING = "Game quit prematurely.";
+  protected static String GAME_QUIT_STRING = "Game quit prematurely.";
   private static final String GAME_OVER_STRING = "Game over.";
   private static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
           "pile again.";
@@ -71,7 +71,7 @@ public class FreecellModelControllerTest {
     StringReader readable = new StringReader("C1 8 F1 q");
     StringBuffer appendable = new StringBuffer();
     FreecellController freecellController = new FreecellController(readable, appendable);
-    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
     Assert.assertEquals("", appendable.toString());
     try {
@@ -98,7 +98,7 @@ public class FreecellModelControllerTest {
     StringBuilder expectedOutput = new StringBuilder();
 
     FreecellController freecellController = new FreecellController(readable, appendable);
-    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
     List<Card> deck = freecellOperations.getDeck();
     deck.remove(0);
@@ -121,7 +121,7 @@ public class FreecellModelControllerTest {
       StringBuilder expectedOutput = new StringBuilder();
 
       FreecellController freecellController = new FreecellController(readable, appendable);
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
       List<Card> deck = TestUtils.getValidDeck();
       List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -148,7 +148,7 @@ public class FreecellModelControllerTest {
       StringBuilder expectedOutput = new StringBuilder();
 
       FreecellController freecellController = new FreecellController(readable, appendable);
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
       List<Card> deck = TestUtils.getValidDeck();
       List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -180,7 +180,7 @@ public class FreecellModelControllerTest {
     FreecellController freecellController = new FreecellController(readable, appendable);
     Assert.assertEquals("", appendable.toString());
 
-    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
     List<Card> deck = freecellOperations.getDeck();
     try {
       freecellController.playGame(deck, freecellOperations, false);
@@ -216,7 +216,7 @@ public class FreecellModelControllerTest {
     Assert.assertEquals("", outputBuffer.toString());
 
     try {
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
       List<Card> deck = freecellOperations.getDeck();
 
       freecellController.playGame(deck, freecellOperations, false);
@@ -234,12 +234,7 @@ public class FreecellModelControllerTest {
   }
 
   @Test
-  public void multiMoveModelValidCardIndexMoveWorks() {
-
-  }
-
-  @Test
-  public void singleMoveModelValidCardIndexDoesNotWork() {
+  public void singleMoveModelOtherThanLastCardIndexDoesNotWork() {
 
   }
 
@@ -271,7 +266,7 @@ public class FreecellModelControllerTest {
     StringBuilder expectedOutput = new StringBuilder();
 
     FreecellController freecellController = new FreecellController(actualInput, actualOutput);
-    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
     List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
     List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -318,7 +313,7 @@ public class FreecellModelControllerTest {
       StringBuilder expectedOutput = new StringBuilder();
 
       FreecellController freecellController = new FreecellController(readable, appendable);
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
       List<Card> deck = TestUtils.getValidDeck();
       List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -355,7 +350,7 @@ public class FreecellModelControllerTest {
         StringBuilder expectedOutput = new StringBuilder();
 
         FreecellController freecellController = new FreecellController(readable, appendable);
-        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
         List<Card> deck = TestUtils.getValidDeck();
         List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -396,7 +391,7 @@ public class FreecellModelControllerTest {
         StringBuilder expectedOutput = new StringBuilder();
 
         FreecellController freecellController = new FreecellController(readable, appendable);
-        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
         List<Card> deck = TestUtils.getValidDeck();
         List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -437,7 +432,7 @@ public class FreecellModelControllerTest {
         StringBuilder expectedOutput = new StringBuilder();
 
         FreecellController freecellController = new FreecellController(readable, appendable);
-        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
         List<Card> deck = TestUtils.getValidDeck();
         List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -480,7 +475,7 @@ public class FreecellModelControllerTest {
         StringBuilder expectedOutput = new StringBuilder();
 
         FreecellController freecellController = new FreecellController(readable, appendable);
-        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
         List<Card> deck = TestUtils.getValidDeck();
         List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
@@ -511,8 +506,8 @@ public class FreecellModelControllerTest {
     }
   }
 
-  protected FreecellOperations<Card> getFreecellOperation() {
-    return FreecellMultiMoveModel.getBuilder().cascades(4).opens(4).build();
+  protected FreecellOperations<Card> getFreecellOperation(int cascadeCount, int openCount) {
+    return FreecellMultiMoveModel.getBuilder().cascades(cascadeCount).opens(openCount).build();
   }
 
   private static List<String> getBadInputStrings() {
