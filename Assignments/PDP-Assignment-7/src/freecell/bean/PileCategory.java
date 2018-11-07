@@ -136,4 +136,13 @@ public enum PileCategory {
     }
     throw new IllegalArgumentException("Invalid input");
   }
+
+  public static PileCategory getPileCategory(char symbol) throws IllegalArgumentException {
+    for (PileCategory pileCategory : PileCategory.values()) {
+      if (pileCategory.getSymbol() == symbol) {
+        return pileCategory;
+      }
+    }
+    throw new IllegalArgumentException("Invalid symbol");
+  }
 }

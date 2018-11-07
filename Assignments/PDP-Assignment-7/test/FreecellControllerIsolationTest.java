@@ -18,7 +18,7 @@ import freecell.model.PileType;
  */
 public class FreecellControllerIsolationTest {
 
-  private final Random random = new Random(System.currentTimeMillis());
+  private final Random random = new Random(1);
 
   @Test
   public void testIfControllerPassesCorrectInputToModel() {
@@ -44,11 +44,10 @@ public class FreecellControllerIsolationTest {
       FreecellController freecellController = new FreecellController(actualInput, actualOutput);
       freecellController.playGame(mockModel.getDeck(), mockModel, shuffle);
 
+      expectedLog.append(codeForGetDeck).append(System.lineSeparator());
       expectedLog.append(codeForStartGame).append(System.lineSeparator());
       expectedLog.append(deckInMockModel).append(System.lineSeparator());
-      expectedLog.append(false).append(System.lineSeparator());
-
-      expectedOutput.append("YOLO").append(System.lineSeparator());
+      expectedLog.append(shuffle).append(System.lineSeparator());
 
       for (String string : Arrays.asList("CASCADE1 11 FOUNDATION1", "CASCADE2 10 FOUNDATION2",
               "CASCADE3 9 FOUNDATION3")) {
@@ -61,6 +60,9 @@ public class FreecellControllerIsolationTest {
 
         expectedOutput.append("YOLO").append(System.lineSeparator());
       }
+
+      expectedLog.append(codeForGameState).append(System.lineSeparator());
+      expectedLog.append(codeForIsGameOver).append(System.lineSeparator());
 
       expectedOutput.append("YOLO").append(System.lineSeparator());
       expectedOutput.append("Game quit prematurely.").append(System.lineSeparator());
