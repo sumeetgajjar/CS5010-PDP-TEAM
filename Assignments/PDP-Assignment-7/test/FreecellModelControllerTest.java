@@ -103,27 +103,29 @@ public class FreecellModelControllerTest {
   @Test
   public void quitWorksWithShuffleFalse() {
     for (String quitString : Arrays.asList("Q", "q")) {
-      StringReader readable = new StringReader(quitString);
-      StringBuffer appendable = new StringBuffer();
+      for (String input : Arrays.asList("C1", "C1 13")) {
+        StringReader readable = new StringReader(input + " " + quitString);
+        StringBuffer appendable = new StringBuffer();
 
-      StringBuilder expectedOutput = new StringBuilder();
+        StringBuilder expectedOutput = new StringBuilder();
 
-      FreecellController freecellController = new FreecellController(readable, appendable);
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
+        FreecellController freecellController = new FreecellController(readable, appendable);
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
-      List<Card> deck = TestUtils.getValidDeck();
-      List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
-      List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
-      List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+        List<Card> deck = TestUtils.getValidDeck();
+        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+        List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
 
-      freecellController.playGame(deck, freecellOperations, false);
-      expectedOutput.append(TestUtils.convertPilesToString(
-              expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
-      expectedOutput.append(System.lineSeparator());
-      expectedOutput.append(TestUtils.GAME_QUIT_STRING);
-      expectedOutput.append(System.lineSeparator());
+        freecellController.playGame(deck, freecellOperations, false);
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+        expectedOutput.append(TestUtils.GAME_QUIT_STRING);
+        expectedOutput.append(System.lineSeparator());
 
-      Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+        Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+      }
     }
   }
 
