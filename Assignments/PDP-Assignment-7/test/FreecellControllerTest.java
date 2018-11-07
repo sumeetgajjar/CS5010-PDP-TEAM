@@ -1,6 +1,13 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +30,8 @@ public class FreecellControllerTest {
 
   @Test
   public void constructingControllerWithNullParamsFails() {
-    StringReader stringReader = new StringReader("C1 8 F1 q");
-    StringBuffer stringBuffer = new StringBuffer();
+    StringReader readable = new StringReader("C1 8 F1 q");
+    StringBuffer appendable = new StringBuffer();
 
     try {
       new FreecellController(null, null);
@@ -32,35 +39,40 @@ public class FreecellControllerTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals("", appendable.toString());
 
     try {
-      new FreecellController(null, stringBuffer);
+      new FreecellController(null, appendable);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals("", appendable.toString());
 
     try {
-      new FreecellController(stringReader, null);
+      new FreecellController(readable, null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals("", appendable.toString());
   }
 
   @Test
   public void invalidModelOrDeckGivenToControllerFails() {
-    StringReader stringReader = new StringReader("C1 8 F1 q");
-    StringBuffer stringBuffer = new StringBuffer();
-    FreecellController freecellController = new FreecellController(stringReader, stringBuffer);
+    StringReader readable = new StringReader("C1 8 F1 q");
+    StringBuffer appendable = new StringBuffer();
+    FreecellController freecellController = new FreecellController(readable, appendable);
     FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
 
+    Assert.assertEquals("", appendable.toString());
     try {
       freecellController.playGame(null, freecellOperations, false);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals("", appendable.toString());
 
     try {
       freecellController.playGame(freecellOperations.getDeck(), null, false);
@@ -68,15 +80,16 @@ public class FreecellControllerTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+    Assert.assertEquals("", appendable.toString());
   }
 
   @Test
   public void passingDeckWith51CardsToController() {
-    StringReader actualInput = new StringReader("C1 q");
-    StringBuffer actualOutput = new StringBuffer();
-    StringBuffer expectedOutput = new StringBuffer();
+    StringReader readable = new StringReader("C1 q");
+    StringBuffer appendable = new StringBuffer();
+    StringBuilder expectedOutput = new StringBuilder();
 
-    FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+    FreecellController freecellController = new FreecellController(readable, appendable);
     FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
 
     List<Card> deck = freecellOperations.getDeck();
@@ -87,19 +100,19 @@ public class FreecellControllerTest {
     expectedOutput.append("Invalid move. Try again.");
     expectedOutput.append(System.lineSeparator());
     expectedOutput.append(GAME_QUIT_STRING);
-    Assert.assertEquals(expectedOutput, actualOutput);
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   //todo add and remove new line after game over and prematurely
   @Test
   public void quitWorksWithShuffleFalse() {
     for (String quitString : Arrays.asList("Q", "q")) {
-      StringReader actualInput = new StringReader(quitString);
-      StringBuffer actualOutput = new StringBuffer();
+      StringReader readable = new StringReader(quitString);
+      StringBuffer appendable = new StringBuffer();
 
       StringBuilder expectedOutput = new StringBuilder();
 
-      FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+      FreecellController freecellController = new FreecellController(readable, appendable);
       FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
 
       List<Card> deck = TestUtils.getValidDeck();
@@ -113,19 +126,19 @@ public class FreecellControllerTest {
       expectedOutput.append(System.lineSeparator());
       expectedOutput.append(GAME_QUIT_STRING);
 
-      Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
+      Assert.assertEquals(expectedOutput.toString(), appendable.toString());
     }
   }
 
   @Test
   public void quitWorksWithShuffleTrue() {
     for (String quitString : Arrays.asList("Q", "q")) {
-      StringReader actualInput = new StringReader(quitString);
-      StringBuffer actualOutput = new StringBuffer();
+      StringReader readable = new StringReader(quitString);
+      StringBuffer appendable = new StringBuffer();
 
       StringBuilder expectedOutput = new StringBuilder();
 
-      FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+      FreecellController freecellController = new FreecellController(readable, appendable);
       FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
 
       List<Card> deck = TestUtils.getValidDeck();
@@ -139,8 +152,62 @@ public class FreecellControllerTest {
       expectedOutput.append(System.lineSeparator());
       expectedOutput.append(GAME_QUIT_STRING);
 
-      Assert.assertNotEquals(expectedOutput.toString(), actualOutput.toString());
+      Assert.assertNotEquals(expectedOutput.toString(), appendable.toString());
     }
+  }
+
+  @Test
+  public void readableFailureCauseIllegalStateException() throws IOException {
+    BufferedReader readable =
+            new BufferedReader(
+                    new InputStreamReader(
+                            new ByteArrayInputStream("C1 q".getBytes())));
+
+    readable.close();
+
+    StringBuffer appendable = new StringBuffer();
+
+    FreecellController freecellController = new FreecellController(readable, appendable);
+    Assert.assertEquals("", appendable.toString());
+
+    try {
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      List<Card> deck = freecellOperations.getDeck();
+
+      freecellController.playGame(deck, freecellOperations, false);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertEquals("cannot read from readable", e.getMessage());
+    }
+
+    Assert.assertEquals("", appendable.toString());
+  }
+
+  @Test
+  public void appendableFailureCauseIllegalStateException() throws IOException {
+    StringReader readable = new StringReader("q");
+
+    BufferedWriter appendable =
+            new BufferedWriter(
+                    new OutputStreamWriter(
+                            new ByteArrayOutputStream()));
+
+    appendable.close();
+
+    FreecellController freecellController = new FreecellController(readable, appendable);
+    Assert.assertEquals("", appendable.toString());
+
+    try {
+      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+      List<Card> deck = freecellOperations.getDeck();
+
+      freecellController.playGame(deck, freecellOperations, false);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertEquals("cannot write to appendable", e.getMessage());
+    }
+
+    Assert.assertEquals("", appendable.toString());
   }
 
   private FreecellOperations<Card> getFreecellOperation() {
