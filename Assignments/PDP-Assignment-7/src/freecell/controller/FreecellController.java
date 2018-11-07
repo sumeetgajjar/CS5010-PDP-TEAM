@@ -53,6 +53,7 @@ public class FreecellController implements IFreecellController<Card> {
 
     try {
       model.startGame(deck, shuffle);
+      this.transmitGameState(model);
       //todo check this to make this more specific
     } catch (Exception e) {
       this.transmitGameState(model);
@@ -65,7 +66,6 @@ public class FreecellController implements IFreecellController<Card> {
     String inputString;
     outer:
     while (true) {
-      this.transmitGameState(model);
 
       if (!model.isGameOver()) {
         PileInfo sourcePileInfo = null;
@@ -117,6 +117,7 @@ public class FreecellController implements IFreecellController<Card> {
                   destinationPileInfo.getPileCategory().getPileType(),
                   destinationPileInfo.getPileIndex()
           );
+          this.transmitGameState(model);
         } catch (IllegalArgumentException e) {
           this.transmitMessage(String.format("%s: %s", INVALID_MOVE_MESSAGE_STRING,
                   e.getMessage()));
