@@ -11,6 +11,8 @@ import freecell.model.FreecellOperations;
 import util.TestUtils;
 import util.Utils;
 
+import static util.TestUtils.GAME_QUIT_STRING;
+
 public class FreeCellMultiMoveModelControllerTest extends FreecellModelControllerTest {
   //  @Override
   protected FreecellOperations<Card> getFreecellOperation(int cascadeCount, int openCount) {
