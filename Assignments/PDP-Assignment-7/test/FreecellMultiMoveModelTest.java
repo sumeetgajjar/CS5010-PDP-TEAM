@@ -1,16 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import freecell.bean.Card;
-import freecell.bean.CardValue;
-import freecell.bean.Suit;
 import freecell.model.FreecellMultiMoveModel;
 import freecell.model.FreecellOperations;
 import freecell.model.FreecellOperationsBuilder;
@@ -39,7 +33,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
               .cascades(cascadePiles)
               .build();
 
-      List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+      List<Card> deck = TestUtils.getDeckForMultipleCardsMovementOnCascadePile();
       List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
               deck);
       freecellOperations.startGame(deck, false);
@@ -136,7 +130,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             .cascades(cascadePiles)
             .build();
 
-    List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+    List<Card> deck = TestUtils.getDeckForMultipleCardsMovementOnCascadePile();
     Collections.reverse(deck);
     List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
             deck);
@@ -180,7 +174,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             .cascades(cascadePiles)
             .build();
 
-    List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
+    List<Card> deck = TestUtils.getDeckForMultipleCardsMovementOnCascadePile();
     List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
             deck);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
@@ -227,28 +221,4 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
     //now cascade piles 0 and 1 are empty.
   }
 
-  private static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
-    List<Card> deck = new ArrayList<>(52);
-    List<CardValue> cardValues = Arrays.stream(CardValue.values())
-            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
-            .collect(Collectors.toList());
-
-    boolean flag = true;
-    for (CardValue cardValue : cardValues) {
-
-      if (flag) {
-        deck.add(new Card(Suit.SPADES, cardValue));
-        deck.add(new Card(Suit.DIAMONDS, cardValue));
-        deck.add(new Card(Suit.CLUBS, cardValue));
-        deck.add(new Card(Suit.HEARTS, cardValue));
-      } else {
-        deck.add(new Card(Suit.DIAMONDS, cardValue));
-        deck.add(new Card(Suit.SPADES, cardValue));
-        deck.add(new Card(Suit.HEARTS, cardValue));
-        deck.add(new Card(Suit.CLUBS, cardValue));
-      }
-      flag = !flag;
-    }
-    return deck;
-  }
 }

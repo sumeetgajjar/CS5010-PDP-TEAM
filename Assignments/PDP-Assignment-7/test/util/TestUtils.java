@@ -105,4 +105,29 @@ public class TestUtils {
     }
     return deck;
   }
+
+  public static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    boolean flag = true;
+    for (CardValue cardValue : cardValues) {
+
+      if (flag) {
+        deck.add(new Card(Suit.SPADES, cardValue));
+        deck.add(new Card(Suit.DIAMONDS, cardValue));
+        deck.add(new Card(Suit.CLUBS, cardValue));
+        deck.add(new Card(Suit.HEARTS, cardValue));
+      } else {
+        deck.add(new Card(Suit.DIAMONDS, cardValue));
+        deck.add(new Card(Suit.SPADES, cardValue));
+        deck.add(new Card(Suit.HEARTS, cardValue));
+        deck.add(new Card(Suit.CLUBS, cardValue));
+      }
+      flag = !flag;
+    }
+    return deck;
+  }
 }
