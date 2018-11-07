@@ -6,27 +6,54 @@ import freecell.bean.Card;
 import util.Utils;
 
 /**
- * Created by gajjar.s, on 12:37 PM, 11/6/18
+ * MultiMoveCascadePileRuleChecker represents rules that apply to a move when the cascade pile is
+ * the source or the destination of the move such that multiple cards can be moved from the source
+ * pile.
  */
 public class MultiMoveCascadePileRuleChecker extends SingleMoveCascadePileRuleChecker {
-  private final long cascadePileCount;
-  private final long openPileCount;
+  private final long emptyCascadePileCount;
+  private final long emptyOpenPileCount;
 
-  public MultiMoveCascadePileRuleChecker(long cascadePileCount, long openPileCount) {
-    this.cascadePileCount = cascadePileCount;
-    this.openPileCount = openPileCount;
+  /**
+   * Constructs a <code>MultiMoveCascadePileRuleChecker</code> in terms of the emptyCascadePileCount
+   * and emptyOpenPileCount since the maximum number of cards that can be moved at the same time is
+   * bounded above by a function of the number of empty cascadePiles and open piles.
+   *
+   * @param emptyCascadePileCount the number of empty cascade piles
+   * @param emptyOpenPileCount    the number of empty open piles
+   */
+  public MultiMoveCascadePileRuleChecker(long emptyCascadePileCount, long emptyOpenPileCount) {
+    this.emptyCascadePileCount = emptyCascadePileCount;
+    this.emptyOpenPileCount = emptyOpenPileCount;
   }
 
+  /**
+   * Checks if the all cards from the cardIndex in the source pile can be moved.
+   *
+   * <p>The following are the conditions for a valid move from a source pile:
+   * <ul>
+   * <li>The first condition is that they should form a valid build, i.e. they should be arranged
+   * in alternating colors and consecutive, descending values in the cascade pile that they are
+   * moving from.</li>
+   * <li>the maximum number of cards that can be moved when there are N free open piles and K empty
+   * cascade piles is (N+1) * 2^K, accordingly, if the number of cards to move is more than this, it
+   * will amount to an invalid move.
+   * </li>
+   * </ul>
+   *
+   * @param cardIndex  the card index of the source sourcePile
+   * @param sourcePile the source pile from which the card needs to be taken out
+   */
   @Override
-  public boolean canGetCardsFromThePile(int cardIndex, List<Card> pile) {
-    if (cardIndex < 0 || cardIndex >= pile.size()) {
+  public boolean canGetCardsFromThePile(int cardIndex, List<Card> sourcePile) {
+    if (cardIndex < 0 || cardIndex >= sourcePile.size()) {
       return false;
     }
 
-    if (!ifEnoughCascadeAndOpenPilesAreEmpty(pile.size() - cardIndex)) {
+    if (!ifEnoughCascadeAndOpenPilesAreEmpty(sourcePile.size() - cardIndex)) {
       return false;
     }
-    return doSourcePileCardsFormValidBuild(Utils.sliceList(pile, cardIndex));
+    return doSourcePileCardsFormValidBuild(Utils.sliceList(sourcePile, cardIndex));
   }
 
   private boolean doSourcePileCardsFormValidBuild(List<Card> sliceList) {
@@ -45,6 +72,6 @@ public class MultiMoveCascadePileRuleChecker extends SingleMoveCascadePileRuleCh
   }
 
   private boolean ifEnoughCascadeAndOpenPilesAreEmpty(int numberOfCardsToBeMoved) {
-    return numberOfCardsToBeMoved <= (openPileCount + 1) * Math.pow(2, cascadePileCount);
+    return numberOfCardsToBeMoved <= (emptyOpenPileCount + 1) * Math.pow(2, emptyCascadePileCount);
   }
 }
