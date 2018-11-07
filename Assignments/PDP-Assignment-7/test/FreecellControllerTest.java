@@ -26,6 +26,7 @@ import util.Utils;
 public class FreecellControllerTest {
 
   private static String GAME_QUIT_STRING = "Game quit prematurely.";
+  private static final String GAME_OVER_STRING = "Game over.";
 
 
   @Test
@@ -267,7 +268,7 @@ public class FreecellControllerTest {
       }
     }
 
-    expectedOutput.append(GAME_QUIT_STRING);
+    expectedOutput.append(GAME_OVER_STRING);
     Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
   }
 
