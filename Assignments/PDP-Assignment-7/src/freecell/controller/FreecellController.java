@@ -18,7 +18,7 @@ public class FreecellController implements IFreecellController<Card> {
    * Start and play a new game of freecell with the provided deck. This deck should be used as-is.
    * This method returns only when the game is over (either by winning or by quitting). If the given
    * deck is invalid in terms of Card then controller will transmit following message "Cannot start
-   * the game".
+   * the game" and return control to the caller.
    *
    * @param deck    the deck to be used to play this game
    * @param model   the model for the game

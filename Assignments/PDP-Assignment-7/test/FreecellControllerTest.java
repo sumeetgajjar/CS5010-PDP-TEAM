@@ -25,10 +25,15 @@ import util.Utils;
  */
 public class FreecellControllerTest {
 
+  private static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
+          "destination pile again.";
+  private static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
+          "index again.";
+  private static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
   private static String GAME_QUIT_STRING = "Game quit prematurely.";
   private static final String GAME_OVER_STRING = "Game over.";
-  private final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source pile " +
-          "again.";
+  private static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
+          "pile again.";
 
 
   @Test
@@ -88,7 +93,7 @@ public class FreecellControllerTest {
 
   @Test
   public void passingDeckWith51CardsToControllerFails() {
-    StringReader readable = new StringReader("C1 q");
+    StringReader readable = new StringReader("C1");
     StringBuffer appendable = new StringBuffer();
     StringBuilder expectedOutput = new StringBuilder();
 
@@ -101,8 +106,6 @@ public class FreecellControllerTest {
     freecellController.playGame(deck, freecellOperations, false);
     expectedOutput.append(System.lineSeparator());
     expectedOutput.append("Cannot start the game");
-    expectedOutput.append(System.lineSeparator());
-    expectedOutput.append(GAME_QUIT_STRING);
     expectedOutput.append(System.lineSeparator());
 
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -318,7 +321,8 @@ public class FreecellControllerTest {
   @Test
   public void badSourcePileGivenToController() {
     for (String quitString : Arrays.asList("Q", "q")) {
-      for (String badInput : Arrays.asList("1", "m", "@")) {
+      // tests for bad inputs for the source pile
+      for (String badInput : getBadInputStrings()) {
         StringReader readable = new StringReader(badInput + " C1 12 O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
@@ -355,7 +359,146 @@ public class FreecellControllerTest {
     }
   }
 
+  @Test
+  public void badDestinationPileGivenToController() {
+    for (String quitString : Arrays.asList("Q", "q")) {
+      // tests for bad inputs for the destination pile
+      for (String badInput : getBadInputStrings()) {
+        StringReader readable = new StringReader("C1 12 " + badInput + " O1 " + quitString);
+        StringBuffer appendable = new StringBuffer();
+
+        StringBuilder expectedOutput = new StringBuilder();
+
+        FreecellController freecellController = new FreecellController(readable, appendable);
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+
+        List<Card> deck = TestUtils.getValidDeck();
+        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+        List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+        freecellController.playGame(deck, freecellOperations, false);
+
+        // tests for initial game state
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+
+        expectedOutput.append(INVALID_DESTINATION_PILE_MESSAGE);
+        expectedOutput.append(System.lineSeparator());
+
+        Card removedCard = expectedCascadingPiles.get(0).remove(12);
+        expectedOpenPiles.get(0).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(System.lineSeparator());
+
+        Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+      }
+    }
+  }
+
+  @Test
+  public void badCardIndexGivenToController() {
+    for (String quitString : Arrays.asList("Q", "q")) {
+      // tests for bad inputs for the card index
+      for (String badInput : getBadInputStrings()) {
+        StringReader readable = new StringReader("C1 " + badInput + " 1 O1 " + quitString);
+        StringBuffer appendable = new StringBuffer();
+
+        StringBuilder expectedOutput = new StringBuilder();
+
+        FreecellController freecellController = new FreecellController(readable, appendable);
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+
+        List<Card> deck = TestUtils.getValidDeck();
+        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+        List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+        freecellController.playGame(deck, freecellOperations, false);
+
+        // tests for initial game state
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+
+        expectedOutput.append(INVALID_CARD_INDEX_MESSAGE);
+        expectedOutput.append(System.lineSeparator());
+
+        Card removedCard = expectedCascadingPiles.get(0).remove(12);
+        expectedOpenPiles.get(0).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(System.lineSeparator());
+
+        Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+      }
+    }
+  }
+
+  @Test
+  public void invalidMoveMadeByController() {
+    for (String quitString : Arrays.asList("Q", "q")) {
+      // tests for bad inputs for the card index
+      for (String badMoves : Arrays.asList("C5 13 F1", "C4 14 F1", "C4 13 F5", "C5 14 F5", "O5 13" +
+              " F1", "O4 14 F1", "O4 13 F5", "O5 14 F5", "F5 13 F1", "F4 14 F1", "F4 13 F5", "F5 " +
+              "14 F1")) {
+        StringReader readable = new StringReader(badMoves + " C1 12 O1 " + quitString);
+        StringBuffer appendable = new StringBuffer();
+
+        StringBuilder expectedOutput = new StringBuilder();
+
+        FreecellController freecellController = new FreecellController(readable, appendable);
+        FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+
+        List<Card> deck = TestUtils.getValidDeck();
+        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+        List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+        List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+        freecellController.playGame(deck, freecellOperations, false);
+
+        // tests for initial game state
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+
+        expectedOutput.append(INVALID_MOVE_MESSAGE_STRING + ": Invalid input");
+        expectedOutput.append(System.lineSeparator());
+
+        Card removedCard = expectedCascadingPiles.get(0).remove(12);
+        expectedOpenPiles.get(0).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+        expectedOutput.append(GAME_QUIT_STRING);
+        expectedOutput.append(System.lineSeparator());
+
+        Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+      }
+    }
+  }
+
   private FreecellOperations<Card> getFreecellOperation() {
     return FreecellMultiMoveModel.getBuilder().cascades(4).opens(4).build();
+  }
+
+  private static List<String> getBadInputStrings() {
+    // todo: check if space fails
+    return Arrays.asList(" ", "0", "1", "123851293872198374616293", "123.1", "m",
+            "@", "c", "f", "o", "c1", "f1", "o1", "C0", "Cm", "C@", "C123851293872198374616293",
+            "C111F1", "O0", "Om", "O@", "O123851293872198374616293", "O111F1", "F0", "Fm", "F@",
+            "F123851293872198374616293", "F111F1", "C1.1", "F1.1", "O1.1", "C@",
+            "C123851293872198374616293.1", "O123851293872198374616293.1", "O111F1.1",
+            "F123851293872198374616293.1"
+    );
   }
 }
