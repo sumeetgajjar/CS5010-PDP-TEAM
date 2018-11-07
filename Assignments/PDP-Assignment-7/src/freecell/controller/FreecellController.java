@@ -63,27 +63,51 @@ public class FreecellController implements IFreecellController<Card> {
     Scanner scanner = new Scanner(this.readable);
 
     String inputString;
+    outer:
     while (true) {
       this.transmitGameState(model);
 
       if (!model.isGameOver()) {
-        inputString = getNextInput(scanner);
-        if (toQuit(inputString)) {
-          break;
-        }
-        PileInfo sourcePileInfo = parsePileInfo(inputString, INVALID_SOURCE_PILE_MESSAGE);
+        PileInfo sourcePileInfo = null;
+        PileInfo destinationPileInfo = null;
+        int cardIndex = -1;
 
-        inputString = getNextInput(scanner);
-        if (toQuit(inputString)) {
-          break;
+        while (true) {
+          inputString = getNextInput(scanner);
+          if (toQuit(inputString)) {
+            break outer;
+          }
+          try {
+            sourcePileInfo = parsePileInfo(inputString, INVALID_SOURCE_PILE_MESSAGE);
+            break;
+          } catch (IllegalArgumentException ignored) {
+          }
         }
-        int cardIndex = readCardIndex(inputString);
 
-        inputString = getNextInput(scanner);
-        if (toQuit(inputString)) {
-          break;
+        while (true) {
+          inputString = getNextInput(scanner);
+          if (toQuit(inputString)) {
+            break outer;
+          }
+          try {
+            cardIndex = parseCardIndex(inputString);
+            break;
+          } catch (IllegalArgumentException ignored) {
+          }
         }
-        PileInfo destinationPileInfo = parsePileInfo(inputString, INVALID_DESTINATION_PILE_MESSAGE);
+
+        while (true) {
+          inputString = getNextInput(scanner);
+          if (toQuit(inputString)) {
+            break outer;
+          }
+          try {
+            destinationPileInfo = parsePileInfo(inputString, INVALID_DESTINATION_PILE_MESSAGE);
+            break;
+          } catch (IllegalArgumentException e) {
+
+          }
+        }
 
         try {
           model.move(
@@ -99,6 +123,7 @@ public class FreecellController implements IFreecellController<Card> {
         }
       } else {
         this.transmitMessage(GAME_OVER_STRING);
+        break;
       }
     }
   }
@@ -111,23 +136,25 @@ public class FreecellController implements IFreecellController<Card> {
     return false;
   }
 
-  private int readCardIndex(String cardIndexString) {
-    while (true) {
-      try {
-        return Integer.parseInt(cardIndexString);
-      } catch (IllegalArgumentException e) {
-        this.transmitMessage(INVALID_CARD_INDEX_MESSAGE);
+  private int parseCardIndex(String cardIndexString) {
+    try {
+      final int cardIndex = Integer.parseInt(cardIndexString) - 1;
+      if (cardIndex < 0) {
+        throw new IllegalArgumentException("invalid input");
       }
+      return cardIndex;
+    } catch (IllegalArgumentException e) {
+      this.transmitMessage(INVALID_CARD_INDEX_MESSAGE);
+      throw e;
     }
   }
 
   private PileInfo parsePileInfo(String inputString, String message) {
-    while (true) {
-      try {
-        return this.parsePileString(inputString);
-      } catch (IllegalArgumentException e) {
-        this.transmitMessage(message);
-      }
+    try {
+      return this.parsePileString(inputString);
+    } catch (IllegalArgumentException e) {
+      this.transmitMessage(message);
+      throw e;
     }
   }
 
@@ -142,7 +169,10 @@ public class FreecellController implements IFreecellController<Card> {
   private PileInfo parsePileString(String pileString) {
     char pilePrefix = pileString.charAt(0);
     PileCategory pileCategory = PileCategory.getPileCategory(pilePrefix);
-    int pileIndex = Integer.parseInt(pileString.substring(1));
+    int pileIndex = Integer.parseInt(pileString.substring(1)) - 1;
+    if (pileIndex < 0) {
+      throw new IllegalArgumentException("negative pile index");
+    }
     return new PileInfo(pileCategory, pileIndex);
   }
 

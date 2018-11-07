@@ -221,6 +221,21 @@ public class FreecellControllerTest {
   }
 
   @Test
+  public void anyInputAfterQMakesNoDifference() {
+
+  }
+
+  @Test
+  public void multiMoveModelValidCardIndexMoveWorks() {
+
+  }
+
+  @Test
+  public void singleMoveModelValidCardIndexDoesNotWork() {
+
+  }
+
+  @Test
   public void simulateEntireGame() {
     StringBuilder stringBuilder = new StringBuilder();
     for (int cardIndex = 13; cardIndex > 0; cardIndex--) {
@@ -286,7 +301,7 @@ public class FreecellControllerTest {
   @Test
   public void prematureQuitWorks() {
     for (String quitString : Arrays.asList("Q", "q")) {
-      StringReader readable = new StringReader("C1 12 O1 " + quitString);
+      StringReader readable = new StringReader("C1 13 O1 " + quitString);
       StringBuffer appendable = new StringBuffer();
 
       StringBuilder expectedOutput = new StringBuilder();
@@ -323,7 +338,7 @@ public class FreecellControllerTest {
     for (String quitString : Arrays.asList("Q", "q")) {
       // tests for bad inputs for the source pile
       for (String badInput : getBadInputStrings()) {
-        StringReader readable = new StringReader(badInput + " C1 12 O1 " + quitString);
+        StringReader readable = new StringReader(badInput + " C1 13 O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
         StringBuilder expectedOutput = new StringBuilder();
@@ -364,7 +379,7 @@ public class FreecellControllerTest {
     for (String quitString : Arrays.asList("Q", "q")) {
       // tests for bad inputs for the destination pile
       for (String badInput : getBadInputStrings()) {
-        StringReader readable = new StringReader("C1 12 " + badInput + " O1 " + quitString);
+        StringReader readable = new StringReader("C1 13 " + badInput + " O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
         StringBuilder expectedOutput = new StringBuilder();
@@ -395,7 +410,6 @@ public class FreecellControllerTest {
         expectedOutput.append(System.lineSeparator());
         expectedOutput.append(GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
-
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());
       }
     }
@@ -406,7 +420,7 @@ public class FreecellControllerTest {
     for (String quitString : Arrays.asList("Q", "q")) {
       // tests for bad inputs for the card index
       for (String badInput : getBadInputStrings()) {
-        StringReader readable = new StringReader("C1 " + badInput + " 1 O1 " + quitString);
+        StringReader readable = new StringReader("C1 " + badInput + " 13 O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
         StringBuilder expectedOutput = new StringBuilder();
@@ -437,7 +451,6 @@ public class FreecellControllerTest {
         expectedOutput.append(System.lineSeparator());
         expectedOutput.append(GAME_QUIT_STRING);
         expectedOutput.append(System.lineSeparator());
-
         Assert.assertEquals(expectedOutput.toString(), appendable.toString());
       }
     }
@@ -450,7 +463,7 @@ public class FreecellControllerTest {
       for (String badMoves : Arrays.asList("C5 13 F1", "C4 14 F1", "C4 13 F5", "C5 14 F5", "O5 13" +
               " F1", "O4 14 F1", "O4 13 F5", "O5 14 F5", "F5 13 F1", "F4 14 F1", "F4 13 F5", "F5 " +
               "14 F1")) {
-        StringReader readable = new StringReader(badMoves + " C1 12 O1 " + quitString);
+        StringReader readable = new StringReader(badMoves + " C1 13 O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
         StringBuilder expectedOutput = new StringBuilder();
@@ -493,7 +506,7 @@ public class FreecellControllerTest {
 
   private static List<String> getBadInputStrings() {
     // todo: check if space fails
-    return Arrays.asList(" ", "-1", "0", "1", "123851293872198374616293", "123.1", "m",
+    return Arrays.asList("-1", "0", "123851293872198374616293", "123.1", "m",
             "@", "c", "f", "o", "c1", "f1", "o1", "C-1", "C0", "Cm", "C@",
             "C123851293872198374616293",
             "C111F1", "O-1", "O0", "Om", "O@", "O123851293872198374616293", "O111F1", "F-1", "F0",

@@ -41,7 +41,8 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
               .build();
 
       List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
-      List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles, deck);
+      List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
+              deck);
       freecellOperations.startGame(deck, false);
 
       List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
@@ -101,7 +102,8 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             .build();
 
     List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
+            deck);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
     freecellOperations.startGame(deck, false);
@@ -137,7 +139,8 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
 
     List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
     Collections.reverse(deck);
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
+            deck);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
@@ -179,7 +182,8 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             .build();
 
     List<Card> deck = getDeckForMultipleCardsMovementOnCascadePile();
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles,
+            deck);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
