@@ -2,6 +2,7 @@ package freecell.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 import freecell.bean.Card;
@@ -51,6 +52,72 @@ public class FreecellController implements IFreecellController<Card> {
     Utils.requireNonNull(deck);
     Utils.requireNonNull(model);
 
+    if (this.canStartGame(deck, model, shuffle)) {
+      return;
+    }
+
+    Scanner scanner = new Scanner(this.readable);
+    while (true) {
+      if (!model.isGameOver()) {
+
+        PileInfo sourcePileInfo = readPileInfo(scanner, INVALID_SOURCE_PILE_MESSAGE);
+        if (Objects.isNull(sourcePileInfo)) {
+          break;
+        }
+
+        Integer cardIndex = readCardIndex(scanner);
+        if (Objects.isNull(cardIndex)) {
+          break;
+        }
+
+        PileInfo destinationPileInfo = readPileInfo(scanner, INVALID_DESTINATION_PILE_MESSAGE);
+        if (Objects.isNull(destinationPileInfo)) {
+          break;
+        }
+
+        this.makeMove(model, sourcePileInfo, destinationPileInfo, cardIndex);
+      } else {
+        this.transmitMessage(GAME_OVER_STRING);
+        break;
+      }
+    }
+  }
+
+  private Integer readCardIndex(Scanner scanner) {
+    while (true) {
+      String inputString = getNextInput(scanner);
+      if (toQuit(inputString)) {
+        return null;
+      }
+
+      try {
+        int cardIndex = Integer.parseInt(inputString) - 1;
+        if (cardIndex < 0) {
+          throw new IllegalArgumentException("invalid input");
+        }
+        return cardIndex;
+      } catch (IllegalArgumentException e) {
+        this.transmitMessage(INVALID_CARD_INDEX_MESSAGE);
+      }
+    }
+  }
+
+  private PileInfo readPileInfo(Scanner scanner, String message) {
+    while (true) {
+      String inputString = getNextInput(scanner);
+      if (toQuit(inputString)) {
+        return null;
+      }
+
+      try {
+        return this.parsePileString(inputString);
+      } catch (IllegalArgumentException e) {
+        this.transmitMessage(message);
+      }
+    }
+  }
+
+  private boolean canStartGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle) {
     try {
       model.startGame(deck, shuffle);
       this.transmitGameState(model);
@@ -58,74 +125,25 @@ public class FreecellController implements IFreecellController<Card> {
     } catch (Exception e) {
       this.transmitGameState(model);
       this.transmitMessage("Cannot start the game");
-      return;
+      return true;
     }
+    return false;
+  }
 
-    Scanner scanner = new Scanner(this.readable);
-
-    String inputString;
-    outer:
-    while (true) {
-
-      if (!model.isGameOver()) {
-        PileInfo sourcePileInfo = null;
-        PileInfo destinationPileInfo = null;
-        int cardIndex = -1;
-
-        while (true) {
-          inputString = getNextInput(scanner);
-          if (toQuit(inputString)) {
-            break outer;
-          }
-          try {
-            sourcePileInfo = parsePileInfo(inputString, INVALID_SOURCE_PILE_MESSAGE);
-            break;
-          } catch (IllegalArgumentException ignored) {
-          }
-        }
-
-        while (true) {
-          inputString = getNextInput(scanner);
-          if (toQuit(inputString)) {
-            break outer;
-          }
-          try {
-            cardIndex = parseCardIndex(inputString);
-            break;
-          } catch (IllegalArgumentException ignored) {
-          }
-        }
-
-        while (true) {
-          inputString = getNextInput(scanner);
-          if (toQuit(inputString)) {
-            break outer;
-          }
-          try {
-            destinationPileInfo = parsePileInfo(inputString, INVALID_DESTINATION_PILE_MESSAGE);
-            break;
-          } catch (IllegalArgumentException e) {
-
-          }
-        }
-
-        try {
-          model.move(
-                  sourcePileInfo.getPileCategory().getPileType(),
-                  sourcePileInfo.getPileIndex(),
-                  cardIndex,
-                  destinationPileInfo.getPileCategory().getPileType(),
-                  destinationPileInfo.getPileIndex()
-          );
-          this.transmitGameState(model);
-        } catch (IllegalArgumentException e) {
-          this.transmitMessage(String.format("%s: %s", INVALID_MOVE_MESSAGE_STRING,
-                  e.getMessage()));
-        }
-      } else {
-        this.transmitMessage(GAME_OVER_STRING);
-        break;
-      }
+  private void makeMove(FreecellOperations<Card> model, PileInfo sourcePileInfo,
+                        PileInfo destinationPileInfo, int cardIndex) {
+    try {
+      model.move(
+              sourcePileInfo.getPileCategory().getPileType(),
+              sourcePileInfo.getPileIndex(),
+              cardIndex,
+              destinationPileInfo.getPileCategory().getPileType(),
+              destinationPileInfo.getPileIndex()
+      );
+      this.transmitGameState(model);
+    } catch (IllegalArgumentException e) {
+      this.transmitMessage(String.format("%s: %s", INVALID_MOVE_MESSAGE_STRING,
+              e.getMessage()));
     }
   }
 
@@ -135,28 +153,6 @@ public class FreecellController implements IFreecellController<Card> {
       return true;
     }
     return false;
-  }
-
-  private int parseCardIndex(String cardIndexString) {
-    try {
-      final int cardIndex = Integer.parseInt(cardIndexString) - 1;
-      if (cardIndex < 0) {
-        throw new IllegalArgumentException("invalid input");
-      }
-      return cardIndex;
-    } catch (IllegalArgumentException e) {
-      this.transmitMessage(INVALID_CARD_INDEX_MESSAGE);
-      throw e;
-    }
-  }
-
-  private PileInfo parsePileInfo(String inputString, String message) {
-    try {
-      return this.parsePileString(inputString);
-    } catch (IllegalArgumentException e) {
-      this.transmitMessage(message);
-      throw e;
-    }
   }
 
   private String getNextInput(Scanner scanner) {
