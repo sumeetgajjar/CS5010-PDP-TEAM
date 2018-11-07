@@ -126,7 +126,6 @@ public class FreecellController implements IFreecellController<Card> {
     try {
       model.startGame(deck, shuffle);
       this.transmitGameState(model);
-      //todo check this to make this more specific
     } catch (Exception e) {
       this.transmitGameState(model);
       this.transmitMessage("Cannot start the game");

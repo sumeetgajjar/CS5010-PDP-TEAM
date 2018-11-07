@@ -100,7 +100,6 @@ public class FreecellModelControllerTest {
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
-  //todo add and remove new line after game over and prematurely
   @Test
   public void quitWorksWithShuffleFalse() {
     for (String quitString : Arrays.asList("Q", "q")) {
@@ -452,6 +451,40 @@ public class FreecellModelControllerTest {
   }
 
   @Test
+  public void multipleSpacesAndNewLineBetweenInputWorks() {
+    StringReader readable = new StringReader(" C1        13 \n\n\n\n\n   O1 q");
+    StringBuffer appendable = new StringBuffer();
+
+    StringBuilder expectedOutput = new StringBuilder();
+
+    FreecellController freecellController = new FreecellController(readable, appendable);
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
+
+    List<Card> deck = TestUtils.getValidDeck();
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+    freecellController.playGame(deck, freecellOperations, false);
+
+    // tests for initial game state
+    expectedOutput.append(TestUtils.convertPilesToString(
+            expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+    expectedOutput.append(System.lineSeparator());
+
+    Card removedCard = expectedCascadingPiles.get(0).remove(12);
+    expectedOpenPiles.get(0).add(removedCard);
+
+    expectedOutput.append(TestUtils.convertPilesToString(
+            expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+    expectedOutput.append(System.lineSeparator());
+    expectedOutput.append(TestUtils.GAME_QUIT_STRING);
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
   public void invalidMoveMadeByController() {
     for (String quitString : Arrays.asList("Q", "q")) {
       // tests for bad inputs for the card index
@@ -500,7 +533,6 @@ public class FreecellModelControllerTest {
   }
 
   private static List<String> getBadInputStrings() {
-    // todo: check if space fails
     return Arrays.asList("-1", "0", "123851293872198374616293", "123.1", "m",
             "@", "c", "f", "o", "c1", "f1", "o1", "C-1", "C0", "Cm", "C@",
             "C123851293872198374616293",
