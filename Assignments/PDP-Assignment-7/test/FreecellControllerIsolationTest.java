@@ -22,50 +22,52 @@ public class FreecellControllerIsolationTest {
 
   @Test
   public void testIfControllerPassesCorrectInputToModel() {
-    StringReader actualInput = new StringReader("C1 11 F1 C2 10 F2 C3 9 F3 Q");
-    StringBuffer actualOutput = new StringBuffer();
-    StringBuilder mockModelLog = new StringBuilder();
-    StringBuilder expectedLog = new StringBuilder();
-    StringBuilder expectedOutput = new StringBuilder();
+    for (boolean shuffle : Arrays.asList(true, false)) {
+      StringReader actualInput = new StringReader("C1 11 F1 C2 10 F2 C3 9 F3 Q");
+      StringBuffer actualOutput = new StringBuffer();
+      StringBuilder mockModelLog = new StringBuilder();
+      StringBuilder expectedLog = new StringBuilder();
+      StringBuilder expectedOutput = new StringBuilder();
 
-    int codeForStartGame = random.nextInt();
-    int codeForMove = random.nextInt();
-    int codeForGameState = random.nextInt();
-    int codeForIsGameOver = random.nextInt();
-    int codeForGetDeck = random.nextInt();
-    MockModel mockModel = new MockModel(mockModelLog, codeForStartGame, codeForMove,
-            codeForGameState,
-            codeForIsGameOver, codeForGetDeck);
-    List<Card> deckInMockModel = Arrays.asList(
-            new Card(Suit.HEARTS, CardValue.ACE),
-            new Card(Suit.DIAMONDS, CardValue.ACE));
+      int codeForStartGame = random.nextInt();
+      int codeForMove = random.nextInt();
+      int codeForGameState = random.nextInt();
+      int codeForIsGameOver = random.nextInt();
+      int codeForGetDeck = random.nextInt();
+      MockModel mockModel = new MockModel(mockModelLog, codeForStartGame, codeForMove,
+              codeForGameState,
+              codeForIsGameOver, codeForGetDeck);
+      List<Card> deckInMockModel = Arrays.asList(
+              new Card(Suit.HEARTS, CardValue.ACE),
+              new Card(Suit.DIAMONDS, CardValue.ACE));
 
-    FreecellController freecellController = new FreecellController(actualInput, actualOutput);
-    freecellController.playGame(mockModel.getDeck(), mockModel, false);
+      FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+      freecellController.playGame(mockModel.getDeck(), mockModel, shuffle);
 
-    expectedLog.append(codeForStartGame).append(System.lineSeparator());
-    expectedLog.append(deckInMockModel).append(System.lineSeparator());
-    expectedLog.append(false).append(System.lineSeparator());
-
-    expectedOutput.append("YOLO").append(System.lineSeparator());
-
-    for (String string : Arrays.asList("CASCADE1 11 FOUNDATION1", "CASCADE2 10 FOUNDATION2",
-            "CASCADE3 9 FOUNDATION3")) {
-      expectedLog.append(codeForGameState).append(System.lineSeparator());
-
-      expectedLog.append(codeForIsGameOver).append(System.lineSeparator());
-
-      expectedLog.append(codeForMove).append(System.lineSeparator());
-      expectedLog.append(string).append(System.lineSeparator());
+      expectedLog.append(codeForStartGame).append(System.lineSeparator());
+      expectedLog.append(deckInMockModel).append(System.lineSeparator());
+      expectedLog.append(false).append(System.lineSeparator());
 
       expectedOutput.append("YOLO").append(System.lineSeparator());
+
+      for (String string : Arrays.asList("CASCADE1 11 FOUNDATION1", "CASCADE2 10 FOUNDATION2",
+              "CASCADE3 9 FOUNDATION3")) {
+        expectedLog.append(codeForGameState).append(System.lineSeparator());
+
+        expectedLog.append(codeForIsGameOver).append(System.lineSeparator());
+
+        expectedLog.append(codeForMove).append(System.lineSeparator());
+        expectedLog.append(string).append(System.lineSeparator());
+
+        expectedOutput.append("YOLO").append(System.lineSeparator());
+      }
+
+      expectedOutput.append("YOLO").append(System.lineSeparator());
+      expectedOutput.append("Game quit prematurely.").append(System.lineSeparator());
+
+      Assert.assertEquals(expectedLog.toString(), mockModelLog.toString());
+      Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
     }
-
-    expectedOutput.append("YOLO").append(System.lineSeparator());
-    expectedOutput.append("Game quit prematurely.").append(System.lineSeparator());
-
-    Assert.assertEquals(expectedLog.toString(), mockModelLog.toString());
-    Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
   }
 
   public static class MockModel implements FreecellOperations<Card> {
