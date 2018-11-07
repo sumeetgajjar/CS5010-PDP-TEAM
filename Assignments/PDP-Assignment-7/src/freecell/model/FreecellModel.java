@@ -48,7 +48,6 @@ public class FreecellModel extends AbstractFreecellModel {
   }
 
   public static class FreecellModelBuilder extends AbstractFreecellOperationsBuilder {
-
     @Override
     protected FreecellOperations<Card> getFreeCellOperationsInstance() {
       return new FreecellModel(numberOfCascadePile, numberOfOpenPile);

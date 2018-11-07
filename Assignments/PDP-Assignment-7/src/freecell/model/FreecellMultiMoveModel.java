@@ -8,7 +8,26 @@ import freecell.model.rulechecker.MultiMoveCascadePileRuleChecker;
 import util.Utils;
 
 /**
- * Created by gajjar.s, on 6:58 PM, 11/3/18
+ * Represents a FreeCellMultiMoveModel that can do everything that a FreeCellModel can do and
+ * additionally it can move multiple cards from a source cascade pile to a destination cascade
+ * pile.
+ *
+ * <p>A multi-card move is basically several single-card moves, using free open piles and empty
+ * cascade piles as “intermediate slots”.
+ *
+ * <p>The following are the conditions for a valid move from a source pile to a destination cascade
+ * pile:
+ * <ul>
+ * <li>The first condition is that they should form a valid build, i.e. they should be arranged in
+ * alternating colors and consecutive, descending values in the cascade pile that they are moving
+ * from.</li>
+ * <li>The second condition is the same for any move to a cascade pile: these cards should form a
+ * build with the last card in the destination cascade pile.</li>
+ * <li>the maximum number of cards that can be moved when there are N free open piles and K empty
+ * cascade piles is (N+1) * 2^K, accordingly, if the number of cards to move is more than this, it
+ * will amount to an invalid move.
+ * </li>
+ * </ul>
  */
 public class FreecellMultiMoveModel extends AbstractFreecellModel {
 
@@ -16,6 +35,11 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
     super(numberOfCascadePile, numberOfOpenPile);
   }
 
+  /**
+   * Gets a new instance of the <code>FreeCellOperationsBuilder</code>.
+   *
+   * @return instance of the <code>FreeCellOperationsBuilder</code>
+   */
   public static FreecellOperationsBuilder getBuilder() {
     return new FreecellModelBuilder();
   }
