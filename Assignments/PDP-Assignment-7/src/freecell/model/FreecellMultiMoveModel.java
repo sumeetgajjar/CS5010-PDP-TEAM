@@ -5,6 +5,7 @@ import java.util.List;
 import freecell.bean.Card;
 import freecell.bean.PileCategory;
 import freecell.model.rulechecker.MultiMoveCascadePileRuleChecker;
+import freecell.model.rulechecker.RuleChecker;
 import util.Utils;
 
 /**
@@ -41,9 +42,14 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
    * @return instance of the <code>FreeCellOperationsBuilder</code>
    */
   public static FreecellOperationsBuilder getBuilder() {
-    return new FreecellModelBuilder();
+    return new FreecellMultiMoveModelBuilder();
   }
 
+  /**
+   * Returns a {@link RuleChecker<Card>} for cascade pile.
+   *
+   * @return a {@link RuleChecker<Card>} for cascade pile
+   */
   @Override
   protected MultiMoveCascadePileRuleChecker getCascadePileRuleChecker() {
     long emptyCascadePileCount =
@@ -53,6 +59,15 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
     return new MultiMoveCascadePileRuleChecker(emptyCascadePileCount, emptyOpenPileCount);
   }
 
+  /**
+   * Removes the cards from given the source pile and moves it into the destinationPile. All the
+   * cards in the source pile from given card index till the end of the source pile will be moved to
+   * destination pile preserving the order of cards.
+   *
+   * @param sourcePile      source pile of cards
+   * @param cardIndex       the index in the source pile of cards
+   * @param destinationPile the destination pile of cards
+   */
   @Override
   protected void commitMove(List<Card> sourcePile, int cardIndex, List<Card> destinationPile) {
     List<Card> cardsInSourcePile = Utils.sliceList(sourcePile, cardIndex);
@@ -62,7 +77,19 @@ public class FreecellMultiMoveModel extends AbstractFreecellModel {
     }
   }
 
-  public static class FreecellModelBuilder extends AbstractFreecellOperationsBuilder {
+  /**
+   * This class represents a builder for instantiating {@link FreecellMultiMoveModel} objects. <code
+   * >FreecellMultiMoveModelBuilder</code> extends <code>AbstractFreecellOperationsBuilder</code>
+   * and provides the ability to configure the number of cascade and open piles for the builder to
+   * build a FreecellMultiMoveModel with the specified number of open and cascade piles.
+   */
+  public static class FreecellMultiMoveModelBuilder extends AbstractFreecellOperationsBuilder {
+
+    /**
+     * Returns a Instance of {@link FreecellMultiMoveModel}.
+     *
+     * @return a Instance of {@link FreecellMultiMoveModel}
+     */
     @Override
     protected FreecellOperations<Card> getFreeCellOperationsInstance() {
       return new FreecellMultiMoveModel(numberOfCascadePile, numberOfOpenPile);
