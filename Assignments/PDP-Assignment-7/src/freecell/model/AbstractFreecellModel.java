@@ -348,6 +348,13 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     this.getPiles(PileCategory.OPEN).forEach(List::clear);
   }
 
+  /**
+   * Distributes the deck amongst the cascading piles in round robin fashion. If shuffle is set to
+   * true then the deck is shuffled before distributing.
+   *
+   * @param deck    the deck to distribute
+   * @param shuffle whether the deck is to be shuffle before distributing
+   */
   private void distributeDeck(List<Card> deck, boolean shuffle) {
     List<Card> deckCopy = new ArrayList<>(deck);
     if (shuffle) {
@@ -397,14 +404,21 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     }
   }
 
-  private static String pilesToString(List<List<Card>> piles, PileCategory pile) {
+  /**
+   * Returns a string representation of the given piles of cards.
+   *
+   * @param piles        the piles of card
+   * @param pileCategory the pile category
+   * @return a string representation of the given pile of cards
+   */
+  private static String pilesToString(List<List<Card>> piles, PileCategory pileCategory) {
     List<String> listOfStrings = piles.stream().map(listOfCards -> listOfCards.stream()
             .map(card -> " " + card.toString()).collect(Collectors.joining(","))
     ).collect(Collectors.toList());
 
     StringBuilder stringBuilder = new StringBuilder();
     for (int pileIndex = 0; pileIndex < listOfStrings.size(); pileIndex++) {
-      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(pileCategory.getSymbol());
       stringBuilder.append(pileIndex + 1);
       stringBuilder.append(":");
       stringBuilder.append(listOfStrings.get(pileIndex));
