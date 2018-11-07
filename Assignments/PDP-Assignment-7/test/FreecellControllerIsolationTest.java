@@ -111,14 +111,14 @@ public class FreecellControllerIsolationTest {
 
       expectedOutput.append("YOLO").append(System.lineSeparator());
       expectedOutput.append(
-              "Invalid move, please try again: mock illegal argument exception in move")
-              .append(System.lineSeparator());
+              "Invalid move, please try again: cannot move card of Index:11 from pile:C1 to pile:F1"
+      ).append(System.lineSeparator());
       expectedOutput.append(
-              "Invalid move, please try again: mock illegal argument exception in move")
-              .append(System.lineSeparator());
+              "Invalid move, please try again: cannot move card of Index:10 from pile:C2 to pile:F2"
+      ).append(System.lineSeparator());
       expectedOutput.append(
-              "Invalid move, please try again: mock illegal argument exception in move")
-              .append(System.lineSeparator());
+              "Invalid move, please try again: cannot move card of Index:9 from pile:C3 to pile:F3"
+      ).append(System.lineSeparator());
       expectedOutput.append(TestUtils.GAME_QUIT_STRING).append(System.lineSeparator());
       Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
     }
