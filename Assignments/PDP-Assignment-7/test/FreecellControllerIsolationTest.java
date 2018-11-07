@@ -110,14 +110,14 @@ public class FreecellControllerIsolationTest {
               mockModel, shuffle);
 
       expectedOutput.append("YOLO").append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
-              "move")
+      expectedOutput.append(
+              "Invalid move, please try again: mock illegal argument exception in move")
               .append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
-              "move")
+      expectedOutput.append(
+              "Invalid move, please try again: mock illegal argument exception in move")
               .append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
-              "move")
+      expectedOutput.append(
+              "Invalid move, please try again: mock illegal argument exception in move")
               .append(System.lineSeparator());
       expectedOutput.append(TestUtils.GAME_QUIT_STRING).append(System.lineSeparator());
       Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
@@ -157,7 +157,7 @@ public class FreecellControllerIsolationTest {
 
     @Override
     public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
-
+      // overriding method to not throw exception
     }
   }
 

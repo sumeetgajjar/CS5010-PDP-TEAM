@@ -15,20 +15,27 @@ import util.Utils;
  */
 public class FreecellController implements IFreecellController<Card> {
 
-  private static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
-          "destination pile again.";
-  private static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
-          "index again.";
+  private static final String INVALID_DESTINATION_PILE_MESSAGE =
+          "Invalid input, please enter destination pile again.";
+
+  private static final String INVALID_CARD_INDEX_MESSAGE =
+          "Invalid input, please enter card index again.";
+
   private static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
+
   private static String GAME_QUIT_STRING = "Game quit prematurely.";
+
   private static final String GAME_OVER_STRING = "Game over.";
-  private static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
-          "pile again.";
+
+  private static final String INVALID_SOURCE_PILE_MESSAGE =
+          "Invalid input, please enter source pile again.";
 
   private final Readable readable;
   private final Appendable appendable;
 
-  public FreecellController(Readable readable, Appendable appendable) throws IllegalArgumentException {
+  public FreecellController(Readable readable, Appendable appendable)
+          throws IllegalArgumentException {
+
     Utils.requireNonNull(readable);
     Utils.requireNonNull(appendable);
     this.readable = readable;
@@ -48,7 +55,9 @@ public class FreecellController implements IFreecellController<Card> {
    * @throws IllegalStateException    if the controller is unable to read input or transmit output
    */
   @Override
-  public void playGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle) throws IllegalArgumentException, IllegalStateException {
+  public void playGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle)
+          throws IllegalArgumentException, IllegalStateException {
+
     Utils.requireNonNull(deck);
     Utils.requireNonNull(model);
 

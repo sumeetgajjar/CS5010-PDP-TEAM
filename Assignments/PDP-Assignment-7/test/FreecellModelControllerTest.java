@@ -218,12 +218,36 @@ public class FreecellModelControllerTest {
 
   @Test
   public void anyInputAfterQMakesNoDifference() {
+    StringReader readable = new StringReader(" C1 13 O1 q C2 13 O2");
+    StringBuffer appendable = new StringBuffer();
 
-  }
+    StringBuilder expectedOutput = new StringBuilder();
 
-  @Test
-  public void singleMoveModelOtherThanLastCardIndexDoesNotWork() {
+    FreecellController freecellController = new FreecellController(readable, appendable);
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation(4, 4);
 
+    List<Card> deck = TestUtils.getValidDeck();
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+    freecellController.playGame(deck, freecellOperations, false);
+
+    // tests for initial game state
+    expectedOutput.append(TestUtils.convertPilesToString(
+            expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+    expectedOutput.append(System.lineSeparator());
+
+    Card removedCard = expectedCascadingPiles.get(0).remove(12);
+    expectedOpenPiles.get(0).add(removedCard);
+
+    expectedOutput.append(TestUtils.convertPilesToString(
+            expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+    expectedOutput.append(System.lineSeparator());
+    expectedOutput.append(TestUtils.GAME_QUIT_STRING);
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
@@ -488,9 +512,9 @@ public class FreecellModelControllerTest {
   public void invalidMoveMadeByController() {
     for (String quitString : Arrays.asList("Q", "q")) {
       // tests for bad inputs for the card index
-      for (String badMoves : Arrays.asList("C5 13 F1", "C4 14 F1", "C4 13 F5", "C5 14 F5", "O5 13" +
-              " F1", "O4 14 F1", "O4 13 F5", "O5 14 F5", "F5 13 F1", "F4 14 F1", "F4 13 F5", "F5 " +
-              "14 F1")) {
+      for (String badMoves : Arrays.asList("C1 10 F1", "C5 13 F1", "C4 14 F1", "C4 13 F5",
+              "C5 14 F5", "O5 13 F1", "O4 14 F1", "O4 13 F5", "O5 14 F5", "F5 13 F1", "F4 14 F1",
+              "F4 13 F5", "F5 14 F1")) {
         StringReader readable = new StringReader(badMoves + " C1 13 O1 " + quitString);
         StringBuffer appendable = new StringBuffer();
 
