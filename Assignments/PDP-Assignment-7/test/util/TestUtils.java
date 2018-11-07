@@ -13,22 +13,27 @@ import freecell.bean.PileCategory;
 import freecell.bean.Suit;
 
 /**
- * Created by gajjar.s, on 10:42 PM, 11/6/18
+ * This class represents set of util functions which can be used by any class for testing purposes.
  */
 public class TestUtils {
 
-  public static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
-          "destination pile again.";
-  public static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
-          "index again.";
+  public static final String INVALID_DESTINATION_PILE_MESSAGE =
+          "Invalid input, please enter destination pile again.";
+
+  public static final String INVALID_CARD_INDEX_MESSAGE =
+          "Invalid input, please enter card index again.";
+
   public static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
   public static final String GAME_OVER_STRING = "Game over.";
-  public static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
-          "pile again.";
+
+  public static final String INVALID_SOURCE_PILE_MESSAGE =
+          "Invalid input, please enter source pile again.";
+
   public static final String CANNOT_START_THE_GAME_STRING = "Cannot start the game";
+
   public static final String GAME_QUIT_STRING = "Game quit prematurely.";
 
-  public static List<List<Card>> getListOfEmptyLists(int listSize) {
+  private static List<List<Card>> getListOfEmptyLists(int listSize) {
     List<List<Card>> expectedOpenPiles = new ArrayList<>(listSize);
     for (int i = 0; i < listSize; i++) {
       expectedOpenPiles.add(new LinkedList<>());
@@ -36,6 +41,12 @@ public class TestUtils {
     return expectedOpenPiles;
   }
 
+  /**
+   * Returns a deck with 52 cards. The deck is arranged such that all cards of one suit are together
+   * with increasing order of their priority.
+   *
+   * @return a deck with 52 cards
+   */
   public static List<Card> getValidDeck() {
     List<Card> deck = new ArrayList<>(52);
     for (Suit suit : Suit.values()) {
@@ -46,6 +57,14 @@ public class TestUtils {
     return deck;
   }
 
+  /**
+   * Returns a list of cascading piles.Distributes the deck among the cascade pile in round robin
+   * fashion.
+   *
+   * @param cascadePileCount the number of cascade piles
+   * @param validDeck        the deck
+   * @return a list of cascading piles
+   */
   public static List<List<Card>> getCardsInCascadingPiles(int cascadePileCount,
                                                           List<Card> validDeck) {
     List<List<Card>> expectedCascadingPiles = getListOfEmptyLists(cascadePileCount);
@@ -61,6 +80,14 @@ public class TestUtils {
     return expectedCascadingPiles;
   }
 
+  /**
+   * Returns a string representation of given foundation, open and cascade piles.
+   *
+   * @param foundationPiles the given foundation Piles
+   * @param openPiles       the given open piles
+   * @param cascadePiles    the given cascade piles
+   * @return a string representation of given foundation, open and cascade piles
+   */
   public static String convertPilesToString(List<List<Card>> foundationPiles,
                                             List<List<Card>> openPiles,
                                             List<List<Card>> cascadePiles) {
@@ -71,7 +98,14 @@ public class TestUtils {
             + pileToString(cascadePiles, PileCategory.CASCADE);
   }
 
-  public static String pileToString(List<List<Card>> piles, PileCategory pile) {
+  /**
+   * Returns a string representation of the given piles of cards.
+   *
+   * @param piles        the piles of card
+   * @param pileCategory the pile category
+   * @return a string representation of the given pile of cards
+   */
+  private static String pileToString(List<List<Card>> piles, PileCategory pileCategory) {
     List<String> listOfStrings = new ArrayList<>();
     for (List<Card> cards : piles) {
       StringBuilder lineString = new StringBuilder();
@@ -83,7 +117,7 @@ public class TestUtils {
 
     StringBuilder stringBuilder = new StringBuilder();
     for (int i = 0; i < listOfStrings.size(); i++) {
-      stringBuilder.append(pile.getSymbol());
+      stringBuilder.append(pileCategory.getSymbol());
       stringBuilder.append(i + 1).append(":");
       stringBuilder.append(listOfStrings.get(i));
       stringBuilder.append(System.lineSeparator());
@@ -91,6 +125,12 @@ public class TestUtils {
     return stringBuilder.toString().trim();
   }
 
+  /**
+   * Returns a deck with 52 cards. The deck is arranged such that cards of all suits of a particular
+   * value are together with decreasing order of their priority.
+   *
+   * @return a deck with 52 cards
+   */
   public static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
     List<Card> deck = new ArrayList<>(52);
     List<CardValue> cardValues = Arrays.stream(CardValue.values())
@@ -106,6 +146,12 @@ public class TestUtils {
     return deck;
   }
 
+  /**
+   * Returns a deck with 52 cards. The deck is arranged such that multiple card movement is possible
+   * on a cascade pile.
+   *
+   * @return a deck with 52 cards
+   */
   public static List<Card> getDeckForMultipleCardsMovementOnCascadePile() {
     List<Card> deck = new ArrayList<>(52);
     List<CardValue> cardValues = Arrays.stream(CardValue.values())
