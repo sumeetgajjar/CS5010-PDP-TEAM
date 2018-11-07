@@ -2,7 +2,7 @@ package freecell.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Scanner;
 
 import freecell.bean.Card;
@@ -15,20 +15,27 @@ import util.Utils;
  */
 public class FreecellController implements IFreecellController<Card> {
 
-  private static final String INVALID_DESTINATION_PILE_MESSAGE = "Invalid input, please enter " +
-          "destination pile again.";
-  private static final String INVALID_CARD_INDEX_MESSAGE = "Invalid input, please enter card " +
-          "index again.";
+  private static final String INVALID_DESTINATION_PILE_MESSAGE =
+          "Invalid input, please enter destination pile again.";
+
+  private static final String INVALID_CARD_INDEX_MESSAGE =
+          "Invalid input, please enter card index again.";
+
   private static final String INVALID_MOVE_MESSAGE_STRING = "Invalid move, please try again";
+
   private static String GAME_QUIT_STRING = "Game quit prematurely.";
+
   private static final String GAME_OVER_STRING = "Game over.";
-  private static final String INVALID_SOURCE_PILE_MESSAGE = "Invalid input, please enter source " +
-          "pile again.";
+
+  private static final String INVALID_SOURCE_PILE_MESSAGE =
+          "Invalid input, please enter source pile again.";
 
   private final Readable readable;
   private final Appendable appendable;
 
-  public FreecellController(Readable readable, Appendable appendable) throws IllegalArgumentException {
+  public FreecellController(Readable readable, Appendable appendable)
+          throws IllegalArgumentException {
+
     Utils.requireNonNull(readable);
     Utils.requireNonNull(appendable);
     this.readable = readable;
@@ -51,7 +58,9 @@ public class FreecellController implements IFreecellController<Card> {
    * @throws IllegalStateException    if the controller is unable to read input or transmit output
    */
   @Override
-  public void playGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle) throws IllegalArgumentException, IllegalStateException {
+  public void playGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle)
+          throws IllegalArgumentException, IllegalStateException {
+
     Utils.requireNonNull(deck);
     Utils.requireNonNull(model);
 
@@ -63,20 +72,25 @@ public class FreecellController implements IFreecellController<Card> {
     while (true) {
       if (!model.isGameOver()) {
 
-        PileInfo sourcePileInfo = readPileInfo(scanner, INVALID_SOURCE_PILE_MESSAGE);
-        if (Objects.isNull(sourcePileInfo)) {
+        Optional<PileInfo> sourcePileInfoOptional = readPileInfo(scanner,
+                INVALID_SOURCE_PILE_MESSAGE);
+        if (!sourcePileInfoOptional.isPresent()) {
           break;
         }
+        PileInfo sourcePileInfo = sourcePileInfoOptional.get();
 
-        Integer cardIndex = readCardIndex(scanner);
-        if (Objects.isNull(cardIndex)) {
+        Optional<Integer> cardIndexOptional = readCardIndex(scanner);
+        if (!cardIndexOptional.isPresent()) {
           break;
         }
+        Integer cardIndex = cardIndexOptional.get();
 
-        PileInfo destinationPileInfo = readPileInfo(scanner, INVALID_DESTINATION_PILE_MESSAGE);
-        if (Objects.isNull(destinationPileInfo)) {
+        Optional<PileInfo> destinationPileInfoOptional = readPileInfo(scanner,
+                INVALID_DESTINATION_PILE_MESSAGE);
+        if (!destinationPileInfoOptional.isPresent()) {
           break;
         }
+        PileInfo destinationPileInfo = destinationPileInfoOptional.get();
 
         this.makeMove(model, sourcePileInfo, destinationPileInfo, cardIndex);
       } else {
@@ -86,11 +100,11 @@ public class FreecellController implements IFreecellController<Card> {
     }
   }
 
-  private Integer readCardIndex(Scanner scanner) {
+  private Optional<Integer> readCardIndex(Scanner scanner) throws IllegalArgumentException {
     while (true) {
       String inputString = getNextInput(scanner);
       if (toQuit(inputString)) {
-        return null;
+        return Optional.empty();
       }
 
       try {
@@ -98,22 +112,22 @@ public class FreecellController implements IFreecellController<Card> {
         if (cardIndex < 0) {
           throw new IllegalArgumentException("invalid input");
         }
-        return cardIndex;
+        return Optional.of(cardIndex);
       } catch (IllegalArgumentException e) {
         this.transmitMessage(INVALID_CARD_INDEX_MESSAGE);
       }
     }
   }
 
-  private PileInfo readPileInfo(Scanner scanner, String message) {
+  private Optional<PileInfo> readPileInfo(Scanner scanner, String message) {
     while (true) {
       String inputString = getNextInput(scanner);
       if (toQuit(inputString)) {
-        return null;
+        return Optional.empty();
       }
 
       try {
-        return this.parsePileString(inputString);
+        return Optional.of(this.parsePileString(inputString));
       } catch (IllegalArgumentException e) {
         this.transmitMessage(message);
       }
@@ -124,7 +138,6 @@ public class FreecellController implements IFreecellController<Card> {
     try {
       model.startGame(deck, shuffle);
       this.transmitGameState(model);
-      //todo check this to make this more specific
     } catch (Exception e) {
       this.transmitGameState(model);
       this.transmitMessage("Cannot start the game");
@@ -158,7 +171,7 @@ public class FreecellController implements IFreecellController<Card> {
     return false;
   }
 
-  private String getNextInput(Scanner scanner) {
+  private String getNextInput(Scanner scanner) throws IllegalStateException {
     try {
       return scanner.next();
     } catch (Exception e) {
@@ -166,7 +179,7 @@ public class FreecellController implements IFreecellController<Card> {
     }
   }
 
-  private PileInfo parsePileString(String pileString) {
+  private PileInfo parsePileString(String pileString) throws IllegalArgumentException {
     char pilePrefix = pileString.charAt(0);
     PileCategory pileCategory = PileCategory.getPileCategory(pilePrefix);
     int pileIndex = Integer.parseInt(pileString.substring(1)) - 1;
@@ -180,7 +193,7 @@ public class FreecellController implements IFreecellController<Card> {
     this.transmitMessage(model.getGameState());
   }
 
-  private void transmitMessage(String message) {
+  private void transmitMessage(String message) throws IllegalStateException {
     try {
       appendable.append(message);
       appendable.append(System.lineSeparator());
@@ -198,11 +211,11 @@ public class FreecellController implements IFreecellController<Card> {
       this.pileIndex = pileIndex;
     }
 
-    public PileCategory getPileCategory() {
+    PileCategory getPileCategory() {
       return pileCategory;
     }
 
-    public int getPileIndex() {
+    int getPileIndex() {
       return pileIndex;
     }
   }

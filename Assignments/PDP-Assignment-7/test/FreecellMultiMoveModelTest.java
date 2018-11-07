@@ -207,7 +207,11 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             expectedCascadingPiles), freecellOperations.getGameState());
   }
 
-  private void moveCardsFromCascadePileToFoundationPile(FreecellOperations<Card> freecellOperations, List<List<Card>> expectedCascadingPiles, List<List<Card>> expectedFoundationPiles) {
+  private void moveCardsFromCascadePileToFoundationPile(
+          FreecellOperations<Card> freecellOperations,
+          List<List<Card>> expectedCascadingPiles,
+          List<List<Card>> expectedFoundationPiles) {
+
     //moving cards from cascade pile 0 and 1 to foundation piles.
     for (int i = 12; i >= 0; i--) {
       Card cardFromSourceCascadePile1 = expectedCascadingPiles.get(0).remove(i);
