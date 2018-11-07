@@ -284,6 +284,14 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     return Utils.requireNonNull(list);
   }
 
+  /**
+   * Returns a map {@link PileCategory} and its corresponding list of piles. A pile is defined as
+   * list of cards.
+   *
+   * @param numberOfCascadePile the number of cascade piles
+   * @param numberOfOpenPile    the number of open piles
+   * @return a map {@link PileCategory} and its corresponding list of piles
+   */
   private Map<PileCategory, List<List<Card>>> getPilesMap(int numberOfCascadePile,
                                                           int numberOfOpenPile) {
 
@@ -294,6 +302,11 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     return map;
   }
 
+  /**
+   * Returns a map of {@link PileCategory} and its corresponding {@link Supplier} for RuleChecker.
+   *
+   * @return a map of {@link PileCategory} and its corresponding {@link Supplier} for RuleChecker
+   */
   private Map<PileCategory, Supplier<RuleChecker<Card>>> getRuleCheckerMap() {
     Map<PileCategory, Supplier<RuleChecker<Card>>> map = new EnumMap<>(PileCategory.class);
     map.put(PileCategory.FOUNDATION, FoundationPileRuleChecker::new);
@@ -302,6 +315,13 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     return map;
   }
 
+  /**
+   * Returns a pile of the given index of the given {@link PileCategory}.
+   *
+   * @param pileCategory the given pile category
+   * @param index        the given index of the pile
+   * @return a pile of the given index of the given {@link PileCategory}
+   */
   private List<Card> getPile(PileCategory pileCategory, int index) {
     List<List<Card>> piles = this.getPiles(pileCategory);
     try {
@@ -311,6 +331,12 @@ public abstract class AbstractFreecellModel implements FreecellOperations<Card> 
     }
   }
 
+  /**
+   * Returns a new {@link RuleChecker} of type card for the given {@link PileCategory}.
+   *
+   * @param pileCategory the given pile category
+   * @return a new {@link RuleChecker} of type card for the given {@link PileCategory}
+   */
   private RuleChecker<Card> getRuleChecker(PileCategory pileCategory) {
     RuleChecker<Card> ruleChecker = this.ruleCheckerMap.get(pileCategory).get();
     return Utils.requireNonNull(ruleChecker);
