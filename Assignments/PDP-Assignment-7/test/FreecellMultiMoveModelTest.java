@@ -100,7 +100,7 @@ public class FreecellMultiMoveModelTest extends FreecellModelTest {
             .cascades(cascadePiles)
             .build();
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
     List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePiles, deck);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 

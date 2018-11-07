@@ -1,8 +1,11 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import freecell.bean.Card;
 import freecell.bean.CardValue;
@@ -75,5 +78,20 @@ public class TestUtils {
       stringBuilder.append(System.lineSeparator());
     }
     return stringBuilder.toString().trim();
+  }
+
+  public static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
+    List<Card> deck = new ArrayList<>(52);
+    List<CardValue> cardValues = Arrays.stream(CardValue.values())
+            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
+            .collect(Collectors.toList());
+
+    for (CardValue cardValue : cardValues) {
+      deck.add(new Card(Suit.SPADES, cardValue));
+      deck.add(new Card(Suit.DIAMONDS, cardValue));
+      deck.add(new Card(Suit.CLUBS, cardValue));
+      deck.add(new Card(Suit.HEARTS, cardValue));
+    }
+    return deck;
   }
 }

@@ -144,8 +144,64 @@ public class FreecellControllerTest {
   }
 
   @Test
-  public void shuffleTrueActuallyShuffles() {
+  public void simulateEntireGame() {
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int cardIndex = 13; cardIndex > 0; cardIndex--) {
+      for (int pileIndex = 1; pileIndex <= 4; pileIndex++) {
+        stringBuilder.append("C").append(pileIndex);
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(cardIndex);
+        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append("O").append(pileIndex);
+        stringBuilder.append(System.lineSeparator());
 
+        stringBuilder.append("O").append(pileIndex);
+        stringBuilder.append(" ");
+        stringBuilder.append(1);
+        stringBuilder.append(" ");
+        stringBuilder.append("F").append(pileIndex);
+      }
+    }
+    stringBuilder.append("q");
+
+    StringReader actualInput = new StringReader(stringBuilder.toString());
+    StringBuffer actualOutput = new StringBuffer();
+    StringBuilder expectedOutput = new StringBuilder();
+
+    FreecellController freecellController = new FreecellController(actualInput, actualOutput);
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+    freecellController.playGame(deck, freecellOperations, true);
+
+
+    for (int cardIndex = 12; cardIndex >= 0; cardIndex--) {
+
+      for (int pileIndex = 0; pileIndex < 4; pileIndex++) {
+        Card removedCard = expectedCascadingPiles.get(pileIndex).remove(cardIndex);
+        expectedOpenPiles.get(pileIndex).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+      }
+
+      for (int pileIndex = 1; pileIndex < 4; pileIndex++) {
+        Card removedCard = expectedOpenPiles.get(pileIndex).remove(0);
+        expectedFoundationPiles.get(pileIndex).add(removedCard);
+
+        expectedOutput.append(TestUtils.convertPilesToString(
+                expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
+        expectedOutput.append(System.lineSeparator());
+      }
+    }
+
+    expectedOutput.append(GAME_QUIT_STRING);
+    Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
   }
 
   private FreecellOperations<Card> getFreecellOperation() {

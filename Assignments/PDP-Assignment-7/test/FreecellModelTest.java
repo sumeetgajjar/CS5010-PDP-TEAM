@@ -4,7 +4,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 import freecell.bean.Card;
 import freecell.bean.CardValue;
-import freecell.bean.PileCategory;
 import freecell.bean.Suit;
 import freecell.model.FreecellModel;
 import freecell.model.FreecellOperations;
@@ -469,8 +467,9 @@ public class FreecellModelTest {
 
 
           //testing invalid source card Index
-          List<Card> expectedCardsInFirstCascadingPile = TestUtils.getCardsInCascadingPiles(cascadingPiles,
-                  deck).get(0);
+          List<Card> expectedCardsInFirstCascadingPile =
+                  TestUtils.getCardsInCascadingPiles(cascadingPiles,
+                          deck).get(0);
           try {
             model.move(PileType.CASCADE, 0, expectedCardsInFirstCascadingPile.size(),
                     PileType.FOUNDATION, 0);
@@ -544,7 +543,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     for (boolean shuffle : Arrays.asList(true, false)) {
       model.startGame(deck, shuffle);
@@ -594,7 +593,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     for (boolean shuffle : Arrays.asList(true, false)) {
       model.startGame(deck, shuffle);
@@ -630,7 +629,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
 
     model.startGame(deck, false);
@@ -697,7 +696,8 @@ public class FreecellModelTest {
         List<Card> deck = model.getDeck();
         model.startGame(deck, false);
 
-        List<List<Card>> expectedCascadingPiles1 = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPiles1 =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
         List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -709,12 +709,14 @@ public class FreecellModelTest {
         expectedOpenPiles.get(0).add(lastCardFromLastPile);
         model.move(PileType.CASCADE, lastPile, lastCardIndex, PileType.OPEN, 0);
 
-        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles,
+                expectedOpenPiles,
                 expectedCascadingPiles1), model.getGameState());
         Assert.assertFalse(model.isGameOver());
 
         model.startGame(deck, false);
-        List<List<Card>> expectedCascadingPiles2 = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPiles2 =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
         Assert.assertEquals(TestUtils.convertPilesToString(Utils.getListOfEmptyLists(4),
                 Utils.getListOfEmptyLists(openPiles), expectedCascadingPiles2),
                 model.getGameState());
@@ -757,7 +759,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
     model.startGame(deck, false);
 
     model.move(PileType.CASCADE, 0, 12, PileType.OPEN, 0);
@@ -830,7 +832,7 @@ public class FreecellModelTest {
             .opens(openPileCount)
             .build();
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     model.startGame(deck, false);
     //moving ace of spades from cascade pile 0 to open pile 0
@@ -874,7 +876,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     model.startGame(deck, false);
     //moving ace of spades from cascade pile 0 to foundation pile 0
@@ -903,7 +905,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     model.startGame(deck, false);
     //moving ace of spades from cascade pile 0 to foundation pile 0
@@ -932,7 +934,7 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     model.startGame(deck, false);
     //moving ace of spades from cascade pile 0 to foundation pile 0
@@ -989,7 +991,8 @@ public class FreecellModelTest {
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce,
                 PileType.OPEN, 0);
 
-        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles,
+                expectedOpenPiles,
                 expectedCascadingCardPiles), model.getGameState());
 
         //moving cards to same position as source
@@ -1018,7 +1021,8 @@ public class FreecellModelTest {
           Assert.assertEquals("Invalid input", e.getMessage());
         }
 
-        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles,
+                expectedOpenPiles,
                 expectedCascadingCardPiles), model.getGameState());
       }
     }
@@ -1036,7 +1040,8 @@ public class FreecellModelTest {
         List<Card> deck = modelWithCascadeFirst.getDeck();
         modelWithCascadeFirst.startGame(deck, false);
 
-        List<List<Card>> expectedCascadingPile1 = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPile1 =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
         String expectedGameState1 = TestUtils.convertPilesToString(Utils.getListOfEmptyLists(4),
                 Utils.getListOfEmptyLists(openPiles), expectedCascadingPile1);
         Assert.assertEquals(expectedGameState1, modelWithCascadeFirst.getGameState());
@@ -1048,7 +1053,8 @@ public class FreecellModelTest {
 
         modelWithCascadeAfter.startGame(deck, false);
 
-        List<List<Card>> expectedCascadingPile2 = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPile2 =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
         String expectedGameState2 = TestUtils.convertPilesToString(Utils.getListOfEmptyLists(4),
                 Utils.getListOfEmptyLists(openPiles), expectedCascadingPile2);
         Assert.assertEquals(expectedGameState2, modelWithCascadeAfter.getGameState());
@@ -1408,11 +1414,12 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     model.startGame(deck, false);
 
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount
+            , deck);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -1464,7 +1471,8 @@ public class FreecellModelTest {
 
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
-        List<List<Card>> expectedCascadePiles = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadePiles = TestUtils.getCardsInCascadingPiles(cascadingPiles
+                , deck);
         Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
 
         expectedFoundationPiles.get(0).add(0, lastAce);
@@ -1537,7 +1545,8 @@ public class FreecellModelTest {
                 ((52 % cascadingPiles) + cascadingPiles - 1) % cascadingPiles;
         int lastCardIndexOfAce = 52 % cascadingPiles == 0 ? (52 / cascadingPiles) - 1 :
                 (52 / cascadingPiles);
-        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPiles =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
 
         int destinationCascadingPileIndex = (sourceCascadingPileIndex--) % cascadingPiles;
 
@@ -1565,7 +1574,8 @@ public class FreecellModelTest {
             .build();
 
     List<Card> deck = model.getDeck();
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount
+            , deck);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPileCount);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -1596,8 +1606,9 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount, deck);
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount
+            , deck);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPileCount);
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
 
@@ -1645,7 +1656,8 @@ public class FreecellModelTest {
 
         List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
-        List<List<Card>> expectedCascadePiles = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadePiles = TestUtils.getCardsInCascadingPiles(cascadingPiles
+                , deck);
         Card lastAce = expectedCascadePiles.get(lastPileOfAce).remove(lastCardIndexOfAce);
 
         expectedOpenPiles.get(0).add(0, lastAce);
@@ -1692,7 +1704,8 @@ public class FreecellModelTest {
 
         model.startGame(deck, false);
 
-        List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
+        List<List<Card>> expectedCascadingPiles =
+                TestUtils.getCardsInCascadingPiles(cascadingPiles, deck);
         List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(openPiles);
 
         List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
@@ -1706,7 +1719,8 @@ public class FreecellModelTest {
         expectedFoundationPiles.get(0).add(lastAce);
         model.move(PileType.CASCADE, lastPileOfAce, lastCardIndexOfAce,
                 PileType.FOUNDATION, 0);
-        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+        Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles,
+                expectedOpenPiles,
                 expectedCascadingPiles), model.getGameState());
         Assert.assertFalse(model.isGameOver());
 
@@ -1727,7 +1741,8 @@ public class FreecellModelTest {
             expectedFoundationPiles.get(foundationPilePosition).add(lastCardFromOpenPile);
             model.move(PileType.OPEN, openPilePosition, 0, PileType.FOUNDATION,
                     foundationPilePosition);
-            Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+            Assert.assertEquals(TestUtils.convertPilesToString(expectedFoundationPiles,
+                    expectedOpenPiles,
                     expectedCascadingPiles), model.getGameState());
             Assert.assertFalse(model.isGameOver());
           }
@@ -1753,11 +1768,12 @@ public class FreecellModelTest {
             .build();
 
 
-    List<Card> deck = getDeckWithAlterColorSuitAndSameCardValue();
+    List<Card> deck = TestUtils.getDeckWithAlterColorSuitAndSameCardValue();
 
     Assert.assertFalse(model.isGameOver());
 
-    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount, deck);
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(cascadePileCount
+            , deck);
 
     model.startGame(deck, false);
     Assert.assertFalse(model.isGameOver());
@@ -1843,7 +1859,8 @@ public class FreecellModelTest {
             .count();
     Assert.assertEquals(openPileCount, countOfEmptyOpenPiles);
 
-    String expectedGameState = TestUtils.convertPilesToString(expectedFoundationPiles, expectedOpenPiles,
+    String expectedGameState = TestUtils.convertPilesToString(expectedFoundationPiles,
+            expectedOpenPiles,
             expectedCascadingPiles);
     Assert.assertEquals(expectedGameState, model.getGameState());
 
@@ -1880,21 +1897,6 @@ public class FreecellModelTest {
     List<Card> deck = model.getDeck();
     //sorting the deck so that all Aces shifts to the end of the deck
     deck.sort((o1, o2) -> o2.getCardValue().getPriority() - o1.getCardValue().getPriority());
-    return deck;
-  }
-
-  protected static List<Card> getDeckWithAlterColorSuitAndSameCardValue() {
-    List<Card> deck = new ArrayList<>(52);
-    List<CardValue> cardValues = Arrays.stream(CardValue.values())
-            .sorted(Comparator.comparingInt(CardValue::getPriority).reversed())
-            .collect(Collectors.toList());
-
-    for (CardValue cardValue : cardValues) {
-      deck.add(new Card(Suit.SPADES, cardValue));
-      deck.add(new Card(Suit.DIAMONDS, cardValue));
-      deck.add(new Card(Suit.CLUBS, cardValue));
-      deck.add(new Card(Suit.HEARTS, cardValue));
-    }
     return deck;
   }
 }
