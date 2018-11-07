@@ -249,21 +249,24 @@ public class FreecellModelControllerTest {
     for (int cardIndex = 13; cardIndex > 0; cardIndex--) {
       for (int pileIndex = 1; pileIndex <= 4; pileIndex++) {
         stringBuilder.append("C").append(pileIndex);
-        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(" ");
         stringBuilder.append(cardIndex);
-        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(" ");
         stringBuilder.append("O").append(pileIndex);
-        stringBuilder.append(System.lineSeparator());
+        stringBuilder.append(" ");
+      }
 
+      for (int pileIndex = 1; pileIndex <= 4; pileIndex++) {
         stringBuilder.append("O").append(pileIndex);
         stringBuilder.append(" ");
         stringBuilder.append(1);
         stringBuilder.append(" ");
         stringBuilder.append("F").append(pileIndex);
+        stringBuilder.append(" ");
       }
     }
 
-    StringReader actualInput = new StringReader(stringBuilder.toString());
+    StringReader actualInput = new StringReader(stringBuilder.toString().trim());
     StringBuffer actualOutput = new StringBuffer();
     StringBuilder expectedOutput = new StringBuilder();
 
@@ -275,7 +278,7 @@ public class FreecellModelControllerTest {
     List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
     List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
 
-    freecellController.playGame(deck, freecellOperations, true);
+    freecellController.playGame(deck, freecellOperations, false);
     expectedOutput.append(TestUtils.convertPilesToString(
             expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
     expectedOutput.append(System.lineSeparator());
@@ -291,7 +294,7 @@ public class FreecellModelControllerTest {
         expectedOutput.append(System.lineSeparator());
       }
 
-      for (int pileIndex = 1; pileIndex < 4; pileIndex++) {
+      for (int pileIndex = 0; pileIndex < 4; pileIndex++) {
         Card removedCard = expectedOpenPiles.get(pileIndex).remove(0);
         expectedFoundationPiles.get(pileIndex).add(removedCard);
 
