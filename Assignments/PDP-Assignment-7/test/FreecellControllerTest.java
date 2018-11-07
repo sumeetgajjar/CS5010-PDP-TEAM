@@ -180,32 +180,40 @@ public class FreecellControllerTest {
     FreecellController freecellController = new FreecellController(readable, appendable);
     Assert.assertEquals("", appendable.toString());
 
+    FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
+    List<Card> deck = freecellOperations.getDeck();
     try {
-      FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
-      List<Card> deck = freecellOperations.getDeck();
-
       freecellController.playGame(deck, freecellOperations, false);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
       Assert.assertEquals("cannot read from readable", e.getMessage());
     }
 
-    Assert.assertEquals("", appendable.toString());
+    List<List<Card>> expectedCascadingPiles = TestUtils.getCardsInCascadingPiles(4, deck);
+    List<List<Card>> expectedFoundationPiles = Utils.getListOfEmptyLists(4);
+    List<List<Card>> expectedOpenPiles = Utils.getListOfEmptyLists(4);
+
+    StringBuilder expectedOutput = new StringBuilder(TestUtils.convertPilesToString(
+            expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles))
+            .append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
   public void appendableFailureCauseIllegalStateException() throws IOException {
     StringReader readable = new StringReader("q");
 
+    ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
     BufferedWriter appendable =
             new BufferedWriter(
                     new OutputStreamWriter(
-                            new ByteArrayOutputStream()));
+                            outputBuffer));
 
     appendable.close();
 
     FreecellController freecellController = new FreecellController(readable, appendable);
-    Assert.assertEquals("", appendable.toString());
+    Assert.assertEquals("", outputBuffer.toString());
 
     try {
       FreecellOperations<Card> freecellOperations = this.getFreecellOperation();
@@ -217,7 +225,7 @@ public class FreecellControllerTest {
       Assert.assertEquals("cannot write to appendable", e.getMessage());
     }
 
-    Assert.assertEquals("", appendable.toString());
+    Assert.assertEquals("", outputBuffer.toString());
   }
 
   @Test
