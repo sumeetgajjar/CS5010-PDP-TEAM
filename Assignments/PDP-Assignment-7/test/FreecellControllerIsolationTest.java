@@ -36,7 +36,7 @@ public class FreecellControllerIsolationTest {
       int codeForGameState = random.nextInt();
       int codeForIsGameOver = random.nextInt();
       int codeForGetDeck = random.nextInt();
-      MockModelWithLogger mockModelWithLogger = new MockModelWithLogger(mockModelLog,
+      FreecellOperations<Card> mockModelWithLogger = new MockModelWithLogger(mockModelLog,
               codeForStartGame, codeForMove,
               codeForGameState,
               codeForIsGameOver, codeForGetDeck);
@@ -84,8 +84,7 @@ public class FreecellControllerIsolationTest {
 
       StringBuilder expectedOutput = new StringBuilder();
 
-      MockModelWhichThrowsExceptionInStartGameAndMove mockModel =
-              new MockModelWhichThrowsExceptionInStartGameAndMove();
+      FreecellOperations<Card> mockModel = new MockModelWhichThrowsException1();
 
       FreecellController freecellController = new FreecellController(actualInput, actualOutput);
       freecellController.playGame(mockModel.getDeck(), mockModel, shuffle);
@@ -97,33 +96,35 @@ public class FreecellControllerIsolationTest {
   }
 
   @Test
-  public void testIfControllerDoesNotPropagateMoveExceptionToCaller() {
+  public void testIfControllerDoesNotPropagateIllegalArgumentExceptionOfMoveToCaller() {
     for (boolean shuffle : Arrays.asList(true, false)) {
       StringReader actualInput = new StringReader("C1 11 F1 C2 10 F2 C3 9 F3 Q");
       StringBuffer actualOutput = new StringBuffer();
 
       StringBuilder expectedOutput = new StringBuilder();
 
-      MockModelWhichThrowsExceptionInMove mockModel =
-              new MockModelWhichThrowsExceptionInMove();
+      FreecellOperations<Card> mockModel = new MockModelWhichThrowsException2();
 
       FreecellController freecellController = new FreecellController(actualInput, actualOutput);
       freecellController.playGame(mockModel.getDeck(),
               mockModel, shuffle);
 
       expectedOutput.append("YOLO").append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock exception in move")
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
               .append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock exception in move")
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
               .append(System.lineSeparator());
-      expectedOutput.append("Invalid move, please try again: mock exception in move")
+      expectedOutput.append("Invalid move, please try again: mock illegal argument exception in " +
+              "move")
               .append(System.lineSeparator());
       expectedOutput.append(TestUtils.GAME_QUIT_STRING).append(System.lineSeparator());
       Assert.assertEquals(expectedOutput.toString(), actualOutput.toString());
     }
   }
 
-  private static class MockModelWhichThrowsExceptionInStartGameAndMove implements FreecellOperations<Card> {
+  private static class MockModelWhichThrowsException1 implements FreecellOperations<Card> {
 
     @Override
     public List<Card> getDeck() {
@@ -132,13 +133,13 @@ public class FreecellControllerIsolationTest {
 
     @Override
     public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
-      throw new IllegalArgumentException("mock exception in startGame");
+      throw new IllegalArgumentException("mock illegal argument exception in startGame");
     }
 
     @Override
     public void move(PileType source, int pileNumber, int cardIndex, PileType destination,
                      int destPileNumber) throws IllegalArgumentException, IllegalStateException {
-      throw new IllegalArgumentException("mock exception in move");
+      throw new IllegalArgumentException("mock illegal argument exception in move");
     }
 
     @Override
@@ -152,7 +153,7 @@ public class FreecellControllerIsolationTest {
     }
   }
 
-  private static class MockModelWhichThrowsExceptionInMove extends MockModelWhichThrowsExceptionInStartGameAndMove {
+  private static class MockModelWhichThrowsException2 extends MockModelWhichThrowsException1 {
 
     @Override
     public void startGame(List<Card> deck, boolean shuffle) throws IllegalArgumentException {
