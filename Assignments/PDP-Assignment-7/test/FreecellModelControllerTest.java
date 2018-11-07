@@ -535,7 +535,12 @@ public class FreecellModelControllerTest {
                 expectedFoundationPiles, expectedOpenPiles, expectedCascadingPiles));
         expectedOutput.append(System.lineSeparator());
 
-        expectedOutput.append(TestUtils.INVALID_MOVE_MESSAGE_STRING + ": Invalid input");
+        String[] split = badMoves.split(" ");
+
+        expectedOutput.append(
+                String.format("%s: cannot move card of Index:%s from pile:%s to pile:%s",
+                        TestUtils.INVALID_MOVE_MESSAGE_STRING,
+                        split[1], split[0], split[2]));
         expectedOutput.append(System.lineSeparator());
 
         Card removedCard = expectedCascadingPiles.get(0).remove(12);

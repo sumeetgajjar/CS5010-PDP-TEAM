@@ -211,8 +211,14 @@ public class FreecellController implements IFreecellController<Card> {
       this.transmitGameState(model);
     } catch (IllegalArgumentException e) {
       this.transmitMessage(String.format("%s: %s", INVALID_MOVE_MESSAGE_STRING,
-              e.getMessage()));
+              this.getInvalidMoveMessage(sourcePileInfo, cardIndex, destinationPileInfo)));
     }
+  }
+
+  private String getInvalidMoveMessage(PileInfo sourcePileInfo, int cardIndex,
+                                       PileInfo destinationPileInfo) {
+    return String.format("cannot move card of Index:%d from pile:%s to pile:%s",
+            (cardIndex + 1), sourcePileInfo, destinationPileInfo);
   }
 
   private boolean toQuit(String inputString) {
@@ -269,6 +275,11 @@ public class FreecellController implements IFreecellController<Card> {
 
     int getPileIndex() {
       return pileIndex;
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s%d", pileCategory.getSymbol(), pileIndex + 1);
     }
   }
 }
