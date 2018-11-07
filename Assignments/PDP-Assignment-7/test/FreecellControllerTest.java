@@ -143,11 +143,6 @@ public class FreecellControllerTest {
     }
   }
 
-  @Test
-  public void shuffleTrueActuallyShuffles() {
-
-  }
-
   private FreecellOperations<Card> getFreecellOperation() {
     return FreecellMultiMoveModel.getBuilder().cascades(4).opens(4).build();
   }
