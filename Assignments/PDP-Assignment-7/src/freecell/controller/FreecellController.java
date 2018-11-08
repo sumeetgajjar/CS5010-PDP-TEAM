@@ -108,7 +108,7 @@ public class FreecellController implements IFreecellController<Card> {
     Utils.requireNonNull(deck);
     Utils.requireNonNull(model);
 
-    if (this.canStartGame(deck, model, shuffle)) {
+    if (this.cannotStartGame(deck, model, shuffle)) {
       return;
     }
 
@@ -186,7 +186,8 @@ public class FreecellController implements IFreecellController<Card> {
     }
   }
 
-  private boolean canStartGame(List<Card> deck, FreecellOperations<Card> model, boolean shuffle) {
+  private boolean cannotStartGame(List<Card> deck, FreecellOperations<Card> model,
+                                  boolean shuffle) {
     try {
       model.startGame(deck, shuffle);
       this.transmitGameState(model);
