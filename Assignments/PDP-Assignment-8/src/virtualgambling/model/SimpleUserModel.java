@@ -55,6 +55,16 @@ public class SimpleUserModel implements UserModel {
   }
 
   @Override
+  public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date) {
+    return null;
+  }
+
+  @Override
+  public BigDecimal getPortfolioValue(String portfolioName, Date date) {
+    return null;
+  }
+
+  @Override
   public PurchaseInfo buyShares(String tickerName, String portfolioName, Date date, long quantity) {
     return null;
   }

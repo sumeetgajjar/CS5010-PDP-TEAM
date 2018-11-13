@@ -37,7 +37,7 @@ public interface UserModel {
    */
   List<Portfolio> getAllPortfolios();
 
-  BigDecimal getCostBasis(String portfolioName, Date date);
+  BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date);
 
   BigDecimal getPortfolioValue(String portfolioName, Date date);
 
