@@ -33,11 +33,23 @@ public class SimpleUserModel implements UserModel {
 
   }
 
+  /**
+   * Returns a portfolio associated with given name. Returns null if there is no portfolio
+   * associated with the given name.
+   *
+   * @param portfolioName the name of the portfolio
+   * @return the portfolio
+   */
   @Override
   public Portfolio getPortfolio(String portfolioName) {
     return null;
   }
 
+  /**
+   * Returns all portfolios for this {@link UserModel}. Returns empty list if there are none.
+   *
+   * @return all portfolios
+   */
   @Override
   public List<Portfolio> getAllPortfolios() {
     return null;
