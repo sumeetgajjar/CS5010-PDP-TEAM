@@ -37,8 +37,8 @@ public class UserModelTest {
     Assert.assertNotNull(portfolio);
     Assert.assertEquals("test", portfolio.getName());
     Assert.assertEquals(0, portfolio.getPurchases().size());
-    Assert.assertEquals(BigDecimal.ZERO, portfolio.getCostBasis());
-    Assert.assertEquals(BigDecimal.ZERO, portfolio.getPortfolioValue(date));
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("p1", date));
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("p1", date));
 
     Assert.assertEquals(DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
   }
