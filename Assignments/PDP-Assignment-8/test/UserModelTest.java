@@ -183,21 +183,91 @@ public class UserModelTest {
     } catch (IllegalArgumentException e) {
       Assert.assertNull("Invalid Input", e.getMessage());
     }
+
+    try {
+      Date futureTime = getFutureTime();
+      userModel.addShareData(getAppleShare(), futureTime);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyingSharesOfInvalidQuantityFails() {
+    UserModel userModel = getUserModelWithAppleShareDataAdded();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    userModel.createPortfolio("p1");
+    try {
+      userModel.buyShares(appleShare.getTickerName(), "p1", date, 0);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+    }
+
+    try {
+      userModel.buyShares(appleShare.getTickerName(), "p1", date, -1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyingShareFailsForNullInputs() {
+    UserModel userModel = getUserModelWithEmptyPortfolios();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    try {
+      userModel.buyShares(null, "p1", date, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+
+    try {
+      userModel.buyShares(appleShare.getTickerName(), null, date, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+
+    try {
+      userModel.buyShares(appleShare.getTickerName(), "p1", null, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyingShareForMissingPortfolioFails() {
+    UserModel userModel = getEmptyUserModel();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    try {
+      userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Portfolio does not exist", e.getMessage());
+    }
   }
 
   @Test
   public void buyingSharesAtInvalidTimeFails() {
-    UserModel userModel = getUserModelWithEmptyPortfolios();
-    Date date = getValidDateForTrading();
+    UserModel userModel = getUserModelWithAppleShareDataAdded();
     Share appleShare = getAppleShare();
-    userModel.addShareData(appleShare, date);
 
     try {
       Date weekendDate = getWeekendDate();
       userModel.buyShares(appleShare.getTickerName(), "p1", weekendDate, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid Input", e.getMessage());
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
     }
 
     try {
@@ -205,7 +275,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", beforeOpeningTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid Input", e.getMessage());
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
     }
 
     try {
@@ -213,7 +283,15 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", afterClosingTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid Input", e.getMessage());
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+    }
+
+    try {
+      Date futureTime = getFutureTime();
+      userModel.buyShares(appleShare.getTickerName(), "p1", futureTime, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
     }
   }
 
@@ -240,6 +318,12 @@ public class UserModelTest {
     return new Share("AAPL", BigDecimal.TEN);
   }
 
+  private Date getFutureTime() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DATE, 1);
+    return calendar.getTime();
+  }
+
   private Date getDateAfterClosingTime() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 4, 1);
@@ -262,6 +346,14 @@ public class UserModelTest {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();
+  }
+
+  private UserModel getUserModelWithAppleShareDataAdded() {
+    UserModel userModel = getEmptyUserModel();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+    userModel.addShareData(appleShare, date);
+    return userModel;
   }
 
   private UserModel getUserModelWithEmptyPortfolios() {
