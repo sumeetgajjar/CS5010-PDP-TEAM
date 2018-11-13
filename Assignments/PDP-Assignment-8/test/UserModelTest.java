@@ -41,8 +41,15 @@ public class UserModelTest {
   public void getPortfolioAndGetAllPortfolioWorks() {
     UserModel userModel = getEmptyUserModel();
 
+    Assert.assertNull(userModel.getPortfolio(" "));
+    Assert.assertNull(userModel.getPortfolio(""));
+    Assert.assertNull(userModel.getPortfolio(null));
+
     for (int i = 1; i <= 4; i++) {
       String portfolioName = String.format("p%d", i);
+
+      Assert.assertNull(userModel.getPortfolio(portfolioName));
+
       userModel.createPortfolio(portfolioName);
       Portfolio portfolio = userModel.getPortfolio(portfolioName);
       Assert.assertEquals(portfolioName, portfolio.getName());
@@ -52,14 +59,14 @@ public class UserModelTest {
   }
 
   @Test
-  public void addPortfolioWorks() {
+  public void createPortfolioWorks() {
     UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("Hello world");
     Assert.assertEquals("Hello world", userModel.getPortfolio("Hello world").getName());
   }
 
   @Test
-  public void addPortfolioFails() {
+  public void createPortfolioFails() {
     UserModel userModel = getEmptyUserModel();
     try {
       userModel.createPortfolio(null);
@@ -105,7 +112,6 @@ public class UserModelTest {
     }
   }
 
-
   @Test
   public void addShareDataWorks() {
     UserModel userModel = getEmptyUserModel();
@@ -121,8 +127,62 @@ public class UserModelTest {
       Assert.assertEquals("stock price not found", e.getMessage());
     }
 
-    userModel.addShareData(new Share("AAPL", BigDecimal.TEN), date);
+    userModel.addShareData(getAppleShare(), date);
     userModel.buyShares("AAPL", portfolioName, date, 1);
+  }
+
+  @Test
+  public void addShareDataFails() {
+    UserModel userModel = getEmptyUserModel();
+    try {
+      userModel.addShareData(null, getValidDateForTrading());
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      userModel.addShareData(getAppleShare(), null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      userModel.addShareData(null, null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+  }
+
+  @Test
+  public void addShareDataFailsForAddingSharesAtInvalidTime() {
+    UserModel userModel = getEmptyUserModel();
+
+    try {
+      Date weekendDate = getWeekendDate();
+      userModel.addShareData(getAppleShare(), weekendDate);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      Date beforeOpeningTime = getDateBeforeOpeningTime();
+      userModel.addShareData(getAppleShare(), beforeOpeningTime);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      Date afterClosingTime = getDateAfterClosingTime();
+      userModel.addShareData(getAppleShare(), afterClosingTime);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
   }
 
   @Test
@@ -139,10 +199,36 @@ public class UserModelTest {
             userModel.getRemainingCapital());
   }
 
+  @Test
+  public void buyingStockWhoseDataIsNotPresentFails() {
+
+  }
+
+  private Share getAppleShare() {
+    return new Share("AAPL", BigDecimal.TEN);
+  }
+
+  private Date getDateAfterClosingTime() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 4, 1);
+    return calendar.getTime();
+  }
+
+  private Date getDateBeforeOpeningTime() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 8, 59);
+    return calendar.getTime();
+  }
+
+  private Date getWeekendDate() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 11, 10, 0);
+    return calendar.getTime();
+  }
 
   private Date getValidDateForTrading() {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(2018, Calendar.DECEMBER, 1, 10, 0);
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();
   }
 
