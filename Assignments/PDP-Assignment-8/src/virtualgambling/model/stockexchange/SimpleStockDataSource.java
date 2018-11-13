@@ -3,7 +3,7 @@ package virtualgambling.model.stockexchange;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import virtualgambling.model.exceptions.StockNotFoundException;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
  * Created by gajjar.s, on 9:47 PM, 11/12/18
@@ -11,7 +11,7 @@ import virtualgambling.model.exceptions.StockNotFoundException;
 public class SimpleStockDataSource implements StockDataSource {
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockNotFoundException {
+  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
     return null;
   }
 }

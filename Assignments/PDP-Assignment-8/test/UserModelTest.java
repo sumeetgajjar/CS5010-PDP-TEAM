@@ -11,6 +11,7 @@ import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.bean.Share;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
 import virtualgambling.model.stockexchange.SimpleStockDataSource;
 
@@ -117,7 +118,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void addShareDataWorks() {
+  public void addShareDataWorks() throws StockDataNotFoundException {
     UserModel userModel = getEmptyUserModel();
     String portfolioName = "p1";
     userModel.createPortfolio(portfolioName);
@@ -126,8 +127,7 @@ public class UserModelTest {
     try {
       userModel.buyShares("AAPL", portfolioName, date, 1);
       Assert.fail("should have failed");
-      //todo change exception
-    } catch (Exception e) {
+    } catch (StockDataNotFoundException e) {
       Assert.assertEquals("stock price not found", e.getMessage());
     }
 
@@ -198,7 +198,8 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyingSharesOfInvalidQuantityFails() {
+  public void buyingSharesOfInvalidQuantityFails() throws IllegalArgumentException,
+          StockDataNotFoundException {
     UserModel userModel = getUserModelWithAppleShareDataAdded();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -220,7 +221,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyingShareFailsForNullInputs() {
+  public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -248,7 +249,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyingShareForMissingPortfolioFails() {
+  public void buyingShareForMissingPortfolioFails() throws StockDataNotFoundException {
     UserModel userModel = getEmptyUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -262,7 +263,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyingSharesAtInvalidTimeFails() {
+  public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithAppleShareDataAdded();
     Share appleShare = getAppleShare();
 
@@ -300,7 +301,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void getRemainingCapitalWorks() {
+  public void getRemainingCapitalWorks() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -314,7 +315,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyingStockWhoseDataIsNotPresentFails() {
+  public void buyingStockWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithAppleShareDataAdded();
     try {
       Calendar calendar = Calendar.getInstance();
@@ -324,26 +325,24 @@ public class UserModelTest {
 
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
-      //todo change this
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertNull("Stock Data not found", e.getMessage());
     }
   }
 
   @Test
-  public void buyingFailsForInvalidTickerName() {
+  public void buyingFailsForInvalidTickerName() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithAppleShareDataAdded();
     try {
       userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
       Assert.fail("should have failed");
-      //todo change this
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertNull("Stock Data not found", e.getMessage());
     }
   }
 
   @Test
-  public void buyFailsDueToInsufficientFunds() {
+  public void buyFailsDueToInsufficientFunds() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = getValidDateForTrading();
     Share appleShare = new Share("AAPL", DEFAULT_USER_CAPITAL.add(BigDecimal.ONE));
@@ -352,14 +351,13 @@ public class UserModelTest {
     try {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
-      //todo change this
-    } catch (Exception e) {
+    } catch (IllegalStateException e) {
       Assert.assertNull("Insufficient funds", e.getMessage());
     }
   }
 
   @Test
-  public void buyMultipleStocksWorks() {
+  public void buyMultipleStocksWorks() throws IllegalArgumentException, StockDataNotFoundException {
     Share appleShare = getAppleShare();
     Share googleShare = getGoogleShare();
 
@@ -403,7 +401,8 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyStockOfSameCompanyAcrossMultipleStretches() {
+  public void buyStockOfSameCompanyAcrossMultipleStretches() throws IllegalArgumentException,
+          StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Share appleShare = getAppleShare();
 

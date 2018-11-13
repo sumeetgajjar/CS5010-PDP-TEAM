@@ -7,7 +7,7 @@ import java.util.List;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.bean.Share;
-import virtualgambling.model.exceptions.InvalidPurchaseOrderException;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
  * Created by gajjar.s, on 8:11 PM, 11/11/18
@@ -42,10 +42,10 @@ public interface UserModel {
    * <ul>
    * <li>If the date for purchase is back dated then the share will bought at closing price of
    * that day</li> // todo move to implementation
-   * <li>If the date for purchase is in future then {@link IllegalArgumentException} will
-   * be thrown</li>
-   * <li>If the date for purchase is non working day then it throws {@link
-   * InvalidPurchaseOrderException}</li>
+   * <li>If a given stock is not found or stock data for the given data and time is not found, it
+   * will throw a {@link StockDataNotFoundException}</li>
+   * <li>It throws a {@link IllegalArgumentException} if the given is not between 9am to 4pm on
+   * weekdays.</li>
    * <li>If the user does not have enough remaining capital to buy shares, then {@link
    * IllegalStateException} is thrown</li>
    * <li>If a stock does not exist with the tickerName or if a portfolio does not exist with
@@ -53,6 +53,9 @@ public interface UserModel {
    * <li>quantity should be positive, if not, then an {@link IllegalArgumentException} is thrown
    * </li>
    * <li>null inputs will result in an {@link IllegalArgumentException}</li>
+   * <li>If the user does not have enough funds to create a purchase transaction, then we throw
+   * an {@link IllegalStateException}.
+   * </li>
    * </ul>
    *
    * @param tickerName    a
@@ -64,9 +67,9 @@ public interface UserModel {
   PurchaseInfo buyShares(String tickerName,
                          String portfolioName,
                          Date date,
-                         long quantity) throws IllegalArgumentException,
-          InvalidPurchaseOrderException;
-  //todo can buy shares between 9am to 4pm on weekdays chuck holidays.
+                         long quantity) throws IllegalArgumentException, StockDataNotFoundException,
+          IllegalStateException;
+
   BigDecimal getRemainingCapital();
 
   /**
