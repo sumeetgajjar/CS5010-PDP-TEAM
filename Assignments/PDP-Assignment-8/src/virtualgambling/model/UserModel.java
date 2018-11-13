@@ -33,6 +33,22 @@ public interface UserModel {
    */
   String getPortfolioComposition(String portfolioName) throws IllegalArgumentException;
 
+  /**
+   * Returns a new line separated string of portfolio name.
+   *
+   * <p>It will return a blank string if there are no portfolios yet.
+   *
+   * @return a new line separated string of portfolio name
+   */
+  String getAllPortfolioNames();
+
+  /**
+   * Returns the amount of liquid cash that is remaining with the user.
+   *
+   * <p>The amount that a user starts with is implementation dependent.
+   *
+   * @return the amount of liquid cash that is remaining with the user.
+   */
   BigDecimal getRemainingCapital();
 
   /**

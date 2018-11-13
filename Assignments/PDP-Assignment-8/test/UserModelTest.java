@@ -453,6 +453,18 @@ public class UserModelTest {
 
   }
 
+  @Test
+  public void getAllPortfolioNamesWorks() {
+    UserModel userModel = getMockedDataSourceEmptyUser();
+
+    Assert.assertEquals("", userModel.getAllPortfolioNames());
+
+    userModel.createPortfolio("p1");
+    Assert.assertEquals("p1", userModel.getAllPortfolioNames());
+    userModel.createPortfolio("p2");
+    Assert.assertEquals("p1" + System.lineSeparator() + "p2", userModel.getAllPortfolioNames());
+  }
+
   private Share getAppleShare() {
     return new Share("AAPL", BigDecimal.TEN);
   }
