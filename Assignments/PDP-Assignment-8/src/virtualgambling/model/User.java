@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.bean.PurchaseInfo;
+import virtualgambling.model.exceptions.InvalidPurchaseOrderException;
+
 /**
  * Created by gajjar.s, on 8:11 PM, 11/11/18
  */
