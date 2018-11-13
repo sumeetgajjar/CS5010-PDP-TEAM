@@ -276,6 +276,50 @@ public class UserModelTest {
   }
 
   @Test
+  public void getCostBasisFailsDueToInvalidArguments() throws StockDataNotFoundException {
+    UserModel userModel = getMockedDataSourceEmptyUser();
+    userModel.createPortfolio("p1");
+    Date date = getValidDateForTrading();
+    userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
+
+    try {
+      userModel.getCostBasisOfPortfolio(null, date);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+
+    try {
+      userModel.getCostBasisOfPortfolio("p1", null);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+  }
+
+  @Test
+  public void getPortfolioValueFailsDueToInvalidArguments() throws StockDataNotFoundException {
+    UserModel userModel = getMockedDataSourceEmptyUser();
+    userModel.createPortfolio("p1");
+    Date date = getValidDateForTrading();
+    userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
+
+    try {
+      userModel.getPortfolioValue(null, date);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+
+    try {
+      userModel.getPortfolioValue("p1", null);
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertNull("Invalid input", e.getMessage());
+    }
+  }
+
+  @Test
   public void buyMultipleStocksWorks() throws IllegalArgumentException, StockDataNotFoundException {
     Share appleShare = getAppleShare();
     Share googleShare = getGoogleShare();
