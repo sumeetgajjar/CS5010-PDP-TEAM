@@ -501,6 +501,9 @@ public class UserModelTest {
 
     Assert.assertEquals(new BigDecimal("50"),
             userModel.getCostBasisOfPortfolio("p1", day2));
+
+    Assert.assertEquals(new BigDecimal("30"),
+            userModel.getCostBasisOfPortfolio("p1", day2));
     try {
       userModel.getCostBasisOfPortfolio("p1", after100Years);
       Assert.fail("should have failed");
