@@ -1,5 +1,6 @@
 package virtualgambling.model.bean;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,10 +13,9 @@ public class Portfolio {
   private final String name;
   private final List<PurchaseInfo> purchases;
 
-  //todo need to pass exchange to this for getting the portfolio value
-  public Portfolio(String name, List<PurchaseInfo> purchases) {
+  public Portfolio(String name) {
     this.name = name;
-    this.purchases = purchases;
+    this.purchases = new ArrayList<>();
   }
 
   public String getName() {
@@ -24,5 +24,9 @@ public class Portfolio {
 
   public List<PurchaseInfo> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
+  }
+
+  PurchaseInfo addPurchaseInfo(PurchaseInfo purchaseInfo) {
+    return null;
   }
 }

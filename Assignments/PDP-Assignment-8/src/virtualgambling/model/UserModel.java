@@ -2,9 +2,7 @@ package virtualgambling.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
@@ -21,25 +19,11 @@ public interface UserModel {
    */
   void createPortfolio(String portfolioName);
 
-  /**
-   * Returns a portfolio associated with given name. Returns null if there is no portfolio
-   * associated with the given name.
-   *
-   * @param portfolioName the name of the portfolio
-   * @return the portfolio
-   */
-  Portfolio getPortfolio(String portfolioName);
-
-  /**
-   * Returns all portfolios for this {@link UserModel}. Returns empty list if there are none.
-   *
-   * @return all portfolios
-   */
-  List<Portfolio> getAllPortfolios();
-
   BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date);
 
   BigDecimal getPortfolioValue(String portfolioName, Date date);
+
+  String getPortfolioComposition(String portfolioName);
 
   BigDecimal getRemainingCapital();
 
