@@ -4,10 +4,12 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.bean.Share;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
 import virtualgambling.model.stockexchange.SimpleStockDataSource;
@@ -352,6 +354,56 @@ public class UserModelTest {
     } catch (Exception e) {
       Assert.assertNull("Insufficient funds", e.getMessage());
     }
+  }
+
+  @Test
+  public void buyStockOfSameCompanyAcrossMultipleStretches() {
+    UserModel userModel = getUserModelWithEmptyPortfolio();
+    Share appleShare = getAppleShare();
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+
+    Date day3 = calendar.getTime();
+    Share appleShareDay3 = new Share("AAPL", new BigDecimal(10));
+    userModel.addShareData(appleShareDay3, day3);
+
+    calendar.add(Calendar.DATE, -1);
+    Date day2 = calendar.getTime();
+    Share appleShareDay2 = new Share("AAPL", new BigDecimal(20));
+    userModel.addShareData(appleShareDay2, day2);
+
+    calendar.add(Calendar.DATE, -2);
+    Date day1 = calendar.getTime();
+    Share appleShareDay1 = new Share("AAPL", new BigDecimal(30));
+    userModel.addShareData(appleShareDay1, day1);
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
+    Portfolio portfolio1 = userModel.getPortfolio("p1");
+    List<PurchaseInfo> portfolio1Purchases = portfolio1.getPurchases();
+
+    PurchaseInfo applePurchasePortfolio1Day1 = portfolio1Purchases.get(0);
+    Assert.assertEquals(appleShareDay1, applePurchasePortfolio1Day1.getShare());
+    Assert.assertEquals(1, applePurchasePortfolio1Day1.getQuantity());
+    Assert.assertEquals(day1, applePurchasePortfolio1Day1.getDate());
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
+    portfolio1 = userModel.getPortfolio("p1");
+    portfolio1Purchases = portfolio1.getPurchases();
+
+    PurchaseInfo applePurchasePortfolio1Day2 = portfolio1Purchases.get(1);
+    Assert.assertEquals(appleShareDay2, applePurchasePortfolio1Day2.getShare());
+    Assert.assertEquals(3, applePurchasePortfolio1Day2.getQuantity());
+    Assert.assertEquals(day2, applePurchasePortfolio1Day2.getDate());
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
+    portfolio1 = userModel.getPortfolio("p1");
+    portfolio1Purchases = portfolio1.getPurchases();
+
+    PurchaseInfo applePurchasePortfolio1Day3 = portfolio1Purchases.get(2);
+    Assert.assertEquals(appleShareDay3, applePurchasePortfolio1Day3.getShare());
+    Assert.assertEquals(5, applePurchasePortfolio1Day3.getQuantity());
+    Assert.assertEquals(day2, applePurchasePortfolio1Day2.getDate());
   }
 
   private Share getAppleShare() {
