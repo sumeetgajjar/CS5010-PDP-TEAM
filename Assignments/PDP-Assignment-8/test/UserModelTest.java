@@ -448,16 +448,61 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
 
+    BigDecimal dayOneValue = userModel.getPortfolioValue("p1", day0);
+    Assert.assertEquals(BigDecimal.ZERO, dayOneValue);
+
+    Assert.assertEquals(new BigDecimal("30"),
+            userModel.getPortfolioValue("p1", day3));
+
+    Assert.assertEquals(new BigDecimal("40"),
+            userModel.getPortfolioValue("p1", day2));
+    try {
+      userModel.getPortfolioValue("p1", after100Years);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+  }
+
+  @Test
+  public void gettingPortfolioCostWorks() throws StockDataNotFoundException {
+    UserModel userModel = getMockedDataSourceEmptyUser();
+    userModel.createPortfolio("p1");
+
+    Share appleShare = getAppleShare();
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+    Date day3 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day2 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -2);
+    Date day1 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -3);
+    Date day0 = calendar.getTime();
+
+
+    calendar.add(Calendar.YEAR, 100);
+    Date after100Years = calendar.getTime();
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
+    userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
+    userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
+
     BigDecimal dayOneValue = userModel.getCostBasisOfPortfolio("p1", day0);
     Assert.assertEquals(BigDecimal.ZERO, dayOneValue);
 
     Assert.assertEquals(new BigDecimal("60"),
-            userModel.getPortfolioValue("p1", day3));
+            userModel.getCostBasisOfPortfolio("p1", day3));
 
     Assert.assertEquals(new BigDecimal("50"),
-            userModel.getPortfolioValue("p1", day2));
+            userModel.getCostBasisOfPortfolio("p1", day2));
     try {
-      userModel.getPortfolioValue("p1", after100Years);
+      userModel.getCostBasisOfPortfolio("p1", after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
