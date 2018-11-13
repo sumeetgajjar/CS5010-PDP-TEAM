@@ -2,6 +2,7 @@ package virtualgambling.model.bean;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class Portfolio {
   private final String name;
   private final List<PurchaseInfo> purchases;
 
+  //todo need to pass exchange to this for getting the portfolio value
   public Portfolio(String name, List<PurchaseInfo> purchases) {
     this.name = name;
     this.purchases = purchases;
@@ -30,7 +32,7 @@ public class Portfolio {
     return null;
   }
 
-  public BigDecimal getPortfolioValue() {
+  public BigDecimal getPortfolioValue(Date date) {
     return null;
   }
 }

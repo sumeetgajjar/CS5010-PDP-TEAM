@@ -30,11 +30,13 @@ public class UserModelTest {
     userModel.createPortfolio("test");
     Portfolio portfolio = userModel.getPortfolio("test");
 
+    Date date = new Date();
+
     Assert.assertNotNull(portfolio);
     Assert.assertEquals("test", portfolio.getName());
     Assert.assertEquals(0, portfolio.getPurchases().size());
     Assert.assertEquals(BigDecimal.ZERO, portfolio.getCostBasis());
-    Assert.assertEquals(BigDecimal.ZERO, portfolio.getPortfolioValue());
+    Assert.assertEquals(BigDecimal.ZERO, portfolio.getPortfolioValue(date));
 
     Assert.assertEquals(DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
   }
@@ -357,6 +359,11 @@ public class UserModelTest {
   }
 
   @Test
+  public void buyStocksOfDifferentCompanyInDifferentPortfolios() {
+
+  }
+
+  @Test
   public void buyStockOfSameCompanyAcrossMultipleStretches() {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Share appleShare = getAppleShare();
@@ -381,6 +388,8 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
     Portfolio portfolio1 = userModel.getPortfolio("p1");
     List<PurchaseInfo> portfolio1Purchases = portfolio1.getPurchases();
+    Assert.assertEquals(1, portfolio1Purchases.size());
+    Assert.assertEquals(new BigDecimal(30), portfolio1.getCostBasis());
 
     PurchaseInfo applePurchasePortfolio1Day1 = portfolio1Purchases.get(0);
     Assert.assertEquals(appleShareDay1, applePurchasePortfolio1Day1.getShare());
@@ -390,6 +399,9 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
     portfolio1 = userModel.getPortfolio("p1");
     portfolio1Purchases = portfolio1.getPurchases();
+    Assert.assertEquals(2, portfolio1Purchases.size());
+    Assert.assertEquals(new BigDecimal(90), portfolio1.getCostBasis());
+
 
     PurchaseInfo applePurchasePortfolio1Day2 = portfolio1Purchases.get(1);
     Assert.assertEquals(appleShareDay2, applePurchasePortfolio1Day2.getShare());
@@ -399,6 +411,8 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
     portfolio1 = userModel.getPortfolio("p1");
     portfolio1Purchases = portfolio1.getPurchases();
+    Assert.assertEquals(3, portfolio1Purchases.size());
+    Assert.assertEquals(new BigDecimal(140), portfolio1.getCostBasis());
 
     PurchaseInfo applePurchasePortfolio1Day3 = portfolio1Purchases.get(2);
     Assert.assertEquals(appleShareDay3, applePurchasePortfolio1Day3.getShare());
