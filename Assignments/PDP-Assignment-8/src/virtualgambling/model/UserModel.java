@@ -23,7 +23,15 @@ public interface UserModel {
 
   BigDecimal getPortfolioValue(String portfolioName, Date date);
 
-  String getPortfolioComposition(String portfolioName);
+  /**
+   * Returns the composition of portfolio in string format. Returns empty string if portfolio is
+   * empty.
+   *
+   * @param portfolioName a
+   * @return a
+   * @throws IllegalArgumentException if the portfolio does not exists
+   */
+  String getPortfolioComposition(String portfolioName) throws IllegalArgumentException;
 
   BigDecimal getRemainingCapital();
 

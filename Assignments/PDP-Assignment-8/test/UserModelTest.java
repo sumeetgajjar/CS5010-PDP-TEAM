@@ -4,12 +4,9 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.bean.Portfolio;
-import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
@@ -26,17 +23,18 @@ public class UserModelTest {
   @Test
   public void testInitializationOfUserModel() {
     UserModel userModel = getEmptyUserModel();
-    Assert.assertEquals(0, userModel.getAllPortfolios().size());
-    Assert.assertNull(userModel.getPortfolio("test"));
+    try {
+      userModel.getPortfolioComposition("test");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Portfolio does not exists", e.getMessage());
+    }
 
     userModel.createPortfolio("test");
-    Portfolio portfolio = userModel.getPortfolio("test");
 
     Date date = new Date();
 
-    Assert.assertNotNull(portfolio);
-    Assert.assertEquals("test", portfolio.getName());
-    Assert.assertEquals(0, portfolio.getPurchases().size());
+    Assert.assertEquals("", userModel.getPortfolioComposition("test"));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("p1", date));
 
@@ -44,31 +42,10 @@ public class UserModelTest {
   }
 
   @Test
-  public void getPortfolioAndGetAllPortfolioWorks() {
-    UserModel userModel = getEmptyUserModel();
-
-    Assert.assertNull(userModel.getPortfolio(" "));
-    Assert.assertNull(userModel.getPortfolio(""));
-    Assert.assertNull(userModel.getPortfolio(null));
-
-    for (int i = 1; i <= 4; i++) {
-      String portfolioName = String.format("p%d", i);
-
-      Assert.assertNull(userModel.getPortfolio(portfolioName));
-
-      userModel.createPortfolio(portfolioName);
-      Portfolio portfolio = userModel.getPortfolio(portfolioName);
-      Assert.assertEquals(portfolioName, portfolio.getName());
-    }
-
-    Assert.assertEquals(4, userModel.getAllPortfolios().size());
-  }
-
-  @Test
   public void createPortfolioWorks() {
     UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("Hello world");
-    Assert.assertEquals("Hello world", userModel.getPortfolio("Hello world").getName());
+    Assert.assertEquals("Hello world", userModel.getPortfolioComposition("Hello world"));
   }
 
   @Test
@@ -335,34 +312,22 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p3", date, 1);
     userModel.buyShares(googleShare.getTickerName(), "p2", date, 1);
 
-    Portfolio portfolio1 = userModel.getPortfolio("p1");
-    PurchaseInfo purchaseInfo1 = portfolio1.getPurchases().get(0);
-    Assert.assertEquals(1, portfolio1.getPurchases().size());
-    Assert.assertEquals(appleShare, purchaseInfo1.getShare());
     Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p1", date));
+    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
 
-    Portfolio portfolio2 = userModel.getPortfolio("p2");
-    Assert.assertEquals(1, portfolio2.getPurchases().size());
-    PurchaseInfo purchaseInfo2 = portfolio2.getPurchases().get(0);
-    Assert.assertEquals(googleShare, purchaseInfo2.getShare());
     Assert.assertEquals(new BigDecimal(11), userModel.getCostBasisOfPortfolio("p2", date));
     Assert.assertEquals(new BigDecimal(11), userModel.getPortfolioValue("p2", date));
+    Assert.assertEquals("", userModel.getPortfolioComposition("p2"));
 
-    Portfolio portfolio3 = userModel.getPortfolio("p3");
-    Assert.assertEquals(1, portfolio3.getPurchases().size());
-    PurchaseInfo purchaseInfo3 = portfolio3.getPurchases().get(0);
-    Assert.assertEquals(appleShare, purchaseInfo3.getShare());
     Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p3", date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p3", date));
+    Assert.assertEquals("", userModel.getPortfolioComposition("p3"));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
-    portfolio1 = userModel.getPortfolio("p1");
-    purchaseInfo1 = portfolio1.getPurchases().get(1);
-    Assert.assertEquals(2, portfolio1.getPurchases().size());
-    Assert.assertEquals(appleShare, purchaseInfo1.getShare());
     Assert.assertEquals(new BigDecimal(20), userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(new BigDecimal(20), userModel.getPortfolioValue("p1", date));
+    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
   }
 
   @Test
@@ -375,49 +340,24 @@ public class UserModelTest {
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
 
     Date day3 = calendar.getTime();
-    Share appleShareDay3 = new Share("AAPL", new BigDecimal(10));
 
     calendar.add(Calendar.DATE, -1);
     Date day2 = calendar.getTime();
-    Share appleShareDay2 = new Share("AAPL", new BigDecimal(20));
 
     calendar.add(Calendar.DATE, -2);
     Date day1 = calendar.getTime();
-    Share appleShareDay1 = new Share("AAPL", new BigDecimal(30));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Portfolio portfolio1 = userModel.getPortfolio("p1");
-    List<PurchaseInfo> portfolio1Purchases = portfolio1.getPurchases();
-    Assert.assertEquals(1, portfolio1Purchases.size());
+    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
 
-    PurchaseInfo applePurchasePortfolio1Day1 = portfolio1Purchases.get(0);
-    Assert.assertEquals(appleShareDay1, applePurchasePortfolio1Day1.getShare());
-    Assert.assertEquals(1, applePurchasePortfolio1Day1.getQuantity());
-    Assert.assertEquals(day1, applePurchasePortfolio1Day1.getDate());
-
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    portfolio1 = userModel.getPortfolio("p1");
-    portfolio1Purchases = portfolio1.getPurchases();
-    Assert.assertEquals(2, portfolio1Purchases.size());
+    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
 
-
-    PurchaseInfo applePurchasePortfolio1Day2 = portfolio1Purchases.get(1);
-    Assert.assertEquals(appleShareDay2, applePurchasePortfolio1Day2.getShare());
-    Assert.assertEquals(3, applePurchasePortfolio1Day2.getQuantity());
-    Assert.assertEquals(day2, applePurchasePortfolio1Day2.getDate());
-
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    portfolio1 = userModel.getPortfolio("p1");
-    portfolio1Purchases = portfolio1.getPurchases();
-    Assert.assertEquals(3, portfolio1Purchases.size());
+    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
-
-    PurchaseInfo applePurchasePortfolio1Day3 = portfolio1Purchases.get(2);
-    Assert.assertEquals(appleShareDay3, applePurchasePortfolio1Day3.getShare());
-    Assert.assertEquals(5, applePurchasePortfolio1Day3.getQuantity());
-    Assert.assertEquals(day2, applePurchasePortfolio1Day2.getDate());
   }
 
   private Share getAppleShare() {

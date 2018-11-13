@@ -41,7 +41,7 @@ public class SimpleUserModel implements UserModel {
   }
 
   @Override
-  public String getPortfolioComposition(String portfolioName) {
+  public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
     return null;
   }
 
