@@ -13,7 +13,7 @@ public class TradingController implements Controller {
   }
 
   @Override
-  public void go() {
+  public void go() throws IllegalStateException {
 
   }
 }

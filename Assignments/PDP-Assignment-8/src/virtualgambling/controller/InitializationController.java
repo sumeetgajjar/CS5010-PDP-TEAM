@@ -20,7 +20,7 @@ public class InitializationController implements Controller {
   }
 
   @Override
-  public void go() {
+  public void go() throws IllegalStateException {
     StockDataSource stockDataSource = new SimpleStockDataSource();
     StockExchange stockExchange = new SimpleStockExchange(stockDataSource);
     UserModel userModel = new SimpleUserModel(stockExchange);

@@ -5,5 +5,5 @@ package virtualgambling.controller;
  */
 public interface Controller {
 
-  void go();
+  void go() throws IllegalStateException;
 }
