@@ -345,7 +345,7 @@ public class UserModelTest {
     Portfolio portfolio1 = userModel.getPortfolio("p1");
     List<PurchaseInfo> portfolio1Purchases = portfolio1.getPurchases();
     Assert.assertEquals(1, portfolio1Purchases.size());
-    Assert.assertEquals(new BigDecimal(30), portfolio1.getCostBasis());
+    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
 
     PurchaseInfo applePurchasePortfolio1Day1 = portfolio1Purchases.get(0);
     Assert.assertEquals(appleShareDay1, applePurchasePortfolio1Day1.getShare());
@@ -356,7 +356,7 @@ public class UserModelTest {
     portfolio1 = userModel.getPortfolio("p1");
     portfolio1Purchases = portfolio1.getPurchases();
     Assert.assertEquals(2, portfolio1Purchases.size());
-    Assert.assertEquals(new BigDecimal(90), portfolio1.getCostBasis());
+    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
 
 
     PurchaseInfo applePurchasePortfolio1Day2 = portfolio1Purchases.get(1);
@@ -368,7 +368,7 @@ public class UserModelTest {
     portfolio1 = userModel.getPortfolio("p1");
     portfolio1Purchases = portfolio1.getPurchases();
     Assert.assertEquals(3, portfolio1Purchases.size());
-    Assert.assertEquals(new BigDecimal(140), portfolio1.getCostBasis());
+    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
 
     PurchaseInfo applePurchasePortfolio1Day3 = portfolio1Purchases.get(2);
     Assert.assertEquals(appleShareDay3, applePurchasePortfolio1Day3.getShare());
