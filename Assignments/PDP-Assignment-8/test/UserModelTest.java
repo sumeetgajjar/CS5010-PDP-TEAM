@@ -157,7 +157,7 @@ public class UserModelTest {
   }
 
   @Test
-  public void addShareDataFailsForAddingSharesAtInvalidTime() {
+  public void addingSharesAtInvalidTimeFails() {
     UserModel userModel = getEmptyUserModel();
 
     try {
@@ -186,16 +186,48 @@ public class UserModelTest {
   }
 
   @Test
+  public void buyingSharesAtInvalidTimeFails() {
+    UserModel userModel = getUserModelWithEmptyPortfolios();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+    userModel.addShareData(appleShare, date);
+
+    try {
+      Date weekendDate = getWeekendDate();
+      userModel.buyShares(appleShare.getTickerName(), "p1", weekendDate, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      Date beforeOpeningTime = getDateBeforeOpeningTime();
+      userModel.buyShares(appleShare.getTickerName(), "p1", beforeOpeningTime, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+
+    try {
+      Date afterClosingTime = getDateAfterClosingTime();
+      userModel.buyShares(appleShare.getTickerName(), "p1", afterClosingTime, 1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertNull("Invalid Input", e.getMessage());
+    }
+  }
+
+  @Test
   public void getRemainingCapitalWorks() {
     UserModel userModel = getUserModelWithEmptyPortfolios();
     Date date = getValidDateForTrading();
-    BigDecimal appleStockCost = BigDecimal.TEN;
-    userModel.addShareData(new Share("AAPL", appleStockCost), date);
+    Share appleShare = getAppleShare();
+    userModel.addShareData(appleShare, date);
 
     Assert.assertEquals(DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
 
     userModel.buyShares("AAPL", "p1", date, 1);
-    Assert.assertEquals(DEFAULT_USER_CAPITAL.subtract(appleStockCost),
+    Assert.assertEquals(DEFAULT_USER_CAPITAL.subtract(appleShare.getUnitPrice()),
             userModel.getRemainingCapital());
   }
 

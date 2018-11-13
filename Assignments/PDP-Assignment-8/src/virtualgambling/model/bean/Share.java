@@ -13,4 +13,12 @@ public class Share {
     this.tickerName = tickerName;
     this.unitPrice = unitPrice;
   }
+
+  public String getTickerName() {
+    return tickerName;
+  }
+
+  public BigDecimal getUnitPrice() {
+    return unitPrice;
+  }
 }
