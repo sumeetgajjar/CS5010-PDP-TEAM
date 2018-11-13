@@ -23,10 +23,18 @@ public interface UserModel {
   /**
    * <ul>
    * <li>If the date for purchase is back dated then the share will bought at closing price of
-   * that day</li>
-   * <li>If the date for purchase is in future then {@link InvalidPurchaseOrderException} will
+   * that day</li> // todo move to implementation
+   * <li>If the date for purchase is in future then {@link IllegalArgumentException} will
    * be thrown</li>
-   * <li>If the date for purchase is non working day then </li>
+   * <li>If the date for purchase is non working day then it throws {@link
+   * InvalidPurchaseOrderException}</li>
+   * <li>If the user does not have enough remaining capital to buy shares, then {@link
+   * IllegalStateException} is thrown</li>
+   * <li>If a stock does not exist with the tickerName or if a portfolio does not exist with
+   * the portfolioName, then an {@link IllegalArgumentException} is thrown</li>
+   * <li>quantity should be positive, if not, then an {@link IllegalArgumentException} is thrown
+   * </li>
+   * <li>null inputs will result in an {@link IllegalArgumentException}</li>
    * </ul>
    *
    * @param tickerName    a
@@ -38,7 +46,8 @@ public interface UserModel {
   PurchaseInfo buyShares(String tickerName,
                          String portfolioName,
                          Date date,
-                         long quantity);
+                         long quantity) throws IllegalArgumentException,
+          InvalidPurchaseOrderException;
 
   BigDecimal getRemainingCapital();
 

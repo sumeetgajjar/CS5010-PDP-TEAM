@@ -3,7 +3,7 @@ package virtualgambling.model.stockdatasource;
 import java.util.Date;
 
 import virtualgambling.model.bean.Share;
-import virtualgambling.model.exceptions.StockPriceNotFoundException;
+import virtualgambling.model.exceptions.StockNotFoundException;
 import virtualgambling.model.stockexchange.StockDataSource;
 
 /**
@@ -16,7 +16,7 @@ public class SimpleStockExchange implements StockExchange {
   }
 
   @Override
-  public Share getPrice(String tickerName, Date date) throws StockPriceNotFoundException {
+  public Share getPrice(String tickerName, Date date) throws StockNotFoundException {
     return null;
   }
 
