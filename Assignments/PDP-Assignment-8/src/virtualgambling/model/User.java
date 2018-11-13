@@ -1,7 +1,7 @@
 package virtualgambling.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,10 +13,27 @@ public interface User {
 
   Portfolio getPortfolio(String portfolioName);
 
-  List<Portfolio> getPortfolios();
+  List<Portfolio> getAllPortfolios();
 
-  OrderInfo buyShares(String tickerName,
-                      String portfolioName,
-                      LocalDateTime localDateTime,
-                      BigDecimal amount);
+  /**
+   * <ul>
+   * <li>If the date for purchase is back dated then the share will bought at closing price of
+   * that day</li>
+   * <li>If the date for purchase is in future then {@link InvalidPurchaseOrderException} will
+   * be thrown</li>
+   * <li>If the date for purchase is non working day then </li>
+   * </ul>
+   *
+   * @param tickerName    a
+   * @param portfolioName a
+   * @param date          a
+   * @param quantity      a
+   * @return a
+   */
+  PurchaseInfo buyShares(String tickerName,
+                         String portfolioName,
+                         Date date,
+                         long quantity);
+
+  BigDecimal getRemainingCapital();
 }
