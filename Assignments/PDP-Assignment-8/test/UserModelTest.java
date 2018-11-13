@@ -52,6 +52,61 @@ public class UserModelTest {
   }
 
   @Test
+  public void addPortfolioWorks() {
+    UserModel userModel = getEmptyUserModel();
+    userModel.createPortfolio("Hello world");
+    Assert.assertEquals("Hello world", userModel.getPortfolio("Hello world").getName());
+  }
+
+  @Test
+  public void addPortfolioFails() {
+    UserModel userModel = getEmptyUserModel();
+    try {
+      userModel.createPortfolio(null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+    }
+
+    try {
+      userModel.createPortfolio("");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+    }
+
+    try {
+      userModel.createPortfolio(" ");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+    }
+
+    try {
+      userModel.createPortfolio(" a");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+    }
+
+    try {
+      userModel.createPortfolio("a ");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+    }
+
+    userModel.createPortfolio("p1");
+    try {
+      userModel.createPortfolio("p1");
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Portfolio already exists", e.getMessage());
+    }
+  }
+
+
+  @Test
   public void addShareDataWorks() {
     UserModel userModel = getEmptyUserModel();
     String portfolioName = "p1";
@@ -83,7 +138,6 @@ public class UserModelTest {
     Assert.assertEquals(DEFAULT_USER_CAPITAL.subtract(appleStockCost),
             userModel.getRemainingCapital());
   }
-
 
 
   private Date getValidDateForTrading() {
