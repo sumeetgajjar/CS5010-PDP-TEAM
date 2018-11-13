@@ -37,6 +37,12 @@ public interface UserModel {
    */
   List<Portfolio> getAllPortfolios();
 
+  BigDecimal getCostBasis(String portfolioName, Date date);
+
+  BigDecimal getPortfolioValue(String portfolioName, Date date);
+
+  BigDecimal getRemainingCapital();
+
   /**
    * <ul>
    * <li>If the date for purchase is back dated then the share will bought at closing price of
@@ -68,6 +74,4 @@ public interface UserModel {
                          Date date,
                          long quantity) throws IllegalArgumentException, StockDataNotFoundException,
           IllegalStateException;
-
-  BigDecimal getRemainingCapital();
 }

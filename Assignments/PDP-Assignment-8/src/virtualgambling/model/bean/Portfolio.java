@@ -1,8 +1,6 @@
 package virtualgambling.model.bean;
 
-import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,13 +24,5 @@ public class Portfolio {
 
   public List<PurchaseInfo> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
-  }
-
-  public BigDecimal getCostBasis() {
-    return null;
-  }
-
-  public BigDecimal getPortfolioValue(Date date) {
-    return null;
   }
 }
