@@ -217,7 +217,7 @@ public class UserModelTest {
 
   @Test
   public void buyingShareFailsForNullInputs() {
-    UserModel userModel = getUserModelWithEmptyPortfolios();
+    UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
 
@@ -297,7 +297,7 @@ public class UserModelTest {
 
   @Test
   public void getRemainingCapitalWorks() {
-    UserModel userModel = getUserModelWithEmptyPortfolios();
+    UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
     userModel.addShareData(appleShare, date);
@@ -311,7 +311,47 @@ public class UserModelTest {
 
   @Test
   public void buyingStockWhoseDataIsNotPresentFails() {
+    UserModel userModel = getUserModelWithAppleShareDataAdded();
+    try {
+      Calendar calendar = Calendar.getInstance();
+      calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+      calendar.add(Calendar.DATE, -1);
+      Date date = calendar.getTime();
 
+      userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
+      Assert.fail("should have failed");
+      //todo change this
+    } catch (Exception e) {
+      Assert.assertNull("Stock Data not found", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyingFailsForInvalidTickerName() {
+    UserModel userModel = getUserModelWithAppleShareDataAdded();
+    try {
+      userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
+      Assert.fail("should have failed");
+      //todo change this
+    } catch (Exception e) {
+      Assert.assertNull("Stock Data not found", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyFailsDueToInsufficientFunds() {
+    UserModel userModel = getUserModelWithEmptyPortfolio();
+    Date date = getValidDateForTrading();
+    Share appleShare = new Share("AAPL", DEFAULT_USER_CAPITAL.add(BigDecimal.ONE));
+    userModel.addShareData(appleShare, date);
+
+    try {
+      userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
+      Assert.fail("should have failed");
+      //todo change this
+    } catch (Exception e) {
+      Assert.assertNull("Insufficient funds", e.getMessage());
+    }
   }
 
   private Share getAppleShare() {
@@ -356,12 +396,8 @@ public class UserModelTest {
     return userModel;
   }
 
-  private UserModel getUserModelWithEmptyPortfolios() {
-    UserModel userModel =
-            new SimpleUserModel(
-                    new SimpleStockExchange(
-                            new SimpleStockDataSource()));
-
+  private UserModel getUserModelWithEmptyPortfolio() {
+    UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("p1");
     return userModel;
   }
