@@ -1,4 +1,4 @@
-package virtualgambling.model;
+package virtualgambling.model.stockdatasource;
 
 import java.util.Date;
 

@@ -12,7 +12,7 @@ import virtualgambling.model.exceptions.InvalidPurchaseOrderException;
 /**
  * Created by gajjar.s, on 8:11 PM, 11/11/18
  */
-public interface User {
+public interface UserModel {
 
   void createPortfolio(String portfolioName);
 
