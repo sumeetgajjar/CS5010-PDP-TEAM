@@ -328,17 +328,14 @@ public class UserModelTest {
 
     Date day3 = calendar.getTime();
     Share appleShareDay3 = new Share("AAPL", new BigDecimal(10));
-    userModel.addShareData(appleShareDay3, day3);
 
     calendar.add(Calendar.DATE, -1);
     Date day2 = calendar.getTime();
     Share appleShareDay2 = new Share("AAPL", new BigDecimal(20));
-    userModel.addShareData(appleShareDay2, day2);
 
     calendar.add(Calendar.DATE, -2);
     Date day1 = calendar.getTime();
     Share appleShareDay1 = new Share("AAPL", new BigDecimal(30));
-    userModel.addShareData(appleShareDay1, day1);
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
     Portfolio portfolio1 = userModel.getPortfolio("p1");
@@ -407,7 +404,7 @@ public class UserModelTest {
     return calendar.getTime();
   }
 
-  private Date getValidDateForTrading() {
+  private static Date getValidDateForTrading() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();
@@ -430,13 +427,35 @@ public class UserModelTest {
   private static class MockDataSource implements StockDataSource {
     @Override
     public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-      if (tickerName.equals("AAPL")) {
-        return BigDecimal.TEN;
-      } else if (tickerName.equals("GOOG")) {
-        return new BigDecimal("11");
-      } else {
-        throw new StockDataNotFoundException();
+      {
+        if (tickerName.equals("AAPL")) {
+          Calendar calendar = Calendar.getInstance();
+
+          calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+          Date day3 = calendar.getTime();
+          if (date.equals(day3)) {
+            return BigDecimal.TEN;
+          }
+
+          calendar.add(Calendar.DATE, -1);
+          Date day2 = calendar.getTime();
+          if (date.equals(day2)) {
+            return new BigDecimal(20);
+          }
+
+          calendar.add(Calendar.DATE, -2);
+          Date day1 = calendar.getTime();
+          if (date.equals(day1)) {
+            return new BigDecimal(30);
+          }
+
+        } else if (tickerName.equals("GOOG")) {
+          return new BigDecimal("11");
+        }
+
       }
+
+      throw new StockDataNotFoundException();
     }
   }
 }
