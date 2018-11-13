@@ -14,10 +14,28 @@ import virtualgambling.model.exceptions.InvalidPurchaseOrderException;
  */
 public interface UserModel {
 
+
+  /**
+   * Creates a portfolio for this UserModel.
+   *
+   * @param portfolioName the name of the portfolio
+   */
   void createPortfolio(String portfolioName);
 
+  /**
+   * Returns a portfolio associated with given name. Returns null if there is no portfolio
+   * associated with the given name.
+   *
+   * @param portfolioName the name of the portfolio
+   * @return the portfolio
+   */
   Portfolio getPortfolio(String portfolioName);
 
+  /**
+   * Returns all portfolios for this {@link UserModel}. Returns empty list if there are none.
+   *
+   * @return all portfolios
+   */
   List<Portfolio> getAllPortfolios();
 
   /**
@@ -48,8 +66,16 @@ public interface UserModel {
                          Date date,
                          long quantity) throws IllegalArgumentException,
           InvalidPurchaseOrderException;
-
+  //todo can buy shares between 9am to 4pm on weekdays chuck holidays.
   BigDecimal getRemainingCapital();
 
-  void addShareData(Share share, Date date);
+  /**
+   * It throws a {@link IllegalArgumentException} if the given is not between 9am to 4pm on
+   * weekdays.
+   *
+   * @param share a
+   * @param date  a
+   * @throws IllegalArgumentException a
+   */
+  void addShareData(Share share, Date date) throws IllegalArgumentException;
 }
