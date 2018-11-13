@@ -6,7 +6,6 @@ import java.util.List;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
-import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -71,14 +70,4 @@ public interface UserModel {
           IllegalStateException;
 
   BigDecimal getRemainingCapital();
-
-  /**
-   * It throws a {@link IllegalArgumentException} if the given is not between 9am to 4pm on
-   * weekdays.
-   *
-   * @param share a
-   * @param date  a
-   * @throws IllegalArgumentException a
-   */
-  void addShareData(Share share, Date date) throws IllegalArgumentException;
 }

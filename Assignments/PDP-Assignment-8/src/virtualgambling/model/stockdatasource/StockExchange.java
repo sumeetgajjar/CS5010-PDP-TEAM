@@ -7,6 +7,4 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 public interface StockExchange {
   Share getPrice(String tickerName, Date date) throws StockDataNotFoundException;
-
-  void addShareData(Share share, Date date);
 }

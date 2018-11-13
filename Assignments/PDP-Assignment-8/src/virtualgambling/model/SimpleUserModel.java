@@ -6,7 +6,6 @@ import java.util.List;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
-import virtualgambling.model.bean.Share;
 import virtualgambling.model.stockdatasource.StockExchange;
 
 /**
@@ -63,10 +62,5 @@ public class SimpleUserModel implements UserModel {
   @Override
   public BigDecimal getRemainingCapital() {
     return null;
-  }
-
-  @Override
-  public void addShareData(Share share, Date date) {
-
   }
 }

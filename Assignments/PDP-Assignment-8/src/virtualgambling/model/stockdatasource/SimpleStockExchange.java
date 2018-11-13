@@ -19,9 +19,4 @@ public class SimpleStockExchange implements StockExchange {
   public Share getPrice(String tickerName, Date date) throws StockDataNotFoundException {
     return null;
   }
-
-  @Override
-  public void addShareData(Share share, Date date) {
-
-  }
 }
