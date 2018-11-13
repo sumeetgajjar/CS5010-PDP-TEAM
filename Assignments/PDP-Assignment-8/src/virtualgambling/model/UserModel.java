@@ -39,8 +39,16 @@ public interface UserModel {
                          String portfolioName,
                          Date date,
                          long quantity);
+  //todo can buy shares between 9am to 4pm on weekdays chuck holidays.
 
   BigDecimal getRemainingCapital();
 
-  void addShareData(Share share, Date date);
+  /**
+   * It should {@link IllegalArgumentException} if the given is not between 9am to 4pm on weekdays.
+   *
+   * @param share a
+   * @param date  a
+   * @throws IllegalArgumentException a
+   */
+  void addShareData(Share share, Date date) throws IllegalArgumentException;
 }

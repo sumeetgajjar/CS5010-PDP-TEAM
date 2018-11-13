@@ -6,6 +6,11 @@ import java.math.BigDecimal;
  * Created by gajjar.s, on 10:11 PM, 11/11/18
  */
 public class Share {
-  private String tickerName;
-  private BigDecimal unitPrice;
+  private final String tickerName;
+  private final BigDecimal unitPrice;
+
+  public Share(String tickerName, BigDecimal unitPrice) {
+    this.tickerName = tickerName;
+    this.unitPrice = unitPrice;
+  }
 }
