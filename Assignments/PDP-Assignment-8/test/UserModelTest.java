@@ -359,8 +359,47 @@ public class UserModelTest {
   }
 
   @Test
-  public void buyStocksOfDifferentCompanyInDifferentPortfolios() {
+  public void buyMultipleStocksWorks() {
+    Share appleShare = getAppleShare();
+    Share googleShare = getGoogleShare();
 
+    Date date = getValidDateForTrading();
+
+    UserModel userModel = getEmptyUserModel();
+    userModel.createPortfolio("p1");
+    userModel.createPortfolio("p2");
+    userModel.createPortfolio("p3");
+    userModel.addShareData(appleShare, date);
+    userModel.addShareData(googleShare, date);
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
+    userModel.buyShares(appleShare.getTickerName(), "p3", date, 1);
+    userModel.buyShares(googleShare.getTickerName(), "p2", date, 1);
+
+    Portfolio portfolio1 = userModel.getPortfolio("p1");
+    PurchaseInfo purchaseInfo1 = portfolio1.getPurchases().get(0);
+    Assert.assertEquals(1, portfolio1.getPurchases().size());
+    Assert.assertEquals(appleShare, purchaseInfo1.getShare());
+    Assert.assertEquals(new BigDecimal(10), portfolio1.getCostBasis());
+
+    Portfolio portfolio2 = userModel.getPortfolio("p2");
+    Assert.assertEquals(1, portfolio2.getPurchases().size());
+    PurchaseInfo purchaseInfo2 = portfolio2.getPurchases().get(0);
+    Assert.assertEquals(googleShare, purchaseInfo2.getShare());
+    Assert.assertEquals(new BigDecimal(11), portfolio2.getCostBasis());
+
+    Portfolio portfolio3 = userModel.getPortfolio("p3");
+    Assert.assertEquals(1, portfolio3.getPurchases().size());
+    PurchaseInfo purchaseInfo3 = portfolio3.getPurchases().get(0);
+    Assert.assertEquals(appleShare, purchaseInfo3.getShare());
+    Assert.assertEquals(new BigDecimal(10), portfolio3.getCostBasis());
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
+    portfolio1 = userModel.getPortfolio("p1");
+    purchaseInfo1 = portfolio1.getPurchases().get(1);
+    Assert.assertEquals(2, portfolio1.getPurchases().size());
+    Assert.assertEquals(appleShare, purchaseInfo1.getShare());
+    Assert.assertEquals(new BigDecimal(20), portfolio1.getCostBasis());
   }
 
   @Test
@@ -422,6 +461,10 @@ public class UserModelTest {
 
   private Share getAppleShare() {
     return new Share("AAPL", BigDecimal.TEN);
+  }
+
+  private Share getGoogleShare() {
+    return new Share("GOOG", new BigDecimal("11"));
   }
 
   private Date getFutureTime() {
