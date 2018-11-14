@@ -3,8 +3,8 @@ package virtualgambling.view;
 import java.io.IOException;
 
 /**
- * This interface represents a View for an MVC app. View can take input from User and display text
- * to the user.
+ * This interface represents a View for our VirtualGambling MVC app. View can take input from User
+ * and display text to the user.
  */
 public interface View {
 
