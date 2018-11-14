@@ -38,7 +38,7 @@ public class SimpleStockExchange implements StockExchange {
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
-    if (Utils.isFutureDate(date) || Utils.isTimeNotInBusinessHours(date)) {
+    if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
       throw new IllegalArgumentException("Cannot buy shares at given time");
     }
     return stockDataSource.getPrice(tickerName, date);
