@@ -177,7 +177,7 @@ public class SimpleUserModel implements UserModel {
   }
 
   protected Date getTodayDate() {
-    return Calendar.getInstance().getTime();
+    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
   }
 
   @Override
