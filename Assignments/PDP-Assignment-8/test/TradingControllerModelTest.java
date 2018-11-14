@@ -53,7 +53,8 @@ public class TradingControllerModelTest {
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of "
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share"
+            + "(s) of "
             + "'AAPL' at a rate of $30"
             + ".00 per stock on 2018-10-30" + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("100"))
@@ -70,13 +71,14 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.run();
-    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks "
+    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Buy Date         "
+            + "   Stocks "
             + "             Cost Price          Current "
-            + "Value\n" +
-            "\n" +
-            "Total Value:        $0.00\n" +
-            "Total Cost:         $0.00\n" +
-            "Profit:             $0.00\n";
+            + "Value\n"
+            + "\n"
+            + "Total Value:        $0.00\n"
+            + "Total Cost:         $0.00\n"
+            + "Profit:             $0.00\n";
     Assert.assertEquals(expected, appendable.toString());
   }
 
@@ -91,7 +93,8 @@ public class TradingControllerModelTest {
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share"
+            + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
             + System.lineSeparator()
             + mockedUserModel.getPortfolioComposition("p1")
@@ -109,11 +112,11 @@ public class TradingControllerModelTest {
     controller.run();
 
     String expected =
-            TestUtils.getWelcomeMessage() + System.lineSeparator() +
-                    Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
-                    System.lineSeparator() +
-                    Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
-                    System.lineSeparator();
+            TestUtils.getWelcomeMessage() + System.lineSeparator()
+                    + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
+                    + System.lineSeparator()
+                    + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
+                    + System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
   }
 
@@ -126,10 +129,10 @@ public class TradingControllerModelTest {
             readable, appendable));
     controller.run();
 
-    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() +
-            "Command not found, please try again" + System.lineSeparator() +
-            Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
-            System.lineSeparator() + "Command not found, please try again"
+    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator()
+            + "Command not found, please try again" + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
+            + System.lineSeparator() + "Command not found, please try again"
             + System.lineSeparator();
     Assert.assertEquals(expected,
             appendable.toString());
@@ -138,10 +141,10 @@ public class TradingControllerModelTest {
   @Test
   public void invalidGetPortfolioValueCommandFails() {
     Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10"
-            + "\nget_portfolio_value" +
-            "\nget_portfolio_value p1" +
-            "\nget_portfolio_value p1 2018-11-" +
-            "\nget_portfolio_value p1 2018-11-01\nquit");
+            + "\nget_portfolio_value"
+            + "\nget_portfolio_value p1"
+            + "\nget_portfolio_value p1 2018-11-"
+            + "\nget_portfolio_value p1 2018-11-01\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable,
@@ -150,49 +153,51 @@ public class TradingControllerModelTest {
     controller.run();
     String invalidCommand = "Invalid Command";
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of " +
-            "'AAPL' at a rate of $30" +
-            ".00 per stock on 2018-10-30" + System.lineSeparator() +
-            invalidCommand + System.lineSeparator() +
-            invalidCommand + System.lineSeparator() +
-            "Invalid date format" + System.lineSeparator() +
-            Utils.getFormattedCurrencyNumberString(new BigDecimal("100")) +
-            System.lineSeparator();
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share"
+            + "(s) of "
+            + "'AAPL' at a rate of $30"
+            + ".00 per stock on 2018-10-30" + System.lineSeparator()
+            + invalidCommand + System.lineSeparator()
+            + invalidCommand + System.lineSeparator()
+            + "Invalid date format" + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("100"))
+            + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
   public void incompleteCostBasisForPortfolioAsksToRetry() {
     Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10"
-            + "\nget_portfolio_cost_basis p1\nget_portfolio_cost_basis " +
-            "2018-11-10\nget_portfolio_cost_basis p1 2018-11-01\nquit");
+            + "\nget_portfolio_cost_basis p1\nget_portfolio_cost_basis "
+            + "2018-11-10\nget_portfolio_cost_basis p1 2018-11-01\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of " +
-            "'AAPL' at a rate of $30.00 per stock on " +
-            "2018-10-30" + System.lineSeparator() +
-            "Invalid Command" + System.lineSeparator() + "Invalid Command"
-            + System.lineSeparator() +
-            Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
-            System.lineSeparator();
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share"
+            + "(s) of "
+            + "'AAPL' at a rate of $30.00 per stock on "
+            + "2018-10-30" + System.lineSeparator()
+            + "Invalid Command" + System.lineSeparator() + "Invalid Command"
+            + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
+            + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
   public void incompleteBuySharesForPortfolioAsksToRetry() {
-    Readable readable = new StringReader("create_portfolio p1\n" +
-            "buy_shares AAPL\n" +
-            "buy_shares AAPL p1 2018\n" +
-            "buy_shares AAPL 2018-1\n" +
-            "buy_shares AAPL 2018-10-30\n" +
-            "buy_shares AAPL p1 2018-10-30\n" +
-            "buy_shares AAPL p1 2018-10-30 10\n" +
-            "get_portfolio_cost_basis p1 2018-11-01\n" +
-            "quit");
+    Readable readable = new StringReader("create_portfolio p1\n"
+            + "buy_shares AAPL\n"
+            + "buy_shares AAPL p1 2018\n"
+            + "buy_shares AAPL 2018-1\n"
+            + "buy_shares AAPL 2018-10-30\n"
+            + "buy_shares AAPL p1 2018-10-30\n"
+            + "buy_shares AAPL p1 2018-10-30 10\n"
+            + "get_portfolio_cost_basis p1 2018-11-01\n"
+            + "quit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
@@ -200,16 +205,16 @@ public class TradingControllerModelTest {
     controller.run();
     String invalidCommand = "Invalid Command";
 
-    String builder =
-            TestUtils.getWelcomeMessage() + System.lineSeparator() + invalidCommand + System.lineSeparator()
-                    + "Invalid date format" + System.lineSeparator() +
-                    invalidCommand + System.lineSeparator() +
-                    invalidCommand + System.lineSeparator() +
-                    invalidCommand + System.lineSeparator() +
-                    "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on " +
-                    "2018-10-30" + System.lineSeparator() +
-                    Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
-                    System.lineSeparator();
+    String builder = TestUtils.getWelcomeMessage()
+            + System.lineSeparator() + invalidCommand + System.lineSeparator()
+            + "Invalid date format" + System.lineSeparator()
+            + invalidCommand + System.lineSeparator()
+            + invalidCommand + System.lineSeparator()
+            + invalidCommand + System.lineSeparator()
+            + "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on "
+            + "2018-10-30" + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
+            + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
 
@@ -221,30 +226,31 @@ public class TradingControllerModelTest {
             readable, appendable));
     controller.run();
 
-    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() +
-            "Invalid Command" + System.lineSeparator() + "Invalid Command" + System.lineSeparator();
+    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator()
+            + "Invalid Command" + System.lineSeparator() + "Invalid Command"
+            + System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
   }
 
   @Test
   public void spaceInPortfolioNameLeadsToIgnoringOf2ndWord() {
-    Readable readable = new StringReader("create_portfolio word1 word2\nget_all_portfolios\n" +
-            "quit");
+    Readable readable = new StringReader("create_portfolio word1 word2\nget_all_portfolios\n"
+            + "quit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
     controller.run();
 
-    String expected =
-            TestUtils.getWelcomeMessage() + System.lineSeparator() + "word1" + System.lineSeparator();
+    String expected = TestUtils.getWelcomeMessage()
+            + System.lineSeparator() + "word1" + System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
   }
 
   @Test
   public void portfolioCompositionWithoutValidPortfolioNameDoesNotWork() {
     Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 1"
-            + "\nget_portfolio_composition\nget_portfolio_composition " +
-            "p\nget_portfolio_composition p1\nquit");
+            + "\nget_portfolio_composition\nget_portfolio_composition "
+            + "p\nget_portfolio_composition p1\nquit");
     Appendable appendable = new StringBuffer();
     UserModel mockedUserModel = TestUtils.getMockedUserModel();
     Controller controller = new TradingController(mockedUserModel,
@@ -252,7 +258,8 @@ public class TradingControllerModelTest {
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share"
+            + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
             + System.lineSeparator()
             + "Invalid Command"

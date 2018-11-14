@@ -111,8 +111,8 @@ public class ModelControllerViewWiringTest {
     private final int getRemainingCapitalCode;
     private final int buySharesCode;
 
-    private MockModel(StringBuilder log, int createPortfolioCode, int getCostBasisOfPortfolioCode
-            , int getPortfolioValueCode, int getPortfolioCompositionCode,
+    private MockModel(StringBuilder log, int createPortfolioCode, int getCostBasisOfPortfolioCode,
+                      int getPortfolioValueCode, int getPortfolioCompositionCode,
                       int getAllPortfolioNamesCode, int getRemainingCapitalCode,
                       int buySharesCode) {
       this.log = log;
