@@ -248,8 +248,9 @@ public class UserModelTest {
 
   @Test
   public void buyFailsDueToInsufficientFunds() throws StockDataNotFoundException {
-    UserModel userModel = getUserModelWithEmptyPortfolio();
+    UserModel userModel = TestUtils.getMockedUserModel();
     Date date = getValidDateForTrading();
+    userModel.createPortfolio("p1");
 
     try {
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date,
@@ -408,7 +409,7 @@ public class UserModelTest {
       userModel.getPortfolioValue("p1", after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Time cannot be in Future", e.getMessage());
     }
 
   }
@@ -451,12 +452,12 @@ public class UserModelTest {
             userModel.getCostBasisOfPortfolio("p1", day2));
 
     Assert.assertEquals(new BigDecimal("30"),
-            userModel.getCostBasisOfPortfolio("p1", day2));
+            userModel.getCostBasisOfPortfolio("p1", day1));
     try {
       userModel.getCostBasisOfPortfolio("p1", after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Time cannot be in Future", e.getMessage());
     }
 
   }
