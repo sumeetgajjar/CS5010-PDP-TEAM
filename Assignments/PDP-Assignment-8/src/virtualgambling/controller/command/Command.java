@@ -8,7 +8,7 @@ import virtualgambling.model.UserModel;
 public interface Command {
 
   /**
-   * Executes the command.
+   * Executes this command.
    *
    * @param userModel the userModel
    */
