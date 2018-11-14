@@ -60,11 +60,25 @@ public class Utils {
     c.setTime(date);
     int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
 
-    if (dayOfTheWeek < 1 || dayOfTheWeek > 5) {
+    if (dayOfTheWeek < 2 || dayOfTheWeek > 6) {
       return false;
     }
 
     int hour = c.get(Calendar.HOUR_OF_DAY);
     return hour < 8 || hour > 15;
+  }
+
+  public static boolean doesDatesHaveSameDay(Date date1, Date date2) {
+    return removeTimeFromDate(date1).equals(removeTimeFromDate(date2));
+  }
+
+  public static Date removeTimeFromDate(Date date) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+    return calendar.getTime();
   }
 }

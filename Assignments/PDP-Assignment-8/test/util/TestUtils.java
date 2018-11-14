@@ -60,19 +60,19 @@ public class TestUtils {
 
         calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
         Date day3 = calendar.getTime();
-        if (date.equals(day3)) {
+        if (Utils.doesDatesHaveSameDay(date, day3)) {
           return BigDecimal.TEN;
         }
 
         calendar.add(Calendar.DATE, -1);
         Date day2 = calendar.getTime();
-        if (date.equals(day2)) {
+        if (Utils.doesDatesHaveSameDay(date, day2)) {
           return new BigDecimal(20);
         }
 
         calendar.add(Calendar.DATE, -2);
         Date day1 = calendar.getTime();
-        if (date.equals(day1)) {
+        if (Utils.doesDatesHaveSameDay(date, day1)) {
           return new BigDecimal(30);
         }
 
