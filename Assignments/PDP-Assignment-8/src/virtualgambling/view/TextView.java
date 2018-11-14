@@ -3,7 +3,8 @@ package virtualgambling.view;
 import java.io.IOException;
 import java.util.Scanner;
 
-import virtualgambling.util.Utils;
+import util.Utils;
+
 
 /**
  * Created by gajjar.s, on 9:42 PM, 11/12/18
@@ -22,7 +23,7 @@ public class TextView implements View {
 
   @Override
   public String getInput() throws IOException {
-    return scanner.nextLine();
+    return scanner.next();
   }
 
   @Override

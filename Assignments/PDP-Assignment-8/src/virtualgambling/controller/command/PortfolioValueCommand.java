@@ -1,11 +1,10 @@
 package virtualgambling.controller.command;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import virtualgambling.model.UserModel;
-import virtualgambling.view.View;
 
 /**
  * Created by gajjar.s, on 12:51 AM, 11/14/18
@@ -14,17 +13,17 @@ public class PortfolioValueCommand implements Command {
 
   private final String portfolioName;
   private final Date date;
-  private final View view;
+  private final Consumer<String> consumer;
 
-  public PortfolioValueCommand(String portfolioName, Date date, View view) {
+  public PortfolioValueCommand(String portfolioName, Date date, Consumer<String> consumer) {
     this.portfolioName = portfolioName;
     this.date = date;
-    this.view = view;
+    this.consumer = consumer;
   }
 
   @Override
-  public void execute(UserModel userModel) throws IOException {
+  public void execute(UserModel userModel) {
     BigDecimal portfolioValue = userModel.getPortfolioValue(portfolioName, date);
-    view.display(portfolioValue.toPlainString());
+    this.consumer.accept(portfolioValue.toPlainString());
   }
 }

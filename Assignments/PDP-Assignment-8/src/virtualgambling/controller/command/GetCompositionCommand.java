@@ -1,9 +1,8 @@
 package virtualgambling.controller.command;
 
-import java.io.IOException;
+import java.util.function.Consumer;
 
 import virtualgambling.model.UserModel;
-import virtualgambling.view.View;
 
 /**
  * Created by gajjar.s, on 12:51 AM, 11/14/18
@@ -11,16 +10,16 @@ import virtualgambling.view.View;
 public class GetCompositionCommand implements Command {
 
   private final String portfolioName;
-  private final View view;
+  private final Consumer<String> consumer;
 
-  public GetCompositionCommand(String portfolioName, View view) {
+  public GetCompositionCommand(String portfolioName, Consumer<String> consumer) {
     this.portfolioName = portfolioName;
-    this.view = view;
+    this.consumer = consumer;
   }
 
   @Override
-  public void execute(UserModel userModel) throws IOException {
+  public void execute(UserModel userModel) {
     String portfolioComposition = userModel.getPortfolioComposition(portfolioName);
-    view.display(portfolioComposition);
+    this.consumer.accept(portfolioComposition);
   }
 }

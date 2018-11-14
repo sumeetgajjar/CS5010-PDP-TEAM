@@ -1,30 +1,29 @@
 package virtualgambling.controller.command;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import virtualgambling.model.UserModel;
-import virtualgambling.view.View;
 
 public class BuyShareCommand implements Command {
   private final String tickerName;
   private final String portfolioName;
   private final Date date;
   private final long quantity;
-  private final View view;
+  private final Consumer<String> consumer;
 
   public BuyShareCommand(String tickerName, String portfolioName, Date date, long quantity,
-                         View view) {
+                         Consumer<String> consumer) {
     this.tickerName = tickerName;
     this.portfolioName = portfolioName;
     this.date = date;
     this.quantity = quantity;
-    this.view = view;
+    this.consumer = consumer;
   }
 
   @Override
-  public void execute(UserModel userModel) throws IOException {
-    view.display(userModel.buyShares(tickerName, portfolioName, date,
+  public void execute(UserModel userModel) {
+    this.consumer.accept(userModel.buyShares(tickerName, portfolioName, date,
             quantity).toString());
   }
 }
