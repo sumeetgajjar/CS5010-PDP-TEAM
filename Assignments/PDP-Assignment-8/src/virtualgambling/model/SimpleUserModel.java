@@ -138,36 +138,37 @@ public class SimpleUserModel implements UserModel {
 
     Date dateTime = Calendar.getInstance().getTime();
     Portfolio portfolio = this.portfolios.get(portfolioName);
+    NumberFormat numberFormatter = Utils.getCurrencyNumberFormatter();
     StringBuilder composition = new StringBuilder();
-    composition.append("Buy Date\tStocks\tCost Price\tCurrent Value");
+    composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
+            "Current Value"));
     composition.append(System.lineSeparator());
     List<SharePurchaseInfo> purchases = portfolio.getPurchases();
     for (SharePurchaseInfo sharePurchaseInfo : purchases) {
-      composition.append(sharePurchaseInfo.getDate());
-      composition.append("\t");
-      composition.append(sharePurchaseInfo.getTickerName());
-      composition.append("\t");
-      composition.append(sharePurchaseInfo.getUnitPrice());
-      composition.append("\t");
-      composition.append(this.stockExchange.
-              getPrice(sharePurchaseInfo.getTickerName(), dateTime));
+      composition.append(String.format("%-20s%-20s%-20s%s",
+              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseInfo.getDate()),
+              sharePurchaseInfo.getTickerName(),
+              numberFormatter.format(sharePurchaseInfo.getUnitPrice()),
+              numberFormatter.format(this.stockExchange.
+                      getPrice(sharePurchaseInfo.getTickerName(), dateTime))));
       composition.append(System.lineSeparator());
     }
 
-    NumberFormat numberFormatter = util.Utils.getCurrencyNumberFormatter();
     BigDecimal portfolioValue = getPortfolioValue(portfolioName, dateTime);
     BigDecimal costBasisOfPortfolio = getCostBasisOfPortfolio(portfolioName, dateTime);
 
-    composition.append("Total Value:\t");
-    composition.append(numberFormatter.format(costBasisOfPortfolio));
+    composition.append(System.lineSeparator());
+    composition.append(String.format("%-20s%s", "Total Value:",
+            Utils.getCurrencyNumberFormatter().format(portfolioValue)));
     composition.append(System.lineSeparator());
 
-    composition.append("Total Cost:\t");
-    composition.append(numberFormatter.format(portfolioValue));
+    composition.append(String.format("%-20s%s", "Total Cost:",
+            Utils.getCurrencyNumberFormatter().format(costBasisOfPortfolio)));
     composition.append(System.lineSeparator());
 
-    composition.append("Profit:\t");
-    composition.append(numberFormatter.format(portfolioValue.subtract(costBasisOfPortfolio)));
+    composition.append(String.format("%-20s%s", "Profit:",
+            Utils.getCurrencyNumberFormatter().format(portfolioValue.subtract(costBasisOfPortfolio))));
+    composition.append(System.lineSeparator());
     return composition.toString();
   }
 

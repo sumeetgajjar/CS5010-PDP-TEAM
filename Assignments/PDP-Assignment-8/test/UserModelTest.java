@@ -321,15 +321,23 @@ public class UserModelTest {
 
     Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p1", date));
-    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
+    String expectedApplePurchaseComposition = "Buy Date            Stocks              Cost Price" +
+            "          Current " +
+            "Value\n" +
+            "2018-11-01          AAPL                $30.00              $30.00\n" +
+            "\n" +
+            "Total Value:        $30.00\n" +
+            "Total Cost:         $30.00\n" +
+            "Profit:             $0.00\n";
+    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p1"));
 
     Assert.assertEquals(new BigDecimal(11), userModel.getCostBasisOfPortfolio("p2", date));
     Assert.assertEquals(new BigDecimal(11), userModel.getPortfolioValue("p2", date));
-    Assert.assertEquals("", userModel.getPortfolioComposition("p2"));
+    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p2"));
 
     Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p3", date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p3", date));
-    Assert.assertEquals("", userModel.getPortfolioComposition("p3"));
+    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p3"));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
     Assert.assertEquals(new BigDecimal(20), userModel.getCostBasisOfPortfolio("p1", date));
