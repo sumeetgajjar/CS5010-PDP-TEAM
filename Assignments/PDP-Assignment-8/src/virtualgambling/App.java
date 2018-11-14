@@ -18,6 +18,8 @@ public class App {
 
   /**
    * Initializes the Model, View and Controller and start the application.
+   *
+   * @param args the args
    */
   public static void main(String[] args) {
     View view = new TextView(new InputStreamReader(System.in), System.out);
