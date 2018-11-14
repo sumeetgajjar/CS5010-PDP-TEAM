@@ -13,7 +13,7 @@ import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
- * Created by gajjar.s, on 9:52 PM, 11/12/18
+ * The class represents a Junit class to test Model in isolation.
  */
 public class UserModelTest {
 

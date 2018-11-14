@@ -11,6 +11,9 @@ import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
+/**
+ * The class represents a Junit class to test Controller and Model.
+ */
 public class TradingControllerModelTest {
   @Test
   public void creatingPortfolioWorks() {
