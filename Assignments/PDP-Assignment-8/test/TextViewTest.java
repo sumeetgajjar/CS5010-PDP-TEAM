@@ -8,7 +8,7 @@ import virtualgambling.view.TextView;
 import virtualgambling.view.View;
 
 /**
- * Created by gajjar.s, on 5:13 PM, 11/14/18
+ * Represents tests on a text view.
  */
 public class TextViewTest {
 
