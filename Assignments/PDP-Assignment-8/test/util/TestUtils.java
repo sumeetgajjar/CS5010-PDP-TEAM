@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -7,10 +7,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import util.Utils;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
 import virtualgambling.model.stockdatasource.StockExchange;

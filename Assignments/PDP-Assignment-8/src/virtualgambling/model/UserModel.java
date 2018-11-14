@@ -3,7 +3,7 @@ package virtualgambling.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import virtualgambling.model.bean.PurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -84,9 +84,10 @@ public interface UserModel {
    * @param quantity      a
    * @return a
    */
-  PurchaseInfo buyShares(String tickerName,
-                         String portfolioName,
-                         Date date,
-                         long quantity) throws IllegalArgumentException, StockDataNotFoundException,
+  SharePurchaseInfo buyShares(String tickerName,
+                              String portfolioName,
+                              Date date,
+                              long quantity) throws IllegalArgumentException,
+          StockDataNotFoundException,
           IllegalStateException;
 }

@@ -5,10 +5,10 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-import utils.TestUtils;
+import util.Share;
+import util.TestUtils;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
 import virtualgambling.model.stockexchange.SimpleStockDataSource;

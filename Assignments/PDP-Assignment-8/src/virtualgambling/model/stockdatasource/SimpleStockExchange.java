@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 
-import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockexchange.StockDataSource;
 
 /**
  * Created by gajjar.s, on 9:46 PM, 11/12/18
+ * todo: is this redundant: read about what a stock exchange is
  */
 public class SimpleStockExchange implements StockExchange {
 
@@ -20,15 +20,14 @@ public class SimpleStockExchange implements StockExchange {
   }
 
   @Override
-  public Share buyShare(String tickerName, Date date) throws StockDataNotFoundException,
+  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
           IllegalArgumentException {
 
     if (this.checkTimeNotInBusinessHours(date)) {
       throw new IllegalArgumentException("Cannot buy stock at given time");
     }
 
-    BigDecimal stockPrice = stockDataSource.getPrice(tickerName, date);
-    return new Share(tickerName, stockPrice);
+    return stockDataSource.getPrice(tickerName, date);
   }
 
   private boolean checkTimeNotInBusinessHours(Date date) {

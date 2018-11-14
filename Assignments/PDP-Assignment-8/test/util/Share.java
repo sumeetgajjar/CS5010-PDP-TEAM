@@ -1,4 +1,4 @@
-package virtualgambling.model.bean;
+package util;
 
 import java.math.BigDecimal;
 import java.util.Objects;

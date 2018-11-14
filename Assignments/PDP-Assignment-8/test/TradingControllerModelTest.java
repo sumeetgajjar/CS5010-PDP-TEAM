@@ -5,7 +5,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 
-import utils.TestUtils;
+import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;

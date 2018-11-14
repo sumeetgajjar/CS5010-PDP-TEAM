@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import virtualgambling.model.bean.Portfolio;
-import virtualgambling.model.bean.PurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.stockdatasource.StockExchange;
 import virtualgambling.util.Utils;
 
@@ -86,14 +86,13 @@ public class SimpleUserModel implements UserModel {
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
     if (Objects.nonNull(portfolio)) {
-      BigDecimal costBasis = portfolio.getPurchases().stream()
-              .filter(purchaseInfo -> purchaseInfo.getDate().compareTo(date) <= 0)
-              .map(purchaseInfo ->
-                      purchaseInfo.getShare().getUnitPrice()
-                              .multiply(new BigDecimal(purchaseInfo.getQuantity())))
-              .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-      return costBasis;
+      return portfolio.getPurchases().stream()
+              .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
+              .map(sharePurchaseInfo ->
+                      sharePurchaseInfo.getUnitPrice()
+                              .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
 
     } else {
       throw new IllegalArgumentException("Invalid input");
@@ -116,7 +115,8 @@ public class SimpleUserModel implements UserModel {
   }
 
   @Override
-  public PurchaseInfo buyShares(String tickerName, String portfolioName, Date date, long quantity) {
+  public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
+                                     long quantity) {
     return null;
   }
 

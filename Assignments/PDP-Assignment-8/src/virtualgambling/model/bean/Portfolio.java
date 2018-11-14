@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Portfolio {
   private final String name;
-  private final List<PurchaseInfo> purchases;
+  private final List<SharePurchaseInfo> purchases;
 
   public Portfolio(String name) {
     this.name = name;
@@ -20,11 +20,11 @@ public class Portfolio {
     return this.name;
   }
 
-  public List<PurchaseInfo> getPurchases() {
+  public List<SharePurchaseInfo> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
   }
 
-  public void addPurchaseInfo(PurchaseInfo purchaseInfo) {
-    this.purchases.add(purchaseInfo);
+  public void addPurchaseInfo(SharePurchaseInfo sharePurchaseInfo) {
+    this.purchases.add(sharePurchaseInfo);
   }
 }
