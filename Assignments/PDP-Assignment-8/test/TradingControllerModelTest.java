@@ -77,8 +77,7 @@ public class TradingControllerModelTest {
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
-            "Profit:             $0.00\n" +
-            "\n";
+            "Profit:             $0.00\n";
     Assert.assertEquals(expected, appendable.toString());
   }
 
