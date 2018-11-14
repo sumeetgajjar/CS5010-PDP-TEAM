@@ -15,6 +15,7 @@ import virtualgambling.controller.command.GetCompositionCommand;
 import virtualgambling.controller.command.PortfolioValueCommand;
 import virtualgambling.controller.command.RemainingCapitalCommand;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
@@ -88,7 +89,7 @@ public class TradingController implements Controller {
         }
       }
       //todo check this
-    } catch (IllegalArgumentException | IllegalStateException | StockDataNotFoundException e) {
+    } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
       this.displayOnView(e.getMessage());
     }
   }
