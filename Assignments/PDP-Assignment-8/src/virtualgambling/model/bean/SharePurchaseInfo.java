@@ -3,6 +3,8 @@ package virtualgambling.model.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import util.Utils;
+
 /**
  * Created by gajjar.s, on 8:11 PM, 11/11/18
  */
@@ -33,5 +35,11 @@ public class SharePurchaseInfo {
 
   public long getQuantity() {
     return quantity;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Purchased %d share(s) of '%s' at a rate of %s per stock on date=%s}",
+            quantity, tickerName, unitPrice, Utils.getDefaultDateFormattedDate(date));
   }
 }

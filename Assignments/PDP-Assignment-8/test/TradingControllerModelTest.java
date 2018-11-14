@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 import util.TestUtils;
+import util.Utils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
@@ -35,7 +36,7 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    NumberFormat numberFormat = TestUtils.getCurrencyNumberFormatter();
+    NumberFormat numberFormat = Utils.getCurrencyNumberFormatter();
     Assert.assertEquals(numberFormat.format(new BigDecimal("300")), appendable.toString());
   }
 
@@ -50,7 +51,7 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    NumberFormat numberFormat = TestUtils.getCurrencyNumberFormatter();
+    NumberFormat numberFormat = Utils.getCurrencyNumberFormatter();
     Assert.assertEquals(numberFormat.format(new BigDecimal("100")), appendable.toString());
   }
 

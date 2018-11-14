@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import util.Utils;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockExchange;
-import virtualgambling.util.Utils;
 
 /**
  * Created by gajjar.s, on 9:45 PM, 11/12/18
@@ -149,7 +149,7 @@ public class SimpleUserModel implements UserModel {
       composition.append(System.lineSeparator());
     }
 
-    NumberFormat numberFormatter = NumberFormat.getCurrencyInstance();
+    NumberFormat numberFormatter = util.Utils.getCurrencyNumberFormatter();
     BigDecimal portfolioValue = getPortfolioValue(portfolioName, dateTime);
     BigDecimal costBasisOfPortfolio = getCostBasisOfPortfolio(portfolioName, dateTime);
 
@@ -176,7 +176,15 @@ public class SimpleUserModel implements UserModel {
   @Override
   public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
                                      long quantity) {
-    return null;
+    BigDecimal stockPrice = this.stockExchange.getPrice(tickerName, date);
+    if (stockPrice.multiply(BigDecimal.valueOf(quantity)).compareTo(this.remainingCapital) <= 0) {
+      SharePurchaseInfo sharePurchaseInfo = new SharePurchaseInfo(tickerName, stockPrice, date,
+              quantity);
+      this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseInfo);
+      return sharePurchaseInfo;
+    } else {
+      throw new IllegalStateException("Insufficient funds");
+    }
   }
 
   @Override

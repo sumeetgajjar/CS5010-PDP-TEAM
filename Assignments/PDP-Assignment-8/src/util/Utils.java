@@ -1,6 +1,9 @@
 package util;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,5 +90,26 @@ public class Utils {
   public static <T> List<T> sliceList(List<T> fullList, int startIndex) {
     Utils.requireNonNull(fullList);
     return new ArrayList<>(fullList.subList(startIndex, fullList.size()));
+  }
+
+  /**
+   * Returns a currency formatter for the default locale.
+   *
+   * @return currency formatter
+   */
+  public static NumberFormat getCurrencyNumberFormatter() {
+    return NumberFormat.getCurrencyInstance();
+  }
+
+  /**
+   * Formats the given date into a 'yyyy-MM-dd' format.
+   *
+   * @param date date to be formatted
+   * @return formatted date in the form of a string
+   */
+  public static String getDefaultDateFormattedDate(Date date) {
+    Utils.requireNonNull(date);
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    return simpleDateFormat.format(date);
   }
 }

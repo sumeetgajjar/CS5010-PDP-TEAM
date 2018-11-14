@@ -1,7 +1,6 @@
 package util;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -21,10 +20,6 @@ public class TestUtils {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1);
     return new MockUserModel(calendar.getTime());
-  }
-
-  public static NumberFormat getCurrencyNumberFormatter() {
-    return NumberFormat.getCurrencyInstance();
   }
 
   public static class MockUserModel extends SimpleUserModel implements UserModel {
@@ -106,15 +101,15 @@ public class TestUtils {
     }
 
     composition.append("Total Value:\t");
-    composition.append(getCurrencyNumberFormatter().format(totalCost));
+    composition.append(Utils.getCurrencyNumberFormatter().format(totalCost));
     composition.append(System.lineSeparator());
 
     composition.append("Total Cost:\t");
-    composition.append(getCurrencyNumberFormatter().format(totalValue));
+    composition.append(Utils.getCurrencyNumberFormatter().format(totalValue));
     composition.append(System.lineSeparator());
 
     composition.append("Profit:\t");
-    composition.append(getCurrencyNumberFormatter().format(totalValue.subtract(totalCost)));
+    composition.append(Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost)));
     return composition.toString();
   }
 }

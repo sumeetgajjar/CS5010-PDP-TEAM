@@ -11,7 +11,6 @@ import virtualgambling.view.View;
  * Created by gajjar.s, on 12:51 AM, 11/14/18
  */
 public class CostBasisCommand implements Command {
-
   private final String portfolioName;
   private final Date date;
   private final View view;

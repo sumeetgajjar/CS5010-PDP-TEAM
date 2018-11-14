@@ -1,9 +1,9 @@
 package virtualgambling.controller.command;
 
+import java.io.IOException;
 import java.util.Date;
 
 import virtualgambling.model.UserModel;
-import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.view.View;
 
 public class BuyShareCommand implements Command {
@@ -23,10 +23,8 @@ public class BuyShareCommand implements Command {
   }
 
   @Override
-  public void execute(UserModel userModel) {
-    SharePurchaseInfo sharePurchaseInfo = userModel.buyShares(tickerName, portfolioName, date,
-            quantity);
-
-    //todo format sharePurchaseInfo and send it to view output
+  public void execute(UserModel userModel) throws IOException {
+    view.display(userModel.buyShares(tickerName, portfolioName, date,
+            quantity).toString());
   }
 }
