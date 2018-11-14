@@ -68,6 +68,11 @@ public class Utils {
     return hour < 8 || hour > 15;
   }
 
+  public static boolean isFutureDate(Date date) {
+    Date currentDate = Calendar.getInstance().getTime();
+    return date.compareTo(currentDate) > 0;
+  }
+
   public static boolean doesDatesHaveSameDay(Date date1, Date date2) {
     return removeTimeFromDate(date1).equals(removeTimeFromDate(date2));
   }
