@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -35,7 +36,7 @@ public class Utils {
    * @return currency formatter
    */
   public static NumberFormat getCurrencyNumberFormatter() {
-    return NumberFormat.getCurrencyInstance();
+    return NumberFormat.getCurrencyInstance(Locale.US);
   }
 
   /**

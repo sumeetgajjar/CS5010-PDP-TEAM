@@ -43,7 +43,10 @@ public class UserModelTest {
   public void createPortfolioWorks() {
     UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("Hello world");
-    Assert.assertEquals("Hello world", userModel.getPortfolioComposition("Hello world"));
+    Assert.assertEquals("Buy Date\tStocks\tCost Price\tCurrent Value\n" +
+            "Total Value:\t$0.00\n" +
+            "Total Cost:\t$0.00\n" +
+            "Profit:\t$0.00", userModel.getPortfolioComposition("Hello world"));
   }
 
   @Test
@@ -162,13 +165,14 @@ public class UserModelTest {
   public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     Share appleShare = getAppleShare();
+    userModel.createPortfolio("p1");
 
     try {
       Date weekendDate = getWeekendDate();
       userModel.buyShares(appleShare.getTickerName(), "p1", weekendDate, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
     }
 
     try {
@@ -176,7 +180,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", beforeOpeningTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
     }
 
     try {
@@ -184,7 +188,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", afterClosingTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
     }
 
     try {
@@ -192,7 +196,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", futureTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
     }
   }
 
