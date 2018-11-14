@@ -27,22 +27,28 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
 /**
- * Created by gajjar.s, on 9:45 PM, 11/12/18
+ * This class represents a Trading Controller for our VirtualGambling MVC app. It implements {@link
+ * Controller} interface.
  */
 public class TradingController implements Controller {
 
   private final UserModel userModel;
   private final View view;
 
-  public TradingController(UserModel userModel, View view) {
-    this.userModel = userModel;
-    this.view = view;
+  /**
+   * Constructs a object of {@link TradingController} with the given params.
+   *
+   * @param userModel the userModel
+   * @param view      the view
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public TradingController(UserModel userModel, View view) throws IllegalArgumentException {
+    this.userModel = Utils.requireNonNull(userModel);
+    this.view = Utils.requireNonNull(view);
   }
 
   @Override
   public void go() {
-
-
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
 
@@ -77,6 +83,7 @@ public class TradingController implements Controller {
   private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();
+
     commandMap.put("create_portfolio",
             (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
 
@@ -84,52 +91,39 @@ public class TradingController implements Controller {
             (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
 
     commandMap.put("get_portfolio_cost_basis",
-            (supplier, consumer) -> {
-              String portfolioName = supplier.get();
-              return new CostBasisCommand(
-                      portfolioName,
-                      getDateFromString(supplier),
-                      consumer);
-            });
+            (supplier, consumer) -> new CostBasisCommand(supplier.get(),
+                    getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_value",
-            (supplier, consumer) -> {
-              String portfolioName = supplier.get();
-              return new PortfolioValueCommand(
-                      portfolioName,
-                      getDateFromString(supplier),
-                      consumer);
-            });
+            (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
+                    getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_composition",
-            (supplier, consumer) -> {
-              String portfolioName = supplier.get();
-              return new GetCompositionCommand(portfolioName, consumer);
-            });
+            (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
 
     commandMap.put("get_remaining_capital",
             (supplier, consumer) -> new RemainingCapitalCommand(consumer));
 
-    commandMap.put("buy_shares",
-            (supplier, consumer) -> {
-              String stockName = supplier.get();
-              String portfolioName = supplier.get();
-              Date date = getDateFromString(supplier);
-              try {
-                long quantity = Long.parseLong(supplier.get());
-                return new BuyShareCommand(
-                        stockName,
-                        portfolioName,
-                        date,
-                        quantity,
-                        consumer);
-              } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Invalid quantity of shares");
-              }
-            });
-
+    commandMap.put("buy_shares", this::getBuySharesCommand);
 
     return commandMap;
+  }
+
+  private Command getBuySharesCommand(Supplier<String> supplier, Consumer<String> consumer) {
+    String stockName = supplier.get();
+    String portfolioName = supplier.get();
+    Date date = getDateFromString(supplier);
+    try {
+      long quantity = Long.parseLong(supplier.get());
+      return new BuyShareCommand(
+              stockName,
+              portfolioName,
+              date,
+              quantity,
+              consumer);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Invalid quantity of shares");
+    }
   }
 
   private void displayOnView(String text) throws IllegalStateException {
