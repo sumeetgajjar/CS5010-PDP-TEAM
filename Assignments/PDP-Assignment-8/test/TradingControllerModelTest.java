@@ -3,7 +3,6 @@ import org.junit.Test;
 
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 
 import util.TestUtils;
 import util.Utils;
@@ -36,12 +35,10 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    NumberFormat numberFormat = Utils.getCurrencyNumberFormatter();
-
     StringBuilder builder = new StringBuilder();
     builder.append("Purchased 10 share(s) of 'AAPL' at a rate of 30 per stock on 2018-10-30");
     builder.append(System.lineSeparator());
-    builder.append(numberFormat.format(new BigDecimal("300")));
+    builder.append(Utils.getFormattedCurrencyNumberString(new BigDecimal("300")));
     builder.append(System.lineSeparator());
 
     Assert.assertEquals(builder.toString(), appendable.toString());
@@ -80,8 +77,7 @@ public class TradingControllerModelTest {
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
-            "Profit:             $0.00\n" +
-            "\n";
+            "Profit:             $0.00\n";
     Assert.assertEquals(expected, appendable.toString());
   }
 

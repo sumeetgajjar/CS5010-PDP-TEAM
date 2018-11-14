@@ -2,9 +2,7 @@ package util;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
@@ -28,7 +26,6 @@ public class TestUtils {
   }
 
   public static class MockUserModel extends SimpleUserModel implements UserModel {
-
     private final StockExchange stockExchange;
     private Date mockedTodayDate;
 
@@ -43,17 +40,9 @@ public class TestUtils {
     }
 
     @Override
-    public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
-      return TestUtils.getPortfolioComposition(
-              Collections.singletonList(new Share("AAPL", new BigDecimal("30"))),
-              Collections.singletonList(new BigDecimal("30")),
-              Collections.singletonList(new BigDecimal("30")),
-              Collections.singletonList(this.mockedTodayDate),
-              new BigDecimal("30"),
-              new BigDecimal("30")
-      );
+    protected Date getTodayDate() {
+      return this.mockedTodayDate;
     }
-
   }
 
   public static class MockDataSource implements StockDataSource {
@@ -87,37 +76,5 @@ public class TestUtils {
 
       throw new StockDataNotFoundException("Stock Data not found");
     }
-  }
-
-  private static String getPortfolioComposition(List<Share> shares, List<BigDecimal> currentValue,
-                                                List<BigDecimal> costPrice, List<Date> buyDates,
-                                                BigDecimal totalCost, BigDecimal totalValue) {
-    StringBuilder composition = new StringBuilder();
-
-    composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
-            "Current Value"));
-    composition.append(System.lineSeparator());
-    for (int i = 0; i < shares.size(); i++) {
-      composition.append(String.format("%-20s%-20s%-20s%s",
-              Utils.getDefaultFormattedDateStringFromDate(buyDates.get(i)),
-              shares.get(i).getTickerName(),
-              Utils.getCurrencyNumberFormatter().format(costPrice.get(i)),
-              Utils.getCurrencyNumberFormatter().format(currentValue.get(i))));
-      composition.append(System.lineSeparator());
-    }
-
-    composition.append(System.lineSeparator());
-    composition.append(String.format("%-20s%s", "Total Value:",
-            Utils.getCurrencyNumberFormatter().format(totalValue)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Total Cost:",
-            Utils.getCurrencyNumberFormatter().format(totalCost)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Profit:",
-            Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost))));
-    composition.append(System.lineSeparator());
-    return composition.toString();
   }
 }
