@@ -154,8 +154,8 @@ public class SimpleUserModel implements UserModel {
               Utils.getDefaultFormattedDateStringFromDate(sharePurchaseInfo.getDate()),
               sharePurchaseInfo.getTickerName(),
               Utils.getFormattedCurrencyNumberString(sharePurchaseInfo.getUnitPrice()),
-              Utils.getFormattedCurrencyNumberString(this.stockExchange.
-                      getPrice(sharePurchaseInfo.getTickerName(), dateTime))));
+              Utils.getFormattedCurrencyNumberString(
+                      this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), dateTime))));
       composition.append(System.lineSeparator());
     }
 
@@ -177,7 +177,7 @@ public class SimpleUserModel implements UserModel {
   }
 
   protected Date getTodayDate() {
-    return Calendar.getInstance().getTime();
+    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
   }
 
   @Override

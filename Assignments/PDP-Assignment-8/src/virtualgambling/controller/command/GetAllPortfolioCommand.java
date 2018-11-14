@@ -13,7 +13,7 @@ public class GetAllPortfolioCommand implements Command {
   private final Consumer<String> consumer;
 
   /**
-   * Constructs a object of {@link GetAllPortfolioCommand} with the given params
+   * Constructs a object of {@link GetAllPortfolioCommand} with the given params.
    *
    * @param consumer the consumer to consume the result of command
    */

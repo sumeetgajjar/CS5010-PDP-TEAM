@@ -58,7 +58,9 @@ public class Utils {
    * @return the Date object.
    * @throws ParseException if the string cannot be parsed to an Date
    */
-  public static Date getDateFromDefaultFormattedDateString(String dateString) throws ParseException {
+  public static Date getDateFromDefaultFormattedDateString(String dateString)
+          throws ParseException {
+
     Utils.requireNonNull(dateString);
     return SIMPLE_DATE_FORMAT.parse(dateString);
   }

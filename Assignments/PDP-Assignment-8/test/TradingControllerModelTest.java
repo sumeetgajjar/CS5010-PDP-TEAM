@@ -20,7 +20,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable,
                     appendable));
-    controller.go();
+    controller.run();
     Assert.assertEquals(getWelcomeMessage() + "\np1\np2\n", appendable.toString());
   }
 
@@ -32,7 +32,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator()
             + "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30"
@@ -51,7 +51,7 @@ public class TradingControllerModelTest {
             new TextView(readable,
                     appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of "
             + "'AAPL' at a rate of $30"
@@ -69,7 +69,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
     String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks "
             + "             Cost Price          Current "
             + "Value\n" +
@@ -89,7 +89,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(mockedUserModel,
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
@@ -106,7 +106,7 @@ public class TradingControllerModelTest {
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
-    controller.go();
+    controller.run();
 
     String expected =
             getWelcomeMessage() + System.lineSeparator() +
@@ -124,7 +124,7 @@ public class TradingControllerModelTest {
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
-    controller.go();
+    controller.run();
 
     String expected = getWelcomeMessage() + System.lineSeparator() +
             "Command not found, please try again" + System.lineSeparator() +
@@ -147,7 +147,7 @@ public class TradingControllerModelTest {
             new TextView(readable,
                     appendable));
 
-    controller.go();
+    controller.run();
     String invalidCommand = "Invalid Command";
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of " +
@@ -170,7 +170,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of " +
             "'AAPL' at a rate of $30.00 per stock on " +
@@ -197,7 +197,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
     String invalidCommand = "Invalid Command";
 
     String builder =
@@ -219,7 +219,7 @@ public class TradingControllerModelTest {
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
-    controller.go();
+    controller.run();
 
     String expected = getWelcomeMessage() + System.lineSeparator() +
             "Invalid Command" + System.lineSeparator() + "Invalid Command" + System.lineSeparator();
@@ -233,7 +233,7 @@ public class TradingControllerModelTest {
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
-    controller.go();
+    controller.run();
 
     String expected =
             getWelcomeMessage() + System.lineSeparator() + "word1" + System.lineSeparator();
@@ -250,7 +250,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(mockedUserModel,
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"

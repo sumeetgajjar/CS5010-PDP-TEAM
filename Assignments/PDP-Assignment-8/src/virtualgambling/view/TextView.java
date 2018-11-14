@@ -13,9 +13,8 @@ import util.Utils;
  */
 public class TextView implements View {
 
-  private final Readable readable;
-  private final Appendable appendable;
   private final Scanner scanner;
+  private final Appendable appendable;
 
   /**
    * Constructs a object of {@link TextView} using the given params.
@@ -25,9 +24,9 @@ public class TextView implements View {
    * @throws IllegalArgumentException if the given params are null
    */
   public TextView(Readable readable, Appendable appendable) throws IllegalArgumentException {
-    this.readable = Utils.requireNonNull(readable);
+    Readable readable1 = Utils.requireNonNull(readable);
     this.appendable = Utils.requireNonNull(appendable);
-    this.scanner = new Scanner(this.readable);
+    this.scanner = new Scanner(readable1);
   }
 
   /**

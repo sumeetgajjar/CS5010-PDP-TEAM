@@ -68,6 +68,8 @@ public class SimpleStockDataSource implements StockDataSource {
       dates.add(calendar.getTime());
       calendar.add(Calendar.DATE, -1);
     }
+
+    Collections.reverse(dates);
     return dates;
   }
 }
