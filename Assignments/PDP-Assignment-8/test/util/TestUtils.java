@@ -88,28 +88,31 @@ public class TestUtils {
                                                 List<BigDecimal> costPrice, List<Date> buyDates,
                                                 BigDecimal totalCost, BigDecimal totalValue) {
     StringBuilder composition = new StringBuilder();
-    composition.append("Buy Date\tStocks\tCost Price\tCurrent Value");
+
+    composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
+            "Current Value"));
+    composition.append(System.lineSeparator());
     for (int i = 0; i < shares.size(); i++) {
-      composition.append(buyDates.get(i));
-      composition.append("\t");
-      composition.append(shares.get(i));
-      composition.append("\t");
-      composition.append(costPrice.get(i));
-      composition.append("\t");
-      composition.append(currentValue.get(i));
+      composition.append(String.format("%-20s%-20s%-20s%s",
+              Utils.getDefaultFormattedDateStringFromDate(buyDates.get(i)),
+              shares.get(i).getTickerName(),
+              Utils.getCurrencyNumberFormatter().format(costPrice.get(i)),
+              Utils.getCurrencyNumberFormatter().format(currentValue.get(i))));
       composition.append(System.lineSeparator());
     }
 
-    composition.append("Total Value:\t");
-    composition.append(Utils.getCurrencyNumberFormatter().format(totalCost));
+    composition.append(System.lineSeparator());
+    composition.append(String.format("%-20s%s", "Total Value:",
+            Utils.getCurrencyNumberFormatter().format(totalValue)));
     composition.append(System.lineSeparator());
 
-    composition.append("Total Cost:\t");
-    composition.append(Utils.getCurrencyNumberFormatter().format(totalValue));
+    composition.append(String.format("%-20s%s", "Total Cost:",
+            Utils.getCurrencyNumberFormatter().format(totalCost)));
     composition.append(System.lineSeparator());
 
-    composition.append("Profit:\t");
-    composition.append(Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost)));
+    composition.append(String.format("%-20s%s", "Profit:",
+            Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost))));
+    composition.append(System.lineSeparator());
     return composition.toString();
   }
 }
