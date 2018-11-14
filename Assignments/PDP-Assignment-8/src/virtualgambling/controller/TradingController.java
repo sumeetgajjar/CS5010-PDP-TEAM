@@ -39,12 +39,13 @@ public class TradingController implements Controller {
 
   @Override
   public void go() throws IllegalStateException {
-    try {
 
-      Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
-              this.getCommandMap();
 
-      while (true) {
+    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+            this.getCommandMap();
+
+    while (true) {
+      try {
         String commandString = getInputFromView();
 
         if (commandString.equalsIgnoreCase("q") ||
@@ -61,9 +62,9 @@ public class TradingController implements Controller {
         } else {
           this.displayOnView("Command not found");
         }
+      } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
+        this.displayOnView(e.getMessage());
       }
-    } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
-      this.displayOnView(e.getMessage());
     }
   }
 
