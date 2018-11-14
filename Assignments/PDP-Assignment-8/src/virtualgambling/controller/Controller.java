@@ -1,9 +1,12 @@
 package virtualgambling.controller;
 
 /**
- * Created by gajjar.s, on 8:42 PM, 11/12/18
+ * This interface represents a Controller for our VirtualGambling MVC app.
  */
 public interface Controller {
 
-  void go() throws IllegalStateException;
+  /**
+   * Start the program, i.e. give control to the controller
+   */
+  void go();
 }
