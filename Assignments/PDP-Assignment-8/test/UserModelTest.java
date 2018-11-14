@@ -260,14 +260,14 @@ public class UserModelTest {
     try {
       userModel.getCostBasisOfPortfolio(null, date);
       Assert.fail("should have failed");
-    } catch (IllegalStateException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.getCostBasisOfPortfolio("p1", null);
       Assert.fail("should have failed");
-    } catch (IllegalStateException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
   }

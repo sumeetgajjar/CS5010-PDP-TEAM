@@ -3,7 +3,6 @@ package util;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -65,6 +64,6 @@ public class Utils {
     }
 
     int hour = c.get(Calendar.HOUR_OF_DAY);
-    return hour >= 8 && hour <= 15;
+    return hour < 8 || hour > 15;
   }
 }
