@@ -16,7 +16,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.StockDAO;
 
 /**
- * Created by gajjar.s, on 9:45 PM, 11/12/18
+ * This class represents a Simple User Model. It implements {@link UserModel} interface.
  */
 public class SimpleUserModel implements UserModel {
 
