@@ -197,6 +197,8 @@ public class TradingControllerModelTest {
             + "buy_shares AAPL 2018-10-30\n"
             + "buy_shares AAPL p1 2018-10-30\n"
             + "buy_shares AAPL p1 2018-10-30 10\n"
+            + "buy_shares AAPL p1 2018-10-30 asd\n"
+            + "buy_shares APL p1 2018-10-30 10\n"
             + "get_portfolio_cost_basis p1 2018-11-01\n"
             + "quit");
     Appendable appendable = new StringBuffer();
@@ -214,6 +216,8 @@ public class TradingControllerModelTest {
             + invalidCommand + System.lineSeparator()
             + "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on "
             + "2018-10-30" + System.lineSeparator()
+            + "Invalid quantity of shares" + System.lineSeparator()
+            + "Stock Data not found" + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
             + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());

@@ -1,6 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -21,6 +25,30 @@ import virtualgambling.view.TextView;
 public class ModelControllerViewWiringTest {
 
   private static final Random RANDOM = new Random(System.currentTimeMillis());
+
+  @Test
+  public void closingAppendableBeforeGivingToController() throws IOException {
+    try {
+      Readable readable = new StringReader("quit\n");
+
+      ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+      BufferedWriter appendable =
+              new BufferedWriter(
+                      new OutputStreamWriter(
+                              outputBuffer));
+
+      appendable.close();
+
+
+      Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
+              new TextView(readable, appendable));
+
+      controller.run();
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertEquals("Cannot display data on view", e.getMessage());
+    }
+  }
 
   @Test
   public void testingModelControllerViewWiring() {
