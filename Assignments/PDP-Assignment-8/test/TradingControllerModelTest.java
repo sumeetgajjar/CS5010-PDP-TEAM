@@ -14,8 +14,8 @@ import virtualgambling.view.TextView;
 public class TradingControllerModelTest {
   @Test
   public void creatingPortfolioWorks() {
-    Readable readable = new StringReader("create_portfolio p1\ncreate_portfolio p2\n" +
-            "get_all_portfolios\nquit");
+    Readable readable = new StringReader("create_portfolio p1\ncreate_portfolio p2\n"
+            + "get_all_portfolios\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable,
@@ -34,11 +34,11 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    String builder = getWelcomeMessage() + System.lineSeparator() +
-            "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30" +
-            System.lineSeparator() +
-            Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
-            System.lineSeparator();
+    String builder = getWelcomeMessage() + System.lineSeparator()
+            + "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30"
+            + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
+            + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
 
@@ -53,26 +53,26 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of " +
-            "'AAPL' at a rate of $30" +
-            ".00 per stock on 2018-10-30" + System.lineSeparator() +
-            Utils.getFormattedCurrencyNumberString(new BigDecimal("100")) +
-            System.lineSeparator();
+    String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share(s) of "
+            + "'AAPL' at a rate of $30"
+            + ".00 per stock on 2018-10-30" + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("100"))
+            + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
   public void emptyPortfolioCompositionWorks() {
-    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_composition p1\n" +
-            "quit");
+    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_composition p1\n"
+            + "quit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
             new TextView(readable, appendable));
 
     controller.go();
-    String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks " +
-            "             Cost Price          Current " +
-            "Value\n" +
+    String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks "
+            + "             Cost Price          Current "
+            + "Value\n" +
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
@@ -82,8 +82,8 @@ public class TradingControllerModelTest {
 
   @Test
   public void portfolioCompositionWorks() {
-    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 1" +
-            "\nget_portfolio_composition p1\nquit");
+    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 1"
+            + "\nget_portfolio_composition p1\nquit");
     Appendable appendable = new StringBuffer();
     UserModel mockedUserModel = TestUtils.getMockedUserModel();
     Controller controller = new TradingController(mockedUserModel,
@@ -91,8 +91,8 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of " +
-            "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
+    String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
+            + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
             + System.lineSeparator()
             + mockedUserModel.getPortfolioComposition("p1")
             + System.lineSeparator();
@@ -101,8 +101,8 @@ public class TradingControllerModelTest {
 
   @Test
   public void getRemainingCapitalWorks() {
-    Readable readable = new StringReader("get_remaining_capital\ncreate_portfolio p1\n" +
-            "get_remaining_capital\nquit");
+    Readable readable = new StringReader("get_remaining_capital\ncreate_portfolio p1\n"
+            + "get_remaining_capital\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
@@ -119,8 +119,8 @@ public class TradingControllerModelTest {
 
   @Test
   public void commandNotFoundInformsUser() {
-    Readable readable = new StringReader("anything_random\nget_remaining_capital\nrandom_hello" +
-            "\nquit");
+    Readable readable = new StringReader("anything_random\nget_remaining_capital\nrandom_hello"
+            + "\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
@@ -238,6 +238,30 @@ public class TradingControllerModelTest {
     String expected =
             getWelcomeMessage() + System.lineSeparator() + "word1" + System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
+  }
+
+  @Test
+  public void portfolioCompositionWithoutValidPortfolioNameDoesNotWork() {
+    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 1"
+            + "\nget_portfolio_composition\nget_portfolio_composition " +
+            "p\nget_portfolio_composition p1\nquit");
+    Appendable appendable = new StringBuffer();
+    UserModel mockedUserModel = TestUtils.getMockedUserModel();
+    Controller controller = new TradingController(mockedUserModel,
+            new TextView(readable, appendable));
+
+    controller.go();
+
+    String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
+            + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
+            + System.lineSeparator()
+            + "Invalid Command"
+            + System.lineSeparator()
+            + "Portfolio not found"
+            + System.lineSeparator()
+            + mockedUserModel.getPortfolioComposition("p1")
+            + System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
   }
 
   private String getWelcomeMessage() {
