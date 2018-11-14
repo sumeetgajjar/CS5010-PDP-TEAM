@@ -8,7 +8,9 @@ import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
- * Created by gajjar.s, on 8:11 PM, 11/11/18
+ * This interface represents a UserModel for our VirtualGambling MVC app. A UserModel can create
+ * portfolio, get cost basis and value of a portfolio at a certain date, examine its composition,
+ * buy shares of some stock in a portfolio worth a certain amount at a certain date.
  */
 public interface UserModel {
 
