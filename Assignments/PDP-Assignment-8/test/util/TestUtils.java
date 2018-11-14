@@ -70,7 +70,7 @@ public class TestUtils {
           return new BigDecimal(20);
         }
 
-        calendar.add(Calendar.DATE, -2);
+        calendar.add(Calendar.DATE, -1);
         Date day1 = calendar.getTime();
         if (Utils.doesDatesHaveSameDay(date, day1)) {
           return new BigDecimal(30);

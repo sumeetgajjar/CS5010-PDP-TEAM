@@ -178,21 +178,12 @@ public class UserModelTest {
       Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
     }
 
-    try {
-      Date beforeOpeningTime = getDateBeforeOpeningTime();
-      userModel.buyShares(appleShare.getTickerName(), "p1", beforeOpeningTime, 1);
-      Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
-    }
+    Date beforeOpeningTime = getDateBeforeOpeningTime();
+    userModel.buyShares(appleShare.getTickerName(), "p1", beforeOpeningTime, 1);
 
-    try {
-      Date afterClosingTime = getDateAfterClosingTime();
-      userModel.buyShares(appleShare.getTickerName(), "p1", afterClosingTime, 1);
-      Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
-    }
+    Date afterClosingTime = getDateAfterClosingTime();
+    userModel.buyShares(appleShare.getTickerName(), "p1", afterClosingTime, 1);
+
 
     try {
       Date futureTime = getFutureTime();
@@ -354,7 +345,7 @@ public class UserModelTest {
     calendar.add(Calendar.DATE, -1);
     Date day2 = calendar.getTime();
 
-    calendar.add(Calendar.DATE, -2);
+    calendar.add(Calendar.DATE, -1);
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
@@ -384,10 +375,10 @@ public class UserModelTest {
     calendar.add(Calendar.DATE, -1);
     Date day2 = calendar.getTime();
 
-    calendar.add(Calendar.DATE, -2);
+    calendar.add(Calendar.DATE, -1);
     Date day1 = calendar.getTime();
 
-    calendar.add(Calendar.DATE, -3);
+    calendar.add(Calendar.DATE, -1);
     Date day0 = calendar.getTime();
 
 
@@ -429,10 +420,10 @@ public class UserModelTest {
     calendar.add(Calendar.DATE, -1);
     Date day2 = calendar.getTime();
 
-    calendar.add(Calendar.DATE, -2);
+    calendar.add(Calendar.DATE, -1);
     Date day1 = calendar.getTime();
 
-    calendar.add(Calendar.DATE, -3);
+    calendar.add(Calendar.DATE, -1);
     Date day0 = calendar.getTime();
 
 

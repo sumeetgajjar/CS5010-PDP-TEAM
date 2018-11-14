@@ -60,12 +60,7 @@ public class Utils {
     c.setTime(date);
     int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
 
-    if (dayOfTheWeek < 2 || dayOfTheWeek > 6) {
-      return true;
-    }
-
-    int hour = c.get(Calendar.HOUR_OF_DAY);
-    return hour < 8 || hour > 15;
+    return dayOfTheWeek < 2 || dayOfTheWeek > 6;
   }
 
   public static boolean isFutureDate(Date date) {
