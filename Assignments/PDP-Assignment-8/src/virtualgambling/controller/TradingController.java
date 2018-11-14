@@ -3,7 +3,12 @@ package virtualgambling.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import util.Utils;
 import virtualgambling.controller.command.BuyShareCommand;
@@ -35,72 +40,88 @@ public class TradingController implements Controller {
   @Override
   public void go() throws IllegalStateException {
     try {
+
+      Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+              this.getCommandMap();
+
       while (true) {
-        Command command = null;
-        String portfolioName;
         String commandString = getInputFromView();
-        switch (commandString) {
-          case "q":
-          case "quit":
-            return;
-          case "create_portfolio":
-            command = new CreatePortfolioCommand(this.getInputFromView());
-            break;
-          case "get_all_portfolios":
-            command = new GetAllPortfolioCommand(this::displayOnView);
-            break;
-          case "get_portfolio_cost_basis":
-            portfolioName = this.getInputFromView();
-            command = new CostBasisCommand(
-                    portfolioName,
-                    this.getDateFromView(),
-                    this::displayOnView);
-            break;
-          case "get_portfolio_value":
-            portfolioName = this.getInputFromView();
-            command = new PortfolioValueCommand(
-                    portfolioName,
-                    getDateFromView(),
-                    this::displayOnView);
-            break;
-          case "get_portfolio_composition":
-            portfolioName = this.getInputFromView();
-            command = new GetCompositionCommand(portfolioName, this::displayOnView);
-            break;
-          case "get_remaining_capital":
-            command = new RemainingCapitalCommand(this::displayOnView);
-            break;
-          case "buy_shares":
-            String stockName = getInputFromView();
-            portfolioName = getInputFromView();
-            long quantity = Long.parseLong(getInputFromView());
-            command = new BuyShareCommand(
-                    stockName,
-                    portfolioName,
-                    this.getDateFromView(),
-                    quantity,
-                    this::displayOnView);
-            break;
-          default:
-            this.displayOnView("Command not found");
+
+        if (commandString.equalsIgnoreCase("q") ||
+                commandString.equalsIgnoreCase("quit")) {
+          return;
         }
-        if (Objects.nonNull(command)) {
-          command.execute(userModel);
+
+        BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
+                commandMap.get(commandString);
+
+        if (Objects.nonNull(biFunction)) {
+          Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
+          command.execute(this.userModel);
+        } else {
+          this.displayOnView("Command not found");
         }
       }
-      //todo check this
     } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
       this.displayOnView(e.getMessage());
     }
   }
 
-  private Date getDateFromView() throws IllegalArgumentException {
-    String dateString = getInputFromView();
-    try {
-      return Utils.getDateFromDefaultFormattedDateString(dateString);
-    } catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date format");
-    }
+  private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+            new HashMap<>();
+    commandMap.put("create_portfolio",
+            (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
+
+    commandMap.put("get_all_portfolios",
+            (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
+
+    commandMap.put("get_portfolio_cost_basis",
+            (supplier, consumer) -> {
+              String portfolioName = supplier.get();
+              return new CostBasisCommand(
+                      portfolioName,
+                      getDateFromString(supplier),
+                      consumer);
+            });
+
+    commandMap.put("get_portfolio_value",
+            (supplier, consumer) -> {
+              String portfolioName = supplier.get();
+              return new PortfolioValueCommand(
+                      portfolioName,
+                      getDateFromString(supplier),
+                      consumer);
+            });
+
+    commandMap.put("get_portfolio_composition",
+            (supplier, consumer) -> {
+              String portfolioName = supplier.get();
+              return new GetCompositionCommand(portfolioName, consumer);
+            });
+
+    commandMap.put("get_remaining_capital",
+            (supplier, consumer) -> new RemainingCapitalCommand(consumer));
+
+    commandMap.put("buy_shares",
+            (supplier, consumer) -> {
+              String stockName = supplier.get();
+              String portfolioName = supplier.get();
+              try {
+                long quantity = Long.parseLong(supplier.get());
+                return new BuyShareCommand(
+                        stockName,
+                        portfolioName,
+                        getDateFromString(supplier),
+                        quantity,
+                        consumer);
+              } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid quantity of shares");
+              }
+            });
+
+
+    return commandMap;
   }
 
   private void displayOnView(String text) throws IllegalStateException {
@@ -117,6 +138,14 @@ public class TradingController implements Controller {
       return view.getInput();
     } catch (IOException e) {
       throw new IllegalStateException("Cannot get data from view");
+    }
+  }
+
+  private static Date getDateFromString(Supplier<String> supplier) throws IllegalArgumentException {
+    try {
+      return Utils.getDateFromDefaultFormattedDateString(supplier.get());
+    } catch (ParseException e) {
+      throw new IllegalArgumentException("Invalid date format");
     }
   }
 }
