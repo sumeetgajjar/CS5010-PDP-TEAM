@@ -94,8 +94,6 @@ public class SimpleUserModel implements UserModel {
                     sharePurchaseInfo.getUnitPrice()
                             .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-
   }
 
   /**
