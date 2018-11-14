@@ -488,13 +488,13 @@ public class UserModelTest {
 
   private static Date getDateAfterClosingTime() {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(2018, Calendar.NOVEMBER, 1, 4, 1);
+    calendar.set(2018, Calendar.NOVEMBER, 1, 4, 0);
     return calendar.getTime();
   }
 
   private static Date getDateBeforeOpeningTime() {
     Calendar calendar = Calendar.getInstance();
-    calendar.set(2018, Calendar.NOVEMBER, 1, 8, 59);
+    calendar.set(2018, Calendar.NOVEMBER, 1, 7, 59);
     return calendar.getTime();
   }
 
