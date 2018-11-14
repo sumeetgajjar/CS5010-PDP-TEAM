@@ -2,17 +2,31 @@ package virtualgambling.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
 import virtualgambling.model.stockdatasource.StockExchange;
+import virtualgambling.util.Utils;
 
 /**
  * Created by gajjar.s, on 9:45 PM, 11/12/18
  */
 public class SimpleUserModel implements UserModel {
 
-  public SimpleUserModel(StockExchange stockExchange) {
+  private final StockExchange stockExchange;
+  private final Map<String, Portfolio> portfolios;
 
+  /**
+   * Constructs a {@link SimpleUserModel} object with given params.
+   *
+   * @param stockExchange the stockExchange
+   * @throws IllegalArgumentException if the given stockExchange is null
+   */
+  public SimpleUserModel(StockExchange stockExchange) throws IllegalArgumentException {
+    this.stockExchange = Utils.requireNonNull(stockExchange);
+    this.portfolios = new HashMap<>();
   }
 
   /**
@@ -27,7 +41,20 @@ public class SimpleUserModel implements UserModel {
    */
   @Override
   public void createPortfolio(String portfolioName) throws IllegalArgumentException {
+    if (this.portfolios.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio already exists");
+    }
 
+    if (portfolioName.length() == 0) {
+      throw new IllegalArgumentException("Invalid Portfolio Name");
+    }
+
+    if (portfolioName.trim().length() != portfolioName.length()) {
+      throw new IllegalArgumentException("Invalid Portfolio Name");
+    }
+
+    Portfolio portfolio = new Portfolio(portfolioName);
+    this.portfolios.put(portfolioName, portfolio);
   }
 
   @Override
