@@ -1,11 +1,12 @@
 package virtualgambling.model;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import virtualgambling.model.bean.Portfolio;
@@ -86,18 +87,15 @@ public class SimpleUserModel implements UserModel {
     this.checkSanity(portfolioName, date);
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
-    if (Objects.nonNull(portfolio)) {
 
-      return portfolio.getPurchases().stream()
-              .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
-              .map(sharePurchaseInfo ->
-                      sharePurchaseInfo.getUnitPrice()
-                              .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
-              .reduce(BigDecimal.ZERO, BigDecimal::add);
+    return portfolio.getPurchases().stream()
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
+            .map(sharePurchaseInfo ->
+                    sharePurchaseInfo.getUnitPrice()
+                            .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-    } else {
-      throw new IllegalArgumentException("Invalid input");
-    }
+
   }
 
   /**
@@ -122,34 +120,52 @@ public class SimpleUserModel implements UserModel {
     this.checkSanity(portfolioName, date);
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
-    if (Objects.nonNull(portfolio)) {
-
-      BigDecimal totalPortfolioValue = BigDecimal.ZERO;
-      for (SharePurchaseInfo sharePurchaseInfo : portfolio.getPurchases()) {
-        long quantity = sharePurchaseInfo.getQuantity();
-        BigDecimal price = this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
-        totalPortfolioValue = price.multiply(new BigDecimal(quantity));
-      }
-      return totalPortfolioValue;
-
-    } else {
-      throw new IllegalArgumentException("Invalid input");
+    BigDecimal totalPortfolioValue = BigDecimal.ZERO;
+    for (SharePurchaseInfo sharePurchaseInfo : portfolio.getPurchases()) {
+      long quantity = sharePurchaseInfo.getQuantity();
+      BigDecimal price = this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
+      totalPortfolioValue = price.multiply(new BigDecimal(quantity));
     }
-  }
-
-  private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
-    Utils.requireNonNull(portfolioName);
-    Utils.requireNonNull(date);
-
-    Date currentDate = Calendar.getInstance().getTime();
-    if (date.compareTo(currentDate) > 0) {
-      throw new IllegalArgumentException("Invalid input");
-    }
+    return totalPortfolioValue;
   }
 
   @Override
   public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
-    return null;
+    if (!this.portfolios.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio not found");
+    }
+
+    Date dateTime = Calendar.getInstance().getTime();
+    Portfolio portfolio = this.portfolios.get(portfolioName);
+    StringBuilder composition = new StringBuilder();
+    composition.append("Buy Date\tStocks\tCost Price\tCurrent Value");
+    List<SharePurchaseInfo> purchases = portfolio.getPurchases();
+    for (SharePurchaseInfo sharePurchaseInfo : purchases) {
+      composition.append(sharePurchaseInfo.getDate());
+      composition.append("\t");
+      composition.append(sharePurchaseInfo.getTickerName());
+      composition.append("\t");
+      composition.append(sharePurchaseInfo.getUnitPrice());
+      composition.append("\t");
+      composition.append(this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), dateTime));
+      composition.append(System.lineSeparator());
+    }
+
+    NumberFormat numberFormatter = NumberFormat.getCurrencyInstance();
+    BigDecimal portfolioValue = getPortfolioValue(portfolioName, dateTime);
+    BigDecimal costBasisOfPortfolio = getCostBasisOfPortfolio(portfolioName, dateTime);
+
+    composition.append("Total Value:\t");
+    composition.append(numberFormatter.format(costBasisOfPortfolio));
+    composition.append(System.lineSeparator());
+
+    composition.append("Total Cost:\t");
+    composition.append(numberFormatter.format(portfolioValue));
+    composition.append(System.lineSeparator());
+
+    composition.append("Profit:\t");
+    composition.append(numberFormatter.format(portfolioValue.subtract(costBasisOfPortfolio)));
+    return composition.toString();
   }
 
   @Override
@@ -168,5 +184,19 @@ public class SimpleUserModel implements UserModel {
   @Override
   public BigDecimal getRemainingCapital() {
     return this.remainingCapital;
+  }
+
+  private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
+    Utils.requireNonNull(portfolioName);
+    Utils.requireNonNull(date);
+
+    if (!this.portfolios.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio not found");
+    }
+
+    Date currentDate = Calendar.getInstance().getTime();
+    if (date.compareTo(currentDate) > 0) {
+      throw new IllegalArgumentException("Date cannot be in the future");
+    }
   }
 }
