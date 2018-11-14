@@ -28,6 +28,13 @@ public interface UserModel {
    */
   BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date);
 
+  /**
+   * Returns the total value of the given portfolio at the given date.
+   *
+   * @param portfolioName the portfolioName
+   * @param date          the date
+   * @return the total value of the portfolio
+   */
   BigDecimal getPortfolioValue(String portfolioName, Date date);
 
   /**

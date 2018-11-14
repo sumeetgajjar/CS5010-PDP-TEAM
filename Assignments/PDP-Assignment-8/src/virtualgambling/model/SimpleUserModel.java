@@ -82,13 +82,8 @@ public class SimpleUserModel implements UserModel {
   @Override
   public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date)
           throws IllegalArgumentException {
-    Utils.requireNonNull(portfolioName);
-    Utils.requireNonNull(date);
 
-    Date currentDate = Calendar.getInstance().getTime();
-    if (date.compareTo(currentDate) > 0) {
-      throw new IllegalArgumentException("Invalid input");
-    }
+    this.checkSanity(portfolioName, date);
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
     if (Objects.nonNull(portfolio)) {
@@ -105,12 +100,26 @@ public class SimpleUserModel implements UserModel {
     }
   }
 
+  /**
+   * Returns the total value of the given portfolio at the given date. It throws {@link
+   * IllegalArgumentException} in the following cases.
+   * <ul>
+   * <li>If any of the given param is null</li>
+   * <li>If the given portfolio does not exists</li>
+   * <li>If the given date is greater than current date</li>
+   * </ul>
+   *
+   * @param portfolioName the portfolioName
+   * @param date          the date
+   * @return the total value of the portfolio
+   * @throws StockDataNotFoundException if the data is not found for the given date
+   * @throws IllegalArgumentException   if the given params are invalid
+   */
   @Override
   public BigDecimal getPortfolioValue(String portfolioName, Date date)
-          throws StockDataNotFoundException {
+          throws StockDataNotFoundException, IllegalArgumentException {
 
-    Utils.requireNonNull(portfolioName);
-    Utils.requireNonNull(date);
+    this.checkSanity(portfolioName, date);
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
     if (Objects.nonNull(portfolio)) {
@@ -124,6 +133,16 @@ public class SimpleUserModel implements UserModel {
       return totalPortfolioValue;
 
     } else {
+      throw new IllegalArgumentException("Invalid input");
+    }
+  }
+
+  private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
+    Utils.requireNonNull(portfolioName);
+    Utils.requireNonNull(date);
+
+    Date currentDate = Calendar.getInstance().getTime();
+    if (date.compareTo(currentDate) > 0) {
       throw new IllegalArgumentException("Invalid input");
     }
   }
