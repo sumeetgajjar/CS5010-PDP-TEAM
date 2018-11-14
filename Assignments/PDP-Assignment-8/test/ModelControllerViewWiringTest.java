@@ -18,12 +18,12 @@ import virtualgambling.view.TextView;
 /**
  * Created by gajjar.s, on 5:17 PM, 11/14/18
  */
-public class ModelControllerViewTest {
+public class ModelControllerViewWiringTest {
 
   private static final Random RANDOM = new Random(System.currentTimeMillis());
 
   @Test
-  public void testingControllerSendsCorrectInputToModel() {
+  public void testingModelControllerViewWiring() {
     Readable readable = new StringReader("create_portfolio p1\nget_portfolio_cost_basis p1 "
             + "2018-11-11\nget_portfolio_value p1 2018-11-11\nget_portfolio_composition "
             + "p1\nget_all_portfolios\nget_remaining_capital\nbuy_shares AAPL p1 2018-11-11 10\nq");
