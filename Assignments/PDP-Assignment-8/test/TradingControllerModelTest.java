@@ -11,7 +11,6 @@ import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
-// todo write buy shares share purchase info output in stringbuffer
 public class TradingControllerModelTest {
   @Test
   public void creatingPortfolioWorks() {
@@ -35,13 +34,11 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    StringBuilder builder = new StringBuilder();
-    builder.append("Purchased 10 share(s) of 'AAPL' at a rate of 30 per stock on 2018-10-30");
-    builder.append(System.lineSeparator());
-    builder.append(Utils.getFormattedCurrencyNumberString(new BigDecimal("300")));
-    builder.append(System.lineSeparator());
-
-    Assert.assertEquals(builder.toString(), appendable.toString());
+    String builder = "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30" +
+            System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
+            System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
@@ -55,8 +52,8 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    StringBuilder builder = new StringBuilder("Purchased 10 share(s) of 'AAPL' at a rate of 30 " +
-            "per stock on 2018-10-30");
+    StringBuilder builder = new StringBuilder("Purchased 10 share(s) of 'AAPL' at a rate of $30" +
+            ".00 per stock on 2018-10-30");
     builder.append(System.lineSeparator());
     builder.append(Utils.getFormattedCurrencyNumberString(new BigDecimal("100")));
     builder.append(System.lineSeparator());
@@ -92,13 +89,11 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    StringBuilder builder = new StringBuilder("Purchased 1 share(s) of 'AAPL' at a rate of 30 per" +
-            " stock on 2018-10-30");
-    builder.append(System.lineSeparator());
-    builder.append(mockedUserModel.getPortfolioComposition("p1"));
-    builder.append(System.lineSeparator());
-
-    Assert.assertEquals(builder.toString(), appendable.toString());
+    String builder = "Purchased 1 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30"
+            + System.lineSeparator()
+            + mockedUserModel.getPortfolioComposition("p1")
+            + System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
@@ -109,14 +104,11 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
     controller.go();
-    StringBuilder expected = new StringBuilder(
-            Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL))
-            .append(System.lineSeparator())
-            .append(Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL))
-            .append(System.lineSeparator());
 
-    Assert.assertEquals(expected.toString(), appendable.toString());
+    String expected = Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
+            System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
+            System.lineSeparator();
+    Assert.assertEquals(expected, appendable.toString());
   }
-
-
 }
