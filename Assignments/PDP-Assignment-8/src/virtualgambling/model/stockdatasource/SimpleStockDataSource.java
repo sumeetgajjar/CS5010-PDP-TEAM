@@ -14,7 +14,11 @@ import java.util.Objects;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
- * Created by gajjar.s, on 9:47 PM, 11/12/18
+ * <code>SimpleStockDataSource</code> implements the <code>StockDataSource</code> interface and
+ * provides data from an in memory source of stock prices for the last ten days.
+ *
+ * <p>It provides stock prices for the last 10 days of the following tickers ["AAPL", "GOOG",
+ * "GE", "BAC", "ORCL", "VZ", "MS", "T"].
  */
 public class SimpleStockDataSource implements StockDataSource {
 
