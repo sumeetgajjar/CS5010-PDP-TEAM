@@ -246,7 +246,8 @@ public class UserModelTest {
 
     try {
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date,
-              TestUtils.DEFAULT_USER_CAPITAL.divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
+              TestUtils.DEFAULT_USER_CAPITAL
+                      .divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
       Assert.assertEquals("Insufficient funds", e.getMessage());
