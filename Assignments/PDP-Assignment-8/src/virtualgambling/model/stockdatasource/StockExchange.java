@@ -6,5 +6,6 @@ import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 public interface StockExchange {
-  Share getPrice(String tickerName, Date date) throws StockDataNotFoundException;
+  Share buyShare(String tickerName, Date date) throws StockDataNotFoundException,
+          IllegalArgumentException;
 }

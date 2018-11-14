@@ -24,7 +24,7 @@ public class Portfolio {
     return Collections.unmodifiableList(this.purchases);
   }
 
-  PurchaseInfo addPurchaseInfo(PurchaseInfo purchaseInfo) {
-    return null;
+  public void addPurchaseInfo(PurchaseInfo purchaseInfo) {
+    this.purchases.add(purchaseInfo);
   }
 }
