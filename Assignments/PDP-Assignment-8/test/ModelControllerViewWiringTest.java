@@ -10,7 +10,7 @@ import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.TextView;
@@ -175,14 +175,14 @@ public class ModelControllerViewWiringTest {
     }
 
     @Override
-    public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
-                                       long quantity) throws IllegalArgumentException,
+    public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
+                                        long quantity) throws IllegalArgumentException,
             StockDataNotFoundException, InsufficientCapitalException {
       this.log.append(buySharesCode);
       this.log.append(System.lineSeparator());
       this.log.append(tickerName).append(portfolioName).append(date).append(quantity);
       this.log.append(System.lineSeparator());
-      return new SharePurchaseInfo(tickerName, BigDecimal.TEN, date, 11);
+      return new SharePurchaseOrder(tickerName, BigDecimal.TEN, date, 11);
     }
   }
 }

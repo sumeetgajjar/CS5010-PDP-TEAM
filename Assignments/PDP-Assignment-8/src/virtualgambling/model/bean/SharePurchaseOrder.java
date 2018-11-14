@@ -15,7 +15,7 @@ public class SharePurchaseOrder {
   private final long quantity;
 
   /**
-   * Constructs a Object of {@link SharePurchaseOrder} with the given params.
+   * Constructs an instance of {@link SharePurchaseOrder} with the given params.
    *
    * @param tickerName the name of the share purchased
    * @param unitPrice  the unit price of the share purchased
