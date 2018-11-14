@@ -52,13 +52,11 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    StringBuilder builder = new StringBuilder("Purchased 10 share(s) of 'AAPL' at a rate of $30" +
-            ".00 per stock on 2018-10-30");
-    builder.append(System.lineSeparator());
-    builder.append(Utils.getFormattedCurrencyNumberString(new BigDecimal("100")));
-    builder.append(System.lineSeparator());
-
-    Assert.assertEquals(builder.toString(), appendable.toString());
+    String builder = "Purchased 10 share(s) of 'AAPL' at a rate of $30" +
+            ".00 per stock on 2018-10-30" + System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(new BigDecimal("100")) +
+            System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
@@ -128,6 +126,31 @@ public class TradingControllerModelTest {
                     + System.lineSeparator();
     Assert.assertEquals(expected,
             appendable.toString());
+  }
+
+  @Test
+  public void invalidGetPortfolioValueCommandFails() {
+    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10" +
+            "\nget_portfolio_value" +
+            "\nget_portfolio_value p1" +
+            "\nget_portfolio_value p1 2018-11-" +
+            "\nget_portfolio_value p1 2018-11-01\nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+            new TextView(readable,
+                    appendable));
+
+    controller.go();
+    String invalidCommand = "Invalid Command";
+
+    String builder = "Purchased 10 share(s) of 'AAPL' at a rate of $30" +
+            ".00 per stock on 2018-10-30" + System.lineSeparator() +
+            invalidCommand + System.lineSeparator() +
+            invalidCommand + System.lineSeparator() +
+            "Invalid date format" + System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(new BigDecimal("100")) +
+            System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
   }
 
   @Test
