@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -46,7 +48,9 @@ public class TradingController implements Controller {
 
     while (true) {
       try {
-        String commandString = getInputFromView();
+        String inputFromView = getInputFromView();
+        Scanner scanner = new Scanner(inputFromView);
+        String commandString = scanner.next();
 
         if (commandString.equalsIgnoreCase("q") ||
                 commandString.equalsIgnoreCase("quit")) {
@@ -57,11 +61,13 @@ public class TradingController implements Controller {
                 commandMap.get(commandString);
 
         if (Objects.nonNull(biFunction)) {
-          Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
+          Command command = biFunction.apply(scanner::next, this::displayOnView);
           command.execute(this.userModel);
         } else {
           this.displayOnView("Command not found");
         }
+      } catch (NoSuchElementException e) {
+        this.displayOnView("Invalid Command");
       } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
         this.displayOnView(e.getMessage());
       }

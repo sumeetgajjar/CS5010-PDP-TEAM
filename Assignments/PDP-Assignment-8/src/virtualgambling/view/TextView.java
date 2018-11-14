@@ -22,8 +22,8 @@ public class TextView implements View {
   }
 
   @Override
-  public String getInput() throws IOException {
-    return scanner.next();
+  public String getInput() {
+    return scanner.nextLine();
   }
 
   @Override
