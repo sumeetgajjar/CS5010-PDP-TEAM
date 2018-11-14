@@ -48,7 +48,7 @@ public class TradingController implements Controller {
   }
 
   @Override
-  public void go() {
+  public void run() {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
 
@@ -58,8 +58,8 @@ public class TradingController implements Controller {
         Scanner scanner = new Scanner(inputFromView);
         String commandString = scanner.next();
 
-        if (commandString.equalsIgnoreCase("q") ||
-                commandString.equalsIgnoreCase("quit")) {
+        if (commandString.equalsIgnoreCase("q")
+                || commandString.equalsIgnoreCase("quit")) {
           return;
         }
 
@@ -74,7 +74,8 @@ public class TradingController implements Controller {
         }
       } catch (NoSuchElementException e) {
         this.displayOnView("Invalid Command");
-      } catch (IllegalArgumentException | InsufficientCapitalException | StockDataNotFoundException e) {
+      } catch (IllegalArgumentException
+              | InsufficientCapitalException | StockDataNotFoundException e) {
         this.displayOnView(e.getMessage());
       }
     }
@@ -85,24 +86,24 @@ public class TradingController implements Controller {
             new HashMap<>();
 
     commandMap.put("create_portfolio",
-            (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
+        (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
 
     commandMap.put("get_all_portfolios",
-            (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
+        (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
 
     commandMap.put("get_portfolio_cost_basis",
-            (supplier, consumer) -> new CostBasisCommand(supplier.get(),
+        (supplier, consumer) -> new CostBasisCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_value",
-            (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
+        (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_composition",
-            (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
+        (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
 
     commandMap.put("get_remaining_capital",
-            (supplier, consumer) -> new RemainingCapitalCommand(consumer));
+        (supplier, consumer) -> new RemainingCapitalCommand(consumer));
 
     commandMap.put("buy_shares", this::getBuySharesCommand);
 

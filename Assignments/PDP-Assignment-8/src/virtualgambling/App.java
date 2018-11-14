@@ -12,13 +12,17 @@ import virtualgambling.view.TextView;
 import virtualgambling.view.View;
 
 /**
- * Created by gajjar.s, on 9:41 PM, 11/12/18
+ * The class represents a Runner for the VirtualGambling MVC app.
  */
 public class App {
+
+  /**
+   * Initializes the Model, View and Controller and start the application.
+   */
   public static void main(String[] args) {
     View view = new TextView(new InputStreamReader(System.in), System.out);
     UserModel userModel = new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
     Controller controller = new TradingController(userModel, view);
-    controller.go();
+    controller.run();
   }
 }
