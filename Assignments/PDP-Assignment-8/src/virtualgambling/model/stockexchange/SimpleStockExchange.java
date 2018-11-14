@@ -1,4 +1,4 @@
-package virtualgambling.model.stockdatasource;
+package virtualgambling.model.stockexchange;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockexchange.StockDataSource;
+import virtualgambling.model.stockdatasource.StockDataSource;
 
 /**
  * Created by gajjar.s, on 9:46 PM, 11/12/18
@@ -40,7 +40,7 @@ public class SimpleStockExchange implements StockExchange {
     Utils.requireNonNull(date);
 
     if (Utils.checkTimeNotInBusinessHours(date)) {
-      throw new IllegalArgumentException("Cannot buy stock at given time");
+      throw new IllegalArgumentException("Cannot buy shares at given time");
     }
     return stockDataSource.getPrice(tickerName, date);
   }

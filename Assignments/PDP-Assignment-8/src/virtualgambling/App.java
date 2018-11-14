@@ -6,8 +6,8 @@ import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.stockdatasource.SimpleStockExchange;
-import virtualgambling.model.stockexchange.SimpleStockDataSource;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.stockexchange.SimpleStockExchange;
 import virtualgambling.view.TextView;
 import virtualgambling.view.View;
 

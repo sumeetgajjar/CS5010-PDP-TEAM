@@ -10,8 +10,8 @@ import util.TestUtils;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdatasource.SimpleStockExchange;
-import virtualgambling.model.stockexchange.SimpleStockDataSource;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.stockexchange.SimpleStockExchange;
 
 /**
  * Created by gajjar.s, on 9:52 PM, 11/12/18
@@ -25,16 +25,19 @@ public class UserModelTest {
       userModel.getPortfolioComposition("test");
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Portfolio does not exists", e.getMessage());
+      Assert.assertEquals("Portfolio not found", e.getMessage());
     }
 
     userModel.createPortfolio("test");
 
     Date date = new Date();
 
-    Assert.assertEquals("", userModel.getPortfolioComposition("test"));
-    Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("p1", date));
-    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("p1", date));
+    Assert.assertEquals("Buy Date\tStocks\tCost Price\tCurrent Value\n" +
+            "Total Value:\t$0.00\n" +
+            "Total Cost:\t$0.00\n" +
+            "Profit:\t$0.00", userModel.getPortfolioComposition("test"));
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("test", date));
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("test", date));
 
     Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
   }
@@ -108,14 +111,14 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 0);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Quantity has to be positive", e.getMessage());
+      Assert.assertEquals("Quantity has to be positive", e.getMessage());
     }
 
     try {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, -1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Quantity has to be positive", e.getMessage());
+      Assert.assertEquals("Quantity has to be positive", e.getMessage());
     }
   }
 
@@ -157,7 +160,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Portfolio does not exist", e.getMessage());
+      Assert.assertEquals("Portfolio does not exist", e.getMessage());
     }
   }
 
@@ -216,15 +219,16 @@ public class UserModelTest {
   @Test
   public void buyingStockWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
+    userModel.createPortfolio("p1");
     try {
       Calendar calendar = Calendar.getInstance();
-      calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+      calendar.set(2018, Calendar.JULY, 1, 10, 0);
       calendar.add(Calendar.DATE, -1);
       Date date = calendar.getTime();
 
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
+    } catch (StockDataNotFoundException e) {
       Assert.assertNull("Stock Data not found", e.getMessage());
     }
   }
@@ -232,11 +236,12 @@ public class UserModelTest {
   @Test
   public void buyingFailsForInvalidTickerName() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
+    userModel.createPortfolio("p1");
     try {
       userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Stock Data not found", e.getMessage());
+      Assert.assertEquals("Stock Data not found", e.getMessage());
     }
   }
 
