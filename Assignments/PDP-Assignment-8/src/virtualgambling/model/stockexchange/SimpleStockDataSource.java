@@ -18,7 +18,8 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
  */
 public class SimpleStockDataSource implements StockDataSource {
 
-  private static final Map<String, Map<Date, BigDecimal>> STOCK_PRICES = getDefaultStockPrices();
+  private static final Map<String, Map<Date, BigDecimal>> STOCK_PRICES =
+          getStockPricesForLast10Days();
 
   @Override
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
@@ -31,23 +32,19 @@ public class SimpleStockDataSource implements StockDataSource {
     }
   }
 
-  private static Map<String, Map<Date, BigDecimal>> getDefaultStockPrices() {
+  private static Map<String, Map<Date, BigDecimal>> getStockPricesForLast10Days() {
     Calendar calendar = Calendar.getInstance();
-    List<Date> dates = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
-      dates.add(calendar.getTime());
-      calendar.add(Calendar.DATE, -1);
-    }
+    List<Date> dates = getDatesForLast10Days(calendar);
 
+    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
     BigDecimal stockPrice = new BigDecimal(10);
     Map<String, Map<Date, BigDecimal>> stockPrices = new LinkedHashMap<>();
-    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
     for (int i = 0; i < stocks.size(); i++) {
       String stockName = stocks.get(i);
       for (int j = 0; j < dates.size(); j++) {
 
-        Map<Date, BigDecimal> dateToPriceMap = stockPrices.getOrDefault(stockName,
-                new LinkedHashMap<>());
+        Map<Date, BigDecimal> dateToPriceMap =
+                stockPrices.getOrDefault(stockName, new LinkedHashMap<>());
         dateToPriceMap.put(dates.get(j), stockPrice);
 
         stockPrice = stockPrice.add(BigDecimal.TEN);
@@ -57,7 +54,12 @@ public class SimpleStockDataSource implements StockDataSource {
     return stockPrices;
   }
 
-  public static void main(String[] args) {
-    System.out.println(getDefaultStockPrices());
+  private static List<Date> getDatesForLast10Days(Calendar calendar) {
+    List<Date> dates = new ArrayList<>();
+    for (int i = 0; i < 10; i++) {
+      dates.add(calendar.getTime());
+      calendar.add(Calendar.DATE, -1);
+    }
+    return dates;
   }
 }
