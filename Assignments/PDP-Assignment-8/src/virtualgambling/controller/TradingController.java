@@ -74,7 +74,7 @@ public class TradingController implements Controller {
           this.displayOnView("Command not found, please try again");
         }
       } catch (NoSuchElementException e) {
-        this.displayOnView("Invalid Command");
+        this.displayOnView("Incomplete Command, please enter valid parameters");
       } catch (IllegalArgumentException
               | InsufficientCapitalException | StockDataNotFoundException e) {
         this.displayOnView(e.getMessage());
@@ -87,24 +87,24 @@ public class TradingController implements Controller {
             new HashMap<>();
 
     commandMap.put("create_portfolio",
-        (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
+            (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
 
     commandMap.put("get_all_portfolios",
-        (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
+            (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
 
     commandMap.put("get_portfolio_cost_basis",
-        (supplier, consumer) -> new CostBasisCommand(supplier.get(),
+            (supplier, consumer) -> new CostBasisCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_value",
-        (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
+            (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
     commandMap.put("get_portfolio_composition",
-        (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
+            (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
 
     commandMap.put("get_remaining_capital",
-        (supplier, consumer) -> new RemainingCapitalCommand(consumer));
+            (supplier, consumer) -> new RemainingCapitalCommand(consumer));
 
     commandMap.put("buy_shares", this::getBuySharesCommand);
 
@@ -155,25 +155,33 @@ public class TradingController implements Controller {
 
   private String getWelcomeMessage() {
     return "Welcome to Virtual Stock Trading Application" + System.lineSeparator()
-            + "You can use the following example commands" + System.lineSeparator()
-            + "create_portfolio portfolioName (portfolioName should be one word): Create an empty"
-            + " portfolio with name as portfolioName."
+            + "=================================================================================="
             + System.lineSeparator()
-            + "get_all_portfolios: Gets a new line separated string of portfolio names."
+            + "You can use the following example commands where the first word is the "
+            + System.lineSeparator() + "command and the remaining are it's parameters"
             + System.lineSeparator()
-            + "get_portfolio_cost_basis portfolioName date: Gets the cost basis of "
-            +            "portfolioName at the given date in this format --> yyyy-MM-dd."
+            + "=================================================================================="
             + System.lineSeparator()
-            + "get_portfolio_value portfolioName date: Gets the value of portFolioName at the "
-            +            "given date in this format --> yyyy-MM-dd."
+            + "create_portfolio portfolioName (portfolioName should be one word)."
             + System.lineSeparator()
-            + "get_portfolio_composition portfolioName: Gets the composition of portfolioName"
+            + "get_all_portfolios"
             + System.lineSeparator()
-            + "get_remaining_capital: Gets your remaining in dollar amount"
+            + "get_portfolio_cost_basis portfolioName date"
             + System.lineSeparator()
-            + "buy_shares tickerName portfolioName date quantity: Buys the stock with the given "
-            +            "ticker in portfolioName at a given date and the given quantity."
+            + "get_portfolio_value portfolioName date"
             + System.lineSeparator()
-            + "The quantity must be positive and the date must be a working day not in the future.";
+            + "get_portfolio_composition portfolioName"
+            + System.lineSeparator()
+            + "get_remaining_capital"
+            + System.lineSeparator()
+            + "buy_shares tickerName portfolioName date quantity"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format yyyy-MM-DD and the date should not be a weekend."
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + System.lineSeparator();
   }
 }

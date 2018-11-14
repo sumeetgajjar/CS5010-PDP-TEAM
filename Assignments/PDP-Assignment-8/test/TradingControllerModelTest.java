@@ -151,7 +151,7 @@ public class TradingControllerModelTest {
                     appendable));
 
     controller.run();
-    String invalidCommand = "Invalid Command";
+    String invalidCommand = "Incomplete Command, please enter valid parameters";
 
     String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share"
             + "(s) of "
@@ -180,7 +180,8 @@ public class TradingControllerModelTest {
             + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on "
             + "2018-10-30" + System.lineSeparator()
-            + "Invalid Command" + System.lineSeparator() + "Invalid Command"
+            + "Incomplete Command, please enter valid parameters" + System.lineSeparator() +
+            "Incomplete Command, please enter valid parameters"
             + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
             + System.lineSeparator();
@@ -203,7 +204,7 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.run();
-    String invalidCommand = "Invalid Command";
+    String invalidCommand = "Incomplete Command, please enter valid parameters";
 
     String builder = TestUtils.getWelcomeMessage()
             + System.lineSeparator() + invalidCommand + System.lineSeparator()
@@ -227,7 +228,8 @@ public class TradingControllerModelTest {
     controller.run();
 
     String expected = TestUtils.getWelcomeMessage() + System.lineSeparator()
-            + "Invalid Command" + System.lineSeparator() + "Invalid Command"
+            + "Incomplete Command, please enter valid parameters" + System.lineSeparator()
+            + "Incomplete Command, please enter valid parameters"
             + System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
   }
@@ -262,7 +264,7 @@ public class TradingControllerModelTest {
             + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
             + System.lineSeparator()
-            + "Invalid Command"
+            + "Incomplete Command, please enter valid parameters"
             + System.lineSeparator()
             + "Portfolio not found"
             + System.lineSeparator()
