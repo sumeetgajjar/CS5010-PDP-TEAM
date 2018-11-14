@@ -17,6 +17,9 @@ import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * This class represents a Simple User Model. It implements {@link UserModel} interface.
+ *
+ * <p>{@link SimpleUserModel} performs several operations with {@link Date}s and it only
+ * considers the year, month and day components out of the date - ignoring the time.
  */
 public class SimpleUserModel implements UserModel {
 
