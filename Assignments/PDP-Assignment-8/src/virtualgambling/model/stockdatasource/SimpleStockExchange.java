@@ -4,15 +4,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import util.Utils;
+import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockexchange.StockDataSource;
 
 /**
- * Created by gajjar.s, on 9:46 PM, 11/12/18 todo: is this redundant: read about what a stock
- * exchange is
+ * Created by gajjar.s, on 9:46 PM, 11/12/18
  */
 public class SimpleStockExchange implements StockExchange {
-
   private final StockDataSource stockDataSource;
 
   public SimpleStockExchange(StockDataSource stockDataSource) {
@@ -20,13 +19,29 @@ public class SimpleStockExchange implements StockExchange {
   }
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
-          IllegalArgumentException {
+  public SharePurchaseInfo buyShares(String tickerName, long quantity, Date date,
+                                     BigDecimal remainingCapital) {
+    Utils.requireNonNull(remainingCapital);
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("Quantity has to be positive");
+    }
+    BigDecimal stockPrice = this.getPrice(tickerName, date);
+    BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
+    if (costOfPurchase.compareTo(remainingCapital) > 0) {
+      throw new IllegalStateException("Insufficient funds");
+    }
+    return new SharePurchaseInfo(tickerName, stockPrice, date,
+            quantity);
+  }
+
+  @Override
+  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+    Utils.requireNonNull(tickerName);
+    Utils.requireNonNull(date);
 
     if (Utils.checkTimeNotInBusinessHours(date)) {
       throw new IllegalArgumentException("Cannot buy stock at given time");
     }
-
     return stockDataSource.getPrice(tickerName, date);
   }
 }

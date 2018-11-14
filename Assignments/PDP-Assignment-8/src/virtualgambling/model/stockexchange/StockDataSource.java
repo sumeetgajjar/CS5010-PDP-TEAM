@@ -9,6 +9,5 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
  * Created by gajjar.s, on 8:11 PM, 11/11/18
  */
 public interface StockDataSource {
-
   BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException;
 }

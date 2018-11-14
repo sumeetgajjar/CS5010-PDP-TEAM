@@ -37,6 +37,10 @@ public class SharePurchaseInfo {
     return quantity;
   }
 
+  public BigDecimal getCostOfPurchase() {
+    return this.unitPrice.multiply(BigDecimal.valueOf(quantity));
+  }
+
   @Override
   public String toString() {
     return String.format("Purchased %d share(s) of '%s' at a rate of %s per stock on date=%s}",

@@ -121,7 +121,8 @@ public class SimpleUserModel implements UserModel {
     BigDecimal totalPortfolioValue = BigDecimal.ZERO;
     for (SharePurchaseInfo sharePurchaseInfo : portfolio.getPurchases()) {
       long quantity = sharePurchaseInfo.getQuantity();
-      BigDecimal price = this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
+      BigDecimal price =
+              this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
       totalPortfolioValue = price.multiply(new BigDecimal(quantity));
     }
     return totalPortfolioValue;
@@ -145,7 +146,8 @@ public class SimpleUserModel implements UserModel {
       composition.append("\t");
       composition.append(sharePurchaseInfo.getUnitPrice());
       composition.append("\t");
-      composition.append(this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), dateTime));
+      composition.append(this.stockExchange.
+              getPrice(sharePurchaseInfo.getTickerName(), dateTime));
       composition.append(System.lineSeparator());
     }
 
@@ -181,25 +183,15 @@ public class SimpleUserModel implements UserModel {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
-
-    if (quantity <= 0) {
-      throw new IllegalArgumentException("Quantity has to be positive");
-    }
     if (!this.portfolios.containsKey(portfolioName)) {
       throw new IllegalArgumentException("Portfolio does not exist");
     }
 
-    BigDecimal stockPrice = this.stockExchange.getPrice(tickerName, date);
-    BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
-    if (costOfPurchase.compareTo(this.remainingCapital) > 0) {
-      throw new IllegalStateException("Insufficient funds");
-    } else {
-      SharePurchaseInfo sharePurchaseInfo = new SharePurchaseInfo(tickerName, stockPrice, date,
-              quantity);
-      this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseInfo);
-      this.remainingCapital = this.remainingCapital.subtract(costOfPurchase);
-      return sharePurchaseInfo;
-    }
+    SharePurchaseInfo sharePurchaseInfo = this.stockExchange.buyShares(tickerName, quantity,
+            date, this.remainingCapital);
+    this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseInfo);
+    this.remainingCapital = this.remainingCapital.subtract(sharePurchaseInfo.getCostOfPurchase());
+    return sharePurchaseInfo;
   }
 
   @Override
