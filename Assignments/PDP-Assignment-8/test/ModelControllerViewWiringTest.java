@@ -1,9 +1,12 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -47,6 +50,29 @@ public class ModelControllerViewWiringTest {
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
       Assert.assertEquals("Cannot display data on view", e.getMessage());
+    }
+  }
+
+  @Test
+  public void closingReadableBeforeGivingToController() throws IOException {
+    try {
+      BufferedReader readable =
+              new BufferedReader(
+                      new InputStreamReader(
+                              new ByteArrayInputStream("C1q\n".getBytes())));
+
+      readable.close();
+
+      Appendable appendable
+              = new StringBuffer();
+
+      Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
+              new TextView(readable, appendable));
+
+      controller.run();
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertEquals("Cannot get data from view", e.getMessage());
     }
   }
 
