@@ -342,7 +342,8 @@ public class UserModelTest {
   @Test
   public void buyStockOfSameCompanyAcrossMultipleStretches() throws IllegalArgumentException,
           StockDataNotFoundException {
-    UserModel userModel = getUserModelWithEmptyPortfolio();
+    UserModel userModel = TestUtils.getMockedUserModel();
+    userModel.createPortfolio("p1");
     Share appleShare = getAppleShare();
 
     Calendar calendar = Calendar.getInstance();
