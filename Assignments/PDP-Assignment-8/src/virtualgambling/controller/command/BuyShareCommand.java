@@ -22,7 +22,7 @@ public class BuyShareCommand implements Command {
    * @param portfolioName the portfolioName in which the stock should be bought
    * @param date          the date at which stock should be bought
    * @param quantity      the number of shares to buy
-   * @param consumer      the consumer of consume the result of command
+   * @param consumer      the consumer to consume the result of command
    */
   public BuyShareCommand(String tickerName, String portfolioName, Date date, long quantity,
                          Consumer<String> consumer) {
