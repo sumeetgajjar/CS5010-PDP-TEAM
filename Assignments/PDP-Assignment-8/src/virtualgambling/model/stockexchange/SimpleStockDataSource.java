@@ -39,13 +39,12 @@ public class SimpleStockDataSource implements StockDataSource {
     List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
     BigDecimal stockPrice = new BigDecimal(10);
     Map<String, Map<Date, BigDecimal>> stockPrices = new LinkedHashMap<>();
-    for (int i = 0; i < stocks.size(); i++) {
-      String stockName = stocks.get(i);
-      for (int j = 0; j < dates.size(); j++) {
+    for (String stockName : stocks) {
+      for (Date date : dates) {
 
         Map<Date, BigDecimal> dateToPriceMap =
                 stockPrices.getOrDefault(stockName, new LinkedHashMap<>());
-        dateToPriceMap.put(dates.get(j), stockPrice);
+        dateToPriceMap.put(date, stockPrice);
 
         stockPrice = stockPrice.add(BigDecimal.TEN);
         stockPrices.put(stockName, dateToPriceMap);

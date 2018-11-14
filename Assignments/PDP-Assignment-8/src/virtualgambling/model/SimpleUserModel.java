@@ -175,15 +175,30 @@ public class SimpleUserModel implements UserModel {
 
   @Override
   public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
-                                     long quantity) {
+                                     long quantity) throws IllegalArgumentException,
+          StockDataNotFoundException,
+          IllegalStateException {
+    Utils.requireNonNull(tickerName);
+    Utils.requireNonNull(portfolioName);
+    Utils.requireNonNull(date);
+
+    if (quantity <= 0) {
+      throw new IllegalArgumentException("Quantity has to be positive");
+    }
+    if (!this.portfolios.containsKey(portfolioName)) {
+      throw new IllegalArgumentException("Portfolio does not exist");
+    }
+
     BigDecimal stockPrice = this.stockExchange.getPrice(tickerName, date);
-    if (stockPrice.multiply(BigDecimal.valueOf(quantity)).compareTo(this.remainingCapital) <= 0) {
+    BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
+    if (costOfPurchase.compareTo(this.remainingCapital) > 0) {
+      throw new IllegalStateException("Insufficient funds");
+    } else {
       SharePurchaseInfo sharePurchaseInfo = new SharePurchaseInfo(tickerName, stockPrice, date,
               quantity);
       this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseInfo);
+      this.remainingCapital = this.remainingCapital.subtract(costOfPurchase);
       return sharePurchaseInfo;
-    } else {
-      throw new IllegalStateException("Insufficient funds");
     }
   }
 

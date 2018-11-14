@@ -2,6 +2,7 @@ package util;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -111,5 +112,15 @@ public class Utils {
     Utils.requireNonNull(date);
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     return simpleDateFormat.format(date);
+  }
+
+  public static boolean checkTimeNotInBusinessHours(Date date) {
+    int dayOfTheWeek = date.toInstant().get(ChronoField.DAY_OF_WEEK);
+    if (dayOfTheWeek < 1 || dayOfTheWeek > 5) {
+      return false;
+    }
+
+    int hour = date.toInstant().get(ChronoField.HOUR_OF_DAY);
+    return hour >= 8 && hour <= 15;
   }
 }

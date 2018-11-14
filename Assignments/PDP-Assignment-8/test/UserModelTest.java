@@ -105,14 +105,14 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 0);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertNull("Quantity has to be positive", e.getMessage());
     }
 
     try {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, -1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Cannot buy shares at given time", e.getMessage());
+      Assert.assertNull("Quantity has to be positive", e.getMessage());
     }
   }
 

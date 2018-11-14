@@ -3,9 +3,9 @@ package virtualgambling.model.stockdatasource;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import util.Utils;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockexchange.StockDataSource;
-import virtualgambling.util.Utils;
 
 /**
  * Created by gajjar.s, on 9:46 PM, 11/12/18 todo: is this redundant: read about what a stock
