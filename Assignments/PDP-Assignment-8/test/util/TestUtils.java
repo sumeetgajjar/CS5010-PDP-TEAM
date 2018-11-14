@@ -80,7 +80,7 @@ public class TestUtils {
         return new BigDecimal("11");
       }
 
-      throw new StockDataNotFoundException();
+      throw new StockDataNotFoundException("Stock Data not found");
     }
   }
 

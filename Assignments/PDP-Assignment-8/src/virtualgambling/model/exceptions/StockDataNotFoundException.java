@@ -5,9 +5,6 @@ package virtualgambling.model.exceptions;
  */
 public class StockDataNotFoundException extends RuntimeException {
 
-  public StockDataNotFoundException() {
-  }
-
   public StockDataNotFoundException(String message) {
     super(message);
   }

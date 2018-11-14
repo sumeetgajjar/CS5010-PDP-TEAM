@@ -240,7 +240,7 @@ public class UserModelTest {
     try {
       userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
       Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
+    } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Data not found", e.getMessage());
     }
   }
