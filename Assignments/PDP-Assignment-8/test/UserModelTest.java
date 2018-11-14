@@ -208,6 +208,7 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
+    userModel.createPortfolio("p1");
 
     Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
 
@@ -222,14 +223,14 @@ public class UserModelTest {
     userModel.createPortfolio("p1");
     try {
       Calendar calendar = Calendar.getInstance();
-      calendar.set(2018, Calendar.JULY, 1, 10, 0);
+      calendar.set(2018, Calendar.JULY, 4, 10, 0);
       calendar.add(Calendar.DATE, -1);
       Date date = calendar.getTime();
 
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
-      Assert.assertNull("Stock Data not found", e.getMessage());
+      Assert.assertEquals("Stock Data not found", e.getMessage());
     }
   }
 
@@ -247,8 +248,9 @@ public class UserModelTest {
 
   @Test
   public void buyFailsDueToInsufficientFunds() throws StockDataNotFoundException {
-    UserModel userModel = getUserModelWithEmptyPortfolio();
+    UserModel userModel = TestUtils.getMockedUserModel();
     Date date = getValidDateForTrading();
+    userModel.createPortfolio("p1");
 
     try {
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date,
@@ -291,14 +293,14 @@ public class UserModelTest {
     try {
       userModel.getPortfolioValue(null, date);
       Assert.fail("should have failed");
-    } catch (IllegalStateException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.getPortfolioValue("p1", null);
       Assert.fail("should have failed");
-    } catch (IllegalStateException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
   }
@@ -415,7 +417,7 @@ public class UserModelTest {
       userModel.getPortfolioValue("p1", after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Time cannot be in Future", e.getMessage());
     }
 
   }
@@ -458,12 +460,12 @@ public class UserModelTest {
             userModel.getCostBasisOfPortfolio("p1", day2));
 
     Assert.assertEquals(new BigDecimal("30"),
-            userModel.getCostBasisOfPortfolio("p1", day2));
+            userModel.getCostBasisOfPortfolio("p1", day1));
     try {
       userModel.getCostBasisOfPortfolio("p1", after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Time cannot be in Future", e.getMessage());
     }
 
   }

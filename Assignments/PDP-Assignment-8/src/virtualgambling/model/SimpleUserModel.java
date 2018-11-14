@@ -121,11 +121,17 @@ public class SimpleUserModel implements UserModel {
 
     Portfolio portfolio = this.portfolios.get(portfolioName);
     BigDecimal totalPortfolioValue = BigDecimal.ZERO;
-    for (SharePurchaseInfo sharePurchaseInfo : portfolio.getPurchases()) {
+
+    List<SharePurchaseInfo> filteredPurchaseInfo = portfolio.getPurchases().stream()
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
+            .collect(Collectors.toList());
+
+    for (SharePurchaseInfo sharePurchaseInfo : filteredPurchaseInfo) {
       long quantity = sharePurchaseInfo.getQuantity();
       BigDecimal price =
               this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
-      totalPortfolioValue = price.multiply(new BigDecimal(quantity));
+      totalPortfolioValue = totalPortfolioValue.add(price.multiply(new BigDecimal(quantity)));
+
     }
     return totalPortfolioValue;
   }
@@ -210,7 +216,9 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Portfolio not found");
     }
 
-    Utils.isFutureDate(date);
+    if (Utils.isFutureDate(date)) {
+      throw new IllegalArgumentException("Time cannot be in Future");
+    }
   }
 
 }
