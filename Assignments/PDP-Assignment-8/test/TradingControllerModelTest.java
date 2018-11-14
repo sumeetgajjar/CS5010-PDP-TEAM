@@ -111,4 +111,22 @@ public class TradingControllerModelTest {
             System.lineSeparator();
     Assert.assertEquals(expected, appendable.toString());
   }
+
+  @Test
+  public void commandNotFoundInformsUser() {
+    Readable readable = new StringReader("anything_random\nget_remaining_capital\nrandom_hello" +
+            "\nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
+            readable, appendable));
+    controller.go();
+
+    String expected =
+            "Command not found, please try again" + System.lineSeparator() +
+                    Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL) +
+                    System.lineSeparator() + "Command not found, please try again"
+                    + System.lineSeparator();
+    Assert.assertEquals(expected,
+            appendable.toString());
+  }
 }
