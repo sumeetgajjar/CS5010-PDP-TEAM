@@ -1,9 +1,11 @@
 package virtualgambling.model;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.PurchaseInfo;
@@ -57,9 +59,45 @@ public class SimpleUserModel implements UserModel {
     this.portfolios.put(portfolioName, portfolio);
   }
 
+  /**
+   * Returns the costBasis of the given portfolio at the given date. It throws {@link
+   * IllegalArgumentException} in the following cases.
+   * <ul>
+   * <li>If any of the given param is null</li>
+   * <li>If the given portfolio does not exists</li>
+   * <li>If the given date is greater than current date</li>
+   * </ul>
+   *
+   * @param portfolioName the portfolioName
+   * @param date          the date
+   * @return the costBasis of the given portfolio
+   * @throws IllegalArgumentException if the given params are invalid
+   */
   @Override
-  public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date) {
-    return null;
+  public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date)
+          throws IllegalArgumentException {
+    Utils.requireNonNull(portfolioName);
+    Utils.requireNonNull(date);
+
+    Date currentDate = Calendar.getInstance().getTime();
+    if (date.compareTo(currentDate) > 0) {
+      throw new IllegalArgumentException("Invalid input");
+    }
+
+    Portfolio portfolio = this.portfolios.get(portfolioName);
+    if (Objects.nonNull(portfolio)) {
+      BigDecimal costBasis = portfolio.getPurchases().stream()
+              .filter(purchaseInfo -> purchaseInfo.getDate().compareTo(date) <= 0)
+              .map(purchaseInfo ->
+                      purchaseInfo.getShare().getUnitPrice()
+                              .multiply(new BigDecimal(purchaseInfo.getQuantity())))
+              .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      return costBasis;
+
+    } else {
+      throw new IllegalArgumentException("Invalid input");
+    }
   }
 
   @Override
