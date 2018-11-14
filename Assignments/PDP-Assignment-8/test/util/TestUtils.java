@@ -52,18 +52,18 @@ public class TestUtils {
             + System.lineSeparator()
             + "get_all_portfolios: Gets a new line separated string of portfolio names."
             + System.lineSeparator()
-            + "get_portfolio_cost_basis portfolioName date: Gets the cost basis of " +
-            "portfolioName at the given date in this format --> yyyy-MM-dd."
+            + "get_portfolio_cost_basis portfolioName date: Gets the cost basis of "
+            + "portfolioName at the given date in this format --> yyyy-MM-dd."
             + System.lineSeparator()
-            + "get_portfolio_value portfolioName date: Gets the value of portFolioName at the " +
-            "given date in this format --> yyyy-MM-dd."
+            + "get_portfolio_value portfolioName date: Gets the value of portFolioName at the "
+            + "given date in this format --> yyyy-MM-dd."
             + System.lineSeparator()
             + "get_portfolio_composition portfolioName: Gets the composition of portfolioName"
             + System.lineSeparator()
             + "get_remaining_capital: Gets your remaining in dollar amount"
             + System.lineSeparator()
-            + "buy_shares tickerName portfolioName date quantity: Buys the stock with the given " +
-            "ticker in portfolioName at a given date and the given quantity."
+            + "buy_shares tickerName portfolioName date quantity: Buys the stock with the given "
+            + "ticker in portfolioName at a given date and the given quantity."
             + System.lineSeparator()
             + "The quantity must be positive and the date must be a working day not in the future.";
   }
