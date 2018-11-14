@@ -192,11 +192,7 @@ public class SimpleUserModel implements UserModel {
                                      long quantity) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException {
     Utils.requireNonNull(tickerName);
-    Utils.requireNonNull(portfolioName);
-    Utils.requireNonNull(date);
-    if (!this.portfolios.containsKey(portfolioName)) {
-      throw new IllegalArgumentException("Portfolio does not exist");
-    }
+    this.checkSanity(portfolioName, date);
 
     SharePurchaseInfo sharePurchaseInfo = this.stockExchange.buyShares(tickerName, quantity,
             date, this.remainingCapital);

@@ -161,7 +161,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Portfolio does not exist", e.getMessage());
+      Assert.assertEquals("Portfolio not found", e.getMessage());
     }
   }
 
@@ -191,7 +191,7 @@ public class UserModelTest {
       userModel.buyShares(appleShare.getTickerName(), "p1", futureTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Cannot buy shares at given time", e.getMessage());
+      Assert.assertEquals("Time cannot be in Future", e.getMessage());
     }
   }
 

@@ -33,8 +33,7 @@ public class SimpleStockDataSource implements StockDataSource {
   }
 
   private static Map<String, Map<Date, BigDecimal>> getStockPricesForLast10Days() {
-    Calendar calendar = Calendar.getInstance();
-    List<Date> dates = getDatesForLast10Days(calendar);
+    List<Date> dates = getDatesForLast10Days();
 
     List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
     BigDecimal stockPrice = new BigDecimal(10);
@@ -53,7 +52,13 @@ public class SimpleStockDataSource implements StockDataSource {
     return stockPrices;
   }
 
-  private static List<Date> getDatesForLast10Days(Calendar calendar) {
+  private static List<Date> getDatesForLast10Days() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+
     List<Date> dates = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
       dates.add(calendar.getTime());
