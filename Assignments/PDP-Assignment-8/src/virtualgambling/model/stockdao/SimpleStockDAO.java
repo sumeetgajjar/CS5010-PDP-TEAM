@@ -1,26 +1,34 @@
-package virtualgambling.model.stockexchange;
+package virtualgambling.model.stockdao;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import util.Utils;
-import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
 /**
- * Created by gajjar.s, on 9:46 PM, 11/12/18
+ * <code>SimpleStockDAO</code> represents a data access object that uses any implementation of the
+ * stock data source in order to access stock price data and perform operations that relate to
+ * accessing stock data.
  */
-public class SimpleStockExchange implements StockExchange {
+public class SimpleStockDAO implements StockDAO {
   private final StockDataSource stockDataSource;
 
-  public SimpleStockExchange(StockDataSource stockDataSource) {
+  /**
+   * Constructs a stockDAO given any implementation of the stock data source.
+   *
+   * @param stockDataSource the stock data source object
+   */
+  public SimpleStockDAO(StockDataSource stockDataSource) {
     this.stockDataSource = stockDataSource;
   }
 
   @Override
-  public SharePurchaseInfo buyShares(String tickerName, long quantity, Date date,
-                                     BigDecimal remainingCapital) {
+  public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date,
+                                                BigDecimal remainingCapital) throws
+          IllegalArgumentException, IllegalStateException {
     Utils.requireNonNull(remainingCapital);
     BigDecimal stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
@@ -30,7 +38,7 @@ public class SimpleStockExchange implements StockExchange {
     if (costOfPurchase.compareTo(remainingCapital) > 0) {
       throw new IllegalStateException("Insufficient funds");
     }
-    return new SharePurchaseInfo(tickerName, stockPrice, date,
+    return new SharePurchaseOrder(tickerName, stockPrice, date,
             quantity);
   }
 

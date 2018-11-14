@@ -3,7 +3,7 @@ package virtualgambling.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
@@ -67,9 +67,11 @@ public interface UserModel {
   BigDecimal getRemainingCapital();
 
   /**
+   * Allows the user the buy shares given the ticker name, date, and quantity into the given
+   * portfolio.
+   *
+   * <p>The following represents error cases:
    * <ul>
-   * <li>If the date for purchase is back dated then the share will bought at closing price of
-   * that day</li> // todo move to implementation
    * <li>If a given stock is not found or stock data for the given data and time is not found, it
    * will throw a {@link StockDataNotFoundException}</li>
    * <li>It throws a {@link IllegalArgumentException} if the given is not between 9am to 4pm on
@@ -84,15 +86,15 @@ public interface UserModel {
    * </li>
    * </ul>
    *
-   * @param tickerName    a
-   * @param portfolioName a
-   * @param date          a
-   * @param quantity      a
-   * @return a
+   * @param tickerName    the name of the ticker
+   * @param portfolioName the name of the portfolio to buy these shares in
+   * @param date          the date at which the stocks need to be bought
+   * @param quantity      amount of shares to be bought
+   * @return a share purchase order that represents the order that was made
    */
-  SharePurchaseInfo buyShares(String tickerName,
-                              String portfolioName,
-                              Date date,
-                              long quantity) throws IllegalArgumentException,
+  SharePurchaseOrder buyShares(String tickerName,
+                               String portfolioName,
+                               Date date,
+                               long quantity) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException;
 }

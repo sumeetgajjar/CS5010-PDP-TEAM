@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Portfolio {
   private final String name;
-  private final List<SharePurchaseInfo> purchases;
+  private final List<SharePurchaseOrder> purchases;
 
   /**
    * Constructs a Object of {@link Portfolio} with the given name.
@@ -36,16 +36,16 @@ public class Portfolio {
    *
    * @return the list of purchases in this portfolio
    */
-  public List<SharePurchaseInfo> getPurchases() {
+  public List<SharePurchaseOrder> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
   }
 
   /**
    * Adds the given Purchase info of the Share to this Portfolio.
    *
-   * @param sharePurchaseInfo the purchase info to add
+   * @param sharePurchaseOrder the purchase info to add
    */
-  public void addPurchaseInfo(SharePurchaseInfo sharePurchaseInfo) {
-    this.purchases.add(sharePurchaseInfo);
+  public void addPurchaseInfo(SharePurchaseOrder sharePurchaseOrder) {
+    this.purchases.add(sharePurchaseOrder);
   }
 }

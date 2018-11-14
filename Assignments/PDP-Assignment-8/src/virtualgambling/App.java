@@ -6,8 +6,8 @@ import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
-import virtualgambling.model.stockexchange.SimpleStockExchange;
 import virtualgambling.view.TextView;
 import virtualgambling.view.View;
 
@@ -21,7 +21,7 @@ public class App {
    */
   public static void main(String[] args) {
     View view = new TextView(new InputStreamReader(System.in), System.out);
-    UserModel userModel = new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
+    UserModel userModel = new SimpleUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
     Controller controller = new TradingController(userModel, view);
     controller.run();
   }

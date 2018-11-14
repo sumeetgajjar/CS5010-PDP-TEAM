@@ -7,10 +7,10 @@ import java.util.Date;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.stockdao.SimpleStockDAO;
+import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
-import virtualgambling.model.stockexchange.SimpleStockExchange;
-import virtualgambling.model.stockexchange.StockExchange;
 
 /**
  * This class represents set of util functions which can be used by any class for testing purposes.
@@ -36,18 +36,18 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static UserModel getEmptyUserModel() {
-    return new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
+    return new SimpleUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
   }
 
   public static class MockUserModel extends SimpleUserModel {
     private Date mockedTodayDate;
 
-    private MockUserModel(StockExchange stockExchange) {
-      super(stockExchange);
+    private MockUserModel(StockDAO stockDAO) {
+      super(stockDAO);
     }
 
     MockUserModel(Date mockedTodayDate) throws IllegalArgumentException {
-      this(new SimpleStockExchange(new MockDataSource()));
+      this(new SimpleStockDAO(new MockDataSource()));
       this.mockedTodayDate = Utils.requireNonNull(mockedTodayDate);
     }
 

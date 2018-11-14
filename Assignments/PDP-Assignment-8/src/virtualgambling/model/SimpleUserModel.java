@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 
 import util.Utils;
 import virtualgambling.model.bean.Portfolio;
-import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockexchange.StockExchange;
+import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * Created by gajjar.s, on 9:45 PM, 11/12/18
@@ -22,18 +22,18 @@ public class SimpleUserModel implements UserModel {
 
   private static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
-  private final StockExchange stockExchange;
+  private final StockDAO stockDAO;
   private final Map<String, Portfolio> portfolios;
   private BigDecimal remainingCapital;
 
   /**
    * Constructs a {@link SimpleUserModel} object with given params.
    *
-   * @param stockExchange the stockExchange
-   * @throws IllegalArgumentException if the given stockExchange is null
+   * @param stockDAO the stockDAO
+   * @throws IllegalArgumentException if the given stockDAO is null
    */
-  public SimpleUserModel(StockExchange stockExchange) throws IllegalArgumentException {
-    this.stockExchange = Utils.requireNonNull(stockExchange);
+  public SimpleUserModel(StockDAO stockDAO) throws IllegalArgumentException {
+    this.stockDAO = Utils.requireNonNull(stockDAO);
     this.portfolios = new HashMap<>();
     this.remainingCapital = DEFAULT_USER_CAPITAL;
   }
@@ -121,14 +121,14 @@ public class SimpleUserModel implements UserModel {
     Portfolio portfolio = this.portfolios.get(portfolioName);
     BigDecimal totalPortfolioValue = BigDecimal.ZERO;
 
-    List<SharePurchaseInfo> filteredPurchaseInfo = portfolio.getPurchases().stream()
+    List<SharePurchaseOrder> filteredPurchaseInfo = portfolio.getPurchases().stream()
             .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
             .collect(Collectors.toList());
 
-    for (SharePurchaseInfo sharePurchaseInfo : filteredPurchaseInfo) {
-      long quantity = sharePurchaseInfo.getQuantity();
+    for (SharePurchaseOrder sharePurchaseOrder : filteredPurchaseInfo) {
+      long quantity = sharePurchaseOrder.getQuantity();
       BigDecimal price =
-              this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
+              this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), date);
       totalPortfolioValue = totalPortfolioValue.add(price.multiply(new BigDecimal(quantity)));
 
     }
@@ -148,14 +148,14 @@ public class SimpleUserModel implements UserModel {
     composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
             "Current Value"));
     composition.append(System.lineSeparator());
-    List<SharePurchaseInfo> purchases = portfolio.getPurchases();
-    for (SharePurchaseInfo sharePurchaseInfo : purchases) {
+    List<SharePurchaseOrder> purchases = portfolio.getPurchases();
+    for (SharePurchaseOrder sharePurchaseOrder : purchases) {
       composition.append(String.format("%-20s%-20s%-20s%s",
-              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseInfo.getDate()),
-              sharePurchaseInfo.getTickerName(),
-              Utils.getFormattedCurrencyNumberString(sharePurchaseInfo.getUnitPrice()),
+              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getDate()),
+              sharePurchaseOrder.getTickerName(),
+              Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getUnitPrice()),
               Utils.getFormattedCurrencyNumberString(
-                      this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), dateTime))));
+                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime))));
       composition.append(System.lineSeparator());
     }
 
@@ -188,17 +188,17 @@ public class SimpleUserModel implements UserModel {
   }
 
   @Override
-  public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
-                                     long quantity) throws IllegalArgumentException,
+  public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
+                                      long quantity) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException {
     Utils.requireNonNull(tickerName);
     this.checkSanity(portfolioName, date);
 
-    SharePurchaseInfo sharePurchaseInfo = this.stockExchange.buyShares(tickerName, quantity,
+    SharePurchaseOrder sharePurchaseOrder = this.stockDAO.createPurchaseOrder(tickerName, quantity,
             date, this.remainingCapital);
-    this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseInfo);
-    this.remainingCapital = this.remainingCapital.subtract(sharePurchaseInfo.getCostOfPurchase());
-    return sharePurchaseInfo;
+    this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseOrder);
+    this.remainingCapital = this.remainingCapital.subtract(sharePurchaseOrder.getCostOfPurchase());
+    return sharePurchaseOrder;
   }
 
   @Override

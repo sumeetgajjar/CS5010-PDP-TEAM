@@ -8,21 +8,21 @@ import util.Utils;
 /**
  * This class represents a information which is captured when a Share is purchased.
  */
-public class SharePurchaseInfo {
+public class SharePurchaseOrder {
   private final String tickerName;
   private final BigDecimal unitPrice;
   private final Date date;
   private final long quantity;
 
   /**
-   * Constructs a Object of {@link SharePurchaseInfo} with the given params.
+   * Constructs a Object of {@link SharePurchaseOrder} with the given params.
    *
    * @param tickerName the name of the share purchased
    * @param unitPrice  the unit price of the share purchased
    * @param date       the date at which the share was purchased
    * @param quantity   the quantity of the share purchased
    */
-  public SharePurchaseInfo(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
+  public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
     this.tickerName = tickerName;
     this.unitPrice = unitPrice;
     this.date = date;
