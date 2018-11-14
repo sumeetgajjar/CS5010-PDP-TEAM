@@ -27,16 +27,24 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
 /**
- * Created by gajjar.s, on 9:45 PM, 11/12/18
+ * This class represents a Trading Controller for our VirtualGambling MVC app. It implements {@link
+ * Controller} interface.
  */
 public class TradingController implements Controller {
 
   private final UserModel userModel;
   private final View view;
 
-  public TradingController(UserModel userModel, View view) {
-    this.userModel = userModel;
-    this.view = view;
+  /**
+   * Constructs a object of {@link TradingController} with the given params.
+   *
+   * @param userModel the userModel
+   * @param view      the view
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public TradingController(UserModel userModel, View view) throws IllegalArgumentException {
+    this.userModel = Utils.requireNonNull(userModel);
+    this.view = Utils.requireNonNull(view);
   }
 
   @Override
