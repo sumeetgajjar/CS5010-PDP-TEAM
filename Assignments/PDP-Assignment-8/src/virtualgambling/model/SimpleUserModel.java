@@ -6,9 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockExchange;
 import virtualgambling.util.Utils;
 
@@ -17,8 +19,11 @@ import virtualgambling.util.Utils;
  */
 public class SimpleUserModel implements UserModel {
 
+  private static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
+
   private final StockExchange stockExchange;
   private final Map<String, Portfolio> portfolios;
+  private BigDecimal remainingCapital;
 
   /**
    * Constructs a {@link SimpleUserModel} object with given params.
@@ -29,6 +34,7 @@ public class SimpleUserModel implements UserModel {
   public SimpleUserModel(StockExchange stockExchange) throws IllegalArgumentException {
     this.stockExchange = Utils.requireNonNull(stockExchange);
     this.portfolios = new HashMap<>();
+    this.remainingCapital = DEFAULT_USER_CAPITAL;
   }
 
   /**
@@ -100,8 +106,26 @@ public class SimpleUserModel implements UserModel {
   }
 
   @Override
-  public BigDecimal getPortfolioValue(String portfolioName, Date date) {
-    return null;
+  public BigDecimal getPortfolioValue(String portfolioName, Date date)
+          throws StockDataNotFoundException {
+
+    Utils.requireNonNull(portfolioName);
+    Utils.requireNonNull(date);
+
+    Portfolio portfolio = this.portfolios.get(portfolioName);
+    if (Objects.nonNull(portfolio)) {
+
+      BigDecimal totalPortfolioValue = BigDecimal.ZERO;
+      for (SharePurchaseInfo sharePurchaseInfo : portfolio.getPurchases()) {
+        long quantity = sharePurchaseInfo.getQuantity();
+        BigDecimal price = this.stockExchange.getPrice(sharePurchaseInfo.getTickerName(), date);
+        totalPortfolioValue = price.multiply(new BigDecimal(quantity));
+      }
+      return totalPortfolioValue;
+
+    } else {
+      throw new IllegalArgumentException("Invalid input");
+    }
   }
 
   @Override
@@ -111,7 +135,9 @@ public class SimpleUserModel implements UserModel {
 
   @Override
   public String getAllPortfolioNames() {
-    return null;
+    return this.portfolios.values().stream()
+            .map(Portfolio::getName)
+            .collect(Collectors.joining(System.lineSeparator()));
   }
 
   @Override
@@ -122,6 +148,6 @@ public class SimpleUserModel implements UserModel {
 
   @Override
   public BigDecimal getRemainingCapital() {
-    return null;
+    return this.remainingCapital;
   }
 }
