@@ -39,6 +39,10 @@ public class Utils {
     return NumberFormat.getCurrencyInstance(Locale.US);
   }
 
+  public static String getFormattedCurrencyNumberString(Number number) {
+    return NumberFormat.getCurrencyInstance(Locale.US).format(number);
+  }
+
   /**
    * Formats the given date into a 'yyyy-MM-dd' format.
    *
@@ -60,12 +64,7 @@ public class Utils {
     c.setTime(date);
     int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
 
-    if (dayOfTheWeek < 2 || dayOfTheWeek > 6) {
-      return true;
-    }
-
-    int hour = c.get(Calendar.HOUR_OF_DAY);
-    return hour < 8 || hour > 15;
+    return dayOfTheWeek < 2 || dayOfTheWeek > 6;
   }
 
   public static boolean isFutureDate(Date date) {

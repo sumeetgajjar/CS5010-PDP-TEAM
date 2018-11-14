@@ -23,7 +23,7 @@ public class TradingControllerModelTest {
             new TextView(readable,
                     appendable));
     controller.go();
-    Assert.assertEquals("p1\np2", appendable.toString());
+    Assert.assertEquals("p1\np2\n", appendable.toString());
   }
 
   @Test
@@ -37,7 +37,14 @@ public class TradingControllerModelTest {
     controller.go();
 
     NumberFormat numberFormat = Utils.getCurrencyNumberFormatter();
-    Assert.assertEquals(numberFormat.format(new BigDecimal("300")), appendable.toString());
+
+    StringBuilder builder = new StringBuilder();
+    builder.append("Purchased 10 share(s) of 'AAPL' at a rate of 30 per stock on 2018-10-30");
+    builder.append(System.lineSeparator());
+    builder.append(numberFormat.format(new BigDecimal("300")));
+    builder.append(System.lineSeparator());
+
+    Assert.assertEquals(builder.toString(), appendable.toString());
   }
 
   @Test
@@ -51,8 +58,13 @@ public class TradingControllerModelTest {
 
     controller.go();
 
-    NumberFormat numberFormat = Utils.getCurrencyNumberFormatter();
-    Assert.assertEquals(numberFormat.format(new BigDecimal("100")), appendable.toString());
+    StringBuilder builder = new StringBuilder("Purchased 10 share(s) of 'AAPL' at a rate of 30 " +
+            "per stock on 2018-10-30");
+    builder.append(System.lineSeparator());
+    builder.append(Utils.getFormattedCurrencyNumberString(new BigDecimal("100")));
+    builder.append(System.lineSeparator());
+
+    Assert.assertEquals(builder.toString(), appendable.toString());
   }
 
   @Test
@@ -76,8 +88,14 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.go();
-    Assert.assertEquals(mockedUserModel.getPortfolioComposition("p1"),
-            appendable.toString());
+
+    StringBuilder builder = new StringBuilder("Purchased 1 share(s) of 'AAPL' at a rate of 30 per" +
+            " stock on 2018-10-30");
+    builder.append(System.lineSeparator());
+    builder.append(mockedUserModel.getPortfolioComposition("p1"));
+    builder.append(System.lineSeparator());
+
+    Assert.assertEquals(builder.toString(), appendable.toString());
   }
 
   @Test

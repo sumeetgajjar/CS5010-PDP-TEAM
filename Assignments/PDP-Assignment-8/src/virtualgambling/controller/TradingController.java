@@ -114,12 +114,13 @@ public class TradingController implements Controller {
             (supplier, consumer) -> {
               String stockName = supplier.get();
               String portfolioName = supplier.get();
+              Date date = getDateFromString(supplier);
               try {
                 long quantity = Long.parseLong(supplier.get());
                 return new BuyShareCommand(
                         stockName,
                         portfolioName,
-                        getDateFromString(supplier),
+                        date,
                         quantity,
                         consumer);
               } catch (NumberFormatException e) {
