@@ -53,7 +53,7 @@ public class UserModelTest {
       userModel.createPortfolio(null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
@@ -126,21 +126,21 @@ public class UserModelTest {
       userModel.buyShares(null, "p1", date, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.buyShares(appleShare.getTickerName(), null, date, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.buyShares(appleShare.getTickerName(), "p1", null, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
   }
 
@@ -246,7 +246,7 @@ public class UserModelTest {
               TestUtils.DEFAULT_USER_CAPITAL.divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertNull("Insufficient funds", e.getMessage());
+      Assert.assertEquals("Insufficient funds", e.getMessage());
     }
   }
 
@@ -261,14 +261,14 @@ public class UserModelTest {
       userModel.getCostBasisOfPortfolio(null, date);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.getCostBasisOfPortfolio("p1", null);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
   }
 
@@ -283,14 +283,14 @@ public class UserModelTest {
       userModel.getPortfolioValue(null, date);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
       userModel.getPortfolioValue("p1", null);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
-      Assert.assertNull("Invalid input", e.getMessage());
+      Assert.assertEquals("Invalid input", e.getMessage());
     }
   }
 

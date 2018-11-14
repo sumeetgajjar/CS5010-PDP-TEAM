@@ -51,6 +51,7 @@ public class SimpleUserModel implements UserModel {
    */
   @Override
   public void createPortfolio(String portfolioName) throws IllegalArgumentException {
+    Utils.requireNonNull(portfolioName);
     if (this.portfolios.containsKey(portfolioName)) {
       throw new IllegalArgumentException("Portfolio already exists");
     }
@@ -139,6 +140,7 @@ public class SimpleUserModel implements UserModel {
     Portfolio portfolio = this.portfolios.get(portfolioName);
     StringBuilder composition = new StringBuilder();
     composition.append("Buy Date\tStocks\tCost Price\tCurrent Value");
+    composition.append(System.lineSeparator());
     List<SharePurchaseInfo> purchases = portfolio.getPurchases();
     for (SharePurchaseInfo sharePurchaseInfo : purchases) {
       composition.append(sharePurchaseInfo.getDate());
