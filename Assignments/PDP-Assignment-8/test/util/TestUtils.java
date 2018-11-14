@@ -9,6 +9,7 @@ import java.util.List;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
 import virtualgambling.model.stockexchange.SimpleStockExchange;
 import virtualgambling.model.stockexchange.StockExchange;
@@ -20,6 +21,10 @@ public class TestUtils {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1);
     return new MockUserModel(calendar.getTime());
+  }
+
+  public static UserModel getEmptyUserModel() {
+    return new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
   }
 
   public static class MockUserModel extends SimpleUserModel implements UserModel {
