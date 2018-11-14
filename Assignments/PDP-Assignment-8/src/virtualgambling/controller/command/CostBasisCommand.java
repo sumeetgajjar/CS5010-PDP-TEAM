@@ -30,7 +30,7 @@ public class CostBasisCommand implements Command {
   }
 
   /**
-   * Executes the command and consumes the result of the command using the consumer.
+   * Executes this command and consumes the result of the command using the consumer.
    *
    * @param userModel the userModel
    */
