@@ -1,4 +1,4 @@
-package virtualgambling.model.stockexchange;
+package virtualgambling.model.stockdatasource;
 
 import java.math.BigDecimal;
 import java.util.Date;

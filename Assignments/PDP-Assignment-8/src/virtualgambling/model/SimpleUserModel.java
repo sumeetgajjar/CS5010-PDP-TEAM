@@ -14,7 +14,7 @@ import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseInfo;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdatasource.StockExchange;
+import virtualgambling.model.stockexchange.StockExchange;
 
 /**
  * Created by gajjar.s, on 9:45 PM, 11/12/18

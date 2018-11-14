@@ -9,9 +9,9 @@ import java.util.List;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdatasource.SimpleStockExchange;
-import virtualgambling.model.stockdatasource.StockExchange;
-import virtualgambling.model.stockexchange.StockDataSource;
+import virtualgambling.model.stockdatasource.StockDataSource;
+import virtualgambling.model.stockexchange.SimpleStockExchange;
+import virtualgambling.model.stockexchange.StockExchange;
 
 public class TestUtils {
   public static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
