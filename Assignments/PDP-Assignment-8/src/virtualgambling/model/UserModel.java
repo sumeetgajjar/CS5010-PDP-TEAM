@@ -85,7 +85,6 @@ public interface UserModel {
    * <li>quantity should be positive, if not, then an {@link IllegalArgumentException} is thrown
    * </li>
    * <li>null inputs will result in an {@link IllegalArgumentException}</li>
-   * </li>
    * </ul>
    *
    * @param tickerName    the name of the ticker
