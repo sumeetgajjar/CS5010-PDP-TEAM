@@ -5,20 +5,18 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import utils.TestUtils;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Share;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.SimpleStockExchange;
 import virtualgambling.model.stockexchange.SimpleStockDataSource;
-import virtualgambling.model.stockexchange.StockDataSource;
 
 /**
  * Created by gajjar.s, on 9:52 PM, 11/12/18
  */
 public class UserModelTest {
-
-  private static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
   @Test
   public void testInitializationOfUserModel() {
@@ -38,7 +36,7 @@ public class UserModelTest {
     Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("p1", date));
 
-    Assert.assertEquals(DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
+    Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
   }
 
   @Test
@@ -98,7 +96,7 @@ public class UserModelTest {
   @Test
   public void buyingSharesOfInvalidQuantityFails() throws IllegalArgumentException,
           StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
 
@@ -162,7 +160,7 @@ public class UserModelTest {
 
   @Test
   public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     Share appleShare = getAppleShare();
 
     try {
@@ -200,20 +198,20 @@ public class UserModelTest {
 
   @Test
   public void getRemainingCapitalWorks() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
 
-    Assert.assertEquals(DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
+    Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
 
     userModel.buyShares("AAPL", "p1", date, 1);
-    Assert.assertEquals(DEFAULT_USER_CAPITAL.subtract(appleShare.getUnitPrice()),
+    Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL.subtract(appleShare.getUnitPrice()),
             userModel.getRemainingCapital());
   }
 
   @Test
   public void buyingStockWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     try {
       Calendar calendar = Calendar.getInstance();
       calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -229,7 +227,7 @@ public class UserModelTest {
 
   @Test
   public void buyingFailsForInvalidTickerName() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     try {
       userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
       Assert.fail("should have failed");
@@ -245,7 +243,7 @@ public class UserModelTest {
 
     try {
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date,
-              DEFAULT_USER_CAPITAL.divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
+              TestUtils.DEFAULT_USER_CAPITAL.divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
       Assert.fail("should have failed");
     } catch (IllegalStateException e) {
       Assert.assertNull("Insufficient funds", e.getMessage());
@@ -254,7 +252,7 @@ public class UserModelTest {
 
   @Test
   public void getCostBasisFailsDueToInvalidArguments() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
     Date date = getValidDateForTrading();
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
@@ -276,7 +274,7 @@ public class UserModelTest {
 
   @Test
   public void getPortfolioValueFailsDueToInvalidArguments() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
     Date date = getValidDateForTrading();
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
@@ -303,7 +301,7 @@ public class UserModelTest {
 
     Date date = getValidDateForTrading();
 
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
     userModel.createPortfolio("p2");
     userModel.createPortfolio("p3");
@@ -362,7 +360,7 @@ public class UserModelTest {
 
   @Test
   public void gettingPortfolioValueWorks() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
 
     Share appleShare = getAppleShare();
@@ -407,7 +405,7 @@ public class UserModelTest {
 
   @Test
   public void gettingPortfolioCostWorks() throws StockDataNotFoundException {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
 
     Share appleShare = getAppleShare();
@@ -455,7 +453,7 @@ public class UserModelTest {
 
   @Test
   public void getAllPortfolioNamesWorks() {
-    UserModel userModel = getMockedDataSourceEmptyUser();
+    UserModel userModel = TestUtils.getMockedUserModel();
 
     Assert.assertEquals("", userModel.getAllPortfolioNames());
 
@@ -473,25 +471,25 @@ public class UserModelTest {
     return new Share("GOOG", new BigDecimal("11"));
   }
 
-  private Date getFutureTime() {
+  private static Date getFutureTime() {
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DATE, 1);
     return calendar.getTime();
   }
 
-  private Date getDateAfterClosingTime() {
+  private static Date getDateAfterClosingTime() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 4, 1);
     return calendar.getTime();
   }
 
-  private Date getDateBeforeOpeningTime() {
+  private static Date getDateBeforeOpeningTime() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 8, 59);
     return calendar.getTime();
   }
 
-  private Date getWeekendDate() {
+  private static Date getWeekendDate() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 11, 10, 0);
     return calendar.getTime();
@@ -503,49 +501,14 @@ public class UserModelTest {
     return calendar.getTime();
   }
 
-  private UserModel getUserModelWithEmptyPortfolio() {
+  private static UserModel getUserModelWithEmptyPortfolio() {
     UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("p1");
     return userModel;
   }
 
-  private UserModel getEmptyUserModel() {
+  private static UserModel getEmptyUserModel() {
     return new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
   }
 
-  private UserModel getMockedDataSourceEmptyUser() {
-    return new SimpleUserModel(new SimpleStockExchange(new MockDataSource()));
-  }
-
-  private static class MockDataSource implements StockDataSource {
-    @Override
-    public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-      if (tickerName.equals("AAPL")) {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
-        Date day3 = calendar.getTime();
-        if (date.equals(day3)) {
-          return BigDecimal.TEN;
-        }
-
-        calendar.add(Calendar.DATE, -1);
-        Date day2 = calendar.getTime();
-        if (date.equals(day2)) {
-          return new BigDecimal(20);
-        }
-
-        calendar.add(Calendar.DATE, -2);
-        Date day1 = calendar.getTime();
-        if (date.equals(day1)) {
-          return new BigDecimal(30);
-        }
-
-      } else if (tickerName.equals("GOOG")) {
-        return new BigDecimal("11");
-      }
-
-      throw new StockDataNotFoundException();
-    }
-  }
 }

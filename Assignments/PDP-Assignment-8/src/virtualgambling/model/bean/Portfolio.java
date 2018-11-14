@@ -7,9 +7,7 @@ import java.util.List;
 /**
  * Created by gajjar.s, on 8:13 PM, 11/11/18
  */
-//todo see if this can be extracted as interface
 public class Portfolio {
-
   private final String name;
   private final List<PurchaseInfo> purchases;
 

@@ -19,6 +19,15 @@ public interface UserModel {
    */
   void createPortfolio(String portfolioName);
 
+  /**
+   * Returns the cost basis of the portfolio at that date.
+   *
+   * <p>Returns cost price in USD.
+   *
+   * @param portfolioName s
+   * @param date          s
+   * @return s
+   */
   BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date);
 
   BigDecimal getPortfolioValue(String portfolioName, Date date);
