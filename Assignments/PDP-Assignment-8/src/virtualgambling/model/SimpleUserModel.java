@@ -1,7 +1,6 @@
 package virtualgambling.model;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -144,7 +143,7 @@ public class SimpleUserModel implements UserModel {
 
     Date dateTime = getTodayDate();
     Portfolio portfolio = this.portfolios.get(portfolioName);
-    NumberFormat numberFormatter = Utils.getCurrencyNumberFormatter();
+
     StringBuilder composition = new StringBuilder();
     composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
             "Current Value"));
@@ -154,8 +153,8 @@ public class SimpleUserModel implements UserModel {
       composition.append(String.format("%-20s%-20s%-20s%s",
               Utils.getDefaultFormattedDateStringFromDate(sharePurchaseInfo.getDate()),
               sharePurchaseInfo.getTickerName(),
-              numberFormatter.format(sharePurchaseInfo.getUnitPrice()),
-              numberFormatter.format(this.stockExchange.
+              Utils.getFormattedCurrencyNumberString(sharePurchaseInfo.getUnitPrice()),
+              Utils.getFormattedCurrencyNumberString(this.stockExchange.
                       getPrice(sharePurchaseInfo.getTickerName(), dateTime))));
       composition.append(System.lineSeparator());
     }
@@ -165,15 +164,15 @@ public class SimpleUserModel implements UserModel {
 
     composition.append(System.lineSeparator());
     composition.append(String.format("%-20s%s", "Total Value:",
-            Utils.getCurrencyNumberFormatter().format(portfolioValue)));
+            Utils.getFormattedCurrencyNumberString(portfolioValue)));
     composition.append(System.lineSeparator());
 
     composition.append(String.format("%-20s%s", "Total Cost:",
-            Utils.getCurrencyNumberFormatter().format(costBasisOfPortfolio)));
+            Utils.getFormattedCurrencyNumberString(costBasisOfPortfolio)));
     composition.append(System.lineSeparator());
 
     composition.append(String.format("%-20s%s", "Profit:",
-            Utils.getCurrencyNumberFormatter().format(portfolioValue.subtract(costBasisOfPortfolio))));
+            Utils.getFormattedCurrencyNumberString(portfolioValue.subtract(costBasisOfPortfolio))));
     return composition.toString();
   }
 

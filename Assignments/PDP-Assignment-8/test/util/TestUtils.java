@@ -3,7 +3,6 @@ package util;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
@@ -77,36 +76,5 @@ public class TestUtils {
 
       throw new StockDataNotFoundException("Stock Data not found");
     }
-  }
-
-  private static String getPortfolioComposition(List<Share> shares, List<BigDecimal> currentValue,
-                                                List<BigDecimal> costPrice, List<Date> buyDates,
-                                                BigDecimal totalCost, BigDecimal totalValue) {
-    StringBuilder composition = new StringBuilder();
-
-    composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
-            "Current Value"));
-    composition.append(System.lineSeparator());
-    for (int i = 0; i < shares.size(); i++) {
-      composition.append(String.format("%-20s%-20s%-20s%s",
-              Utils.getDefaultFormattedDateStringFromDate(buyDates.get(i)),
-              shares.get(i).getTickerName(),
-              Utils.getCurrencyNumberFormatter().format(costPrice.get(i)),
-              Utils.getCurrencyNumberFormatter().format(currentValue.get(i))));
-      composition.append(System.lineSeparator());
-    }
-
-    composition.append(System.lineSeparator());
-    composition.append(String.format("%-20s%s", "Total Value:",
-            Utils.getCurrencyNumberFormatter().format(totalValue)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Total Cost:",
-            Utils.getCurrencyNumberFormatter().format(totalCost)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Profit:",
-            Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost))));
-    return composition.toString();
   }
 }

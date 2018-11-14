@@ -31,14 +31,10 @@ public class Utils {
   }
 
   /**
-   * Returns a currency formatter for the default locale.
+   * Returns a currency formatted string of the number.
    *
    * @return currency formatter
    */
-  public static NumberFormat getCurrencyNumberFormatter() {
-    return NumberFormat.getCurrencyInstance(Locale.US);
-  }
-
   public static String getFormattedCurrencyNumberString(Number number) {
     return NumberFormat.getCurrencyInstance(Locale.US).format(number);
   }
