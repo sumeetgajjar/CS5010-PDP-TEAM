@@ -21,8 +21,6 @@ public class TradingControllerModelTest {
             new TextView(readable,
                     appendable));
     controller.run();
-    Assert.assertEquals("p1\np2\n", appendable.toString());
-    controller.go();
     Assert.assertEquals(getWelcomeMessage() + "\np1\np2\n", appendable.toString());
   }
 
@@ -72,8 +70,6 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.run();
-    String expected = "Buy Date            Stocks              Cost Price          Current " +
-    controller.go();
     String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks " +
             "             Cost Price          Current " +
             "Value\n" +
