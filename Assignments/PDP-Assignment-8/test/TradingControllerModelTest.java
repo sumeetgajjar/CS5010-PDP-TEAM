@@ -70,10 +70,6 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.run();
-    String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks " +
-            "             Cost Price          Current " +
-            "Value\n" +
-    controller.go();
     String expected = getWelcomeMessage() + System.lineSeparator() + "Buy Date            Stocks "
             + "             Cost Price          Current "
             + "Value\n" +
@@ -254,7 +250,7 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(mockedUserModel,
             new TextView(readable, appendable));
 
-    controller.go();
+    controller.run();
 
     String builder = getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
