@@ -3,8 +3,14 @@ package virtualgambling.controller.command;
 import virtualgambling.model.UserModel;
 
 /**
- * Created by gajjar.s, on 12:49 AM, 11/14/18
+ * This interface represents a command which can be executed by a controller.
  */
 public interface Command {
+
+  /**
+   * Executes the command.
+   *
+   * @param userModel the userModel
+   */
   void execute(UserModel userModel);
 }
