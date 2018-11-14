@@ -1,5 +1,8 @@
 package virtualgambling.view;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 import virtualgambling.util.Utils;
 
 /**
@@ -9,21 +12,21 @@ public class TextView implements View {
 
   private final Readable readable;
   private final Appendable appendable;
+  private final Scanner scanner;
 
   public TextView(Readable readable, Appendable appendable) throws IllegalArgumentException {
     this.readable = Utils.requireNonNull(readable);
     this.appendable = Utils.requireNonNull(appendable);
+    this.scanner = new Scanner(this.readable);
   }
 
   @Override
-  public String getInput() {
-
-
-    return null;
+  public String getInput() throws IOException {
+    return scanner.nextLine();
   }
 
   @Override
-  public void display(String text) {
-
+  public void display(String text) throws IOException {
+    this.appendable.append(text);
   }
 }
