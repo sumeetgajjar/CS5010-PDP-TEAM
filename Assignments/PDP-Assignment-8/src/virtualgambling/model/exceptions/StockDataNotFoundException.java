@@ -1,10 +1,16 @@
 package virtualgambling.model.exceptions;
 
 /**
- * Created by gajjar.s, on 10:24 PM, 11/11/18
+ * This class represents a runtime exception which will be thrown if Data for the queried stock is
+ * not available with the source.
  */
 public class StockDataNotFoundException extends RuntimeException {
 
+  /**
+   * Constructs a object of {@link StockDataNotFoundException} with the given message.
+   *
+   * @param message the message
+   */
   public StockDataNotFoundException(String message) {
     super(message);
   }
