@@ -39,11 +39,11 @@ public class SimpleUserModel implements UserModel {
   }
 
   /**
-   * Creates a portfolio for this UserModel. The portfolio name should contain at least 1 character
-   * and cannot contain leading or trailing spaces. It will throw {@link IllegalArgumentException}
-   * if the given condition is not satisfied. It throws {@link IllegalArgumentException} if the
-   * given portfolioName is null or empty. If a portfolio already exists then it will throw an
-   * {@link IllegalArgumentException}.
+   * Creates a portfolio for this UserModel. The portfolio name should contain at least 1 character,
+   * no spaces in the name and cannot contain leading or trailing spaces. It will throw {@link
+   * IllegalArgumentException} if the given condition is not satisfied. It throws {@link
+   * IllegalArgumentException} if the given portfolioName is null or empty. If a portfolio already
+   * exists then it will throw an {@link IllegalArgumentException}.
    *
    * @param portfolioName the name of the portfolio
    * @throws IllegalArgumentException if the name is invalid
