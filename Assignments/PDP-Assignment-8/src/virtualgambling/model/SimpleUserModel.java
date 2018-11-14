@@ -209,9 +209,7 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Portfolio not found");
     }
 
-    Date currentDate = Calendar.getInstance().getTime();
-    if (date.compareTo(currentDate) > 0) {
-      throw new IllegalArgumentException("Date cannot be in the future");
-    }
+    Utils.isFutureDate(date);
   }
+
 }

@@ -22,10 +22,10 @@ public class SimpleStockExchange implements StockExchange {
   public SharePurchaseInfo buyShares(String tickerName, long quantity, Date date,
                                      BigDecimal remainingCapital) {
     Utils.requireNonNull(remainingCapital);
+    BigDecimal stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
       throw new IllegalArgumentException("Quantity has to be positive");
     }
-    BigDecimal stockPrice = this.getPrice(tickerName, date);
     BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
     if (costOfPurchase.compareTo(remainingCapital) > 0) {
       throw new IllegalStateException("Insufficient funds");
@@ -38,8 +38,7 @@ public class SimpleStockExchange implements StockExchange {
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
-
-    if (Utils.checkTimeNotInBusinessHours(date)) {
+    if (Utils.isFutureDate(date) || Utils.checkTimeNotInBusinessHours(date)) {
       throw new IllegalArgumentException("Cannot buy shares at given time");
     }
     return stockDataSource.getPrice(tickerName, date);

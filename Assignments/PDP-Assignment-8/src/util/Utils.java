@@ -67,4 +67,9 @@ public class Utils {
     int hour = c.get(Calendar.HOUR_OF_DAY);
     return hour < 8 || hour > 15;
   }
+
+  public static boolean isFutureDate(Date date) {
+    Date currentDate = Calendar.getInstance().getTime();
+    return date.compareTo(currentDate) > 0;
+  }
 }
