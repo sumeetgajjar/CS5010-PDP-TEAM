@@ -64,7 +64,7 @@ public class TradingController implements Controller {
           Command command = biFunction.apply(scanner::next, this::displayOnView);
           command.execute(this.userModel);
         } else {
-          this.displayOnView("Command not found");
+          this.displayOnView("Command not found, please try again");
         }
       } catch (NoSuchElementException e) {
         this.displayOnView("Invalid Command");
