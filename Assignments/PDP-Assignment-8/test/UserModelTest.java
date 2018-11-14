@@ -9,6 +9,7 @@ import util.Share;
 import util.TestUtils;
 import util.Utils;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -252,7 +253,7 @@ public class UserModelTest {
               TestUtils.DEFAULT_USER_CAPITAL
                       .divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1);
       Assert.fail("should have failed");
-    } catch (IllegalStateException e) {
+    } catch (InsufficientCapitalException e) {
       Assert.assertEquals("Insufficient funds", e.getMessage());
     }
   }

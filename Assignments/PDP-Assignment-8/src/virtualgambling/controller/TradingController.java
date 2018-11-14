@@ -86,25 +86,25 @@ public class TradingController implements Controller {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();
 
-    commandMap.put("create_portfolio",
-            (supplier, consumer) -> new CreatePortfolioCommand(supplier.get()));
+    commandMap.put("create_portfolio", (supplier, consumer) ->
+            new CreatePortfolioCommand(supplier.get()));
 
-    commandMap.put("get_all_portfolios",
-            (supplier, consumer) -> new GetAllPortfolioCommand(consumer));
+    commandMap.put("get_all_portfolios", (supplier, consumer) ->
+            new GetAllPortfolioCommand(consumer));
 
-    commandMap.put("get_portfolio_cost_basis",
-            (supplier, consumer) -> new CostBasisCommand(supplier.get(),
+    commandMap.put("get_portfolio_cost_basis", (supplier, consumer) ->
+            new CostBasisCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
-    commandMap.put("get_portfolio_value",
-            (supplier, consumer) -> new PortfolioValueCommand(supplier.get(),
+    commandMap.put("get_portfolio_value", (supplier, consumer) ->
+            new PortfolioValueCommand(supplier.get(),
                     getDateFromString(supplier), consumer));
 
-    commandMap.put("get_portfolio_composition",
-            (supplier, consumer) -> new GetCompositionCommand(supplier.get(), consumer));
+    commandMap.put("get_portfolio_composition", (supplier, consumer) ->
+            new GetCompositionCommand(supplier.get(), consumer));
 
-    commandMap.put("get_remaining_capital",
-            (supplier, consumer) -> new RemainingCapitalCommand(consumer));
+    commandMap.put("get_remaining_capital", (supplier, consumer) ->
+            new RemainingCapitalCommand(consumer));
 
     commandMap.put("buy_shares", this::getBuySharesCommand);
 
