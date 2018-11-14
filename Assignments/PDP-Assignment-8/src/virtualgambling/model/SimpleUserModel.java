@@ -142,7 +142,7 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Portfolio not found");
     }
 
-    Date dateTime = Calendar.getInstance().getTime();
+    Date dateTime = getTodayDate();
     Portfolio portfolio = this.portfolios.get(portfolioName);
     NumberFormat numberFormatter = Utils.getCurrencyNumberFormatter();
     StringBuilder composition = new StringBuilder();
@@ -174,8 +174,11 @@ public class SimpleUserModel implements UserModel {
 
     composition.append(String.format("%-20s%s", "Profit:",
             Utils.getCurrencyNumberFormatter().format(portfolioValue.subtract(costBasisOfPortfolio))));
-    composition.append(System.lineSeparator());
     return composition.toString();
+  }
+
+  protected Date getTodayDate() {
+    return Calendar.getInstance().getTime();
   }
 
   @Override

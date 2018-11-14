@@ -32,10 +32,12 @@ public class UserModelTest {
 
     Date date = new Date();
 
-    Assert.assertEquals("Buy Date\tStocks\tCost Price\tCurrent Value\n" +
-            "Total Value:\t$0.00\n" +
-            "Total Cost:\t$0.00\n" +
-            "Profit:\t$0.00", userModel.getPortfolioComposition("test"));
+    Assert.assertEquals("Buy Date            Stocks              Cost Price          Current " +
+            "Value\n" +
+            "\n" +
+            "Total Value:        $0.00\n" +
+            "Total Cost:         $0.00\n" +
+            "Profit:             $0.00", userModel.getPortfolioComposition("test"));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("test", date));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("test", date));
 
@@ -46,10 +48,12 @@ public class UserModelTest {
   public void createPortfolioWorks() {
     UserModel userModel = getEmptyUserModel();
     userModel.createPortfolio("Hello world");
-    Assert.assertEquals("Buy Date\tStocks\tCost Price\tCurrent Value\n" +
-            "Total Value:\t$0.00\n" +
-            "Total Cost:\t$0.00\n" +
-            "Profit:\t$0.00", userModel.getPortfolioComposition("Hello world"));
+    Assert.assertEquals("Buy Date            Stocks              Cost Price          Current " +
+            "Value\n" +
+            "\n" +
+            "Total Value:        $0.00\n" +
+            "Total Cost:         $0.00\n" +
+            "Profit:             $0.00", userModel.getPortfolioComposition("Hello world"));
   }
 
   @Test
@@ -317,16 +321,24 @@ public class UserModelTest {
     String expectedApplePurchaseComposition = "Buy Date            Stocks              Cost Price" +
             "          Current " +
             "Value\n" +
-            "2018-11-01          AAPL                $30.00              $30.00\n" +
+            "2018-11-01          AAPL                $10.00              $10.00\n" +
             "\n" +
-            "Total Value:        $30.00\n" +
-            "Total Cost:         $30.00\n" +
-            "Profit:             $0.00\n";
+            "Total Value:        $10.00\n" +
+            "Total Cost:         $10.00\n" +
+            "Profit:             $0.00";
+
+    String expectedGooglePurchase = "Buy Date            Stocks              Cost Price          " +
+            "Current Value\n" +
+            "2018-11-01          GOOG                $11.00              $11.00\n" +
+            "\n" +
+            "Total Value:        $11.00\n" +
+            "Total Cost:         $11.00\n" +
+            "Profit:             $0.00";
     Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p1"));
 
     Assert.assertEquals(new BigDecimal(11), userModel.getCostBasisOfPortfolio("p2", date));
     Assert.assertEquals(new BigDecimal(11), userModel.getPortfolioValue("p2", date));
-    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p2"));
+    Assert.assertEquals(expectedGooglePurchase, userModel.getPortfolioComposition("p2"));
 
     Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p3", date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p3", date));
@@ -335,7 +347,14 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
     Assert.assertEquals(new BigDecimal(20), userModel.getCostBasisOfPortfolio("p1", date));
     Assert.assertEquals(new BigDecimal(20), userModel.getPortfolioValue("p1", date));
-    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
+    Assert.assertEquals("Buy Date            Stocks              Cost Price          Current " +
+            "Value\n" +
+            "2018-11-01          AAPL                $10.00              $10.00\n" +
+            "2018-11-01          AAPL                $10.00              $10.00\n" +
+            "\n" +
+            "Total Value:        $20.00\n" +
+            "Total Cost:         $20.00\n" +
+            "Profit:             $0.00", userModel.getPortfolioComposition("p1"));
   }
 
   @Test
@@ -357,16 +376,22 @@ public class UserModelTest {
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals("", userModel.getPortfolioComposition("p1"));
     Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
+    Assert.assertEquals("Buy Date            Stocks              Cost Price          Current " +
+            "Value\n" +
+            "2018-10-30          AAPL                $30.00              $10.00\n" +
+            "2018-10-31          AAPL                $20.00              $10.00\n" +
+            "2018-11-01          AAPL                $10.00              $10.00\n" +
+            "\n" +
+            "Total Value:        $90.00\n" +
+            "Total Cost:         $140.00\n" +
+            "Profit:             ($50.00)", userModel.getPortfolioComposition("p1"));
   }
 
   @Test

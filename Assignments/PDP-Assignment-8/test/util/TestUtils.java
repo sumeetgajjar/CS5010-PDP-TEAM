@@ -2,7 +2,6 @@ package util;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +22,6 @@ public class TestUtils {
   }
 
   public static class MockUserModel extends SimpleUserModel implements UserModel {
-
     private final StockExchange stockExchange;
     private Date mockedTodayDate;
 
@@ -38,17 +36,9 @@ public class TestUtils {
     }
 
     @Override
-    public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
-      return TestUtils.getPortfolioComposition(
-              Collections.singletonList(new Share("AAPL", new BigDecimal("30"))),
-              Collections.singletonList(new BigDecimal("30")),
-              Collections.singletonList(new BigDecimal("30")),
-              Collections.singletonList(this.mockedTodayDate),
-              new BigDecimal("30"),
-              new BigDecimal("30")
-      );
+    protected Date getTodayDate() {
+      return this.mockedTodayDate;
     }
-
   }
 
   public static class MockDataSource implements StockDataSource {
@@ -112,7 +102,6 @@ public class TestUtils {
 
     composition.append(String.format("%-20s%s", "Profit:",
             Utils.getCurrencyNumberFormatter().format(totalValue.subtract(totalCost))));
-    composition.append(System.lineSeparator());
     return composition.toString();
   }
 }
