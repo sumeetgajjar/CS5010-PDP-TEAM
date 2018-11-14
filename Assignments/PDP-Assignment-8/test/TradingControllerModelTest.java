@@ -151,6 +151,36 @@ public class TradingControllerModelTest {
   }
 
   @Test
+  public void incompleteBuySharesForPortfolioAsksToRetry() {
+    Readable readable = new StringReader("create_portfolio p1\n" +
+            "buy_shares AAPL\n" +
+            "buy_shares AAPL p1 2018\n" +
+            "buy_shares AAPL 2018-1\n" +
+            "buy_shares AAPL 2018-10-30\n" +
+            "buy_shares AAPL p1 2018-10-30\n" +
+            "buy_shares AAPL p1 2018-10-30 10\n" +
+            "get_portfolio_cost_basis p1 2018-11-01\n" +
+            "quit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+            new TextView(readable, appendable));
+
+    controller.go();
+    String invalidCommand = "Invalid Command";
+
+    String builder = invalidCommand + System.lineSeparator() +
+            "Invalid date format" + System.lineSeparator() +
+            invalidCommand + System.lineSeparator() +
+            invalidCommand + System.lineSeparator() +
+            invalidCommand + System.lineSeparator() +
+            "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on " +
+            "2018-10-30" + System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
+            System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
+  }
+
+  @Test
   public void validCreatePortfolioInvalidParameters() {
     Readable readable = new StringReader("create_portfolio\ncreate_portfolio \nquit");
     Appendable appendable = new StringBuffer();
