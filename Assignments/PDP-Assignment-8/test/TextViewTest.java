@@ -8,7 +8,7 @@ import virtualgambling.view.TextView;
 import virtualgambling.view.View;
 
 /**
- * Represents tests on a text view.
+ * The class represents a Junit class to test View in isolation.
  */
 public class TextViewTest {
 

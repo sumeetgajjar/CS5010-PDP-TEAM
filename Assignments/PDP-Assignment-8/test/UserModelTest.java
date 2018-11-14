@@ -7,12 +7,13 @@ import java.util.Date;
 
 import util.Share;
 import util.TestUtils;
+import util.Utils;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
- * Created by gajjar.s, on 9:52 PM, 11/12/18
+ * The class represents a Junit class to test Model in isolation.
  */
 public class UserModelTest {
 
@@ -212,18 +213,20 @@ public class UserModelTest {
 
   @Test
   public void buyingStockWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
-    UserModel userModel = TestUtils.getMockedUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     userModel.createPortfolio("p1");
     try {
       Calendar calendar = Calendar.getInstance();
       calendar.set(2018, Calendar.JULY, 4, 10, 0);
       calendar.add(Calendar.DATE, -1);
-      Date date = calendar.getTime();
+      Date date = Utils.removeTimeFromDate(calendar.getTime());
 
       userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
-      Assert.assertEquals("Stock Data not found", e.getMessage());
+      Assert.assertEquals(
+              "Stock Data not found for Stock:AAPL for Date:Tue Jul 03 00:00:00 EDT 2018",
+              e.getMessage());
     }
   }
 

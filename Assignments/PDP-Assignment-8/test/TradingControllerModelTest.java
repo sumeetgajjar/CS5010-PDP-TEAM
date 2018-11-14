@@ -1,6 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.math.BigDecimal;
 
@@ -11,6 +15,9 @@ import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
+/**
+ * The class represents a Junit class to test Controller and Model.
+ */
 public class TradingControllerModelTest {
   @Test
   public void creatingPortfolioWorks() {
@@ -180,8 +187,8 @@ public class TradingControllerModelTest {
             + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on "
             + "2018-10-30" + System.lineSeparator()
-            + "Incomplete Command, please enter valid parameters" + System.lineSeparator() +
-            "Incomplete Command, please enter valid parameters"
+            + "Incomplete Command, please enter valid parameters" + System.lineSeparator()
+            + "Incomplete Command, please enter valid parameters"
             + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
             + System.lineSeparator();
@@ -197,6 +204,8 @@ public class TradingControllerModelTest {
             + "buy_shares AAPL 2018-10-30\n"
             + "buy_shares AAPL p1 2018-10-30\n"
             + "buy_shares AAPL p1 2018-10-30 10\n"
+            + "buy_shares AAPL p1 2018-10-30 asd\n"
+            + "buy_shares APL p1 2018-10-30 10\n"
             + "get_portfolio_cost_basis p1 2018-11-01\n"
             + "quit");
     Appendable appendable = new StringBuffer();
@@ -214,6 +223,8 @@ public class TradingControllerModelTest {
             + invalidCommand + System.lineSeparator()
             + "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on "
             + "2018-10-30" + System.lineSeparator()
+            + "Invalid quantity of shares" + System.lineSeparator()
+            + "Stock Data not found" + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
             + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
@@ -273,4 +284,27 @@ public class TradingControllerModelTest {
     Assert.assertEquals(builder, appendable.toString());
   }
 
+  @Test
+  public void closingAppendableBeforeGivingToController() throws IOException {
+    try {
+      Readable readable = new StringReader("quit\n");
+
+      ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+      BufferedWriter appendable =
+              new BufferedWriter(
+                      new OutputStreamWriter(
+                              outputBuffer));
+
+      appendable.close();
+
+
+      Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
+              new TextView(readable, appendable));
+
+      controller.run();
+      Assert.fail("should have failed");
+    } catch (IllegalStateException e) {
+      Assert.assertEquals("Cannot display data on view", e.getMessage());
+    }
+  }
 }

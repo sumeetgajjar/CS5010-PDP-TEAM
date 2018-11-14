@@ -16,7 +16,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.TextView;
 
 /**
- * Created by gajjar.s, on 5:17 PM, 11/14/18
+ * The class represents a Junit class to test wiring of Model controller and view in isolation.
  */
 public class ModelControllerViewWiringTest {
 
@@ -98,7 +98,6 @@ public class ModelControllerViewWiringTest {
     Assert.assertEquals(expectedLog.toString(), log.toString());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
-
 
   private static class MockModel implements UserModel {
 

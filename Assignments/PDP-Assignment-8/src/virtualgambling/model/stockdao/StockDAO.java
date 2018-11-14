@@ -43,5 +43,6 @@ public interface StockDAO {
    *                                    the future or a stock market holiday
    * @throws StockDataNotFoundException if the stock price at the given date is not found
    */
-  BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException;
+  BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+          IllegalArgumentException;
 }
