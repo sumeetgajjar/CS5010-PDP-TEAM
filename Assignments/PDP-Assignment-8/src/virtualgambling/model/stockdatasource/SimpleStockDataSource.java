@@ -25,6 +25,17 @@ public class SimpleStockDataSource implements StockDataSource {
   private static final Map<String, Map<Date, BigDecimal>> STOCK_PRICES =
           getStockPricesForLast10Days();
 
+  /**
+   * Retrieves the stock price information for a given stock ticker and date.
+   *
+   * <p>{@link SimpleStockDataSource} only considers the date and not the time.
+   *
+   * @param tickerName the ticker name of the stock
+   * @param date       the date when the stock needs to be purchased
+   * @return the price of the stock that matches the given ticker and date
+   * @throws StockDataNotFoundException if stock price for the ticker for the given date is not
+   *                                    found
+   */
   @Override
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
     BigDecimal stockPrice = STOCK_PRICES.getOrDefault(tickerName, Collections.emptyMap()).get(date);
