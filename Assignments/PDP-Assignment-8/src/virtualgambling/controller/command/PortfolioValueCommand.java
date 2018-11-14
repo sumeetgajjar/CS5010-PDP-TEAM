@@ -8,7 +8,8 @@ import util.Utils;
 import virtualgambling.model.UserModel;
 
 /**
- * Created by gajjar.s, on 12:51 AM, 11/14/18
+ * This class represents a command to get portfolio value of the given portfolio. It implements the
+ * {@link Command} interface.
  */
 public class PortfolioValueCommand implements Command {
 
@@ -16,12 +17,24 @@ public class PortfolioValueCommand implements Command {
   private final Date date;
   private final Consumer<String> consumer;
 
+  /**
+   * Constructs a object of {@link PortfolioValueCommand} with the given params.
+   *
+   * @param portfolioName the name of the portfolio
+   * @param date          the date at which the portfolio value is to be calculated
+   * @param consumer      the consumer to consume the result of command
+   */
   public PortfolioValueCommand(String portfolioName, Date date, Consumer<String> consumer) {
     this.portfolioName = portfolioName;
     this.date = date;
     this.consumer = consumer;
   }
 
+  /**
+   * Executes this command and consumes the result of the command using the consumer.
+   *
+   * @param userModel the userModel
+   */
   @Override
   public void execute(UserModel userModel) {
     BigDecimal portfolioValue = userModel.getPortfolioValue(portfolioName, date);

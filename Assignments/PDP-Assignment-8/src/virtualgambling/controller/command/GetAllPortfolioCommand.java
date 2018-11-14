@@ -15,7 +15,7 @@ public class GetAllPortfolioCommand implements Command {
   /**
    * Constructs a object of {@link GetAllPortfolioCommand} with the given params
    *
-   * @param consumer the consumer of consume the result of command
+   * @param consumer the consumer to consume the result of command
    */
   public GetAllPortfolioCommand(Consumer<String> consumer) {
     this.consumer = consumer;

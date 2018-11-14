@@ -21,7 +21,7 @@ public class CostBasisCommand implements Command {
    *
    * @param portfolioName the name of the portfolio
    * @param date          the date at which the cost basis is to be calculated
-   * @param consumer      the consumer of consume the result of command
+   * @param consumer      the consumer to consume the result of command
    */
   public CostBasisCommand(String portfolioName, Date date, Consumer<String> consumer) {
     this.portfolioName = portfolioName;
