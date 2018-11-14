@@ -26,12 +26,10 @@ public class TestUtils {
   }
 
   public static class MockUserModel extends SimpleUserModel implements UserModel {
-    private final StockExchange stockExchange;
     private Date mockedTodayDate;
 
     private MockUserModel(StockExchange stockExchange) {
       super(stockExchange);
-      this.stockExchange = stockExchange;
     }
 
     MockUserModel(Date mockedTodayDate) throws IllegalArgumentException {
