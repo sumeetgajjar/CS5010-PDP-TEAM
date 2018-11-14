@@ -71,11 +71,18 @@ public class TradingControllerModelTest {
   public void emptyPortfolioCompositionWorks() {
     Readable readable = new StringReader("create_portfolio p1\nget_portfolio_composition p1\nquit");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
             new TextView(readable, appendable));
 
     controller.go();
-    Assert.assertEquals("", appendable.toString());
+    String expected = "Buy Date            Stocks              Cost Price          Current " +
+            "Value\n" +
+            "\n" +
+            "Total Value:        $0.00\n" +
+            "Total Cost:         $0.00\n" +
+            "Profit:             $0.00\n" +
+            "\n";
+    Assert.assertEquals(expected, appendable.toString());
   }
 
   @Test
@@ -106,7 +113,13 @@ public class TradingControllerModelTest {
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
     controller.go();
-    Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL.toPlainString(), appendable.toString());
+    StringBuilder expected = new StringBuilder(
+            Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL))
+            .append(System.lineSeparator())
+            .append(Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL))
+            .append(System.lineSeparator());
+
+    Assert.assertEquals(expected.toString(), appendable.toString());
   }
 
 

@@ -7,11 +7,8 @@ import java.util.Date;
 
 import util.Share;
 import util.TestUtils;
-import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
-import virtualgambling.model.stockexchange.SimpleStockExchange;
 
 /**
  * Created by gajjar.s, on 9:52 PM, 11/12/18
@@ -20,7 +17,7 @@ public class UserModelTest {
 
   @Test
   public void testInitializationOfUserModel() {
-    UserModel userModel = getEmptyUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     try {
       userModel.getPortfolioComposition("test");
       Assert.fail("should have failed");
@@ -46,7 +43,7 @@ public class UserModelTest {
 
   @Test
   public void createPortfolioWorks() {
-    UserModel userModel = getEmptyUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     userModel.createPortfolio("Hello world");
     Assert.assertEquals("Buy Date            Stocks              Cost Price          Current " +
             "Value\n" +
@@ -58,7 +55,7 @@ public class UserModelTest {
 
   @Test
   public void createPortfolioFails() {
-    UserModel userModel = getEmptyUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     try {
       userModel.createPortfolio(null);
       Assert.fail("should have failed");
@@ -156,7 +153,7 @@ public class UserModelTest {
 
   @Test
   public void buyingShareForMissingPortfolioFails() throws StockDataNotFoundException {
-    UserModel userModel = getEmptyUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
 
@@ -538,13 +535,9 @@ public class UserModelTest {
   }
 
   private static UserModel getUserModelWithEmptyPortfolio() {
-    UserModel userModel = getEmptyUserModel();
+    UserModel userModel = TestUtils.getEmptyUserModel();
     userModel.createPortfolio("p1");
     return userModel;
-  }
-
-  private static UserModel getEmptyUserModel() {
-    return new SimpleUserModel(new SimpleStockExchange(new SimpleStockDataSource()));
   }
 
 }
