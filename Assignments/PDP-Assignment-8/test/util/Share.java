@@ -50,8 +50,8 @@ public class Share {
     }
 
     Share share = (Share) o;
-    return Objects.equals(tickerName, share.tickerName) &&
-            Objects.equals(unitPrice, share.unitPrice);
+    return Objects.equals(tickerName, share.tickerName)
+            && Objects.equals(unitPrice, share.unitPrice);
   }
 
   @Override
