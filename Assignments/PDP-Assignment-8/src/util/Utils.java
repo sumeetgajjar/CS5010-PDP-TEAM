@@ -39,6 +39,10 @@ public class Utils {
     return NumberFormat.getCurrencyInstance(Locale.US);
   }
 
+  public static String getFormattedCurrencyNumberString(Number number) {
+    return NumberFormat.getCurrencyInstance(Locale.US).format(number);
+  }
+
   /**
    * Formats the given date into a 'yyyy-MM-dd' format.
    *
