@@ -129,4 +129,49 @@ public class TradingControllerModelTest {
     Assert.assertEquals(expected,
             appendable.toString());
   }
+
+  @Test
+  public void incompleteCostBasisForPortfolioAsksToRetry() {
+    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10" +
+            "\nget_portfolio_cost_basis p1\nget_portfolio_cost_basis " +
+            "2018-11-10\nget_portfolio_cost_basis p1 2018-11-01\nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+            new TextView(readable, appendable));
+
+    controller.go();
+
+    String builder = "Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on " +
+            "2018-10-30" + System.lineSeparator() +
+            "Invalid Command" + System.lineSeparator() + "Invalid Command"
+            + System.lineSeparator() +
+            Utils.getFormattedCurrencyNumberString(new BigDecimal("300")) +
+            System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
+  }
+
+  @Test
+  public void validCreatePortfolioInvalidParameters() {
+    Readable readable = new StringReader("create_portfolio\ncreate_portfolio \nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
+            readable, appendable));
+    controller.go();
+
+    String expected =
+            "Invalid Command" + System.lineSeparator() + "Invalid Command" + System.lineSeparator();
+    Assert.assertEquals(expected, appendable.toString());
+  }
+
+  @Test
+  public void spaceInPortfolioNameLeadsToIgnoringOf2ndWord() {
+    Readable readable = new StringReader("create_portfolio word1 word2\nget_all_portfolios\nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
+            readable, appendable));
+    controller.go();
+
+    String expected = "word1" + System.lineSeparator();
+    Assert.assertEquals(expected, appendable.toString());
+  }
 }
