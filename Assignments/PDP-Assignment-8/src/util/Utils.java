@@ -33,6 +33,7 @@ public class Utils {
   /**
    * Returns a currency formatted string of the number.
    *
+   * @param number the number to format
    * @return currency formatter
    */
   public static String getFormattedCurrencyNumberString(Number number) {
