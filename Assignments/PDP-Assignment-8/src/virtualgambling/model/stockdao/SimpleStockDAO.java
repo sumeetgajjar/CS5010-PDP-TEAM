@@ -44,7 +44,8 @@ public class SimpleStockDAO implements StockDAO {
   }
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+          IllegalArgumentException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
     if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
