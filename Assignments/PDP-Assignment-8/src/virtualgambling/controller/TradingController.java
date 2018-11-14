@@ -41,8 +41,6 @@ public class TradingController implements Controller {
 
   @Override
   public void go() {
-
-
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
 
