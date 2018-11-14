@@ -11,6 +11,7 @@ import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
+// todo write buy shares share purchase info output in stringbuffer
 public class TradingControllerModelTest {
   @Test
   public void creatingPortfolioWorks() {
