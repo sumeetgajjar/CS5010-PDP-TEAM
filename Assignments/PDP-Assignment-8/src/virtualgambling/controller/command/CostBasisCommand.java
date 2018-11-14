@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.function.Consumer;
 
+import util.Utils;
 import virtualgambling.model.UserModel;
 
 /**
@@ -24,6 +25,6 @@ public class CostBasisCommand implements Command {
   public void execute(UserModel userModel) {
     BigDecimal costBasisOfPortfolio = userModel.getCostBasisOfPortfolio(this.portfolioName,
             this.date);
-    consumer.accept(costBasisOfPortfolio.toPlainString());
+    consumer.accept(Utils.getFormattedCurrencyNumberString(costBasisOfPortfolio));
   }
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.function.Consumer;
 
+import util.Utils;
 import virtualgambling.model.UserModel;
 
 /**
@@ -24,6 +25,6 @@ public class PortfolioValueCommand implements Command {
   @Override
   public void execute(UserModel userModel) {
     BigDecimal portfolioValue = userModel.getPortfolioValue(portfolioName, date);
-    this.consumer.accept(portfolioValue.toPlainString());
+    this.consumer.accept(Utils.getFormattedCurrencyNumberString(portfolioValue));
   }
 }
