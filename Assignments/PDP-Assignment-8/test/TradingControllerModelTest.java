@@ -180,8 +180,8 @@ public class TradingControllerModelTest {
             + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on "
             + "2018-10-30" + System.lineSeparator()
-            + "Incomplete Command, please enter valid parameters" + System.lineSeparator() +
-            "Incomplete Command, please enter valid parameters"
+            + "Incomplete Command, please enter valid parameters" + System.lineSeparator()
+            + "Incomplete Command, please enter valid parameters"
             + System.lineSeparator()
             + Utils.getFormattedCurrencyNumberString(new BigDecimal("300"))
             + System.lineSeparator();
