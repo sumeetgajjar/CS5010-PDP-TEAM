@@ -1,19 +1,18 @@
 package virtualgambling.controller.command;
 
-import java.io.IOException;
+import java.util.function.Consumer;
 
 import virtualgambling.model.UserModel;
-import virtualgambling.view.View;
 
 public class RemainingCapitalCommand implements Command {
-  private final View view;
+  private final Consumer<String> consumer;
 
-  public RemainingCapitalCommand(View view) {
-    this.view = view;
+  public RemainingCapitalCommand(Consumer<String> consumer) {
+    this.consumer = consumer;
   }
 
   @Override
-  public void execute(UserModel userModel) throws IOException {
-    this.view.display(userModel.getRemainingCapital().toPlainString());
+  public void execute(UserModel userModel) {
+    this.consumer.accept(userModel.getRemainingCapital().toPlainString());
   }
 }

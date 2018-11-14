@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -74,14 +75,12 @@ public interface UserModel {
    * <li>It throws a {@link IllegalArgumentException} if the given is not between 9am to 4pm on
    * weekdays.</li>
    * <li>If the user does not have enough remaining capital to buy shares, then {@link
-   * IllegalStateException} is thrown</li>
+   * InsufficientCapitalException} is thrown</li>
    * <li>If a stock does not exist with the tickerName or if a portfolio does not exist with
    * the portfolioName, then an {@link IllegalArgumentException} is thrown</li>
    * <li>quantity should be positive, if not, then an {@link IllegalArgumentException} is thrown
    * </li>
    * <li>null inputs will result in an {@link IllegalArgumentException}</li>
-   * <li>If the user does not have enough funds to create a purchase transaction, then we throw
-   * an {@link IllegalStateException}.
    * </li>
    * </ul>
    *
@@ -95,6 +94,5 @@ public interface UserModel {
                               String portfolioName,
                               Date date,
                               long quantity) throws IllegalArgumentException,
-          StockDataNotFoundException,
-          IllegalStateException;
+          StockDataNotFoundException, InsufficientCapitalException;
 }

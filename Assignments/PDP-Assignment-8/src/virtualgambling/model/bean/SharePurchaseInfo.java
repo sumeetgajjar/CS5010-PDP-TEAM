@@ -44,6 +44,6 @@ public class SharePurchaseInfo {
   @Override
   public String toString() {
     return String.format("Purchased %d share(s) of '%s' at a rate of %s per stock on date=%s}",
-            quantity, tickerName, unitPrice, Utils.getDefaultDateFormattedDate(date));
+            quantity, tickerName, unitPrice, Utils.getDefaultFormattedDateStringFromDate(date));
   }
 }

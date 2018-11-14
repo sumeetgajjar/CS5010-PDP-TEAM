@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import util.Utils;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseInfo;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockExchange;
 
@@ -178,8 +179,7 @@ public class SimpleUserModel implements UserModel {
   @Override
   public SharePurchaseInfo buyShares(String tickerName, String portfolioName, Date date,
                                      long quantity) throws IllegalArgumentException,
-          StockDataNotFoundException,
-          IllegalStateException {
+          StockDataNotFoundException, InsufficientCapitalException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
