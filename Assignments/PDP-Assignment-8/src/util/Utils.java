@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoField;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -56,12 +57,15 @@ public class Utils {
   }
 
   public static boolean checkTimeNotInBusinessHours(Date date) {
-    int dayOfTheWeek = date.toInstant().get(ChronoField.DAY_OF_WEEK);
+    Calendar c = Calendar.getInstance();
+    c.setTime(date);
+    int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
+
     if (dayOfTheWeek < 1 || dayOfTheWeek > 5) {
       return false;
     }
 
-    int hour = date.toInstant().get(ChronoField.HOUR_OF_DAY);
+    int hour = c.get(Calendar.HOUR_OF_DAY);
     return hour >= 8 && hour <= 15;
   }
 }
