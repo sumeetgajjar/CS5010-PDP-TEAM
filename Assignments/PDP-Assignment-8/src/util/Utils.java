@@ -55,13 +55,13 @@ public class Utils {
     return SIMPLE_DATE_FORMAT.parse(dateString);
   }
 
-  public static boolean checkTimeNotInBusinessHours(Date date) {
+  public static boolean isTimeNotInBusinessHours(Date date) {
     Calendar c = Calendar.getInstance();
     c.setTime(date);
     int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
 
     if (dayOfTheWeek < 2 || dayOfTheWeek > 6) {
-      return false;
+      return true;
     }
 
     int hour = c.get(Calendar.HOUR_OF_DAY);

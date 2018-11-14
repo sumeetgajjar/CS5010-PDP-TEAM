@@ -39,7 +39,7 @@ public class SimpleStockExchange implements StockExchange {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
 
-    if (Utils.checkTimeNotInBusinessHours(date)) {
+    if (Utils.isTimeNotInBusinessHours(date)) {
       throw new IllegalArgumentException("Cannot buy shares at given time");
     }
     return stockDataSource.getPrice(tickerName, date);
