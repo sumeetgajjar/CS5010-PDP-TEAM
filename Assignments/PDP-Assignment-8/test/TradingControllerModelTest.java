@@ -173,6 +173,22 @@ public class TradingControllerModelTest {
   }
 
   @Test
+  public void dateStringWithHourMinutesAndSecondsWorks() {
+    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_cost_basis p1" +
+            " 2018-11-01:12:11:21\nquit");
+    Appendable appendable = new StringBuffer();
+    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+            new TextView(readable, appendable));
+
+    controller.run();
+
+    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator()
+            + Utils.getFormattedCurrencyNumberString(new BigDecimal("0"))
+            + System.lineSeparator();
+    Assert.assertEquals(builder, appendable.toString());
+  }
+
+  @Test
   public void incompleteCostBasisForPortfolioAsksToRetry() {
     Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10"
             + "\nget_portfolio_cost_basis p1\nget_portfolio_cost_basis "
