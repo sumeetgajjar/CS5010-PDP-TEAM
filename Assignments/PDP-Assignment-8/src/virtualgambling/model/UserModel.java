@@ -41,8 +41,7 @@ public interface UserModel {
   BigDecimal getPortfolioValue(String portfolioName, Date date);
 
   /**
-   * Returns the composition of portfolio in string format. Returns empty string if portfolio is
-   * empty.
+   * Returns the composition of portfolio in string format.
    *
    * @param portfolioName the portfolioName
    * @return the composition of portfolio in string format

@@ -42,9 +42,9 @@ public class SimpleUserModel implements UserModel {
   }
 
   /**
-   * Creates a portfolio for this UserModel. The portfolio name should contain at least 1 character,
-   * no spaces in the name and cannot contain leading or trailing spaces. It will throw {@link
-   * IllegalArgumentException} if the given condition is not satisfied. It throws {@link
+   * Creates a portfolio for this UserModel. The portfolio name should be a single word,should
+   * contain at least 1 character, and cannot contain leading or trailing spaces. It will throw
+   * {@link IllegalArgumentException} if the above conditions are not satisfied. It throws {@link
    * IllegalArgumentException} if the given portfolioName is null or empty. If a portfolio already
    * exists then it will throw an {@link IllegalArgumentException}.
    *
@@ -179,10 +179,6 @@ public class SimpleUserModel implements UserModel {
     return composition.toString();
   }
 
-  protected Date getTodayDate() {
-    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
-  }
-
   @Override
   public String getAllPortfolioNames() {
     return this.portfolios.values().stream()
@@ -209,6 +205,10 @@ public class SimpleUserModel implements UserModel {
     return this.remainingCapital;
   }
 
+  protected Date getTodayDate() {
+    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
+  }
+
   private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
@@ -221,5 +221,4 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Time cannot be in Future");
     }
   }
-
 }
