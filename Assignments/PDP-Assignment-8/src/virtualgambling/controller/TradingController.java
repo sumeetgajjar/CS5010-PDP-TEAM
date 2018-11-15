@@ -154,7 +154,22 @@ public class TradingController implements Controller {
   }
 
   private String getWelcomeMessage() {
-    return "Welcome to Virtual Stock Trading Application" + System.lineSeparator()
+    return "" + System.lineSeparator() + ""
+            + "__        __   _                            _____      __     ___      _            "
+            + "   _   _____              _ _             " + System.lineSeparator() + ""
+            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
+            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
+            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
+            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
+            + ""
+            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
+            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
+            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
+            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
+            + System.lineSeparator() + ""
+            + "                                                                                    "
+            + "                                    |___/ "
+            + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator()
             + "You can use the following example commands where the first word is the "
@@ -178,7 +193,7 @@ public class TradingController implements Controller {
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator()
-            + "All dates must be in this format yyyy-MM-DD and the date should not be a weekend."
+            + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator()
