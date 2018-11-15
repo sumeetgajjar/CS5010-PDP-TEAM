@@ -1,35 +1,51 @@
 package virtualgambling.model.bean;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by gajjar.s, on 8:13 PM, 11/11/18
+ * This class represents {@link Portfolio} of the User. The portfolio has a Name and a list of
+ * purchases of Share associated with it.
  */
 public class Portfolio {
-
   private final String name;
-  private final List<PurchaseInfo> purchases;
+  private final List<SharePurchaseOrder> purchases;
 
-  public Portfolio(String name, List<PurchaseInfo> purchases) {
+  /**
+   * Constructs a Object of {@link Portfolio} with the given name.
+   *
+   * @param name the name of the portfolio.
+   */
+  public Portfolio(String name) {
     this.name = name;
-    this.purchases = purchases;
+    this.purchases = new ArrayList<>();
   }
 
+  /**
+   * Returns the name of this Portfolio.
+   *
+   * @return the name of this Portfolio
+   */
   public String getName() {
     return this.name;
   }
 
-  public List<PurchaseInfo> getPurchases() {
+  /**
+   * Returns the list of purchases in this portfolio.
+   *
+   * @return the list of purchases in this portfolio
+   */
+  public List<SharePurchaseOrder> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
   }
 
-  public BigDecimal getCostBasis() {
-    return null;
-  }
-
-  public BigDecimal getPortfolioValue() {
-    return null;
+  /**
+   * Adds the given Purchase order of the Share to this Portfolio.
+   *
+   * @param sharePurchaseOrder the purchase info to add
+   */
+  public void addPurchaseOrder(SharePurchaseOrder sharePurchaseOrder) {
+    this.purchases.add(sharePurchaseOrder);
   }
 }
