@@ -174,8 +174,8 @@ public class TradingControllerModelTest {
 
   @Test
   public void dateStringWithHourMinutesAndSecondsWorks() {
-    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_cost_basis p1" +
-            " 2018-11-01:12:11:21\nquit");
+    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_cost_basis p1"
+            + " 2018-11-01:12:11:21\nquit");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
