@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents {@link Portfolio} for the User. The portfolio has a Name and a list of
+ * This class represents {@link Portfolio} of the User. The portfolio has a Name and a list of
  * purchases of Share associated with it.
  */
 public class Portfolio {
@@ -41,11 +41,11 @@ public class Portfolio {
   }
 
   /**
-   * Adds the given Purchase info of the Share to this Portfolio.
+   * Adds the given Purchase order of the Share to this Portfolio.
    *
    * @param sharePurchaseOrder the purchase info to add
    */
-  public void addPurchaseInfo(SharePurchaseOrder sharePurchaseOrder) {
+  public void addPurchaseOrder(SharePurchaseOrder sharePurchaseOrder) {
     this.purchases.add(sharePurchaseOrder);
   }
 }

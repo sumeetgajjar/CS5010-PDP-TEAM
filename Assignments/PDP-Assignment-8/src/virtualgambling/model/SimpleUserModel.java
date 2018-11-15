@@ -199,7 +199,7 @@ public class SimpleUserModel implements UserModel {
 
     SharePurchaseOrder sharePurchaseOrder = this.stockDAO.createPurchaseOrder(tickerName, quantity,
             date, this.remainingCapital);
-    this.portfolios.get(portfolioName).addPurchaseInfo(sharePurchaseOrder);
+    this.portfolios.get(portfolioName).addPurchaseOrder(sharePurchaseOrder);
     this.remainingCapital = this.remainingCapital.subtract(sharePurchaseOrder.getCostOfPurchase());
     return sharePurchaseOrder;
   }
