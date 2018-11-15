@@ -17,7 +17,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
  * <code>SimpleStockDataSource</code> implements the <code>StockDataSource</code> interface and
  * provides data from an in memory source of stock prices for the last ten days.
  *
- * <p>It provides stock prices for the last 10 days of the following tickers ["AAPL", "GOOG",
+ * <p>It provides stock prices for the last 100 days of the following tickers ["AAPL", "GOOG",
  * "GE", "BAC", "ORCL", "VZ", "MS", "T"].
  */
 public class SimpleStockDataSource implements StockDataSource {
@@ -48,7 +48,7 @@ public class SimpleStockDataSource implements StockDataSource {
   }
 
   private static Map<String, Map<Date, BigDecimal>> getStockPricesForLast10Days() {
-    List<Date> dates = getDatesForLast10Days();
+    List<Date> dates = getDatesForLast100Days();
 
     List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
     BigDecimal stockPrice = new BigDecimal(10);
@@ -67,7 +67,7 @@ public class SimpleStockDataSource implements StockDataSource {
     return stockPrices;
   }
 
-  private static List<Date> getDatesForLast10Days() {
+  private static List<Date> getDatesForLast100Days() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
@@ -75,7 +75,7 @@ public class SimpleStockDataSource implements StockDataSource {
     calendar.set(Calendar.MILLISECOND, 0);
 
     List<Date> dates = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       dates.add(calendar.getTime());
       calendar.add(Calendar.DATE, -1);
     }
