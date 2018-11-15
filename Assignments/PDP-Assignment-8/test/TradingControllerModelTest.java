@@ -78,14 +78,12 @@ public class TradingControllerModelTest {
             new TextView(readable, appendable));
 
     controller.run();
-    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Buy Date         "
-            + "   Stocks "
-            + "             Cost Price          Current "
-            + "Value\n"
-            + "\n"
-            + "Total Value:        $0.00\n"
-            + "Total Cost:         $0.00\n"
-            + "Profit:             $0.00\n";
+    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Buy Date         " +
+            "   Stocks              Quantity            Cost Price          Current Value\n" +
+            "\n" +
+            "Total Value:        $0.00\n" +
+            "Total Cost:         $0.00\n" +
+            "Profit:             $0.00\n";
     Assert.assertEquals(expected, appendable.toString());
   }
 
