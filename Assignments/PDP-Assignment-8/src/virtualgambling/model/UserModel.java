@@ -44,8 +44,8 @@ public interface UserModel {
    * Returns the composition of portfolio in string format. Returns empty string if portfolio is
    * empty.
    *
-   * @param portfolioName a
-   * @return a
+   * @param portfolioName the portfolioName
+   * @return the composition of portfolio in string format
    * @throws IllegalArgumentException if the portfolio does not exists
    */
   String getPortfolioComposition(String portfolioName) throws IllegalArgumentException;
