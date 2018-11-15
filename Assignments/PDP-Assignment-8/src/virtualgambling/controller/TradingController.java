@@ -47,8 +47,20 @@ public class TradingController implements Controller {
     this.view = Utils.requireNonNull(view);
   }
 
+  /**
+   * The controller starts by displaying a welcome message on the view. It then waits for the input
+   * from the user. On receiving the input from the user if the input corresponds to a valid command
+   * it executes the respective command and displays the output of the command on view if there is
+   * any. If the input does not corresponds to a valid command or if its not possible to execute the
+   * command successfully then it displays the error message on view and again waits for the input
+   * from the user. The controller returns the control to the caller if input from the view is "q"
+   * or "quit". At any point during the execution if it is not possible for the controller to read
+   * input from the view or display text on the view then it throws {@link IllegalStateException}.
+   *
+   * @throws IllegalStateException if unable to read from view or unable to display on view
+   */
   @Override
-  public void run() {
+  public void run() throws IllegalStateException {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
     this.displayOnView(getWelcomeMessage());
