@@ -24,8 +24,7 @@ public interface StockDAO {
    * @param remainingCapital the remaining capital that the user has
    * @return a share purchase order
    * @throws IllegalArgumentException if the arguments are null or if the quantity is 0 or if the
-   *                                  date represents a day in the future or is a stock market
-   *                                  holiday
+   *                                  date represents a day in the future or a weekend
    * @throws IllegalStateException    if the arguments are valid but the remainingCapital is not
    *                                  sufficient to create a valid order.
    */
@@ -40,7 +39,7 @@ public interface StockDAO {
    * @param date       the date and time at which the price is needed
    * @return the stock price at the given date
    * @throws IllegalArgumentException   if any argument is null or if the date represents a day in
-   *                                    the future or a stock market holiday
+   *                                    the future or a weekend
    * @throws StockDataNotFoundException if the stock price at the given date is not found
    */
   BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
