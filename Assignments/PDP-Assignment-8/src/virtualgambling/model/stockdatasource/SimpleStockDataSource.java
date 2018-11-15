@@ -75,7 +75,7 @@ public class SimpleStockDataSource implements StockDataSource {
     calendar.set(Calendar.MILLISECOND, 0);
 
     List<Date> dates = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 100; i++) {
       dates.add(calendar.getTime());
       calendar.add(Calendar.DATE, -1);
     }
