@@ -191,6 +191,8 @@ public class TradingController implements Controller {
             + System.lineSeparator()
             + "buy_shares tickerName portfolioName date quantity"
             + System.lineSeparator()
+            + "q or quit"
+            + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator()
             + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
