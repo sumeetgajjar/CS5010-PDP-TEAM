@@ -20,7 +20,7 @@ All accessors to portfolio methods in the user model offer read-only access to t
 instance directly to avoid rogue additions to the portfolio.
 
 Lastly, our design is generic in that all models accept a Date object that represents date and time, thus we don't
-use generality to restrict usage to a date without time - at the same time, the current implementation uses only dates and
+lose generality to restrict usage to a date without time - at the same time, the current implementation uses only dates and
 disregard time - in order to start using time, we will require 0 design change.
 
 Our Controller is initialized with a model and a view and it waits for inputs from the view and calls the appropriate methods of the
