@@ -148,14 +148,15 @@ public class SimpleUserModel implements UserModel {
     Portfolio portfolio = this.portfolios.get(portfolioName);
 
     StringBuilder composition = new StringBuilder();
-    composition.append(String.format("%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Cost Price",
-            "Current Value"));
+    composition.append(String.format("%-20s%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Quantity",
+            "Cost Price", "Current Value"));
     composition.append(System.lineSeparator());
     List<SharePurchaseOrder> purchases = portfolio.getPurchases();
     for (SharePurchaseOrder sharePurchaseOrder : purchases) {
-      composition.append(String.format("%-20s%-20s%-20s%s",
+      composition.append(String.format("%-20s%-20s%-20s%-20s%s",
               Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getDate()),
               sharePurchaseOrder.getTickerName(),
+              sharePurchaseOrder.getQuantity(),
               Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getUnitPrice()),
               Utils.getFormattedCurrencyNumberString(
                       this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime))));
