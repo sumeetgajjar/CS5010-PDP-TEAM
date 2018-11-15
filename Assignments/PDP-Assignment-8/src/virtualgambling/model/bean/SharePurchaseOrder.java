@@ -6,7 +6,7 @@ import java.util.Date;
 import util.Utils;
 
 /**
- * This class represents a information which is captured when a Share is purchased.
+ * This class represents a information which is captured when a Share is bought by the User.
  */
 public class SharePurchaseOrder {
   private final String tickerName;
@@ -17,10 +17,10 @@ public class SharePurchaseOrder {
   /**
    * Constructs an instance of {@link SharePurchaseOrder} with the given params.
    *
-   * @param tickerName the name of the share purchased
-   * @param unitPrice  the unit price of the share purchased
+   * @param tickerName the tickerName of the purchased share
+   * @param unitPrice  the unit price of the purchased share
    * @param date       the date at which the share was purchased
-   * @param quantity   the quantity of the share purchased
+   * @param quantity   the quantity of the purchased share
    */
   public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
     this.tickerName = tickerName;
@@ -57,9 +57,9 @@ public class SharePurchaseOrder {
   }
 
   /**
-   * Returns the quantity of the shares purchased.
+   * Returns the quantity of the purchased share.
    *
-   * @return the quantity of the shares purchased
+   * @return the quantity of the purchased share
    */
   public long getQuantity() {
     return quantity;
