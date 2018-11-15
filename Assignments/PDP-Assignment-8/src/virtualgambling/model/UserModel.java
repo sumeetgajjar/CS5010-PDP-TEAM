@@ -80,10 +80,10 @@ public interface UserModel {
    * weekdays.</li>
    * <li>If the user does not have enough remaining capital to buy shares, then {@link
    * InsufficientCapitalException} is thrown</li>
-   * <li>If a stock does not exist with the tickerName or if a portfolio does not exist with
-   * the portfolioName, then an {@link IllegalArgumentException} is thrown</li>
-   * <li>quantity should be positive, if not, then an {@link IllegalArgumentException} is thrown
-   * </li>
+   * <li>if a portfolio does not exist with the portfolioName, then an {@link
+   * IllegalArgumentException} is thrown</li>
+   * <li>quantity should be positive integer, if not, then an {@link IllegalArgumentException} is
+   * thrown</li>
    * <li>null inputs will result in an {@link IllegalArgumentException}</li>
    * </ul>
    *
