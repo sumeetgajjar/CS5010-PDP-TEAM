@@ -407,6 +407,102 @@ public class UserModelTest {
   }
 
   @Test
+  public void buyStockOfDifferentCompanyAcrossMultipleStretches() throws IllegalArgumentException,
+          StockDataNotFoundException {
+    UserModel userModel = TestUtils.getMockedUserModel();
+    userModel.createPortfolio("p1");
+    userModel.createPortfolio("p2");
+    Share appleShare = getAppleShare();
+    Share googleShare = getGoogleShare();
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+
+    Date day3 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day2 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day1 = calendar.getTime();
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
+    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
+    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
+    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
+
+    userModel.buyShares(googleShare.getTickerName(), "p1", day1, 1);
+    Assert.assertEquals(new BigDecimal(41), userModel.getCostBasisOfPortfolio("p1", day1));
+
+    userModel.buyShares(googleShare.getTickerName(), "p1", day2, 3);
+    Assert.assertEquals(new BigDecimal(134), userModel.getCostBasisOfPortfolio("p1", day2));
+
+    userModel.buyShares(googleShare.getTickerName(), "p1", day3, 5);
+    Assert.assertEquals(new BigDecimal(239), userModel.getCostBasisOfPortfolio("p1", day3));
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value\n" +
+            "2018-10-30          AAPL                1                   $30.00              $10" +
+            ".00\n" +
+            "2018-10-31          AAPL                3                   $20.00              $10" +
+            ".00\n" +
+            "2018-11-01          AAPL                5                   $10.00              $10" +
+            ".00\n" +
+            "2018-10-30          GOOG                1                   $11.00              $11" +
+            ".00\n" +
+            "2018-10-31          GOOG                3                   $11.00              $11" +
+            ".00\n" +
+            "2018-11-01          GOOG                5                   $11.00              $11" +
+            ".00\n" +
+            "\n" +
+            "Total Value:        $189.00\n" +
+            "Total Cost:         $239.00\n" +
+            "Profit:             ($50.00)", userModel.getPortfolioComposition("p1"));
+
+
+    //////// portfolio 2 ///////
+
+    userModel.buyShares(appleShare.getTickerName(), "p2", day1, 1);
+    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p2", day1));
+
+    userModel.buyShares(appleShare.getTickerName(), "p2", day2, 3);
+    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p2", day2));
+
+    userModel.buyShares(appleShare.getTickerName(), "p2", day3, 5);
+    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p2", day3));
+
+    userModel.buyShares(googleShare.getTickerName(), "p2", day1, 1);
+    Assert.assertEquals(new BigDecimal(41), userModel.getCostBasisOfPortfolio("p2", day1));
+
+    userModel.buyShares(googleShare.getTickerName(), "p2", day2, 3);
+    Assert.assertEquals(new BigDecimal(134), userModel.getCostBasisOfPortfolio("p2", day2));
+
+    userModel.buyShares(googleShare.getTickerName(), "p2", day3, 5);
+    Assert.assertEquals(new BigDecimal(239), userModel.getCostBasisOfPortfolio("p2", day3));
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value\n" +
+            "2018-10-30          AAPL                1                   $30.00              $10" +
+            ".00\n" +
+            "2018-10-31          AAPL                3                   $20.00              $10" +
+            ".00\n" +
+            "2018-11-01          AAPL                5                   $10.00              $10" +
+            ".00\n" +
+            "2018-10-30          GOOG                1                   $11.00              $11" +
+            ".00\n" +
+            "2018-10-31          GOOG                3                   $11.00              $11" +
+            ".00\n" +
+            "2018-11-01          GOOG                5                   $11.00              $11" +
+            ".00\n" +
+            "\n" +
+            "Total Value:        $189.00\n" +
+            "Total Cost:         $239.00\n" +
+            "Profit:             ($50.00)", userModel.getPortfolioComposition("p2"));
+  }
+
+  @Test
   public void gettingPortfolioValueWorks() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
