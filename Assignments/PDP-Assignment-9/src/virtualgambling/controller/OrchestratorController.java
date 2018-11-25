@@ -34,6 +34,7 @@ public class OrchestratorController extends AbstractController {
       String inputFromView = this.getInputFromView();
       Controller tradingController = null;
       switch (inputFromView) {
+        // todo use enhanced trading controller
         case "alpha-vantage-api":
           tradingController = new TradingController(new SimpleUserModel(new DAOV2()), view);
           break;
