@@ -21,7 +21,7 @@ public class UserModelTest {
   public void testInitializationOfUserModel() {
     UserModel userModel = TestUtils.getEmptyUserModel();
     try {
-      userModel.getPortfolioComposition("test");
+      userModel.getPortfolio("test");
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Portfolio not found", e.getMessage());
@@ -37,9 +37,9 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
-            "Profit:             $0.00", userModel.getPortfolioComposition("test"));
-    Assert.assertEquals(BigDecimal.ZERO, userModel.getCostBasisOfPortfolio("test", date));
-    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolioValue("test", date));
+            "Profit:             $0.00", userModel.getPortfolio("test").toString());
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolio("test").getCostBasis(date));
+    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolio("test").getValue(date));
 
     Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
   }
@@ -54,7 +54,7 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
-            "Profit:             $0.00", userModel.getPortfolioComposition("Hello world"));
+            "Profit:             $0.00", userModel.getPortfolio("Hello world"));
   }
 
   @Test
@@ -268,14 +268,14 @@ public class UserModelTest {
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
 
     try {
-      userModel.getCostBasisOfPortfolio(null, date);
+      userModel.getPortfolio(null).getCostBasis(date);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
-      userModel.getCostBasisOfPortfolio("p1", null);
+      userModel.getPortfolio("p1").getCostBasis(null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
@@ -290,14 +290,14 @@ public class UserModelTest {
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
 
     try {
-      userModel.getPortfolioValue(null, date);
+      userModel.getPortfolio(null).getValue(date);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
-      userModel.getPortfolioValue("p1", null);
+      userModel.getPortfolio("p1").getValue(null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
@@ -320,8 +320,8 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p3", date, 1);
     userModel.buyShares(googleShare.getTickerName(), "p2", date, 1);
 
-    Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p1", date));
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p1", date));
+    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getValue(date));
     String expectedApplePurchaseComposition = "Buy Date            Stocks              Quantity  " +
             "          Cost Price          Current Value\n" +
             "2018-11-01          AAPL                1                   $10.00              $10" +
@@ -339,19 +339,19 @@ public class UserModelTest {
             "Total Value:        $11.00\n" +
             "Total Cost:         $11.00\n" +
             "Profit:             $0.00";
-    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p1"));
+    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p1").toString());
 
-    Assert.assertEquals(new BigDecimal(11), userModel.getCostBasisOfPortfolio("p2", date));
-    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolioValue("p2", date));
-    Assert.assertEquals(expectedGooglePurchase, userModel.getPortfolioComposition("p2"));
+    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getValue(date));
+    Assert.assertEquals(expectedGooglePurchase, userModel.getPortfolio("p2").toString());
 
-    Assert.assertEquals(new BigDecimal(10), userModel.getCostBasisOfPortfolio("p3", date));
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolioValue("p3", date));
-    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolioComposition("p3"));
+    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getValue(date));
+    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p3").toString());
 
     userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
-    Assert.assertEquals(new BigDecimal(20), userModel.getCostBasisOfPortfolio("p1", date));
-    Assert.assertEquals(new BigDecimal(20), userModel.getPortfolioValue("p1", date));
+    Assert.assertEquals(new BigDecimal(20), userModel.getPortfolio("p1").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(20), userModel.getPortfolio("p1").getValue(date));
     Assert.assertEquals("Buy Date            Stocks              Quantity            " +
             "Cost Price  " +
             "        Current Value\n" +
@@ -362,7 +362,7 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $20.00\n" +
             "Total Cost:         $20.00\n" +
-            "Profit:             $0.00", userModel.getPortfolioComposition("p1"));
+            "Profit:             $0.00", userModel.getPortfolio("p1").toString());
   }
 
   @Test
@@ -384,13 +384,13 @@ public class UserModelTest {
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
+    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p1").getCostBasis(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
+    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p1").getCostBasis(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
+    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p1").getCostBasis(day3));
     Assert.assertEquals("Buy Date            Stocks              Quantity           " +
             " Cost Price  " +
             "        Current Value\n" +
@@ -403,7 +403,7 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $90.00\n" +
             "Total Cost:         $140.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolioComposition("p1"));
+            "Profit:             ($50.00)", userModel.getPortfolio("p1").toString());
   }
 
   @Test
@@ -427,22 +427,22 @@ public class UserModelTest {
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p1", day1));
+    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p1").getCostBasis(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p1", day2));
+    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p1").getCostBasis(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p1", day3));
+    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p1").getCostBasis(day3));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(41), userModel.getCostBasisOfPortfolio("p1", day1));
+    Assert.assertEquals(new BigDecimal(41), userModel.getPortfolio("p1").getCostBasis(day1));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(134), userModel.getCostBasisOfPortfolio("p1", day2));
+    Assert.assertEquals(new BigDecimal(134), userModel.getPortfolio("p1").getCostBasis(day2));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(239), userModel.getCostBasisOfPortfolio("p1", day3));
+    Assert.assertEquals(new BigDecimal(239), userModel.getPortfolio("p1").getCostBasis(day3));
     Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
             "        Current Value\n" +
             "2018-10-30          AAPL                1                   $30.00              $10" +
@@ -460,28 +460,28 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $189.00\n" +
             "Total Cost:         $239.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolioComposition("p1"));
+            "Profit:             ($50.00)", userModel.getPortfolio("p1").toString());
 
 
     //////// portfolio 2 ///////
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getCostBasisOfPortfolio("p2", day1));
+    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p2").getCostBasis(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getCostBasisOfPortfolio("p2", day2));
+    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p2").getCostBasis(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getCostBasisOfPortfolio("p2", day3));
+    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p2").getCostBasis(day3));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day1, 1);
-    Assert.assertEquals(new BigDecimal(41), userModel.getCostBasisOfPortfolio("p2", day1));
+    Assert.assertEquals(new BigDecimal(41), userModel.getPortfolio("p2").getCostBasis(day1));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day2, 3);
-    Assert.assertEquals(new BigDecimal(134), userModel.getCostBasisOfPortfolio("p2", day2));
+    Assert.assertEquals(new BigDecimal(134), userModel.getPortfolio("p2").getCostBasis(day2));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day3, 5);
-    Assert.assertEquals(new BigDecimal(239), userModel.getCostBasisOfPortfolio("p2", day3));
+    Assert.assertEquals(new BigDecimal(239), userModel.getPortfolio("p2").getCostBasis(day3));
     Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
             "        Current Value\n" +
             "2018-10-30          AAPL                1                   $30.00              $10" +
@@ -499,7 +499,7 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $189.00\n" +
             "Total Cost:         $239.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolioComposition("p2"));
+            "Profit:             ($50.00)", userModel.getPortfolio("p2").toString());
   }
 
   @Test
@@ -530,16 +530,16 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
 
-    BigDecimal dayOneValue = userModel.getPortfolioValue("p1", day0);
+    BigDecimal dayOneValue = userModel.getPortfolio("p1").getValue(day0);
     Assert.assertEquals(BigDecimal.ZERO, dayOneValue);
 
     Assert.assertEquals(new BigDecimal("30"),
-            userModel.getPortfolioValue("p1", day3));
+            userModel.getPortfolio("p1").getValue(day3));
 
     Assert.assertEquals(new BigDecimal("40"),
-            userModel.getPortfolioValue("p1", day2));
+            userModel.getPortfolio("p1").getValue(day2));
     try {
-      userModel.getPortfolioValue("p1", after100Years);
+      userModel.getPortfolio("p1").getValue(after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Time cannot be in Future", e.getMessage());
@@ -575,19 +575,19 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
 
-    BigDecimal dayOneValue = userModel.getCostBasisOfPortfolio("p1", day0);
+    BigDecimal dayOneValue = userModel.getPortfolio("p1").getCostBasis(day0);
     Assert.assertEquals(BigDecimal.ZERO, dayOneValue);
 
     Assert.assertEquals(new BigDecimal("60"),
-            userModel.getCostBasisOfPortfolio("p1", day3));
+            userModel.getPortfolio("p1").getCostBasis(day3));
 
     Assert.assertEquals(new BigDecimal("50"),
-            userModel.getCostBasisOfPortfolio("p1", day2));
+            userModel.getPortfolio("p1").getCostBasis(day2));
 
     Assert.assertEquals(new BigDecimal("30"),
-            userModel.getCostBasisOfPortfolio("p1", day1));
+            userModel.getPortfolio("p1").getCostBasis(day1));
     try {
-      userModel.getCostBasisOfPortfolio("p1", after100Years);
+      userModel.getPortfolio("p1").getCostBasis(after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Time cannot be in Future", e.getMessage());
@@ -595,16 +595,16 @@ public class UserModelTest {
 
   }
 
-  @Test
+  @Test //todo move to controller
   public void getAllPortfolioNamesWorks() {
     UserModel userModel = TestUtils.getMockedUserModel();
 
-    Assert.assertEquals("", userModel.getAllPortfolioNames());
+    Assert.assertEquals("", userModel.getAllPortfolios());
 
     userModel.createPortfolio("p1");
-    Assert.assertEquals("p1", userModel.getAllPortfolioNames());
+    Assert.assertEquals("p1", userModel.getAllPortfolios());
     userModel.createPortfolio("p2");
-    Assert.assertEquals("p1" + System.lineSeparator() + "p2", userModel.getAllPortfolioNames());
+    Assert.assertEquals("p1" + System.lineSeparator() + "p2", userModel.getAllPortfolios());
   }
 
   private Share getAppleShare() {

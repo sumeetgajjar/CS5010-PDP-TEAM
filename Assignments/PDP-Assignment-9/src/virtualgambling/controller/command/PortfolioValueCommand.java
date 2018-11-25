@@ -37,7 +37,7 @@ public class PortfolioValueCommand implements Command {
    */
   @Override
   public void execute(UserModel userModel) {
-    BigDecimal portfolioValue = userModel.getPortfolioValue(portfolioName, date);
+    BigDecimal portfolioValue = userModel.getPortfolio(portfolioName).getValue(date);
     this.consumer.accept(Utils.getFormattedCurrencyNumberString(portfolioValue));
   }
 }

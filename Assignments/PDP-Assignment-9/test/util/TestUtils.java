@@ -104,11 +104,6 @@ public class TestUtils {
       this(new SimpleStockDAO(new MockDataSource()));
       this.mockedTodayDate = Utils.requireNonNull(mockedTodayDate);
     }
-
-    @Override
-    protected Date getTodayDate() {
-      return this.mockedTodayDate;
-    }
   }
 
   public static class MockDataSource implements StockDataSource {

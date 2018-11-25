@@ -1,8 +1,10 @@
 package virtualgambling.controller.command;
 
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import virtualgambling.model.UserModel;
+import virtualgambling.model.bean.Portfolio;
 
 /**
  * This class represents a command to get list of all portfolios. It implements the {@link Command}
@@ -28,7 +30,9 @@ public class GetAllPortfolioCommand implements Command {
    */
   @Override
   public void execute(UserModel userModel) {
-    String allPortfolioNames = userModel.getAllPortfolioNames();
+    String allPortfolioNames =
+            userModel.getAllPortfolios().stream().map(Portfolio::getName)
+                    .collect(Collectors.joining(System.lineSeparator()));
     this.consumer.accept(allPortfolioNames);
   }
 }
