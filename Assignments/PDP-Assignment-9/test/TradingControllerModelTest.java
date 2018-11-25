@@ -102,7 +102,7 @@ public class TradingControllerModelTest {
             + "(s) of "
             + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
             + System.lineSeparator()
-            + mockedUserModel.getPortfolioComposition("p1")
+            + mockedUserModel.getPortfolio("p1").toString()
             + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }
@@ -293,7 +293,7 @@ public class TradingControllerModelTest {
             + System.lineSeparator()
             + "Portfolio not found"
             + System.lineSeparator()
-            + mockedUserModel.getPortfolioComposition("p1")
+            + mockedUserModel.getPortfolio("p1").toString()
             + System.lineSeparator();
     Assert.assertEquals(builder, appendable.toString());
   }

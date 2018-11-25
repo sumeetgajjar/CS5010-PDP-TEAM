@@ -2,7 +2,9 @@ package virtualgambling.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -22,32 +24,7 @@ public interface UserModel {
    */
   void createPortfolio(String portfolioName);
 
-  /**
-   * Returns the costBasis of the given portfolio at the given date.
-   *
-   * @param portfolioName the portfolioName
-   * @param date          the date
-   * @return the costBasis of the given portfolio
-   */
-  BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date);
-
-  /**
-   * Returns the total value of the given portfolio at the given date.
-   *
-   * @param portfolioName the portfolioName
-   * @param date          the date
-   * @return the total value of the portfolio
-   */
-  BigDecimal getPortfolioValue(String portfolioName, Date date);
-
-  /**
-   * Returns the composition of portfolio in string format.
-   *
-   * @param portfolioName the portfolioName
-   * @return the composition of portfolio in string format
-   * @throws IllegalArgumentException if the portfolio does not exists
-   */
-  String getPortfolioComposition(String portfolioName) throws IllegalArgumentException;
+  Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException;
 
   /**
    * Returns a new line separated string of portfolio name.
@@ -56,7 +33,7 @@ public interface UserModel {
    *
    * @return a new line separated string of portfolio name
    */
-  String getAllPortfolioNames();
+  List<Portfolio> getAllPortfolios();
 
   /**
    * Returns the amount of liquid cash that is remaining with the user.

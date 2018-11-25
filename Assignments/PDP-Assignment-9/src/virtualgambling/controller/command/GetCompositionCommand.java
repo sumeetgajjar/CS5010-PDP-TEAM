@@ -31,7 +31,7 @@ public class GetCompositionCommand implements Command {
    */
   @Override
   public void execute(UserModel userModel) {
-    String portfolioComposition = userModel.getPortfolioComposition(portfolioName);
+    String portfolioComposition = userModel.getPortfolio(portfolioName).toString();
     this.consumer.accept(portfolioComposition);
   }
 }

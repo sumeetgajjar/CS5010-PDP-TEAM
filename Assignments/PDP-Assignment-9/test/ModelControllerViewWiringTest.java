@@ -3,16 +3,22 @@ import org.junit.Test;
 
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
+import virtualgambling.model.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.stockdao.SimpleStockDAO;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.view.TextView;
 
 /**
@@ -32,36 +38,22 @@ public class ModelControllerViewWiringTest {
     StringBuilder log = new StringBuilder();
 
     int createPortfolioCode = RANDOM.nextInt();
-    int getCostBasisOfPortfolioCode = RANDOM.nextInt();
-    int getPortfolioValueCode = RANDOM.nextInt();
-    int getPortfolioCompositionCode = RANDOM.nextInt();
     int getAllPortfolioNamesCode = RANDOM.nextInt();
     int getRemainingCapitalCode = RANDOM.nextInt();
     int buySharesCode = RANDOM.nextInt();
+    int getPortfolioCode = RANDOM.nextInt();
     StringBuilder expectedLog = new StringBuilder();
     StringBuilder expectedOutput = new StringBuilder();
 
     Controller controller = new TradingController(
             new MockModel(log,
                     createPortfolioCode,
-                    getCostBasisOfPortfolioCode,
-                    getPortfolioValueCode,
-                    getPortfolioCompositionCode,
                     getAllPortfolioNamesCode,
                     getRemainingCapitalCode,
-                    buySharesCode),
+                    buySharesCode, getPortfolioCode),
             new TextView(readable, appendable));
 
     controller.run();
-
-    expectedOutput.append(TestUtils.getWelcomeMessage()).append(System.lineSeparator())
-            .append("$1.00").append(System.lineSeparator())
-            .append("$2.00").append(System.lineSeparator())
-            .append("3").append(System.lineSeparator())
-            .append("4").append(System.lineSeparator())
-            .append("$5.00").append(System.lineSeparator())
-            .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-11")
-            .append(System.lineSeparator());
 
 
     expectedLog.append(createPortfolioCode);
@@ -69,17 +61,17 @@ public class ModelControllerViewWiringTest {
     expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
 
-    expectedLog.append(getCostBasisOfPortfolioCode);
+    expectedLog.append(getPortfolioCode);
     expectedLog.append(System.lineSeparator());
-    expectedLog.append("p1").append("Sun Nov 11 00:00:00 EST 2018");
-    expectedLog.append(System.lineSeparator());
-
-    expectedLog.append(getPortfolioValueCode);
-    expectedLog.append(System.lineSeparator());
-    expectedLog.append("p1").append("Sun Nov 11 00:00:00 EST 2018");
+    expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
 
-    expectedLog.append(getPortfolioCompositionCode);
+    expectedLog.append(getPortfolioCode);
+    expectedLog.append(System.lineSeparator());
+    expectedLog.append("p1");
+    expectedLog.append(System.lineSeparator());
+
+    expectedLog.append(getPortfolioCode);
     expectedLog.append(System.lineSeparator());
     expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
@@ -96,6 +88,19 @@ public class ModelControllerViewWiringTest {
     expectedLog.append(System.lineSeparator());
 
     Assert.assertEquals(expectedLog.toString(), log.toString());
+
+    expectedOutput.append(TestUtils.getWelcomeMessage()).append(System.lineSeparator())
+            .append("$0.00").append(System.lineSeparator())
+            .append("$0.00").append(System.lineSeparator())
+            .append("Buy Date            Stocks              Quantity            Cost Price      " +
+                    "    Current Value\n" +
+                    "\n" +
+                    "Total Value:        $0.00\n" +
+                    "Total Cost:         $0.00\n" +
+                    "Profit:             $0.00\n").append(System.lineSeparator())
+            .append("$5.00").append(System.lineSeparator())
+            .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-11")
+            .append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
@@ -103,25 +108,20 @@ public class ModelControllerViewWiringTest {
 
     private final StringBuilder log;
     private final int createPortfolioCode;
-    private final int getCostBasisOfPortfolioCode;
-    private final int getPortfolioValueCode;
-    private final int getPortfolioCompositionCode;
     private final int getAllPortfolioNamesCode;
     private final int getRemainingCapitalCode;
     private final int buySharesCode;
+    private final int getPortfolioCode;
 
-    private MockModel(StringBuilder log, int createPortfolioCode, int getCostBasisOfPortfolioCode,
-                      int getPortfolioValueCode, int getPortfolioCompositionCode,
+    private MockModel(StringBuilder log, int createPortfolioCode,
                       int getAllPortfolioNamesCode, int getRemainingCapitalCode,
-                      int buySharesCode) {
+                      int buySharesCode, int getPortfolioCode) {
       this.log = log;
       this.createPortfolioCode = createPortfolioCode;
-      this.getCostBasisOfPortfolioCode = getCostBasisOfPortfolioCode;
-      this.getPortfolioValueCode = getPortfolioValueCode;
-      this.getPortfolioCompositionCode = getPortfolioCompositionCode;
       this.getAllPortfolioNamesCode = getAllPortfolioNamesCode;
       this.getRemainingCapitalCode = getRemainingCapitalCode;
       this.buySharesCode = buySharesCode;
+      this.getPortfolioCode = getPortfolioCode;
     }
 
     @Override
@@ -133,37 +133,20 @@ public class ModelControllerViewWiringTest {
     }
 
     @Override
-    public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date) {
-      this.log.append(getCostBasisOfPortfolioCode);
-      this.log.append(System.lineSeparator());
-      this.log.append(portfolioName).append(date);
-      this.log.append(System.lineSeparator());
-      return BigDecimal.ONE;
-    }
-
-    @Override
-    public BigDecimal getPortfolioValue(String portfolioName, Date date) {
-      this.log.append(getPortfolioValueCode);
-      this.log.append(System.lineSeparator());
-      this.log.append(portfolioName).append(date);
-      this.log.append(System.lineSeparator());
-      return new BigDecimal(2);
-    }
-
-    @Override
-    public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
-      this.log.append(getPortfolioCompositionCode);
+    public Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException {
+      this.log.append(getPortfolioCode);
       this.log.append(System.lineSeparator());
       this.log.append(portfolioName);
       this.log.append(System.lineSeparator());
-      return "3";
+      return new Portfolio("random", new SimpleStockDAO(new SimpleStockDataSource()),
+              Collections.emptyList());
     }
 
     @Override
-    public String getAllPortfolioNames() {
+    public List<Portfolio> getAllPortfolios() {
       this.log.append(getAllPortfolioNamesCode);
       this.log.append(System.lineSeparator());
-      return "4";
+      return Collections.emptyList();
     }
 
     @Override
