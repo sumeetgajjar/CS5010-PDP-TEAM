@@ -38,9 +38,6 @@ public class ModelControllerViewWiringTest {
     StringBuilder log = new StringBuilder();
 
     int createPortfolioCode = RANDOM.nextInt();
-    int getCostBasisOfPortfolioCode = RANDOM.nextInt();
-    int getPortfolioValueCode = RANDOM.nextInt();
-    int getPortfolioCompositionCode = RANDOM.nextInt();
     int getAllPortfolioNamesCode = RANDOM.nextInt();
     int getRemainingCapitalCode = RANDOM.nextInt();
     int buySharesCode = RANDOM.nextInt();
@@ -58,32 +55,23 @@ public class ModelControllerViewWiringTest {
 
     controller.run();
 
-    expectedOutput.append(TestUtils.getWelcomeMessage()).append(System.lineSeparator())
-            .append("$1.00").append(System.lineSeparator())
-            .append("$2.00").append(System.lineSeparator())
-            .append("3").append(System.lineSeparator())
-            .append("4").append(System.lineSeparator())
-            .append("$5.00").append(System.lineSeparator())
-            .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-11")
-            .append(System.lineSeparator());
-
 
     expectedLog.append(createPortfolioCode);
     expectedLog.append(System.lineSeparator());
     expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
 
-    expectedLog.append(getCostBasisOfPortfolioCode);
+    expectedLog.append(getPortfolioCode);
     expectedLog.append(System.lineSeparator());
-    expectedLog.append("p1").append("Sun Nov 11 00:00:00 EST 2018");
-    expectedLog.append(System.lineSeparator());
-
-    expectedLog.append(getPortfolioValueCode);
-    expectedLog.append(System.lineSeparator());
-    expectedLog.append("p1").append("Sun Nov 11 00:00:00 EST 2018");
+    expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
 
-    expectedLog.append(getPortfolioCompositionCode);
+    expectedLog.append(getPortfolioCode);
+    expectedLog.append(System.lineSeparator());
+    expectedLog.append("p1");
+    expectedLog.append(System.lineSeparator());
+
+    expectedLog.append(getPortfolioCode);
     expectedLog.append(System.lineSeparator());
     expectedLog.append("p1");
     expectedLog.append(System.lineSeparator());
@@ -100,6 +88,19 @@ public class ModelControllerViewWiringTest {
     expectedLog.append(System.lineSeparator());
 
     Assert.assertEquals(expectedLog.toString(), log.toString());
+
+    expectedOutput.append(TestUtils.getWelcomeMessage()).append(System.lineSeparator())
+            .append("$0.00").append(System.lineSeparator())
+            .append("$0.00").append(System.lineSeparator())
+            .append("Buy Date            Stocks              Quantity            Cost Price      " +
+                    "    Current Value\n" +
+                    "\n" +
+                    "Total Value:        $0.00\n" +
+                    "Total Cost:         $0.00\n" +
+                    "Profit:             $0.00\n").append(System.lineSeparator())
+            .append("$5.00").append(System.lineSeparator())
+            .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-11")
+            .append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
