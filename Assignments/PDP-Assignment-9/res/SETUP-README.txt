@@ -1,4 +1,4 @@
-The stock prices of following tickerName is available with the program.
+The stock prices of following tickerNames is available with the program.
 "AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T"
 
 The program only has stock prices of last 100 days from today. Hence while purchasing the stocks
