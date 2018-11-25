@@ -10,8 +10,6 @@ import virtualgambling.view.View;
  * Represents an orchestrator that initializes the model correctly based on the input data source.
  */
 public class OrchestratorController extends AbstractController {
-  private final View view;
-
   /**
    * Constructs a new Orchestrator Controller by taking in a view as input.
    *
@@ -19,7 +17,6 @@ public class OrchestratorController extends AbstractController {
    */
   public OrchestratorController(View view) {
     super(view);
-    this.view = view;
   }
 
   @Override

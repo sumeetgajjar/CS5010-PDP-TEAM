@@ -18,7 +18,8 @@ public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
   public BuySharesEquiWeightedCommand(List<String> tickerNames) {
     super(tickerNames,
             IntStream.range(0, tickerNames.size())
-                    .mapToObj(i -> 100.0 / tickerNames.size())
+                    .mapToDouble(i -> 100.0 / tickerNames.size())
+                    .boxed()
                     .collect(Collectors.toList()));
   }
 }

@@ -7,7 +7,7 @@ import virtualgambling.view.View;
 
 abstract class AbstractController implements Controller {
 
-  private final View view;
+  protected final View view;
 
   AbstractController(View view) {
     this.view = Utils.requireNonNull(view);
