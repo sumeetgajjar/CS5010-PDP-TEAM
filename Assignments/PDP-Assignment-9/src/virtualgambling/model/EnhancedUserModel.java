@@ -1,6 +1,5 @@
 package virtualgambling.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +17,11 @@ public interface EnhancedUserModel extends UserModel {
                                String portfolioName,
                                Date date,
                                long quantity,
-                               BigDecimal commissionPercentage) throws IllegalArgumentException,
+                               double commissionPercentage) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException;
 
   List<SharePurchaseOrder> buyShares(String portfolioName,
                                      Strategy strategy,
-                                     BigDecimal commissionPercentage)
+                                     double commissionPercentage)
           throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException;
 }

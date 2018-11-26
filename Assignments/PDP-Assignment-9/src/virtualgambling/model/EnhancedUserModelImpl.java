@@ -1,6 +1,5 @@
 package virtualgambling.model;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,13 +22,13 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
 
   @Override
   public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
-                                      long quantity, BigDecimal commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
+                                      long quantity, double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
     return null;
   }
 
   @Override
   public List<SharePurchaseOrder> buyShares(String portfolioName, Strategy strategy,
-                                            BigDecimal commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
+                                            double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
     return null;
   }
 }

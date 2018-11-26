@@ -8,7 +8,6 @@ import java.util.Date;
 import util.Share;
 import util.TestUtils;
 import util.Utils;
-import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -22,7 +21,7 @@ import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 public class UserModelTest {
 
   protected UserModel getUserModel(StockDAO stockDAO) {
-    return new SimpleUserModel(stockDAO);
+    return TestUtils.getEmptySimpleUserModelUsingStockDAO(stockDAO);
   }
 
   private UserModel getUserModelWithSimpleStockDao() {
@@ -66,7 +65,7 @@ public class UserModelTest {
             "\n" +
             "Total Value:        $0.00\n" +
             "Total Cost:         $0.00\n" +
-            "Profit:             $0.00", userModel.getPortfolio("Hello world"));
+            "Profit:             $0.00", userModel.getPortfolio("Hello world").toString());
   }
 
   @Test
