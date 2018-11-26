@@ -10,7 +10,7 @@ import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.strategy.Strategy;
+import virtualgambling.model.strategy.Strategy;
 
 public class EnhancedUserModelTest extends UserModelTest {
 
@@ -77,13 +77,38 @@ public class EnhancedUserModelTest extends UserModelTest {
       BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getUnitPrice().multiply(
               BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
       );
-      Assert.assertNotEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase()
-      );
+      Assert.assertNotEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase());
 
-      Assert.assertNotEquals(getPriceAfterCommission(unitPriceIntoQuantity, commission),
+      Assert.assertEquals(getPriceAfterCommission(unitPriceIntoQuantity, commission),
               sharePurchaseOrder.getCostOfPurchase()
       );
     }
+  }
+
+  @Test
+  public void buyingWithZeroCommissionDoesNotIncreaseCosts() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    double commission = 0.00;
+    SharePurchaseOrder withoutCommission = enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1,
+            getValidDate(), 10);
+    SharePurchaseOrder withCommissionWithoutStrategy = enhancedUserModel.buyShares("AAPL",
+            PORTFOLIO_P1, getValidDate(), 10, commission);
+
+    Assert.assertEquals(withCommissionWithoutStrategy.getCostOfPurchase(),
+            withoutCommission.getCostOfPurchase());
+
+    List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
+            getValidStrategy(), commission);
+
+    for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+      BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getUnitPrice().multiply(
+              BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+      );
+
+      Assert.assertEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase());
+    }
+
   }
 
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {

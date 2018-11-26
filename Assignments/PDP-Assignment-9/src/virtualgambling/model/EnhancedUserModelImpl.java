@@ -7,7 +7,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.strategy.Strategy;
+import virtualgambling.model.strategy.Strategy;
 
 public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUserModel {
   /**

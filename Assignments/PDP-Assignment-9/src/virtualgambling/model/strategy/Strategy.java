@@ -1,4 +1,4 @@
-package virtualgambling.model.stockdatasource.strategy;
+package virtualgambling.model.strategy;
 
 import java.math.BigDecimal;
 import java.util.List;

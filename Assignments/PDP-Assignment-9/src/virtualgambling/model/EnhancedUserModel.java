@@ -6,7 +6,7 @@ import java.util.List;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdatasource.strategy.Strategy;
+import virtualgambling.model.strategy.Strategy;
 
 /**
  * Created by gajjar.s, on 1:12 PM, 11/25/18
