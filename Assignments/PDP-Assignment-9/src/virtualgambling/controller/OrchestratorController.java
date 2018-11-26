@@ -1,6 +1,6 @@
 package virtualgambling.controller;
 
-import virtualgambling.model.SimpleUserModel;
+import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.stockdao.DAOV2;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
@@ -31,12 +31,12 @@ public class OrchestratorController extends AbstractController {
       String inputFromView = this.getInputFromView();
       Controller tradingController = null;
       switch (inputFromView) {
-        // todo use enhanced trading controller
         case "alpha-vantage-api":
-          tradingController = new TradingController(new SimpleUserModel(new DAOV2()), view);
+          tradingController =
+                  new EnhancedTradingController(new EnhancedUserModelImpl(new DAOV2()), view);
           break;
         case "in-memory":
-          tradingController = new TradingController(new SimpleUserModel(new SimpleStockDAO(
+          tradingController = new TradingController(new EnhancedUserModelImpl(new SimpleStockDAO(
                   new SimpleStockDataSource())), view);
           break;
         default:

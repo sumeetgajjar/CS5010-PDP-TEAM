@@ -12,7 +12,7 @@ import virtualgambling.model.stockdatasource.strategy.Strategy;
 /**
  * Created by gajjar.s, on 1:12 PM, 11/25/18
  */
-public interface UserModelV2 extends UserModel {
+public interface EnhancedUserModel extends UserModel {
 
   SharePurchaseOrder buyShares(String tickerName,
                                String portfolioName,

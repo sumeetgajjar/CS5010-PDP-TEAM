@@ -8,18 +8,30 @@ import java.util.Date;
 import util.Share;
 import util.TestUtils;
 import util.Utils;
+import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.stockdao.SimpleStockDAO;
+import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 
 /**
  * The class represents a Junit class to test Model in isolation.
  */
 public class UserModelTest {
 
+  protected UserModel getUserModel(StockDAO stockDAO) {
+    return new SimpleUserModel(stockDAO);
+  }
+
+  private UserModel getUserModelWithSimpleStockDao() {
+    return getUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
+  }
+
   @Test
   public void testInitializationOfUserModel() {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+    UserModel userModel = getUserModelWithSimpleStockDao();
     try {
       userModel.getPortfolio("test");
       Assert.fail("should have failed");
@@ -46,7 +58,7 @@ public class UserModelTest {
 
   @Test
   public void createPortfolioWorks() {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+    UserModel userModel = getUserModelWithSimpleStockDao();
     userModel.createPortfolio("Hello world");
     Assert.assertEquals("Buy Date            Stocks              Quantity            " +
             "Cost Price  " +
@@ -59,7 +71,7 @@ public class UserModelTest {
 
   @Test
   public void createPortfolioFails() {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+    UserModel userModel = getUserModelWithSimpleStockDao();
     try {
       userModel.createPortfolio(null);
       Assert.fail("should have failed");
@@ -157,7 +169,7 @@ public class UserModelTest {
 
   @Test
   public void buyingShareForMissingPortfolioFails() throws StockDataNotFoundException {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+    UserModel userModel = getUserModelWithSimpleStockDao();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
 
@@ -215,7 +227,7 @@ public class UserModelTest {
 
   @Test
   public void buyingStockWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+    UserModel userModel = getUserModelWithSimpleStockDao();
     userModel.createPortfolio("p1");
     try {
       Calendar calendar = Calendar.getInstance();
@@ -645,8 +657,8 @@ public class UserModelTest {
     return calendar.getTime();
   }
 
-  private static UserModel getUserModelWithEmptyPortfolio() {
-    UserModel userModel = TestUtils.getEmptyUserModel();
+  private UserModel getUserModelWithEmptyPortfolio() {
+    UserModel userModel = getUserModelWithSimpleStockDao();
     userModel.createPortfolio("p1");
     return userModel;
   }

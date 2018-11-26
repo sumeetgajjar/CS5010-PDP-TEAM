@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
+import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -35,8 +37,35 @@ public class TestUtils {
    *
    * @return a SimpleUserModel
    */
-  public static UserModel getEmptyUserModel() {
-    return new SimpleUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
+  public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(StockDAO stockDAO) {
+    return new EnhancedUserModelImpl(stockDAO);
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static EnhancedUserModel getEmptyEnhancedUserModel() {
+    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static UserModel getEmptySimpleUserModelUsingStockDAO(StockDAO stockDAO) {
+    return new SimpleUserModel(stockDAO);
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static UserModel getEmptySimpleUserModel() {
+    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
   }
 
   /**

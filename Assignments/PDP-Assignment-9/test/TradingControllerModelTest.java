@@ -74,7 +74,7 @@ public class TradingControllerModelTest {
     Readable readable = new StringReader("create_portfolio p1\nget_portfolio_composition p1\n"
             + "quit");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
+    Controller controller = new TradingController(TestUtils.getEmptySimpleUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
@@ -312,7 +312,7 @@ public class TradingControllerModelTest {
       appendable.close();
 
 
-      Controller controller = new TradingController(TestUtils.getEmptyUserModel(),
+      Controller controller = new TradingController(TestUtils.getEmptySimpleUserModel(),
               new TextView(readable, appendable));
 
       controller.run();
