@@ -118,4 +118,16 @@ public class Utils {
     calendar.set(Calendar.MILLISECOND, 0);
     return calendar.getTime();
   }
+
+  /**
+   * Compares two doubles and ensures that they are within comparision threshold of delta.
+   *
+   * @param number1 number 1
+   * @param number2 number 2
+   * @param delta   threshold of allowance for floating point precision issues
+   * @return true if the numbers are equal within delta, false otherwise
+   */
+  public static boolean areTwoDoublesEqual(double number1, double number2, double delta) {
+    return Math.abs(number1 - number2) <= delta;
+  }
 }

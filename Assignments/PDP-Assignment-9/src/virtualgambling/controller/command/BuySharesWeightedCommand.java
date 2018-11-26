@@ -1,9 +1,11 @@
 package virtualgambling.controller.command;
 
-import java.util.List;
+import java.util.Map;
 
 import util.Utils;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.strategy.Strategy;
+import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 
 /**
  * This class represents a Buy Share command with the enhancement that the each ticker can have an
@@ -11,8 +13,8 @@ import virtualgambling.model.UserModel;
  * it's weight/total weight. It implements the {@link Command} interface.
  */
 public class BuySharesWeightedCommand implements Command {
-  private final List<String> tickerNames;
-  private final List<Double> weights;
+  private final Map<String, Double> stockWeights;
+  private final Strategy strategy;
 
   /**
    * Constructs a BuySharesWeightedCommand that take in a set of tickers and their associated
@@ -21,21 +23,12 @@ public class BuySharesWeightedCommand implements Command {
    * <p>The constructor will throw an IllegalArgumentException if any of the parameters are null
    * or if the weights do not sum up to 1.
    *
-   * @param tickerNames list of ticker names
-   * @param weights     list of weights for each ticker
+   * @param stockWeights map of ticker to stocks
    */
-  public BuySharesWeightedCommand(List<String> tickerNames, List<Double> weights)
+  public BuySharesWeightedCommand(Map<String, Double> stockWeights)
           throws IllegalArgumentException {
-    this.tickerNames = Utils.requireNonNull(tickerNames);
-    this.weights = Utils.requireNonNull(weights);
-    this.checkTotalsInvariant(weights);
-  }
-
-  private void checkTotalsInvariant(List<Double> weights) {
-    double sum = weights.stream().mapToDouble(Double::doubleValue).sum();
-    if (sum != 1.0) {
-      throw new IllegalArgumentException("weights do not sum to 1");
-    }
+    this.stockWeights = Utils.requireNonNull(stockWeights);
+    this.strategy = new WeightedInvestmentStrategy(stockWeights);
   }
 
   @Override
