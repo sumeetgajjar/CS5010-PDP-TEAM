@@ -122,7 +122,6 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   }
 
   private BigDecimal getPriceFromApi(String tickerName, Date date) {
-    date = Utils.removeTimeFromDate(date);
     String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
 
     try {
