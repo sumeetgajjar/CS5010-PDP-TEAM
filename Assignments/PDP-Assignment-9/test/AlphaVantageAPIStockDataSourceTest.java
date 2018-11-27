@@ -1,5 +1,3 @@
-package virtualgambling.model.stockdatasource;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
+import virtualgambling.model.stockdatasource.StockDataSource;
 
 public class AlphaVantageAPIStockDataSourceTest {
 

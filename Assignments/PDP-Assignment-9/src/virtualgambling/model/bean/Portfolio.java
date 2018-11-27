@@ -113,7 +113,7 @@ public class Portfolio {
     return composition.toString();
   }
 
-  private Date getTodayDate() {
+  protected Date getTodayDate() {
     return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
   }
 

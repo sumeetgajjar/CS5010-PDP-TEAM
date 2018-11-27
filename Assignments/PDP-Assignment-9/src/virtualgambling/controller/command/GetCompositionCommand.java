@@ -2,6 +2,7 @@ package virtualgambling.controller.command;
 
 import java.util.function.Consumer;
 
+import virtualgambling.model.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 
 /**
@@ -30,7 +31,7 @@ public class GetCompositionCommand implements Command {
    * @param userModel the userModel
    */
   @Override
-  public void execute(UserModel userModel) {
+  public void execute(UserModel userModel) throws PortfolioNotFoundException {
     String portfolioComposition = userModel.getPortfolio(portfolioName).toString();
     this.consumer.accept(portfolioComposition);
   }

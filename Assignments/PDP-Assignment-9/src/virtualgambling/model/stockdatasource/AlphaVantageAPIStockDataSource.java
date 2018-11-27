@@ -14,7 +14,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -156,19 +155,6 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   private void addToLruCache(String tickerName,
                              NavigableMap<String, BigDecimal> timeStampMap) {
     LRU_CACHE.put(tickerName, timeStampMap);
-  }
-
-  public static void main(String[] args) throws IOException, ParseException {
-    Date date = Utils.getDateFromDefaultFormattedDateString("2018" +
-            "-11-23");
-
-    AlphaVantageAPIStockDataSource dataSource = AlphaVantageAPIStockDataSource.getInstance();
-    System.out.println(dataSource.getPrice("GOOG", date));
-    System.out.println(dataSource.getPrice("GOOG", date));
-    System.out.println(dataSource.getPrice("T", date));
-    System.out.println(dataSource.getPrice("AAPL", date));
-    System.out.println(dataSource.getPrice("ASC", date));
-    System.out.println(dataSource.getPrice("GOOG", date));
   }
 
   private NavigableMap<String, BigDecimal> queryApi(String tickerName) throws IOException {

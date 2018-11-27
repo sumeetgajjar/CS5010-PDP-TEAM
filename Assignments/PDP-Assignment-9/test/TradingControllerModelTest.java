@@ -291,7 +291,7 @@ public class TradingControllerModelTest {
             + System.lineSeparator()
             + "Incomplete Command, please enter valid parameters"
             + System.lineSeparator()
-            + "Portfolio not found"
+            + "portfolio by the name 'p' not found"
             + System.lineSeparator()
             + mockedUserModel.getPortfolio("p1").toString()
             + System.lineSeparator();

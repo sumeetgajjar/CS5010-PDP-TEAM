@@ -66,7 +66,7 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Invalid Portfolio Name");
     }
 
-    Portfolio portfolio = new Portfolio(portfolioName, stockDAO, Collections.emptyList());
+    Portfolio portfolio = instantiatePortfolio(portfolioName, Collections.emptyList());
     this.portfolios.put(portfolioName, portfolio);
   }
 
@@ -76,7 +76,8 @@ public class SimpleUserModel implements UserModel {
     if (this.portfolios.containsKey(portfolioName)) {
       return this.portfolios.get(portfolioName);
     } else {
-      throw new PortfolioNotFoundException(String.format("%s not found", portfolioName));
+      throw new PortfolioNotFoundException(String.format("portfolio by the name '%s' not found",
+              portfolioName));
     }
   }
 
@@ -104,6 +105,11 @@ public class SimpleUserModel implements UserModel {
     return this.remainingCapital;
   }
 
+  protected Portfolio instantiatePortfolio(String portfolioName,
+                                           List<SharePurchaseOrder> sharePurchaseOrders) {
+    return new Portfolio(portfolioName, stockDAO, sharePurchaseOrders);
+  }
+
   private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
@@ -122,7 +128,6 @@ public class SimpleUserModel implements UserModel {
     ArrayList<SharePurchaseOrder> newSharePurchaseOrders =
             new ArrayList<>(portfolio.getPurchases());
     newSharePurchaseOrders.add(sharePurchaseOrder);
-    this.portfolios.put(portfolioName, new Portfolio(portfolioName, stockDAO,
-            newSharePurchaseOrders));
+    this.portfolios.put(portfolioName, instantiatePortfolio(portfolioName, newSharePurchaseOrders));
   }
 }

@@ -2,13 +2,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import util.Share;
 import util.TestUtils;
 import util.Utils;
+import virtualgambling.model.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
@@ -34,8 +40,8 @@ public class UserModelTest {
     try {
       userModel.getPortfolio("test");
       Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Portfolio not found", e.getMessage());
+    } catch (PortfolioNotFoundException e) {
+      Assert.assertEquals("portfolio by the name 'test' not found", e.getMessage());
     }
 
     userModel.createPortfolio("test");
@@ -606,16 +612,20 @@ public class UserModelTest {
 
   }
 
-  @Test //todo move to controller
+  @Test
   public void getAllPortfolioNamesWorks() {
     UserModel userModel = TestUtils.getMockedUserModel();
 
-    Assert.assertEquals("", userModel.getAllPortfolios());
+    Assert.assertEquals(Collections.emptyList(), userModel.getAllPortfolios());
 
     userModel.createPortfolio("p1");
-    Assert.assertEquals("p1", userModel.getAllPortfolios());
+    List<String> actualPortfolioNames =
+            userModel.getAllPortfolios().stream().map(Portfolio::getName).collect(Collectors.toList());
+    Assert.assertEquals(Collections.singletonList("p1"), actualPortfolioNames);
     userModel.createPortfolio("p2");
-    Assert.assertEquals("p1" + System.lineSeparator() + "p2", userModel.getAllPortfolios());
+    actualPortfolioNames =
+            userModel.getAllPortfolios().stream().map(Portfolio::getName).collect(Collectors.toList());
+    Assert.assertEquals(Arrays.asList("p1", "p2"), actualPortfolioNames);
   }
 
   private Share getAppleShare() {

@@ -3,11 +3,14 @@ package util;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
+import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
@@ -122,16 +125,45 @@ public class TestUtils {
             + System.lineSeparator();
   }
 
+  public static class MockPortfolio extends Portfolio {
+    private Date mockedTodayDate;
+
+    /**
+     * Constructs a Object of {@link Portfolio} with the given name.
+     *
+     * @param name            the name of the portfolio.
+     * @param mockedTodayDate mocked date for testing
+     */
+    public MockPortfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases,
+                         Date mockedTodayDate) {
+      super(name, stockDAO, purchases);
+      this.mockedTodayDate = mockedTodayDate;
+    }
+
+    @Override
+    protected Date getTodayDate() {
+      return mockedTodayDate;
+    }
+  }
+
   public static class MockUserModel extends SimpleUserModel {
     private Date mockedTodayDate;
+    private StockDAO simpleStockDAO;
 
     private MockUserModel(StockDAO stockDAO) {
       super(stockDAO);
+      this.simpleStockDAO = stockDAO;
     }
 
     MockUserModel(Date mockedTodayDate) throws IllegalArgumentException {
       this(new SimpleStockDAO(new MockDataSource()));
       this.mockedTodayDate = Utils.requireNonNull(mockedTodayDate);
+    }
+
+    @Override
+    protected Portfolio instantiatePortfolio(String portfolioName,
+                                             List<SharePurchaseOrder> sharePurchaseOrders) {
+      return new MockPortfolio(portfolioName, simpleStockDAO, sharePurchaseOrders, mockedTodayDate);
     }
   }
 
