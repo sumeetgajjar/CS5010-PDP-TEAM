@@ -3,30 +3,29 @@ package virtualgambling.model.strategy;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
-public class RecurringWeightedInvestmentStrategy implements Strategy {
-  private final Strategy strategy;
+public class RecurringWeightedInvestmentStrategy extends AbstractWeightedInvestmentStrategy {
   private final int dayFrequency;
-  private final Date startDate;
   private Date endDate;
 
-  public RecurringWeightedInvestmentStrategy(Strategy strategy, Date startDate, int dayFrequency) {
-    this.strategy = Utils.requireNonNull(strategy);
-    this.startDate = Utils.requireNonNull(startDate);
+  public RecurringWeightedInvestmentStrategy(Date startDate, Map<String, Double> stockWeights,
+                                             int dayFrequency,
+                                             Date endDate) {
+    super(startDate, stockWeights);
     if (dayFrequency < 1) {
       throw new IllegalArgumentException("Frequency cannot be less than 1 day");
     }
     this.dayFrequency = dayFrequency;
-    this.endDate = null;
+    this.endDate = Utils.requireNonNull(endDate);
   }
 
-  public RecurringWeightedInvestmentStrategy(Strategy strategy, Date startDate, int dayFrequency,
-                                             Date endDate) {
-    this(strategy, startDate, dayFrequency);
-    this.endDate = Utils.requireNonNull(endDate);
+  public RecurringWeightedInvestmentStrategy(Date startDate,
+                                             Map<String, Double> stockWeights, int dayFrequency) {
+    this(startDate, stockWeights, dayFrequency, Utils.getYesterdayDate());
   }
 
   @Override
