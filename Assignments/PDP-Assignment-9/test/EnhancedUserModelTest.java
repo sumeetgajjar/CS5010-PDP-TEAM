@@ -178,7 +178,35 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksFailsIfOneStockIsInvalid() {
+  public void buySharesIfInvestmentAmountIsLessThanOne() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("RANDOM", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(0), strategy, 10);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
+    }
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(-1), strategy, 10);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
+    }
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+  }
+
+  @Test
+  public void buySharesFailsIfOneStockIsInvalid() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("RANDOM", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
@@ -198,7 +226,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksFailsIfOneStockDataIsNotFound() {
+  public void buySharesFailsIfOneStockDataIsNotFound() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
@@ -221,7 +249,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksWithDifferentWeightsInNewPortfolio() {
+  public void buySharesWithDifferentWeightsInNewPortfolio() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
@@ -252,7 +280,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksWithSameWeightsInNewPortfolio() {
+  public void buySharesWithSameWeightsInNewPortfolio() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 50.0D);
     stocksWeights.put("NFLX", 50.0D);
@@ -283,7 +311,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksWithDifferentWeightsInOldPortfolio() {
+  public void buySharesWithDifferentWeightsInOldPortfolio() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
@@ -320,7 +348,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyStocksWithSameWeightsInOldPortfolio() {
+  public void buySharesWithSameWeightsInOldPortfolio() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
