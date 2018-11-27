@@ -17,10 +17,11 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
+import java.util.TreeMap;
 
 import util.LRUCache;
 import util.Utils;
@@ -35,7 +36,8 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
           "AOHAEN4D9GAK0UA3"
   );
 
-  private static final LRUCache<String, Map<String, BigDecimal>> LRU_CACHE = new LRUCache<>(2);
+  private static final LRUCache<String, NavigableMap<String, BigDecimal>> LRU_CACHE =
+          new LRUCache<>(2);
   private static final String DISK_CACHE_ROOT_PATH = "StocksPriceCache";
 
   private static AlphaVantageAPIStockDataSource HOLDER;
@@ -48,28 +50,45 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
   @Override
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-    date = Utils.removeTimeFromDate(date);
+    String dateString = Utils.getDefaultFormattedDateStringFromDate(Utils.removeTimeFromDate(date));
 
-    BigDecimal stockPrice = getDataFromLruCache(tickerName, date);
+    BigDecimal stockPrice = getDataFromLruCache(tickerName, dateString);
     if (Objects.nonNull(stockPrice)) {
       return stockPrice;
     }
 
+    if (addDataToLRUCacheIfAvailable(tickerName, dateString)) {
+      return LRU_CACHE.get(tickerName).get(dateString);
+    } else {
+      NavigableMap<String, BigDecimal> dateToBigDecimalMap = LRU_CACHE.get(tickerName);
+      if (Objects.nonNull(dateToBigDecimalMap)) {
+        BigDecimal price = dateToBigDecimalMap.ceilingEntry(dateString).getValue();
+        if (Objects.isNull(price)) {
+          throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
+                  tickerName, dateString));
+        }
+        return price;
+
+      }
+      throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
+              tickerName, dateString));
+    }
+  }
+
+  private boolean addDataToLRUCacheIfAvailable(String tickerName, String dateString) {
     try {
-      stockPrice = getPriceFromDisk(tickerName, date);
-      if (Objects.nonNull(stockPrice)) {
-        return stockPrice;
+      if (addDataToLRUCacheFromDisk(tickerName, dateString)) {
+        return true;
       }
     } catch (IOException ignored) {
     }
 
-    return getPriceFromApi(tickerName, date);
+    return addDataToLRUCacheFromAPI(tickerName, dateString);
   }
 
-  private BigDecimal getDataFromLruCache(String tickerName, Date date) {
-    String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
+  private BigDecimal getDataFromLruCache(String tickerName, String dateString) {
     if (LRU_CACHE.containsKey(tickerName)) {
-      Map<String, BigDecimal> timeStampMap = LRU_CACHE.get(tickerName);
+      NavigableMap<String, BigDecimal> timeStampMap = LRU_CACHE.get(tickerName);
       if (timeStampMap.containsKey(dateString)) {
         return timeStampMap.get(dateString);
       }
@@ -77,30 +96,29 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     return null;
   }
 
-  private BigDecimal getPriceFromDisk(String tickerName, Date date) throws IOException {
+  private boolean addDataToLRUCacheFromDisk(String tickerName, String dateString) throws IOException {
     Path cachePath = getCacheFolderPath(tickerName);
     if (Files.isDirectory(cachePath)) {
       Path cacheFilePath = getCacheFilePath(tickerName);
       if (Files.exists(cacheFilePath)) {
-        Map<String, BigDecimal> timeStampMap = readDataFromDisk(cacheFilePath);
-        String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
+        NavigableMap<String, BigDecimal> timeStampMap = readDataFromDisk(cacheFilePath);
         if (timeStampMap.containsKey(dateString)) {
           addToLruCache(tickerName, timeStampMap);
-          return timeStampMap.get(dateString);
+          return true;
         }
       }
     }
 
-    return null;
+    return false;
   }
 
   private Path getCacheFilePath(String tickerName) {
     return Paths.get(DISK_CACHE_ROOT_PATH, tickerName, "data.csv");
   }
 
-  private Map<String, BigDecimal> readDataFromDisk(Path cacheFilePath) throws IOException {
+  private NavigableMap<String, BigDecimal> readDataFromDisk(Path cacheFilePath) throws IOException {
     File file = new File(cacheFilePath.toUri());
-    Map<String, BigDecimal> timeStampMap = new HashMap<>(2000);
+    NavigableMap<String, BigDecimal> timeStampMap = new TreeMap<>();
     try (BufferedReader reader =
                  new BufferedReader(
                          new InputStreamReader(
@@ -121,28 +139,22 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     return Paths.get(DISK_CACHE_ROOT_PATH, tickerName);
   }
 
-  private BigDecimal getPriceFromApi(String tickerName, Date date) {
-    String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
+  private boolean addDataToLRUCacheFromAPI(String tickerName, String dateString) {
 
     try {
-      Map<String, BigDecimal> timeStampMap = queryApi(tickerName);
+      NavigableMap<String, BigDecimal> timeStampMap = queryApi(tickerName);
       addToLruCache(tickerName, timeStampMap);
 
       BigDecimal stockPrice = timeStampMap.get(dateString);
-      if (Objects.isNull(stockPrice)) {
-        throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
-                tickerName, Utils.getDefaultFormattedDateStringFromDate(date)));
-
-      }
-      return stockPrice;
+      return !Objects.isNull(stockPrice);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private Map<String, BigDecimal> addToLruCache(String tickerName,
-                                                Map<String, BigDecimal> timeStampMap) {
-    return LRU_CACHE.put(tickerName, timeStampMap);
+  private void addToLruCache(String tickerName,
+                             NavigableMap<String, BigDecimal> timeStampMap) {
+    LRU_CACHE.put(tickerName, timeStampMap);
   }
 
   public static void main(String[] args) throws IOException, ParseException {
@@ -158,10 +170,10 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     System.out.println(dataSource.getPrice("GOOG", date));
   }
 
-  private Map<String, BigDecimal> queryApi(String tickerName) throws IOException {
+  private NavigableMap<String, BigDecimal> queryApi(String tickerName) throws IOException {
     URL url = getUrl(tickerName);
 
-    Map<String, BigDecimal> dateToPriceMap = new HashMap<>(2000);
+    NavigableMap<String, BigDecimal> dateToPriceMap = new TreeMap<>();
     try (BufferedReader reader =
                  new BufferedReader(
                          new InputStreamReader(
