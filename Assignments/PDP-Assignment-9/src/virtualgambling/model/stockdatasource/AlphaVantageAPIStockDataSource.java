@@ -62,12 +62,13 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     } else {
       NavigableMap<String, BigDecimal> dateToBigDecimalMap = LRU_CACHE.get(tickerName);
       if (Objects.nonNull(dateToBigDecimalMap)) {
-        BigDecimal price = dateToBigDecimalMap.ceilingEntry(dateString).getValue();
-        if (Objects.isNull(price)) {
+        Map.Entry<String, BigDecimal> dateToPriceEntry =
+                dateToBigDecimalMap.ceilingEntry(dateString);
+        if (Objects.isNull(dateToPriceEntry) || Objects.isNull(dateToPriceEntry.getValue())) {
           throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
                   tickerName, dateString));
         }
-        return price;
+        return dateToPriceEntry.getValue();
 
       }
       throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
@@ -205,11 +206,13 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     return dateToPriceMap;
   }
 
-  private File getCacheFile(String tickerName) {
+  private File getCacheFile(String tickerName) throws IOException {
+    if (!Files.exists(Paths.get(DISK_CACHE_ROOT_PATH))) {
+      Files.createDirectory(Paths.get(DISK_CACHE_ROOT_PATH));
+    }
     Path cacheFolderPath = getCacheFolderPath(tickerName);
     if (!Files.exists(cacheFolderPath)) {
-      File file = new File(cacheFolderPath.toUri());
-      file.mkdir();
+      Files.createDirectory(cacheFolderPath);
     }
     return new File(getCacheFilePath(tickerName).toUri());
   }
