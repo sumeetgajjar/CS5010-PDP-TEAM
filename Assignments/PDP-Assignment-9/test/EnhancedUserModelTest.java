@@ -42,14 +42,14 @@ public class EnhancedUserModelTest extends UserModelTest {
       Map<String, Double> stocksWeights = new HashMap<>();
       stocksWeights.put("FB", 50.0D);
       stocksWeights.put("NFLX", 49.0D);
-      new WeightedInvestmentStrategy(getValidDateForTrading(), stocksWeights);
+      new WeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), stocksWeights);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
     }
 
     try {
-      new WeightedInvestmentStrategy(getValidDateForTrading(), Collections.emptyMap());
+      new WeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), Collections.emptyMap());
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -59,7 +59,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       Map<String, Double> stocksWeights = new HashMap<>();
       stocksWeights.put("FB", 50.0D);
       stocksWeights.put("NFLX", 51.0D);
-      new WeightedInvestmentStrategy(getValidDateForTrading(), stocksWeights);
+      new WeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), stocksWeights);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -71,7 +71,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       stocksWeights.put("NFLX", 49.0D);
       new RecurringWeightedInvestmentStrategy(
               new WeightedInvestmentStrategy(
-                      getValidDateForTrading(), stocksWeights));
+                      TestUtils.getValidDateForTrading(), stocksWeights));
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
@@ -80,7 +80,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     try {
       new RecurringWeightedInvestmentStrategy(
               new WeightedInvestmentStrategy(
-                      getValidDateForTrading(), Collections.emptyMap()));
+                      TestUtils.getValidDateForTrading(), Collections.emptyMap()));
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -92,7 +92,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       stocksWeights.put("NFLX", 51.0D);
       new RecurringWeightedInvestmentStrategy(
               new WeightedInvestmentStrategy(
-                      getValidDateForTrading(), stocksWeights));
+                      TestUtils.getValidDateForTrading(), stocksWeights));
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -102,7 +102,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Test
   public void invalidInputToStrategyFails() {
     try {
-      new WeightedInvestmentStrategy(getValidDateForTrading(), null);
+      new WeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -126,7 +126,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Test
   public void buySharesFailsForNullInputs() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     try {
@@ -176,7 +176,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   public void buySingleShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
           StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     enhancedUserModel.createPortfolio("p1");
@@ -198,7 +198,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Test
   public void buySingleShareWithCommissionForMissingPortfolioFails() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     try {
@@ -233,7 +233,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio("p1");
     try {
-      enhancedUserModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1, 10);
+      enhancedUserModel.buyShares("AAPL1", "p1", TestUtils.getValidDateForTrading(), 1, 10);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Data not found", e.getMessage());
@@ -243,7 +243,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Test
   public void buySingleShareWithCommissionFailsDueToInsufficientFunds() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     enhancedUserModel.createPortfolio("p1");
 
     try {
@@ -262,7 +262,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("RANDOM", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -290,7 +290,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("RANDOM", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -310,7 +310,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("RANDOM", 50.0D);
     stocksWeights.put("NFLX", 50.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -376,7 +376,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -407,7 +407,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -429,7 +429,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -519,7 +519,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 50.0D);
     stocksWeights.put("NFLX", 50.0D);
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
@@ -550,7 +550,7 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
 
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
@@ -587,7 +587,7 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
-    Date validDateForTrading = getValidDateForTrading();
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
     enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
 
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
@@ -624,7 +624,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
     double negativeCommission = -5;
     try {
-      enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1, getValidDateForTrading(), 10,
+      enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10,
               negativeCommission);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
@@ -647,9 +647,9 @@ public class EnhancedUserModelTest extends UserModelTest {
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
     double commission = 5;
     SharePurchaseOrder withoutCommission = enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1,
-            getValidDateForTrading(), 10);
+            TestUtils.getValidDateForTrading(), 10);
     SharePurchaseOrder withCommissionWithoutStrategy = enhancedUserModel.buyShares("AAPL",
-            PORTFOLIO_P1, getValidDateForTrading(), 10, commission);
+            PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10, commission);
 
     Assert.assertNotEquals(withCommissionWithoutStrategy.getCostOfPurchase(),
             withoutCommission.getCostOfPurchase());
@@ -688,9 +688,9 @@ public class EnhancedUserModelTest extends UserModelTest {
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
     double commission = 0.00;
     SharePurchaseOrder withoutCommission = enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1,
-            getValidDateForTrading(), 10);
+            TestUtils.getValidDateForTrading(), 10);
     SharePurchaseOrder withCommissionWithoutStrategy = enhancedUserModel.buyShares("AAPL",
-            PORTFOLIO_P1, getValidDateForTrading(), 10, commission);
+            PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10, commission);
 
     Assert.assertEquals(withCommissionWithoutStrategy.getCostOfPurchase(),
             withoutCommission.getCostOfPurchase());
@@ -717,7 +717,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 50.0D);
     stocksWeights.put("NFLX", 50.0D);
-    return new WeightedInvestmentStrategy(getValidDateForTrading(), stocksWeights);
+    return new WeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), stocksWeights);
   }
 
   private Map<String, Long> getIndividualShareCount(List<SharePurchaseOrder> sharePurchaseOrders) {

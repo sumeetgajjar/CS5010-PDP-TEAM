@@ -4,7 +4,10 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
 
+import util.TestUtils;
+import util.Utils;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
@@ -20,7 +23,7 @@ public class AlphaVantageAPIStockDataSourceTest {
 
   @Test
   public void getPriceOnHolidayOfValidStockGetsNextAvailableDay() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 22); // thanksgiving goes to friday
     BigDecimal closePriceOn23Nov = dataSource.getPrice("AAPL", calendar.getTime());
     Assert.assertEquals(new BigDecimal("172.29"), closePriceOn23Nov.stripTrailingZeros());
@@ -32,8 +35,16 @@ public class AlphaVantageAPIStockDataSourceTest {
 
   @Test(expected = StockDataNotFoundException.class)
   public void aFutureDayFails() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2118, Calendar.NOVEMBER, 22);
     dataSource.getPrice("AAPL", calendar.getTime());
+  }
+
+  @Test
+  public void priceReturnedIsClosingPrice() {
+    Date validDateForTrading = TestUtils.getValidDateForTrading();
+    BigDecimal aaplPrice = dataSource.getPrice("AAPL", validDateForTrading);
+    BigDecimal expectedAAPLClosingPrice = new BigDecimal("222.2200");
+    Assert.assertEquals(expectedAAPLClosingPrice, aaplPrice);
   }
 }
