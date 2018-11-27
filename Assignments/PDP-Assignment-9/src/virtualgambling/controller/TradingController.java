@@ -1,5 +1,6 @@
 package virtualgambling.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -20,9 +20,9 @@ import virtualgambling.controller.command.GetAllPortfolioCommand;
 import virtualgambling.controller.command.GetCompositionCommand;
 import virtualgambling.controller.command.PortfolioValueCommand;
 import virtualgambling.controller.command.RemainingCapitalCommand;
-import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
@@ -59,7 +59,7 @@ public class TradingController extends AbstractController {
    */
   @Override
   public void run() throws IllegalStateException {
-    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+    Map<String, BiFunctionWithException<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
     this.displayOnView(getWelcomeMessage());
 
@@ -74,11 +74,11 @@ public class TradingController extends AbstractController {
           return;
         }
 
-        BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
+        BiFunctionWithException<Supplier<String>, Consumer<String>, Command> biFunction =
                 commandMap.get(commandString);
 
         if (Objects.nonNull(biFunction)) {
-          Command command = biFunction.apply(scanner::next, this::displayOnView);
+          Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
           command.execute(this.userModel);
         } else {
           this.displayOnView("Command not found, please try again");
@@ -88,6 +88,8 @@ public class TradingController extends AbstractController {
       } catch (IllegalArgumentException | InsufficientCapitalException |
               StockDataNotFoundException | PortfolioNotFoundException e) {
         this.displayOnView(e.getMessage());
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     }
   }
@@ -142,12 +144,11 @@ public class TradingController extends AbstractController {
             + System.lineSeparator();
   }
 
-  private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
-    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+  private Map<String, BiFunctionWithException<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+    Map<String, BiFunctionWithException<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();
 
-    commandMap.put("create_portfolio", (supplier, consumer) ->
-            new CreatePortfolioCommand(supplier.get()));
+    commandMap.put("create_portfolio", CreatePortfolioCommand::new);
 
     commandMap.put("get_all_portfolios", (supplier, consumer) ->
             new GetAllPortfolioCommand(consumer));
@@ -166,7 +167,7 @@ public class TradingController extends AbstractController {
     commandMap.put("get_remaining_capital", (supplier, consumer) ->
             new RemainingCapitalCommand(consumer));
 
-    commandMap.put("buy_shares", this::getBuySharesCommand);
+    commandMap.put("buy_shares", (supplier, consumer) -> getBuySharesCommand(supplier, consumer));
 
     return commandMap;
   }
@@ -194,5 +195,9 @@ public class TradingController extends AbstractController {
     } catch (ParseException e) {
       throw new IllegalArgumentException("Invalid date format");
     }
+  }
+
+  private interface BiFunctionWithException<T, U, R> {
+    R apply(T t, U u) throws IOException;
   }
 }

@@ -1,22 +1,22 @@
 package virtualgambling.controller.command;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
 import virtualgambling.model.UserModel;
 
 /**
  * This class represents a command to create a portfolio. It implements the {@link Command}
  * interface.
  */
-public class CreatePortfolioCommand implements Command {
+public class CreatePortfolioCommand extends AbstractCommand {
 
   private final String portfolioName;
 
-  /**
-   * Constructs a object of {@link CreatePortfolioCommand} with the given params.
-   *
-   * @param portfolioName the name of the portfolio
-   */
-  public CreatePortfolioCommand(String portfolioName) {
-    this.portfolioName = portfolioName;
+  public CreatePortfolioCommand(Supplier<String> supplier, Consumer<String> consumer) {
+    super(supplier, consumer);
+    this.consumer.accept("Please Enter the Portfolio Name");
+    this.portfolioName = supplier.get();
   }
 
   /**
