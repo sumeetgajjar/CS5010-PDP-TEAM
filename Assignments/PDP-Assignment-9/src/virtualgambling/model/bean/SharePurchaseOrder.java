@@ -13,6 +13,16 @@ public class SharePurchaseOrder {
   private final BigDecimal unitPrice;
   private final Date date;
   private final long quantity;
+  private final double commissionPercentage;
+
+  public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity,
+                            double commissionPercentage) {
+    this.tickerName = tickerName;
+    this.unitPrice = unitPrice;
+    this.date = date;
+    this.quantity = quantity;
+    this.commissionPercentage = commissionPercentage;
+  }
 
   /**
    * Constructs an instance of {@link SharePurchaseOrder} with the given params.
@@ -23,10 +33,7 @@ public class SharePurchaseOrder {
    * @param quantity   the quantity of the purchased share
    */
   public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
-    this.tickerName = tickerName;
-    this.unitPrice = unitPrice;
-    this.date = date;
-    this.quantity = quantity;
+    this(tickerName, unitPrice, date, quantity, 0D);
   }
 
   /**
@@ -66,12 +73,23 @@ public class SharePurchaseOrder {
   }
 
   /**
+   * Returns the commission percentage associated with this purchase.
+   *
+   * @return the commission percentage associated with this purchase
+   */
+  public double getCommissionPercentage() {
+    return commissionPercentage;
+  }
+
+  /**
    * Returns the total cost of this purchase.
    *
    * @return the total cost of this purchase
    */
   public BigDecimal getCostOfPurchase() {
-    return this.unitPrice.multiply(BigDecimal.valueOf(quantity));
+    BigDecimal costOfAllShares = this.unitPrice.multiply(BigDecimal.valueOf(quantity));
+    BigDecimal commission = costOfAllShares.multiply(new BigDecimal(commissionPercentage / 100D));
+    return costOfAllShares.add(commission);
   }
 
   @Override

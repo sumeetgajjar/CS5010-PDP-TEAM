@@ -50,7 +50,8 @@ public class SimpleStockDataSource implements StockDataSource {
   private static Map<String, Map<Date, BigDecimal>> getStockPricesForLast10Days() {
     List<Date> dates = getDatesForLast100Days();
 
-    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
+    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T", "FB"
+            , "NFLX");
     BigDecimal stockPrice = new BigDecimal(10);
     Map<String, Map<Date, BigDecimal>> stockPrices = new LinkedHashMap<>();
     for (String stockName : stocks) {
