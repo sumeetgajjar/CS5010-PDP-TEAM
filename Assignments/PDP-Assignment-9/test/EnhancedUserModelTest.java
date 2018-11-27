@@ -172,7 +172,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyingShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
+  public void buyShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
           StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = getValidDateForTrading();
@@ -191,6 +191,51 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Quantity has to be positive", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyShareForMissingPortfolioFails() throws StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    try {
+      enhancedUserModel.buyShares(appleShare.getTickerName(), "p1", date, 1, 10);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Portfolio not found", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyShareWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    enhancedUserModel.createPortfolio("p1");
+    try {
+      Calendar calendar = Utils.getCalendarInstance();
+      calendar.set(2018, Calendar.JULY, 4, 10, 0);
+      calendar.add(Calendar.DATE, -1);
+      Date date = Utils.removeTimeFromDate(calendar.getTime());
+
+      enhancedUserModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1, 10);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals(
+              "Stock Data not found for Stock:AAPL for Date:Tue Jul 03 00:00:00 EDT 2018",
+              e.getMessage());
+    }
+  }
+
+  @Test
+  public void buyShareFailsForInvalidTickerName() throws StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    enhancedUserModel.createPortfolio("p1");
+    try {
+      enhancedUserModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals("Stock Data not found", e.getMessage());
     }
   }
 
