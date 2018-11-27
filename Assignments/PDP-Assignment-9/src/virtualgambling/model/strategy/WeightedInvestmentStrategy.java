@@ -22,7 +22,7 @@ public class WeightedInvestmentStrategy implements Strategy {
   private void checkInvariantForStockWeights(Map<String, Double> stockWeights) {
     double weightSum = stockWeights.values().stream().mapToDouble(Double::doubleValue).sum();
     if (!Utils.areTwoDoublesEqual(weightSum, 100.0, 0.001)) {
-      throw new IllegalArgumentException("Weights do not sum up to 1");
+      throw new IllegalArgumentException("Weights do not sum up to 100");
     }
   }
 
