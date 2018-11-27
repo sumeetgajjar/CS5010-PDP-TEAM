@@ -3,6 +3,7 @@ package virtualgambling.controller;
 import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.stockdao.DAOV2;
 import virtualgambling.model.stockdao.SimpleStockDAO;
+import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.view.View;
 
@@ -21,7 +22,9 @@ public class OrchestratorController extends AbstractController {
 
   @Override
   String getWelcomeMessage() {
-    return "Please select data source, in-memory OR alpha-vantage-api";
+    return "Please enter the data source option" + System.lineSeparator()
+            + "Enter 1 for 'in-memory" + System.lineSeparator()
+            + "Enter 2 for 'alpha-vantage-api";
   }
 
   @Override
@@ -31,13 +34,17 @@ public class OrchestratorController extends AbstractController {
       String inputFromView = this.getInputFromView();
       Controller tradingController = null;
       switch (inputFromView) {
-        case "alpha-vantage-api":
-          tradingController =
-                  new EnhancedTradingController(new EnhancedUserModelImpl(new DAOV2()), view);
+        case "1":
+          tradingController = new TradingController(
+                  new EnhancedUserModelImpl(
+                          new SimpleStockDAO(
+                                  new SimpleStockDataSource())), view);
           break;
-        case "in-memory":
-          tradingController = new TradingController(new EnhancedUserModelImpl(new SimpleStockDAO(
-                  new SimpleStockDataSource())), view);
+        case "2":
+          tradingController =
+                  new EnhancedTradingController(new EnhancedUserModelImpl(
+                          new DAOV2(
+                                  AlphaVantageAPIStockDataSource.getInstance())), view);
           break;
         default:
           this.displayOnView("Please type one of in-memory OR alpha-vantage-api");

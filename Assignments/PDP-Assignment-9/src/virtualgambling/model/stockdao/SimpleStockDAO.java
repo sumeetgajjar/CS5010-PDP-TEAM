@@ -48,9 +48,19 @@ public class SimpleStockDAO implements StockDAO {
           IllegalArgumentException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
+    if (Utils.isFutureDate(date)) {
+      throw new IllegalArgumentException("Cannot buy shares at given time");
+    }
+
+    date = this.getValidDate(date);
+
     if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
       throw new IllegalArgumentException("Cannot buy shares at given time");
     }
     return stockDataSource.getPrice(tickerName, date);
+  }
+
+  protected Date getValidDate(Date date) {
+    return date;
   }
 }
