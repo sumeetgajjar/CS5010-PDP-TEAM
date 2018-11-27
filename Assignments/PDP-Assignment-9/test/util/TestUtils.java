@@ -14,7 +14,6 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
 /**
@@ -50,7 +49,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static EnhancedUserModel getEmptyEnhancedUserModel() {
-    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new MockDataSource()));
   }
 
   /**
@@ -68,7 +67,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static UserModel getEmptySimpleUserModel() {
-    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new MockDataSource()));
   }
 
   /**
@@ -123,6 +122,17 @@ public class TestUtils {
             + "=================================================================================="
             + System.lineSeparator()
             + System.lineSeparator();
+  }
+
+  /**
+   * Returns a valid date for trading, which is 1 Nov 2018.
+   *
+   * @return a valid date for trading which is 1 Nov 2018
+   */
+  public static Date getValidDateForTrading() {
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+    return calendar.getTime();
   }
 
   public static class MockPortfolio extends Portfolio {

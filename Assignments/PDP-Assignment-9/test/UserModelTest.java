@@ -125,7 +125,7 @@ public class UserModelTest {
   public void buyingSharesOfInvalidQuantityFails() throws IllegalArgumentException,
           StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     userModel.createPortfolio("p1");
@@ -154,7 +154,7 @@ public class UserModelTest {
   @Test
   public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     try {
@@ -182,7 +182,7 @@ public class UserModelTest {
   @Test
   public void buyingShareForMissingPortfolioFails() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithSimpleStockDao();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
 
     try {
@@ -226,7 +226,7 @@ public class UserModelTest {
   @Test
   public void getRemainingCapitalWorks() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
     userModel.createPortfolio("p1");
 
@@ -261,7 +261,7 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
     try {
-      userModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
+      userModel.buyShares("AAPL1", "p1", TestUtils.getValidDateForTrading(), 1);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Data not found", e.getMessage());
@@ -271,7 +271,7 @@ public class UserModelTest {
   @Test
   public void buyFailsDueToInsufficientFunds() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     userModel.createPortfolio("p1");
 
     try {
@@ -288,7 +288,7 @@ public class UserModelTest {
   public void getCostBasisFailsDueToInvalidArguments() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
 
     try {
@@ -310,7 +310,7 @@ public class UserModelTest {
   public void getPortfolioValueFailsDueToInvalidArguments() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
 
     try {
@@ -333,7 +333,7 @@ public class UserModelTest {
     Share appleShare = getAppleShare();
     Share googleShare = getGoogleShare();
 
-    Date date = getValidDateForTrading();
+    Date date = TestUtils.getValidDateForTrading();
 
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
@@ -664,12 +664,6 @@ public class UserModelTest {
   private static Date getWeekendDate() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 11, 10, 0);
-    return calendar.getTime();
-  }
-
-  protected static Date getValidDateForTrading() {
-    Calendar calendar = Utils.getCalendarInstance();
-    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();
   }
 
