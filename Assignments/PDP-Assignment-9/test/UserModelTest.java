@@ -618,7 +618,7 @@ public class UserModelTest {
     Assert.assertEquals("p1" + System.lineSeparator() + "p2", userModel.getAllPortfolios());
   }
 
-  private Share getAppleShare() {
+  protected static Share getAppleShare() {
     return new Share("AAPL", BigDecimal.TEN);
   }
 

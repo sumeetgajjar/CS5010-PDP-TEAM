@@ -7,11 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.Share;
 import util.TestUtils;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.DAOV2;
 import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
@@ -37,6 +39,60 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
+  public void invalidParamsGivenToBuySharesFails() {
+
+  }
+
+  @Test
+  public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    try {
+      enhancedUserModel.buyShares(null, "p1", date, 1, 10);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(appleShare.getTickerName(), null, date, 1, 10);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(appleShare.getTickerName(), "p1", null, 1, 10);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(null, new BigDecimal(100), getValidStrategy(), 10D);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_P1, null, getValidStrategy(), 10D);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_P1, new BigDecimal(100), null, 10D);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+  }
+
+  @Test
   public void buyStocksWithDifferentWeightsInNewPortfolio() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 80.0D);
@@ -45,7 +101,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Date validDateForTrading = getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
-    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     Assert.assertEquals(0, enhancedUserModel.getAllPortfolios().size());
@@ -76,7 +132,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Date validDateForTrading = getValidDateForTrading();
     Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
-    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     Assert.assertEquals(0, enhancedUserModel.getAllPortfolios().size());
@@ -100,7 +156,7 @@ public class EnhancedUserModelTest extends UserModelTest {
 
   @Test
   public void buyStocksWithDifferentWeightsInOldPortfolio() {
-    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
@@ -137,7 +193,7 @@ public class EnhancedUserModelTest extends UserModelTest {
 
   @Test
   public void buyStocksWithSameWeightsInOldPortfolio() {
-    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
