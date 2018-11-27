@@ -166,6 +166,8 @@ public class TestUtils {
         return new BigDecimal("40");
       } else if (tickerName.equals("NFLX")) {
         return new BigDecimal("20");
+      } else if (tickerName.equals("T")) {
+        return new BigDecimal("10");
       }
 
       throw new StockDataNotFoundException("Stock Data not found");
