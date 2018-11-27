@@ -17,13 +17,14 @@ import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdao.DAOV2;
 import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 
+/**
+ * The class represents a Junit class to test Enhanced User Model in isolation.
+ */
 public class EnhancedUserModelTest extends UserModelTest {
 
   private static final String PORTFOLIO_P1 = "p1";
@@ -32,14 +33,6 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Override
   protected UserModel getUserModel(StockDAO stockDAO) {
     return TestUtils.getEmptyEnhancedUserModelWithStockDAO(stockDAO);
-  }
-
-  private EnhancedUserModel getEnhancedUserModel(StockDAO stockDAO) {
-    return TestUtils.getEmptyEnhancedUserModelWithStockDAO(stockDAO);
-  }
-
-  private StockDAO getLiveStockDAO() {
-    return new DAOV2(AlphaVantageAPIStockDataSource.getInstance());
   }
 
   @Test
@@ -541,29 +534,6 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyDifferentSharesInSamePortfolioOnDifferentDays() {
-
-  }
-
-  private Map<String, Long> getIndividualShareCount(List<SharePurchaseOrder> sharePurchaseOrders) {
-    Map<String, Long> shareCount = new HashMap<>();
-    for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-      Long count = shareCount.getOrDefault(sharePurchaseOrder.getTickerName(), 0L);
-      count += sharePurchaseOrder.getQuantity();
-      shareCount.put(sharePurchaseOrder.getTickerName(), count);
-    }
-    return shareCount;
-  }
-
-  private BigDecimal getTotalCostOfPurchase(List<SharePurchaseOrder> sharePurchaseOrders) {
-    BigDecimal actualCost = BigDecimal.ZERO;
-    for (SharePurchaseOrder order : sharePurchaseOrders) {
-      actualCost = actualCost.add(order.getCostOfPurchase());
-    }
-    return actualCost;
-  }
-
-  @Test
   public void buySharesWithNegativeCommissionFails() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
@@ -657,7 +627,27 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   private Strategy getValidStrategy() {
-    //todo
-    return null;
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 50.0D);
+    stocksWeights.put("NFLX", 50.0D);
+    return new WeightedInvestmentStrategy(getValidDateForTrading(), stocksWeights);
+  }
+
+  private Map<String, Long> getIndividualShareCount(List<SharePurchaseOrder> sharePurchaseOrders) {
+    Map<String, Long> shareCount = new HashMap<>();
+    for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+      Long count = shareCount.getOrDefault(sharePurchaseOrder.getTickerName(), 0L);
+      count += sharePurchaseOrder.getQuantity();
+      shareCount.put(sharePurchaseOrder.getTickerName(), count);
+    }
+    return shareCount;
+  }
+
+  private BigDecimal getTotalCostOfPurchase(List<SharePurchaseOrder> sharePurchaseOrders) {
+    BigDecimal actualCost = BigDecimal.ZERO;
+    for (SharePurchaseOrder order : sharePurchaseOrders) {
+      actualCost = actualCost.add(order.getCostOfPurchase());
+    }
+    return actualCost;
   }
 }
