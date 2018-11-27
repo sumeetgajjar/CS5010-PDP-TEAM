@@ -2,7 +2,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,11 +42,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Calendar calendar = Calendar.getInstance();
-    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
-    Date day2 = calendar.getTime();
-
-    Strategy strategy = new WeightedInvestmentStrategy(day2, stocksWeights);
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
 
@@ -64,44 +60,116 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
-    BigDecimal expectedTotalCostWithCommission = new BigDecimal(110);
-    Assert.assertEquals(expectedTotalCostWithCommission,
-            fangPortfolio.getCostBasis(day2));
-
-    Assert.assertEquals(expectedTotalCostWithCommission,
-            fangPortfolio.getValue(day2));
+    Assert.assertEquals(new BigDecimal(110), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(100), fangPortfolio.getValue(validDateForTrading));
 
     BigDecimal actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
-    Assert.assertEquals(expectedTotalCostWithCommission, actualCostWithCommission);
+    Assert.assertEquals(new BigDecimal(110), actualCostWithCommission);
+  }
 
-    calendar.add(Calendar.DATE, -1);
-    Date day1 = calendar.getTime();
+  @Test
+  public void buyStocksWithSameWeightsInNewPortfolio() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 50.0D);
+    stocksWeights.put("NFLX", 50.0D);
 
-    stocksWeights = new HashMap<>();
-    stocksWeights.put("T", 100.0D);
-    strategy = new WeightedInvestmentStrategy(day1, stocksWeights);
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
-    enhancedUserModel.buyShares(
-            PORTFOLIO_FANG, new BigDecimal(50), strategy, 10);
+    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    Assert.assertEquals(0, enhancedUserModel.getAllPortfolios().size());
+
+    List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(
+            PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+
+    Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    List<SharePurchaseOrder> purchasesInFANG = fangPortfolio.getPurchases();
+
+    Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
+
+    Assert.assertEquals(new BigDecimal(88), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(80), fangPortfolio.getValue(validDateForTrading));
+
+    BigDecimal actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
+    Assert.assertEquals(new BigDecimal(88), actualCostWithCommission);
+  }
+
+  @Test
+  public void buyStocksWithDifferentWeightsInOldPortfolio() {
+    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
+
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
+    Date validDateForTrading = getValidDateForTrading();
+    enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
+
+    Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    Assert.assertEquals(1, fangPortfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal(11), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(10), fangPortfolio.getValue(validDateForTrading));
+
+    Map<String, Long> shareCount = getIndividualShareCount(fangPortfolio.getPurchases());
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
 
     fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
-    purchasesInFANG = fangPortfolio.getPurchases();
+    List<SharePurchaseOrder> purchasesInFANG = fangPortfolio.getPurchases();
+    Assert.assertEquals(3, purchasesInFANG.size());
 
     shareCount = getIndividualShareCount(purchasesInFANG);
-    Assert.assertEquals(Long.valueOf(5), shareCount.get("FB"));
     Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
-    expectedTotalCostWithCommission = new BigDecimal(55);
-    Assert.assertEquals(expectedTotalCostWithCommission,
-            fangPortfolio.getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(121), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(110), fangPortfolio.getValue(validDateForTrading));
+  }
 
-    Assert.assertEquals(expectedTotalCostWithCommission,
-            fangPortfolio.getValue(day1));
+  @Test
+  public void buyStocksWithSameWeightsInOldPortfolio() {
+    EnhancedUserModel enhancedUserModel = this.getEnhancedUserModel(getLiveStockDAO());
 
-    actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
-    Assert.assertEquals(expectedTotalCostWithCommission, actualCostWithCommission);
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
+    Date validDateForTrading = getValidDateForTrading();
+    enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
+
+    Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    Assert.assertEquals(1, fangPortfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal(11), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(10), fangPortfolio.getValue(validDateForTrading));
+
+    Map<String, Long> shareCount = getIndividualShareCount(fangPortfolio.getPurchases());
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 50.0D);
+    stocksWeights.put("NFLX", 50.0D);
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+
+    fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    List<SharePurchaseOrder> purchasesInFANG = fangPortfolio.getPurchases();
+    Assert.assertEquals(3, purchasesInFANG.size());
+
+    shareCount = getIndividualShareCount(purchasesInFANG);
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
+
+    Assert.assertEquals(new BigDecimal(99), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(90), fangPortfolio.getValue(validDateForTrading));
   }
 
   private Map<String, Long> getIndividualShareCount(List<SharePurchaseOrder> sharePurchaseOrders) {
