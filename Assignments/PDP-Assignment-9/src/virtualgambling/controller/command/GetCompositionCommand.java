@@ -2,7 +2,7 @@ package virtualgambling.controller.command;
 
 import java.util.function.Consumer;
 
-import virtualgambling.model.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 
 /**
