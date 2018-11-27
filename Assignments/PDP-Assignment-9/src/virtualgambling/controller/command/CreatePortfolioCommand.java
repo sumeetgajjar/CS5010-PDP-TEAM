@@ -13,6 +13,12 @@ public class CreatePortfolioCommand extends AbstractCommand {
 
   private final String portfolioName;
 
+  /**
+   * Creates a CreatePortfolioCommand object with the given params
+   *
+   * @param supplier the supplier of type string
+   * @param consumer the consumer of type string
+   */
   public CreatePortfolioCommand(Supplier<String> supplier, Consumer<String> consumer) {
     super(supplier, consumer);
     this.consumer.accept("Please Enter the Portfolio Name");
