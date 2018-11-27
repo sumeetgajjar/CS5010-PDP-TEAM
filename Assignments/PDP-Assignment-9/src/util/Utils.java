@@ -141,4 +141,10 @@ public class Utils {
     calendar.setLenient(false);
     return calendar;
   }
+
+  public static Date getYesterdayDate() {
+    Calendar calendar = getCalendarInstance();
+    calendar.add(Calendar.DATE, -1);
+    return calendar.getTime();
+  }
 }
