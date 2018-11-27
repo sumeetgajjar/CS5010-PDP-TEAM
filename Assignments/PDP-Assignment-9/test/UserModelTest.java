@@ -138,50 +138,11 @@ public class UserModelTest {
     }
   }
 
-  @Test
-  public void buySharesFailsForInvalidDate() {
-    Share appleShare = getAppleShare();
-    Share googleShare = getGoogleShare();
-
-    Date date = getValidDateForTrading();
-
-    UserModel userModel = TestUtils.getMockedUserModel();
-    userModel.createPortfolio("p1");
-    userModel.createPortfolio("p2");
-    userModel.createPortfolio("p3");
-
-    userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
-    userModel.buyShares(appleShare.getTickerName(), "p3", date, 1);
-    userModel.buyShares(googleShare.getTickerName(), "p2", date, 1);
-
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getCostBasis(date));
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getValue(date));
-    String expectedApplePurchaseComposition = "Buy Date            Stocks              Quantity  " +
-            "          Cost Price          Current Value\n" +
-            "2018-11-01          AAPL                1                   $10.00              $10" +
-            ".00\n" +
-            "\n" +
-            "Total Value:        $10.00\n" +
-            "Total Cost:         $10.00\n" +
-            "Profit:             $0.00";
-
-    String expectedGooglePurchase = "Buy Date            Stocks              Quantity            " +
-            "Cost Price          Current Value\n" +
-            "2018-11-01          GOOG                1                   $11.00              $11" +
-            ".00\n" +
-            "\n" +
-            "Total Value:        $11.00\n" +
-            "Total Cost:         $11.00\n" +
-            "Profit:             $0.00";
-    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p1").toString());
-
-    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getCostBasis(date));
-    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getValue(date));
-    Assert.assertEquals(expectedGooglePurchase, userModel.getPortfolio("p2").toString());
-
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getCostBasis(date));
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getValue(date));
-    Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p3").toString());
+  @Test(expected = IllegalArgumentException.class)
+  public void cannotCreateInvalidDate() {
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(2018, Calendar.SEPTEMBER, 31, 10, 1);
+    calendar.getTime();
   }
 
   @Test
