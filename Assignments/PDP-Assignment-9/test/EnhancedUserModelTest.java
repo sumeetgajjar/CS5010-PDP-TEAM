@@ -191,7 +191,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(0), strategy, 10);
       Assert.fail("should have failed");
-    } catch (StockDataNotFoundException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
     }
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
@@ -199,7 +199,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(-1), strategy, 10);
       Assert.fail("should have failed");
-    } catch (StockDataNotFoundException e) {
+    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
     }
     Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
@@ -277,6 +277,54 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     BigDecimal actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
     Assert.assertEquals(new BigDecimal(110), actualCostWithCommission);
+  }
+
+  @Test
+  public void buySharesFailsDueToAmountGivenIsLessThanMinimumRequiredAmount() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(99), strategy, 10);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Investment amount is less minimum amount required for purchase",
+              e.getMessage());
+    }
+  }
+
+  @Test
+  public void buySharesWithThriceTheMinimumAmount() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(300), strategy, 10);
+
+    Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    List<SharePurchaseOrder> purchasesInFANG = fangPortfolio.getPurchases();
+
+    Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
+    Assert.assertEquals(Long.valueOf(6), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(6), shareCount.get("NFLX"));
+
+    Assert.assertEquals(new BigDecimal(330), fangPortfolio.getCostBasis(validDateForTrading));
+    Assert.assertEquals(new BigDecimal(300), fangPortfolio.getValue(validDateForTrading));
   }
 
   @Test
