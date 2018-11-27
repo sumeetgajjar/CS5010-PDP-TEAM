@@ -372,6 +372,70 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
+  public void buySharesUsingWeightedStrategyWithDifferentWeightsOnMultipleDays() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 50.0D);
+    stocksWeights.put("NFLX", 50.0D);
+
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+
+    Date day3 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day2 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day1 = calendar.getTime();
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    //purchasing the shares on day1
+    Strategy strategy = new WeightedInvestmentStrategy(day1, stocksWeights);
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+
+    Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    List<SharePurchaseOrder> purchasesInFANG = fangPortfolio.getPurchases();
+    Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
+
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
+    Assert.assertEquals(new BigDecimal(88), fangPortfolio.getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(80), fangPortfolio.getValue(day1));
+
+    //purchasing the same shares on day2
+    strategy = new WeightedInvestmentStrategy(day2, stocksWeights);
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+
+    fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    purchasesInFANG = fangPortfolio.getPurchases();
+    shareCount = getIndividualShareCount(purchasesInFANG);
+
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(8), shareCount.get("NFLX"));
+    Assert.assertEquals(new BigDecimal(176), fangPortfolio.getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(160), fangPortfolio.getValue(day1));
+
+    //purchasing the different shares on day3
+    stocksWeights = new HashMap<>();
+    stocksWeights.put("T", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+    strategy = new WeightedInvestmentStrategy(day3, stocksWeights);
+    enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+
+    fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+    purchasesInFANG = fangPortfolio.getPurchases();
+    shareCount = getIndividualShareCount(purchasesInFANG);
+
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(8), shareCount.get("NFLX"));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("T"));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("GOOG"));
+    Assert.assertEquals(new BigDecimal(268.4), fangPortfolio.getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(244), fangPortfolio.getValue(day1));
+  }
+
+  @Test
   public void buySharesUsingWeightedStrategyWithSameWeightsInNewPortfolio() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("FB", 50.0D);
