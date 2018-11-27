@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -174,6 +175,49 @@ public class EnhancedUserModelTest extends UserModelTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
+  }
+
+  @Test
+  public void buyStocksFailsIfOneStockIsInvalid() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("RANDOM", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+
+    Date validDateForTrading = getValidDateForTrading();
+    Strategy strategy = new WeightedInvestmentStrategy(validDateForTrading, stocksWeights);
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals("Stock Not found", e.getMessage());
+    }
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+  }
+
+  @Test
+  public void buyStocksFailsIfOneStockDataIsNotFound() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 80.0D);
+    stocksWeights.put("NFLX", 20.0D);
+
+    Calendar calendar = Calendar.getInstance();
+    calendar.set(1990, Calendar.NOVEMBER, 1, 4, 0);
+    Date dateOnWhichStockDataIsNotAvailable = calendar.getTime();
+    Strategy strategy = new WeightedInvestmentStrategy(dateOnWhichStockDataIsNotAvailable,
+            stocksWeights);
+
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    try {
+      enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
+      Assert.fail("should have failed");
+    } catch (StockDataNotFoundException e) {
+      Assert.assertEquals("Stock Not found", e.getMessage());
+    }
+    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
   }
 
   @Test
