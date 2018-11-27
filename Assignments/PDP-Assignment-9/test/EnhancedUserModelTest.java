@@ -172,6 +172,29 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
+  public void buyingShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
+          StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Date date = getValidDateForTrading();
+    Share appleShare = getAppleShare();
+
+    enhancedUserModel.createPortfolio("p1");
+    try {
+      enhancedUserModel.buyShares(appleShare.getTickerName(), "p1", date, 0, 10D);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Quantity has to be positive", e.getMessage());
+    }
+
+    try {
+      enhancedUserModel.buyShares(appleShare.getTickerName(), "p1", date, -1, 10D);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Quantity has to be positive", e.getMessage());
+    }
+  }
+
+  @Test
   public void buySharesFailsIfInvestmentAmountIsLessThanOne() {
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("RANDOM", 80.0D);
