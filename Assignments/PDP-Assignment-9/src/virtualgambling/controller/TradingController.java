@@ -1,7 +1,6 @@
 package virtualgambling.controller;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -149,20 +148,14 @@ public class TradingController extends AbstractController {
             new HashMap<>();
 
     commandMap.put("create_portfolio", CreatePortfolioCommand::new);
-
-    commandMap.put("get_all_portfolios", (supplier, consumer) ->
-            new GetAllPortfolioCommand(consumer));
+    commandMap.put("get_all_portfolios", GetAllPortfolioCommand::new);
+    commandMap.put("get_portfolio_value", PortfolioValueCommand::new);
+    commandMap.put("get_portfolio_composition", GetCompositionCommand::new);
 
     commandMap.put("get_portfolio_cost_basis", (supplier, consumer) ->
             new CostBasisCommand(supplier.get(),
-                    getDateFromString(supplier), consumer));
+                    Utils.getDateFromStringSupplier(supplier), consumer));
 
-    commandMap.put("get_portfolio_value", (supplier, consumer) ->
-            new PortfolioValueCommand(supplier.get(),
-                    getDateFromString(supplier), consumer));
-
-    commandMap.put("get_portfolio_composition", (supplier, consumer) ->
-            new GetCompositionCommand(supplier.get(), consumer));
 
     commandMap.put("get_remaining_capital", (supplier, consumer) ->
             new RemainingCapitalCommand(consumer));
@@ -175,7 +168,7 @@ public class TradingController extends AbstractController {
   private Command getBuySharesCommand(Supplier<String> supplier, Consumer<String> consumer) {
     String stockName = supplier.get();
     String portfolioName = supplier.get();
-    Date date = getDateFromString(supplier);
+    Date date = Utils.getDateFromStringSupplier(supplier);
     try {
       long quantity = Long.parseLong(supplier.get());
       return new BuyShareCommand(
@@ -186,14 +179,6 @@ public class TradingController extends AbstractController {
               consumer);
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Invalid quantity of shares");
-    }
-  }
-
-  private static Date getDateFromString(Supplier<String> supplier) throws IllegalArgumentException {
-    try {
-      return Utils.getDateFromDefaultFormattedDateString(supplier.get());
-    } catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date format");
     }
   }
 

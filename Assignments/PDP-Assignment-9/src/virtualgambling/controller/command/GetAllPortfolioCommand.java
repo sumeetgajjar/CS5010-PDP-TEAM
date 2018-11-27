@@ -19,7 +19,7 @@ public class GetAllPortfolioCommand extends AbstractCommand {
    * @param supplier the supplier of type string
    * @param consumer the consumer of type string
    */
-  protected GetAllPortfolioCommand(Supplier<String> supplier, Consumer<String> consumer) {
+  public GetAllPortfolioCommand(Supplier<String> supplier, Consumer<String> consumer) {
     super(supplier, consumer);
   }
 

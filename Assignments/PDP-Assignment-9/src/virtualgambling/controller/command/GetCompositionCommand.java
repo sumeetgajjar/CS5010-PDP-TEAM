@@ -20,7 +20,7 @@ public class GetCompositionCommand extends AbstractCommand {
    * @param supplier the supplier of type string
    * @param consumer the consumer of type string
    */
-  protected GetCompositionCommand(Supplier<String> supplier, Consumer<String> consumer) {
+  public GetCompositionCommand(Supplier<String> supplier, Consumer<String> consumer) {
     super(supplier, consumer);
     this.consumer.accept("Please Enter the Portfolio Name");
     this.portfolioName = supplier.get();
