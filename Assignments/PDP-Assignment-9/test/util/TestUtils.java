@@ -50,7 +50,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static EnhancedUserModel getEmptyEnhancedUserModel() {
-    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new MockDataSource()));
   }
 
   /**
@@ -68,7 +68,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static UserModel getEmptySimpleUserModel() {
-    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new MockDataSource()));
   }
 
   /**
