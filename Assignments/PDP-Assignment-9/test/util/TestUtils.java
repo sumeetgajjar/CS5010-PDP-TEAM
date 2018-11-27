@@ -187,35 +187,53 @@ public class TestUtils {
 
     @Override
     public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-      if (tickerName.equals("AAPL")) {
-        Calendar calendar = Utils.getCalendarInstance();
+      switch (tickerName) {
+        case "AAPL":
+          Calendar calendar = Utils.getCalendarInstance();
 
-        calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
-        Date day3 = calendar.getTime();
-        if (Utils.doesDatesHaveSameDay(date, day3)) {
-          return BigDecimal.TEN;
-        }
+          calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+          Date day3 = calendar.getTime();
+          if (Utils.doesDatesHaveSameDay(date, day3)) {
+            return BigDecimal.TEN;
+          }
 
-        calendar.add(Calendar.DATE, -1);
-        Date day2 = calendar.getTime();
-        if (Utils.doesDatesHaveSameDay(date, day2)) {
-          return new BigDecimal(20);
-        }
+          calendar.add(Calendar.DATE, -1);
+          Date day2 = calendar.getTime();
+          if (Utils.doesDatesHaveSameDay(date, day2)) {
+            return new BigDecimal(20);
+          }
 
-        calendar.add(Calendar.DATE, -1);
-        Date day1 = calendar.getTime();
-        if (Utils.doesDatesHaveSameDay(date, day1)) {
-          return new BigDecimal(30);
-        }
+          calendar.add(Calendar.DATE, -1);
+          Date day1 = calendar.getTime();
+          if (Utils.doesDatesHaveSameDay(date, day1)) {
+            return new BigDecimal(30);
+          }
 
-      } else if (tickerName.equals("GOOG")) {
-        return new BigDecimal("11");
-      } else if (tickerName.equals("FB")) {
-        return new BigDecimal("40");
-      } else if (tickerName.equals("NFLX")) {
-        return new BigDecimal("20");
-      } else if (tickerName.equals("T")) {
-        return new BigDecimal("10");
+          calendar.set(2018, Calendar.NOVEMBER, 24);
+          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
+            return new BigDecimal(1000);
+          }
+
+          calendar.set(2018, Calendar.OCTOBER, 24);
+          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
+            return new BigDecimal(100);
+          }
+
+          calendar.set(2018, Calendar.SEPTEMBER, 24);
+          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
+            return new BigDecimal(10);
+          } else {
+            return new BigDecimal(2000);
+          }
+
+        case "GOOG":
+          return new BigDecimal("11");
+        case "FB":
+          return new BigDecimal("40");
+        case "NFLX":
+          return new BigDecimal("20");
+        case "T":
+          return new BigDecimal("10");
       }
 
       throw new StockDataNotFoundException("Stock Data not found");
