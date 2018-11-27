@@ -11,6 +11,7 @@ import java.util.Map;
 
 import util.Share;
 import util.TestUtils;
+import util.Utils;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
@@ -231,7 +232,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     stocksWeights.put("FB", 80.0D);
     stocksWeights.put("NFLX", 20.0D);
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(1990, Calendar.NOVEMBER, 1, 4, 0);
     Date dateOnWhichStockDataIsNotAvailable = calendar.getTime();
     Strategy strategy = new WeightedInvestmentStrategy(dateOnWhichStockDataIsNotAvailable,

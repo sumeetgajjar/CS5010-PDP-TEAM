@@ -28,7 +28,8 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
   }
 
   @Override
-  public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest, Strategy strategy,
+  public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
+                                            Strategy strategy,
                                             double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
     return null;
   }

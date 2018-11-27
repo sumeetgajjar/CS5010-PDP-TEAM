@@ -114,7 +114,7 @@ public class Portfolio {
   }
 
   private Date getTodayDate() {
-    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
+    return Utils.removeTimeFromDate(Utils.getCalendarInstance().getTime());
   }
 
   private void checkSanity(Date date) throws IllegalArgumentException {
