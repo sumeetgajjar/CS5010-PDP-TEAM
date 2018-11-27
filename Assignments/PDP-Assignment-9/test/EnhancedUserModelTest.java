@@ -16,6 +16,7 @@ import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
@@ -123,7 +124,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
+  public void buySharesFailsForNullInputs() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -172,7 +173,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
+  public void buySingleShareWithCommissionOfInvalidQuantityFails() throws IllegalArgumentException,
           StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = getValidDateForTrading();
@@ -195,7 +196,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyShareForMissingPortfolioFails() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionForMissingPortfolioFails() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -209,7 +210,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyShareWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio("p1");
     try {
@@ -228,14 +229,30 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buyShareFailsForInvalidTickerName() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionFailsForInvalidTickerName() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio("p1");
     try {
-      enhancedUserModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1);
+      enhancedUserModel.buyShares("AAPL1", "p1", getValidDateForTrading(), 1, 10);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Data not found", e.getMessage());
+    }
+  }
+
+  @Test
+  public void buySingleShareWithCommissionFailsDueToInsufficientFunds() throws StockDataNotFoundException {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    Date date = getValidDateForTrading();
+    enhancedUserModel.createPortfolio("p1");
+
+    try {
+      enhancedUserModel.buyShares(getAppleShare().getTickerName(), "p1", date,
+              TestUtils.DEFAULT_USER_CAPITAL
+                      .divide(BigDecimal.TEN, BigDecimal.ROUND_CEILING).longValue() + 1, 10);
+      Assert.fail("should have failed");
+    } catch (InsufficientCapitalException e) {
+      Assert.assertEquals("Insufficient funds", e.getMessage());
     }
   }
 
