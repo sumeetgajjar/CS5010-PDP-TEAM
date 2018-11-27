@@ -654,7 +654,9 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertNotEquals(withCommissionWithoutStrategy.getCostOfPurchase(),
             withoutCommission.getCostOfPurchase());
 
-    Assert.assertEquals(getPriceAfterCommission(withoutCommission.getCostOfPurchase(), commission),
+    BigDecimal expectedCostOfPurchaseWithCommission =
+            getPriceAfterCommission(withoutCommission.getCostOfPurchase(), commission);
+    Assert.assertEquals(expectedCostOfPurchaseWithCommission,
             withCommissionWithoutStrategy.getCostOfPurchase());
   }
 
