@@ -11,7 +11,7 @@ import java.util.Random;
 import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
-import virtualgambling.model.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;

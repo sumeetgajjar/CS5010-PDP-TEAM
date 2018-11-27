@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import util.Share;
 import util.TestUtils;
 import util.Utils;
-import virtualgambling.model.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.exceptions.InsufficientCapitalException;

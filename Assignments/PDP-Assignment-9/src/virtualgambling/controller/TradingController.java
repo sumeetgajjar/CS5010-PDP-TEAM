@@ -20,7 +20,7 @@ import virtualgambling.controller.command.GetAllPortfolioCommand;
 import virtualgambling.controller.command.GetCompositionCommand;
 import virtualgambling.controller.command.PortfolioValueCommand;
 import virtualgambling.controller.command.RemainingCapitalCommand;
-import virtualgambling.model.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
