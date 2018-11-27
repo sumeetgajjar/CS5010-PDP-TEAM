@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -708,6 +709,84 @@ public class EnhancedUserModelTest extends UserModelTest {
     }
 
   }
+
+  @Test
+  public void buyingWithRecurringStrategyAndSameWeightsWorks() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(), stocksWeights, 30,
+                    endCalendar.getTime());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    for (double commission : Arrays.asList(0, 10)) {
+      List<SharePurchaseOrder> sharePurchaseOrders =
+              enhancedUserModel.buyShares(PORTFOLIO_P1,
+                      new BigDecimal(2000),
+                      recurringWeightedInvestmentStrategy, commission);
+      Assert.assertEquals(6, sharePurchaseOrders.size());
+
+      for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+        );
+        // individual cost cannot be more than 1000 since
+        Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
+                1000)) >= 0
+        );
+      }
+
+      Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+      Long expectedAAPLCount = individualShareCount.get("AAPL");
+      Assert.assertEquals(Long.valueOf(333), expectedAAPLCount);
+
+      Long expectedGOOGCount = individualShareCount.get("GOOG");
+      Assert.assertEquals(Long.valueOf(540), expectedGOOGCount);
+    }
+  }
+
+  @Test
+  public void buyingWithRecurringStrategyAndDifferentWeightsWorks() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(), stocksWeights, 30,
+                    endCalendar.getTime());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    for (double commission : Arrays.asList(0, 10)) {
+      List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
+              new BigDecimal(1000),
+              recurringWeightedInvestmentStrategy, commission);
+      Assert.assertEquals(6, sharePurchaseOrders.size());
+
+      Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+      Long expectedAAPLCount = individualShareCount.get("AAPL");
+      Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+
+      Long expectedGOOGCount = individualShareCount.get("GOOG");
+      Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+    }
+  }
+
 
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {
     return price.multiply(BigDecimal.valueOf(1 + commission));
