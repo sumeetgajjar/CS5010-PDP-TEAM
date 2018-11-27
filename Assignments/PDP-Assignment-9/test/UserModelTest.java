@@ -650,7 +650,7 @@ public class UserModelTest {
     return calendar.getTime();
   }
 
-  private static Date getValidDateForTrading() {
+  protected static Date getValidDateForTrading() {
     Calendar calendar = Calendar.getInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();

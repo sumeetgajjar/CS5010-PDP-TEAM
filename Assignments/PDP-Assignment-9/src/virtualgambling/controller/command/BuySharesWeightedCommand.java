@@ -1,8 +1,8 @@
 package virtualgambling.controller.command;
 
+import java.util.Date;
 import java.util.Map;
 
-import util.Utils;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.model.strategy.WeightedInvestmentStrategy;
@@ -23,12 +23,13 @@ public class BuySharesWeightedCommand implements Command {
    * <p>The constructor will throw an IllegalArgumentException if any of the parameters are null
    * or if the weights do not sum up to 1.
    *
-   * @param stockWeights map of ticker to stocks
+   * @param dateOfPurchase the date of purchase for the stocks
+   * @param stockWeights   map of ticker to stocks
    */
-  public BuySharesWeightedCommand(Map<String, Double> stockWeights)
+  public BuySharesWeightedCommand(Date dateOfPurchase, Map<String, Double> stockWeights)
           throws IllegalArgumentException {
-    this.stockWeights = Utils.requireNonNull(stockWeights);
-    this.strategy = new WeightedInvestmentStrategy(stockWeights);
+    this.stockWeights = stockWeights;
+    this.strategy = new WeightedInvestmentStrategy(dateOfPurchase, stockWeights);
   }
 
   @Override

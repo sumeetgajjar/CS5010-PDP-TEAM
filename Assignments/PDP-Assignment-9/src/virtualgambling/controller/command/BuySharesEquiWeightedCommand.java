@@ -1,5 +1,6 @@
 package virtualgambling.controller.command;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,10 +16,11 @@ public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
    * Constructs a BuySharesEquiWeightedCommand in terms of the tickerNames such that each ticker has
    * an equal weight.
    *
-   * @param tickerNames set of ticker names
+   * @param dateOfPurchase the date of purchase for stocks
+   * @param tickerNames    set of ticker names
    */
-  public BuySharesEquiWeightedCommand(Set<String> tickerNames) {
-    super(getTickersWithWeights(Utils.requireNonNull(tickerNames)));
+  public BuySharesEquiWeightedCommand(Date dateOfPurchase, Set<String> tickerNames) {
+    super(dateOfPurchase, getTickersWithWeights(Utils.requireNonNull(tickerNames)));
   }
 
   private static Map<String, Double> getTickersWithWeights(Set<String> tickerNames) {

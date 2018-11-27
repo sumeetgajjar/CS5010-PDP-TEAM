@@ -162,6 +162,10 @@ public class TestUtils {
 
       } else if (tickerName.equals("GOOG")) {
         return new BigDecimal("11");
+      } else if (tickerName.equals("FB")) {
+        return new BigDecimal("40");
+      } else if (tickerName.equals("NFLX")) {
+        return new BigDecimal("20");
       }
 
       throw new StockDataNotFoundException("Stock Data not found");

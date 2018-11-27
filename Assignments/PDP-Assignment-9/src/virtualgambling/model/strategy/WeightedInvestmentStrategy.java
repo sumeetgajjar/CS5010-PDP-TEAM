@@ -1,6 +1,7 @@
 package virtualgambling.model.strategy;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,11 +9,14 @@ import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 public class WeightedInvestmentStrategy implements Strategy {
+
+  private final Date dateOfPurchase;
   private final Map<String, Double> stockWeights;
 
-  public WeightedInvestmentStrategy(Map<String, Double> stockWeights) {
+  public WeightedInvestmentStrategy(Date dateOfPurchase, Map<String, Double> stockWeights) {
     this.checkInvariantForStockWeights(Utils.requireNonNull(stockWeights));
     this.stockWeights = stockWeights;
+    this.dateOfPurchase = Utils.requireNonNull(dateOfPurchase);
   }
 
   private void checkInvariantForStockWeights(Map<String, Double> stockWeights) {
