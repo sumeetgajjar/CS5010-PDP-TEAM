@@ -74,7 +74,7 @@ public class Utils {
    * @return true if the given date is a weekend, false otherwise
    */
   public static boolean isNonWorkingDayOfTheWeek(Date date) {
-    Calendar c = Calendar.getInstance();
+    Calendar c = Utils.getCalendarInstance();
     c.setTime(date);
     int dayOfTheWeek = c.get(Calendar.DAY_OF_WEEK);
 
@@ -88,7 +88,7 @@ public class Utils {
    * @return true if the given date is in Future, false otherwise.
    */
   public static boolean isFutureDate(Date date) {
-    Date currentDate = Calendar.getInstance().getTime();
+    Date currentDate = Utils.getCalendarInstance().getTime();
     return date.compareTo(currentDate) > 0;
   }
 
@@ -110,7 +110,7 @@ public class Utils {
    * @return a copy the given date with Hour, Minute, Second and Millisecond component set to 0
    */
   public static Date removeTimeFromDate(Date date) {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(date);
     calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
@@ -129,5 +129,16 @@ public class Utils {
    */
   public static boolean areTwoDoublesEqual(double number1, double number2, double delta) {
     return Math.abs(number1 - number2) <= delta;
+  }
+
+  /**
+   * Returns a Calendar object with lenient flag set to false.
+   *
+   * @return a Calendar object with lenient flag set to false
+   */
+  public static Calendar getCalendarInstance() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setLenient(false);
+    return calendar;
   }
 }

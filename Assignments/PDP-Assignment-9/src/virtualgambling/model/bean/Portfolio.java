@@ -1,7 +1,6 @@
 package virtualgambling.model.bean;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -114,7 +113,7 @@ public class Portfolio {
   }
 
   protected Date getTodayDate() {
-    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
+    return Utils.removeTimeFromDate(Utils.getCalendarInstance().getTime());
   }
 
   private void checkSanity(Date date) throws IllegalArgumentException {

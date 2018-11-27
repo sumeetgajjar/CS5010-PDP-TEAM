@@ -30,7 +30,7 @@ public class TestUtils {
    * @return a mocked user model for testing purposes
    */
   public static UserModel getMockedUserModel() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1);
     return new MockUserModel(calendar.getTime());
   }
@@ -172,7 +172,7 @@ public class TestUtils {
     @Override
     public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
       if (tickerName.equals("AAPL")) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Utils.getCalendarInstance();
 
         calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
         Date day3 = calendar.getTime();
@@ -198,6 +198,8 @@ public class TestUtils {
         return new BigDecimal("40");
       } else if (tickerName.equals("NFLX")) {
         return new BigDecimal("20");
+      } else if (tickerName.equals("T")) {
+        return new BigDecimal("10");
       }
 
       throw new StockDataNotFoundException("Stock Data not found");

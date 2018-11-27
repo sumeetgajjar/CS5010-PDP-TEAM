@@ -144,6 +144,13 @@ public class UserModelTest {
     }
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void cannotCreateInvalidDate() {
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(2018, Calendar.SEPTEMBER, 31, 10, 1);
+    calendar.getTime();
+  }
+
   @Test
   public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
@@ -235,7 +242,7 @@ public class UserModelTest {
     UserModel userModel = getUserModelWithSimpleStockDao();
     userModel.createPortfolio("p1");
     try {
-      Calendar calendar = Calendar.getInstance();
+      Calendar calendar = Utils.getCalendarInstance();
       calendar.set(2018, Calendar.JULY, 4, 10, 0);
       calendar.add(Calendar.DATE, -1);
       Date date = Utils.removeTimeFromDate(calendar.getTime());
@@ -389,7 +396,7 @@ public class UserModelTest {
     userModel.createPortfolio("p1");
     Share appleShare = getAppleShare();
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
 
     Date day3 = calendar.getTime();
@@ -432,7 +439,7 @@ public class UserModelTest {
     Share appleShare = getAppleShare();
     Share googleShare = getGoogleShare();
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
 
     Date day3 = calendar.getTime();
@@ -526,7 +533,7 @@ public class UserModelTest {
 
     Share appleShare = getAppleShare();
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     Date day3 = calendar.getTime();
 
@@ -571,7 +578,7 @@ public class UserModelTest {
 
     Share appleShare = getAppleShare();
 
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     Date day3 = calendar.getTime();
 
@@ -628,7 +635,7 @@ public class UserModelTest {
     Assert.assertEquals(Arrays.asList("p1", "p2"), actualPortfolioNames);
   }
 
-  private Share getAppleShare() {
+  protected static Share getAppleShare() {
     return new Share("AAPL", BigDecimal.TEN);
   }
 
@@ -637,31 +644,31 @@ public class UserModelTest {
   }
 
   private static Date getFutureTime() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.add(Calendar.DATE, 1);
     return calendar.getTime();
   }
 
   private static Date getDateAfterClosingTime() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 4, 0);
     return calendar.getTime();
   }
 
   private static Date getDateBeforeOpeningTime() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 7, 59);
     return calendar.getTime();
   }
 
   private static Date getWeekendDate() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 11, 10, 0);
     return calendar.getTime();
   }
 
   protected static Date getValidDateForTrading() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
     return calendar.getTime();
   }

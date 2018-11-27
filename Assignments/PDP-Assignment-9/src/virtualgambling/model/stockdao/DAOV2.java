@@ -22,7 +22,7 @@ public class DAOV2 extends SimpleStockDAO {
 
   @Override
   protected Date getValidDate(Date date) {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(date);
 
     while (Utils.isNonWorkingDayOfTheWeek(date)) {

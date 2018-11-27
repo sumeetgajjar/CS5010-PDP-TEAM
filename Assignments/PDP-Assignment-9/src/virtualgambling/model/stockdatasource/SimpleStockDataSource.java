@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import util.Utils;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -69,7 +70,7 @@ public class SimpleStockDataSource implements StockDataSource {
   }
 
   private static List<Date> getDatesForLast100Days() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);
