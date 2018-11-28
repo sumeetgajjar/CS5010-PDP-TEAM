@@ -52,7 +52,7 @@ public class OrchestratorController extends AbstractController {
     while (true) {
       this.displayOnView(this.getMenuOptions());
       String commandString = this.getInputFromView();
-      Controller tradingController = null;
+      Controller controller = null;
 
       if (isQuitCommand(commandString)) {
         return;
@@ -60,13 +60,13 @@ public class OrchestratorController extends AbstractController {
 
       switch (commandString) {
         case "1":
-          tradingController = new TradingController(
+          controller = new EnhancedTradingController(
                   new EnhancedUserModelImpl(
                           new SimpleStockDAO(
                                   new SimpleStockDataSource())), view);
           break;
         case "2":
-          tradingController =
+          controller =
                   new EnhancedTradingController(new EnhancedUserModelImpl(
                           new DAOV2(
                                   AlphaVantageAPIStockDataSource.getInstance())), view);
@@ -75,9 +75,9 @@ public class OrchestratorController extends AbstractController {
           this.displayOnView("Please type one of in-memory OR alpha-vantage-api");
       }
 
-      if (tradingController != null) {
-        tradingController.run();
-        break; // exit this controller as well if tradingController exits
+      if (controller != null) {
+        controller.run();
+        break; // exit this controller as well if controller exits
       }
     }
   }
