@@ -22,7 +22,9 @@ import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
+import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
@@ -66,7 +68,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       new OneTimeWeightedInvestmentStrategy(startDate, Collections.emptyMap());
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
     }
 
     try {
@@ -83,7 +85,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       new OneTimeWeightedInvestmentStrategy(startDate, stocksWeights);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
     }
 
     try {
@@ -120,18 +122,11 @@ public class EnhancedUserModelTest extends UserModelTest {
       new RecurringWeightedInvestmentStrategy(null, stocksWeights, 1, endDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
-    }
-
-    try {
-      new RecurringWeightedInvestmentStrategy(startDate, null, 1, endDate);
-      Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
-      new RecurringWeightedInvestmentStrategy(startDate, stocksWeights, 1, null);
+      new RecurringWeightedInvestmentStrategy(startDate, null, 1, endDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
@@ -142,21 +137,14 @@ public class EnhancedUserModelTest extends UserModelTest {
       new RecurringWeightedInvestmentStrategy(futureDate, stocksWeights, 1, endDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Cannot start strategy from a future date", e.getMessage());
     }
 
     try {
       new RecurringWeightedInvestmentStrategy(futureDate, stocksWeights, 1, futureDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
-    }
-
-    try {
-      new RecurringWeightedInvestmentStrategy(startDate, stocksWeights, 1, futureDate);
-      Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Cannot start strategy from a future date", e.getMessage());
     }
 
     Map<String, Double> aapl = Collections.singletonMap("AAPL", 100D);
@@ -171,21 +159,21 @@ public class EnhancedUserModelTest extends UserModelTest {
       new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), aapl, -1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Frequency cannot be less than 1 day", e.getMessage());
     }
 
     try {
       new RecurringWeightedInvestmentStrategy(startDate, stocksWeights, 0, futureDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Frequency cannot be less than 1 day", e.getMessage());
     }
 
     try {
       new RecurringWeightedInvestmentStrategy(startDate, stocksWeights, -1, futureDate);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Invalid input", e.getMessage());
+      Assert.assertEquals("Frequency cannot be less than 1 day", e.getMessage());
     }
   }
 
@@ -277,7 +265,8 @@ public class EnhancedUserModelTest extends UserModelTest {
 
   @Test
   public void buySingleShareWithCommissionWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
-    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+    EnhancedUserModel enhancedUserModel =
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
     enhancedUserModel.createPortfolio("p1");
     try {
       Calendar calendar = Utils.getCalendarInstance();
@@ -332,14 +321,12 @@ public class EnhancedUserModelTest extends UserModelTest {
     Strategy strategy = new OneTimeWeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(0), strategy, 10);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
     }
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
 
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(-1), strategy, 10);
@@ -347,7 +334,6 @@ public class EnhancedUserModelTest extends UserModelTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Investment amount cannot be less than 1", e.getMessage());
     }
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
   }
 
   @Test
@@ -360,14 +346,13 @@ public class EnhancedUserModelTest extends UserModelTest {
     Strategy strategy = new OneTimeWeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
-      Assert.assertEquals("Stock Not found", e.getMessage());
+      Assert.assertEquals("Stock Data not found", e.getMessage());
     }
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
   }
 
   @Test
@@ -380,7 +365,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Strategy strategy = new OneTimeWeightedInvestmentStrategy(validDateForTrading, stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
@@ -403,14 +388,13 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Not found", e.getMessage());
     }
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
   }
 
   @Test
@@ -426,14 +410,12 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
       Assert.assertEquals("Stock Not found", e.getMessage());
     }
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
   }
 
   @Test
@@ -482,13 +464,11 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
-
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(99), strategy, 10);
       Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Investment amount is less minimum amount required for purchase",
+    } catch (StrategyExecutionException e) {
+      Assert.assertEquals("Unable to buy even a single stock",
               e.getMessage());
     }
   }
@@ -504,8 +484,6 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
-
     enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(300), strategy, 10);
 
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
@@ -513,10 +491,12 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
     Assert.assertEquals(Long.valueOf(6), shareCount.get("FB"));
-    Assert.assertEquals(Long.valueOf(6), shareCount.get("NFLX"));
+    Assert.assertEquals(Long.valueOf(3), shareCount.get("NFLX"));
 
-    Assert.assertEquals(new BigDecimal(330), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(300), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(330), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(300), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
 
   @Test
@@ -605,7 +585,6 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     Assert.assertEquals(0, enhancedUserModel.getAllPortfolios().size());
 
     List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(
@@ -616,13 +595,16 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
     Assert.assertEquals(Long.valueOf(1), shareCount.get("FB"));
-    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
-    Assert.assertEquals(new BigDecimal(88), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(80), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(80), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
     BigDecimal actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
-    Assert.assertEquals(new BigDecimal(88), actualCostWithCommission);
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
+            getScaledStrippedBigDecimal(actualCostWithCommission, 2));
   }
 
   @Test
@@ -712,9 +694,9 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(3, purchasesInFANG.size());
 
     shareCount = getIndividualShareCount(purchasesInFANG);
-    Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
+    Assert.assertEquals(Long.valueOf(1), shareCount.get("FB"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
-    Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(99), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
@@ -760,8 +742,9 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     BigDecimal expectedCostOfPurchaseWithCommission =
             getPriceAfterCommission(withoutCommission.getCostOfPurchase(), commission);
-    Assert.assertEquals(expectedCostOfPurchaseWithCommission,
-            withCommissionWithoutStrategy.getCostOfPurchase());
+
+    Assert.assertEquals(getScaledStrippedBigDecimal(expectedCostOfPurchaseWithCommission, 2),
+            getScaledStrippedBigDecimal(withCommissionWithoutStrategy.getCostOfPurchase(), 2));
   }
 
   @Test
@@ -780,9 +763,8 @@ public class EnhancedUserModelTest extends UserModelTest {
       );
       Assert.assertNotEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase());
 
-      Assert.assertEquals(getPriceAfterCommission(unitPriceIntoQuantity, commission),
-              sharePurchaseOrder.getCostOfPurchase()
-      );
+      Assert.assertEquals(getScaledStrippedBigDecimal(getPriceAfterCommission(unitPriceIntoQuantity, commission), 2),
+              getScaledStrippedBigDecimal(sharePurchaseOrder.getCostOfPurchase(), 2));
     }
   }
 
@@ -881,7 +863,7 @@ public class EnhancedUserModelTest extends UserModelTest {
               enhancedUserModel.buyShares(PORTFOLIO_P1,
                       new BigDecimal(2000),
                       recurringWeightedInvestmentStrategy, commission);
-      Assert.assertEquals(6, sharePurchaseOrders.size());
+      Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
         BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
@@ -889,26 +871,26 @@ public class EnhancedUserModelTest extends UserModelTest {
         );
         // individual cost cannot be more than 1000 since
         Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
-                1000)) >= 0
+                1000)) > 0
         );
       }
 
       Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
       Long expectedAAPLCount = individualShareCount.get("AAPL");
-      Assert.assertEquals(Long.valueOf(333), expectedAAPLCount);
+      Assert.assertEquals(Long.valueOf(110), expectedAAPLCount);
 
       Long expectedGOOGCount = individualShareCount.get("GOOG");
-      Assert.assertEquals(Long.valueOf(270), expectedGOOGCount);
+      Assert.assertEquals(Long.valueOf(180), expectedGOOGCount);
     }
 
     Portfolio portfolio = enhancedUserModel.getPortfolio(PORTFOLIO_P1);
     List<SharePurchaseOrder> sharePurchaseOrders = portfolio.getPurchases();
     Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
     Long expectedAAPLCount = individualShareCount.get("AAPL");
-    Assert.assertEquals(Long.valueOf(333 * 2), expectedAAPLCount);
+    Assert.assertEquals(Long.valueOf(110 * 2), expectedAAPLCount);
 
     Long expectedGOOGCount = individualShareCount.get("GOOG");
-    Assert.assertEquals(Long.valueOf(270 * 2), expectedGOOGCount);
+    Assert.assertEquals(Long.valueOf(180 * 2), expectedGOOGCount);
   }
 
 
@@ -980,24 +962,24 @@ public class EnhancedUserModelTest extends UserModelTest {
       List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
               new BigDecimal(1000),
               recurringWeightedInvestmentStrategy, commission);
-      Assert.assertEquals(6, sharePurchaseOrders.size());
+      Assert.assertEquals(4, sharePurchaseOrders.size());
 
       Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
       Long expectedAAPLCount = individualShareCount.get("AAPL");
-      Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+      Assert.assertEquals(Long.valueOf(88), expectedAAPLCount);
 
       Long expectedGOOGCount = individualShareCount.get("GOOG");
-      Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+      Assert.assertEquals(Long.valueOf(36), expectedGOOGCount);
     }
 
     Portfolio portfolio = enhancedUserModel.getPortfolio(PORTFOLIO_P1);
     List<SharePurchaseOrder> sharePurchaseOrders = portfolio.getPurchases();
     Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
     Long expectedAAPLCount = individualShareCount.get("AAPL");
-    Assert.assertEquals(Long.valueOf(264 * 2), expectedAAPLCount);
+    Assert.assertEquals(Long.valueOf(88 * 2), expectedAAPLCount);
 
     Long expectedGOOGCount = individualShareCount.get("GOOG");
-    Assert.assertEquals(Long.valueOf(54 * 2), expectedGOOGCount);
+    Assert.assertEquals(Long.valueOf(36 * 2), expectedGOOGCount);
   }
 
   @Test
@@ -1023,24 +1005,24 @@ public class EnhancedUserModelTest extends UserModelTest {
       List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
               new BigDecimal(1000),
               recurringWeightedInvestmentStrategy, commission);
-      Assert.assertEquals(6, sharePurchaseOrders.size());
+      Assert.assertEquals(4, sharePurchaseOrders.size());
 
       Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
       Long expectedAAPLCount = individualShareCount.get("AAPL");
-      Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+      Assert.assertEquals(Long.valueOf(88), expectedAAPLCount);
 
       Long expectedGOOGCount = individualShareCount.get("GOOG");
-      Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+      Assert.assertEquals(Long.valueOf(36), expectedGOOGCount);
     }
 
     Portfolio portfolio = enhancedUserModel.getPortfolio(PORTFOLIO_P1);
     List<SharePurchaseOrder> sharePurchaseOrders = portfolio.getPurchases();
     Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
     Long expectedAAPLCount = individualShareCount.get("AAPL");
-    Assert.assertEquals(Long.valueOf(264 * 2), expectedAAPLCount);
+    Assert.assertEquals(Long.valueOf(88 * 2), expectedAAPLCount);
 
     Long expectedGOOGCount = individualShareCount.get("GOOG");
-    Assert.assertEquals(Long.valueOf(54 * 2), expectedGOOGCount);
+    Assert.assertEquals(Long.valueOf(36 * 2), expectedGOOGCount);
   }
 
   @Test
@@ -1080,8 +1062,10 @@ public class EnhancedUserModelTest extends UserModelTest {
                 recurringWeightedInvestmentStrategy, commission);
 
         Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
-        double numberOfFBStocksIn1Transaction = (stocksWeights.get("FB") * amountToInvest) / 40;
-        double numberOfGoogStocksIn1Transaction = (stocksWeights.get("GOOG") * amountToInvest) / 11;
+        double numberOfFBStocksIn1Transaction =
+                (stocksWeights.get("FB") * amountToInvest) / (100 * 40);
+        double numberOfGoogStocksIn1Transaction =
+                (stocksWeights.get("GOOG") * amountToInvest) / (100 * 11);
         Assert.assertEquals(numberOfFBStocksIn1Transaction * numberOfPurchases,
                 individualShareCount.get("FB"), 0.0);
         Assert.assertEquals(numberOfGoogStocksIn1Transaction * numberOfPurchases,
@@ -1110,8 +1094,8 @@ public class EnhancedUserModelTest extends UserModelTest {
 
 
     Map<String, Double> stocksWeights2 = new HashMap<>();
-    stocksWeights1.put("T", 80.0D);
-    stocksWeights1.put("NFLX", 20.0D);
+    stocksWeights2.put("T", 80.0D);
+    stocksWeights2.put("NFLX", 20.0D);
 
     Calendar startCalendar1 = Utils.getCalendarInstance();
     Calendar startCalendar2 = Utils.getCalendarInstance();
@@ -1212,27 +1196,27 @@ public class EnhancedUserModelTest extends UserModelTest {
       List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
               new BigDecimal(1000),
               recurringWeightedInvestmentStrategy, commission);
-      Assert.assertEquals(6, sharePurchaseOrders.size());
+      Assert.assertEquals(4, sharePurchaseOrders.size());
 
       Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
       Long expectedAAPLCount = individualShareCount.get("AAPL");
-      Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+      Assert.assertEquals(Long.valueOf(88), expectedAAPLCount);
 
       Long expectedGOOGCount = individualShareCount.get("GOOG");
-      Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+      Assert.assertEquals(Long.valueOf(36), expectedGOOGCount);
     }
 
     Portfolio portfolio = enhancedUserModel.getPortfolio(PORTFOLIO_P1);
     List<SharePurchaseOrder> purchases = portfolio.getPurchases();
 
     Map<String, Long> individualShareCount = getIndividualShareCount(purchases);
-    Assert.assertEquals(13, purchases.size());
+    Assert.assertEquals(9, purchases.size());
 
     Long expectedAAPLCount = individualShareCount.get("AAPL");
-    Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+    Assert.assertEquals(Long.valueOf(176), expectedAAPLCount);
 
     Long expectedGOOGCount = individualShareCount.get("GOOG");
-    Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+    Assert.assertEquals(Long.valueOf(72), expectedGOOGCount);
 
     Long expectedTCount = individualShareCount.get("T");
     Assert.assertEquals(Long.valueOf(10), expectedTCount);
@@ -1364,8 +1348,62 @@ public class EnhancedUserModelTest extends UserModelTest {
     }
   }
 
+  @Test
+  public void strategyCanEndInTheFutureAndBehavesTheSameAsThereIsNoEndDate() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2218, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights, 30,
+                    endCalendar.getTime());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    for (double commission : Arrays.asList(0, 10)) {
+      List<SharePurchaseOrder> sharePurchaseOrders =
+              enhancedUserModel.buyShares(PORTFOLIO_P1,
+                      new BigDecimal(2000),
+                      recurringWeightedInvestmentStrategy, commission);
+      Assert.assertEquals(4, sharePurchaseOrders.size());
+
+      for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+        );
+        // individual cost cannot be more than 1000 since
+        Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
+                1000)) > 0
+        );
+      }
+
+      Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+      Long expectedAAPLCount = individualShareCount.get("AAPL");
+      Assert.assertEquals(Long.valueOf(110), expectedAAPLCount);
+
+      Long expectedGOOGCount = individualShareCount.get("GOOG");
+      Assert.assertEquals(Long.valueOf(180), expectedGOOGCount);
+    }
+
+    Portfolio portfolio = enhancedUserModel.getPortfolio(PORTFOLIO_P1);
+    List<SharePurchaseOrder> sharePurchaseOrders = portfolio.getPurchases();
+    Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+    Long expectedAAPLCount = individualShareCount.get("AAPL");
+    Assert.assertEquals(Long.valueOf(110 * 2), expectedAAPLCount);
+
+    Long expectedGOOGCount = individualShareCount.get("GOOG");
+    Assert.assertEquals(Long.valueOf(180 * 2), expectedGOOGCount);
+  }
+
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {
-    return price.multiply(BigDecimal.valueOf(1 + commission));
+    return price.multiply(BigDecimal.valueOf(1 + commission / 100));
   }
 
   private Strategy getValidStrategy() {

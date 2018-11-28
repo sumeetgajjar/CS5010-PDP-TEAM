@@ -165,7 +165,7 @@ public class Utils {
    */
   public static long absoluteDaysBetweenDates(Date date1, Date date2) {
     long difference = Math.abs(date1.getTime() - date2.getTime());
-    return TimeUnit.MILLISECONDS.convert(difference, TimeUnit.DAYS);
+    return TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
   }
 
   /**

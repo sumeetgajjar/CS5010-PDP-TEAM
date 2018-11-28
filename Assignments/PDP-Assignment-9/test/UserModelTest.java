@@ -195,7 +195,7 @@ public class UserModelTest {
 
   @Test
   public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
-    UserModel userModel = TestUtils.getMockedUserModel();
+    UserModel userModel = getUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
     Share appleShare = getAppleShare();
     userModel.createPortfolio("p1");
 

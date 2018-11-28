@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
@@ -39,6 +38,9 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     if (Utils.doesDatesHaveSameDay(Utils.getTodayDate(), startDate)) {
       throw new IllegalArgumentException("Strategy cannot start from today");
     }
+    if (Utils.isFutureDate(startDate)) {
+      throw new IllegalArgumentException("Cannot start strategy from a future date");
+    }
   }
 
   public RecurringWeightedInvestmentStrategy(Date startDate,
@@ -58,26 +60,32 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     List<SharePurchaseOrder> sharePurchaseOrders = new ArrayList<>();
 
     while (calendar.getTime().compareTo(endDate) <= 0) {
-      List<SharePurchaseOrder> purchaseOrders =
-              this.stockWeights.entrySet().stream().map(tickerAndAmount -> {
-                String tickerName = tickerAndAmount.getKey();
-                Double stockWeight = tickerAndAmount.getValue();
-                BigDecimal price = stockDAO.getPrice(tickerName, startDate);
-                BigDecimal amountAvailableForThisStock = amountToInvest.multiply(BigDecimal.valueOf(
-                        stockWeight
-                        ).divide(
-                        BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN)
-                );
-                long quantity =
-                        amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValue();
-                if (quantity <= 0) {
-                  throw new StrategyExecutionException("Unable to buy even a single stock");
-                }
-                return stockDAO.createPurchaseOrder(tickerName, quantity, this.startDate);
-              })
-                      .collect(Collectors.toList());
-      sharePurchaseOrders.addAll(purchaseOrders);
+      Date dateOfPurchase = calendar.getTime();
+      List<SharePurchaseOrder> purchaseOrders = new ArrayList<>();
+      for (Map.Entry<String, Double> tickerAndAmount : this.stockWeights.entrySet()) {
+        String tickerName = tickerAndAmount.getKey();
+        Double stockWeight = tickerAndAmount.getValue();
+        BigDecimal price = stockDAO.getPrice(tickerName, dateOfPurchase);
+        BigDecimal amountAvailableForThisStock = amountToInvest.multiply(BigDecimal.valueOf(
+                stockWeight
+                ).divide(
+                BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN)
+        );
+        long quantity =
+                amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValue();
+        if (quantity <= 0) {
+          break;
+        }
+        purchaseOrders.add(stockDAO.createPurchaseOrder(tickerName, quantity, dateOfPurchase));
+      }
+      if (purchaseOrders.size() == this.stockWeights.size()) {
+        // add only if all orders could be executed
+        sharePurchaseOrders.addAll(purchaseOrders);
+      }
       calendar.add(Calendar.DATE, dayFrequency);
+    }
+    if (sharePurchaseOrders.isEmpty()) {
+      throw new StrategyExecutionException("Unable to buy even a single stock");
     }
     return sharePurchaseOrders;
   }
@@ -95,9 +103,12 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
 
   private void setEndDate(Date endDate) {
     if (Objects.nonNull(endDate)) {
-      this.endDate = Utils.removeTimeFromDate(endDate);
-      if (this.endDate.compareTo(this.startDate) < 0) {
-        throw new IllegalArgumentException("end date cannot be before the start date");
+      endDate = Utils.removeTimeFromDate(endDate);
+      if (!Utils.isFutureDate(endDate)) {
+        this.endDate = endDate;
+        if (this.endDate.compareTo(this.startDate) < 0) {
+          throw new IllegalArgumentException("end date cannot be before the start date");
+        }
       }
     }
   }
