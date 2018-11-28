@@ -3,7 +3,6 @@ package virtualgambling.controller.command;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import util.Utils;
 import virtualgambling.model.UserModel;
@@ -12,23 +11,23 @@ import virtualgambling.model.UserModel;
  * This class represents a command to get portfolio value of the given portfolio. It implements the
  * {@link Command} interface.
  */
-public class PortfolioValueCommand extends AbstractCommand {
+public class PortfolioValueCommand implements Command {
 
   private final String portfolioName;
   private final Date date;
+  private final Consumer<String> consumer;
 
   /**
    * Constructs a object of {@link PortfolioValueCommand} with the given params.
    *
-   * @param supplier the supplier of type string
-   * @param consumer the consumer of type string
+   * @param portfolioName the name of the portfolio
+   * @param date          the date at which the portfolio value is to be calculated
+   * @param consumer      the consumer to consume the result of command
    */
-  public PortfolioValueCommand(Supplier<String> supplier, Consumer<String> consumer) {
-    super(supplier, consumer);
-    this.consumer.accept("Please Enter the Portfolio Name");
-    this.portfolioName = supplier.get();
-    this.consumer.accept("Please Enter the Date from which the value is to be calculated");
-    this.date = Utils.getDateFromStringSupplier(supplier);
+  public PortfolioValueCommand(String portfolioName, Date date, Consumer<String> consumer) {
+    this.portfolioName = portfolioName;
+    this.date = date;
+    this.consumer = consumer;
   }
 
   /**

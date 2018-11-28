@@ -1,7 +1,6 @@
 package virtualgambling.controller.command;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
@@ -10,20 +9,20 @@ import virtualgambling.model.exceptions.PortfolioNotFoundException;
  * This command represents a command to get composition of a portfolio. It implements the {@link
  * Command} interface.
  */
-public class GetCompositionCommand extends AbstractCommand {
+public class GetCompositionCommand implements Command {
 
   private final String portfolioName;
+  private final Consumer<String> consumer;
 
   /**
    * Constructs a object of {@link GetCompositionCommand} with the given params.
    *
-   * @param supplier the supplier of type string
-   * @param consumer the consumer of type string
+   * @param portfolioName the name of the portfolio
+   * @param consumer      the consumer to consume the result of command
    */
-  public GetCompositionCommand(Supplier<String> supplier, Consumer<String> consumer) {
-    super(supplier, consumer);
-    this.consumer.accept("Please Enter the Portfolio Name");
-    this.portfolioName = supplier.get();
+  public GetCompositionCommand(String portfolioName, Consumer<String> consumer) {
+    this.portfolioName = portfolioName;
+    this.consumer = consumer;
   }
 
   /**
