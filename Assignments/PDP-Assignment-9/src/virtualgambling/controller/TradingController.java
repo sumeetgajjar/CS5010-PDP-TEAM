@@ -121,13 +121,13 @@ public class TradingController extends AbstractController {
             + System.lineSeparator()
             + "3 => to get the cost basis of a portfolio"
             + System.lineSeparator()
-            + "3 => to get the value of a portfolio"
+            + "4 => to get the value of a portfolio"
             + System.lineSeparator()
-            + "4 => to get the composition of a portfolio"
+            + "5 => to get the composition of a portfolio"
             + System.lineSeparator()
-            + "5 => to get the remaining capital"
+            + "6 => to get the remaining capital"
             + System.lineSeparator()
-            + "6 => to buy shares"
+            + "7 => to buy shares"
             + System.lineSeparator()
             + "q or quit"
             + System.lineSeparator()
@@ -147,9 +147,9 @@ public class TradingController extends AbstractController {
 
     commandMap.put("1", getCreatePortfolioCommand());
     commandMap.put("2", getGetAllPortfolioCommand());
-    commandMap.put("3", getPortfolioValueCommand());
-    commandMap.put("4", getGetCompositionCommand());
-    commandMap.put("5", getCostBasisCommand());
+    commandMap.put("3", getCostBasisCommand());
+    commandMap.put("4", getPortfolioValueCommand());
+    commandMap.put("5", getGetCompositionCommand());
     commandMap.put("6", getRemainingCapitalCommand());
     commandMap.put("7", getBuySharesCommand());
 
