@@ -60,7 +60,6 @@ public class TradingController extends AbstractController {
   public void run() throws IllegalStateException {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             this.getCommandMap();
-    this.displayOnView(getWelcomeMessage());
 
     while (true) {
       try {
@@ -69,8 +68,7 @@ public class TradingController extends AbstractController {
         Scanner scanner = new Scanner(inputFromView);
         String commandString = scanner.next();
 
-        if (commandString.equalsIgnoreCase("q")
-                || commandString.equalsIgnoreCase("quit")) {
+        if (isQuitCommand(commandString)) {
           return;
         }
 
@@ -92,26 +90,6 @@ public class TradingController extends AbstractController {
     }
   }
 
-  @Override
-  protected String getWelcomeMessage() {
-    return "" + System.lineSeparator() + ""
-            + "__        __   _                            _____      __     ___      _            "
-            + "   _   _____              _ _             " + System.lineSeparator() + ""
-            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
-            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
-            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
-            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
-            + ""
-            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
-            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
-            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
-            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
-            + System.lineSeparator() + ""
-            + "                                                                                    "
-            + "                                    |___/ "
-            + System.lineSeparator();
-  }
-
   protected String getMenuString() {
     return "=================================================================================="
             + System.lineSeparator()
@@ -129,13 +107,13 @@ public class TradingController extends AbstractController {
             + System.lineSeparator()
             + "7 => to buy shares"
             + System.lineSeparator()
-            + "q or quit"
+            + "q or quit => to quit"
             + System.lineSeparator()
             + "Please enter a choice"
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator()
-            + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
+            + "All dates must be in this format 'yyyy-MM-DD'"
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator();

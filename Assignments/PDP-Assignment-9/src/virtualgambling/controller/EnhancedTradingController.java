@@ -36,6 +36,44 @@ public class EnhancedTradingController extends TradingController {
   }
 
   @Override
+  protected String getMenuString() {
+    return "=================================================================================="
+            + System.lineSeparator()
+            + "1 => to create a portfolio"
+            + System.lineSeparator()
+            + "2 => to list all portfolios"
+            + System.lineSeparator()
+            + "3 => to get the cost basis of a portfolio"
+            + System.lineSeparator()
+            + "4 => to get the value of a portfolio"
+            + System.lineSeparator()
+            + "5 => to get the composition of a portfolio"
+            + System.lineSeparator()
+            + "6 => to get the remaining capital"
+            + System.lineSeparator()
+            + "7 => to buy shares of same stock"
+            + System.lineSeparator()
+            + "8 => to buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "9 => to buy shares of various stocks with equal weights"
+            + System.lineSeparator()
+            + "10 => to recurrently buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "11 => to recurrently buy shares of various stocks with same individual weights"
+            + System.lineSeparator()
+            + "q or quit => to quit"
+            + System.lineSeparator()
+            + "Please enter a choice"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator();
+  }
+
+  @Override
   protected Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();

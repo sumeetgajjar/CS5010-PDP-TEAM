@@ -18,8 +18,6 @@ abstract class AbstractController implements Controller {
     this.view = Utils.requireNonNull(view);
   }
 
-  abstract String getWelcomeMessage();
-
   protected void displayOnView(String text) throws IllegalStateException {
     try {
       this.view.display(text);
@@ -103,5 +101,10 @@ abstract class AbstractController implements Controller {
         consumer.accept(e.getMessage());
       }
     }
+  }
+
+  protected boolean isQuitCommand(String commandString) {
+    return commandString.equalsIgnoreCase("q")
+            || commandString.equalsIgnoreCase("quit");
   }
 }
