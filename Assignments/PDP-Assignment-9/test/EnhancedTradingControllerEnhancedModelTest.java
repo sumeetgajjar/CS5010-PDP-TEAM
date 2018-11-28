@@ -261,7 +261,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   @Test
   public void buySharesWithDifferentWeights() {
     Readable readable = new StringReader(
-            "1 p1 8 p1 2018-11-1 10000 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 quit");
+            "8 p1 2018-11-1 10000 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 quit");
 
     Appendable appendable = new StringBuffer();
     Controller controller = getController(readable, appendable);
@@ -269,9 +269,6 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     controller.run();
 
     StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
-    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
-
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
