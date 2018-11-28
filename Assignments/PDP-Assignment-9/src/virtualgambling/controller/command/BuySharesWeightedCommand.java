@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Map;
 
 import virtualgambling.model.UserModel;
+import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
-import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 
 /**
  * This class represents a Buy Share command with the enhancement that the each ticker can have an
@@ -29,7 +29,7 @@ public class BuySharesWeightedCommand implements Command {
   public BuySharesWeightedCommand(Date dateOfPurchase, Map<String, Double> stockWeights)
           throws IllegalArgumentException {
     this.stockWeights = stockWeights;
-    this.strategy = new WeightedInvestmentStrategy(dateOfPurchase, stockWeights);
+    this.strategy = new OneTimeWeightedInvestmentStrategy(dateOfPurchase, stockWeights);
   }
 
   @Override
