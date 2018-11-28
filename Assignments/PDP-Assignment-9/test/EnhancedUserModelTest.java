@@ -156,6 +156,21 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals("Invalid Input", e.getMessage());
     }
 
+    Map<String, Double> aapl = Collections.singletonMap("AAPL", 100D);
+    try {
+      new WeightedInvestmentStrategy(null, aapl);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Input", e.getMessage());
+    }
+
+    try {
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), aapl, -1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Input", e.getMessage());
+    }
+
     try {
       new RecurringWeightedInvestmentStrategy(startDate, stocksWeights, 0, futureDate);
       Assert.fail("should have failed");
@@ -834,6 +849,68 @@ public class EnhancedUserModelTest extends UserModelTest {
     }
   }
 
+  @Test
+  public void buyingWithRecurringStrategyAndVariableFrequency() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("FB", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+
+    long numberOfDaysBetweenStartDateAndEndDate = Utils.absoluteDaysBetweenDates(
+            startCalendar.getTime(), endCalendar.getTime()
+    );
+
+    for (int dayFrequency : Arrays.asList(5, 10, 30, 50)) {
+      long numberOfPurchases = numberOfDaysBetweenStartDateAndEndDate / dayFrequency;
+      Strategy recurringWeightedInvestmentStrategy =
+              new RecurringWeightedInvestmentStrategy(startCalendar.getTime(), stocksWeights,
+                      dayFrequency,
+                      endCalendar.getTime());
+
+      enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+      for (double commission : Arrays.asList(0, 10)) {
+        int amountToInvest = 1000;
+        List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
+                new BigDecimal(amountToInvest),
+                recurringWeightedInvestmentStrategy, commission);
+
+        Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+        double numberOfFBStocksIn1Transaction = (stocksWeights.get("FB") * amountToInvest) / 40;
+        double numberOfGoogStocksIn1Transaction = (stocksWeights.get("GOOG") * amountToInvest) / 11;
+        Assert.assertEquals(numberOfFBStocksIn1Transaction * numberOfPurchases,
+                individualShareCount.get("FB"), 0.0);
+        Assert.assertEquals(numberOfGoogStocksIn1Transaction * numberOfPurchases,
+                individualShareCount.get("GOOG"), 0.0);
+      }
+    }
+  }
+
+  @Test
+  public void buyingWithIntervalGreaterThanEndDate() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+
+    try {
+      new RecurringWeightedInvestmentStrategy(startCalendar.getTime(), stocksWeights, 300,
+              endCalendar.getTime());
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("frequency cannot cross endDate with 0 transactions", e.getMessage());
+    }
+  }
 
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {
     return price.multiply(BigDecimal.valueOf(1 + commission));
