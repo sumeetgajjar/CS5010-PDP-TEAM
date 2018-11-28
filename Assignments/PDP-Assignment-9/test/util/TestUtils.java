@@ -172,7 +172,7 @@ public class TestUtils {
                                                    Map<String, Double> stockWeights,
                                                    int dayFrequency, Date mockedYesterdayDate) {
       super(startDate, stockWeights, dayFrequency);
-      this.mockedYesterdayDate = mockedYesterdayDate;
+      this.mockedYesterdayDate = Utils.requireNonNull(mockedYesterdayDate);
     }
 
     @Override

@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -446,8 +447,9 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
     Assert.assertEquals(0, enhancedUserModel.getAllPortfolios().size());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_FANG);
 
     List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(
             PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
@@ -459,11 +461,14 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
-    Assert.assertEquals(new BigDecimal(110), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(100), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(100), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
     BigDecimal actualCostWithCommission = getTotalCostOfPurchase(sharePurchaseOrders);
-    Assert.assertEquals(new BigDecimal(110), actualCostWithCommission);
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
+            getScaledStrippedBigDecimal(actualCostWithCommission, 2));
   }
 
   @Test
@@ -542,9 +547,12 @@ public class EnhancedUserModelTest extends UserModelTest {
     Map<String, Long> shareCount = getIndividualShareCount(purchasesInFANG);
 
     Assert.assertEquals(Long.valueOf(1), shareCount.get("FB"));
-    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
-    Assert.assertEquals(new BigDecimal(88), fangPortfolio.getCostBasis(day1));
-    Assert.assertEquals(new BigDecimal(80), fangPortfolio.getValue(day1));
+    Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
+
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day1), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(80), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(day1), 2));
 
     //purchasing the same shares on day2
     strategy = new OneTimeWeightedInvestmentStrategy(day2, stocksWeights);
@@ -555,9 +563,12 @@ public class EnhancedUserModelTest extends UserModelTest {
     shareCount = getIndividualShareCount(purchasesInFANG);
 
     Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
-    Assert.assertEquals(Long.valueOf(8), shareCount.get("NFLX"));
-    Assert.assertEquals(new BigDecimal(176), fangPortfolio.getCostBasis(day1));
-    Assert.assertEquals(new BigDecimal(160), fangPortfolio.getValue(day1));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
+
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(176), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day2), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(160), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(day2), 2));
 
     //purchasing the different shares on day3
     stocksWeights = new HashMap<>();
@@ -571,11 +582,16 @@ public class EnhancedUserModelTest extends UserModelTest {
     shareCount = getIndividualShareCount(purchasesInFANG);
 
     Assert.assertEquals(Long.valueOf(2), shareCount.get("FB"));
-    Assert.assertEquals(Long.valueOf(8), shareCount.get("NFLX"));
-    Assert.assertEquals(Long.valueOf(4), shareCount.get("T"));
+    Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
+    Assert.assertEquals(Long.valueOf(5), shareCount.get("T"));
     Assert.assertEquals(Long.valueOf(4), shareCount.get("GOOG"));
-    Assert.assertEquals(new BigDecimal(268.4), fangPortfolio.getCostBasis(day1));
-    Assert.assertEquals(new BigDecimal(244), fangPortfolio.getValue(day1));
+
+    Assert.assertEquals(new BigDecimal(279.4)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN)
+                    .stripTrailingZeros(),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day3), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(254), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(day3), 2));
   }
 
   @Test
@@ -626,8 +642,11 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
-    Assert.assertEquals(new BigDecimal(11), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(10), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
+
 
     Map<String, Long> shareCount = getIndividualShareCount(fangPortfolio.getPurchases());
     Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
@@ -648,23 +667,35 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
-    Assert.assertEquals(new BigDecimal(121), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(110), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(121), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
 
   @Test
   public void buySharesUsingWeightedStrategyWithSameWeightsInOldPortfolio() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    try {
+      enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+      Assert.fail("should have failed");
+    } catch (PortfolioNotFoundException e) {
+      Assert.assertEquals("portfolio by the name 'FANG' not found", e.getMessage());
+    }
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_FANG);
 
     Date validDateForTrading = TestUtils.getValidDateForTrading();
     enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
 
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
-    Assert.assertEquals(new BigDecimal(11), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(10), fangPortfolio.getValue(validDateForTrading));
+
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
     Map<String, Long> shareCount = getIndividualShareCount(fangPortfolio.getPurchases());
     Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
@@ -685,8 +716,10 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("AAPL"));
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
-    Assert.assertEquals(new BigDecimal(99), fangPortfolio.getCostBasis(validDateForTrading));
-    Assert.assertEquals(new BigDecimal(90), fangPortfolio.getValue(validDateForTrading));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(99), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+    Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(90), 2),
+            getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
 
   @Test
@@ -1301,6 +1334,36 @@ public class EnhancedUserModelTest extends UserModelTest {
     }
   }
 
+  @Test
+  public void startDateCannotBeToday() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    try {
+      new OneTimeWeightedInvestmentStrategy(Utils.getCalendarInstance().getTime(), stocksWeights);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Strategy cannot start from today", e.getMessage());
+    }
+
+    try {
+      new RecurringWeightedInvestmentStrategy(Utils.getTodayDate(),
+              stocksWeights, 30);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Strategy cannot start from today", e.getMessage());
+    }
+
+    try {
+      new RecurringWeightedInvestmentStrategy(Utils.getTodayDate(),
+              stocksWeights, 30, Utils.getTodayDate());
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Strategy cannot start from today", e.getMessage());
+    }
+  }
+
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {
     return price.multiply(BigDecimal.valueOf(1 + commission));
   }
@@ -1328,5 +1391,9 @@ public class EnhancedUserModelTest extends UserModelTest {
       actualCost = actualCost.add(order.getCostOfPurchase());
     }
     return actualCost;
+  }
+
+  private BigDecimal getScaledStrippedBigDecimal(BigDecimal bigDecimal, int scale) {
+    return bigDecimal.setScale(2, RoundingMode.HALF_DOWN).stripTrailingZeros();
   }
 }
