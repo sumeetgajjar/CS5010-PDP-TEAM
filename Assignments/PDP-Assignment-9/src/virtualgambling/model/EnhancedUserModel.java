@@ -7,6 +7,7 @@ import java.util.List;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.strategy.Strategy;
 
 /**
@@ -24,5 +25,6 @@ public interface EnhancedUserModel extends UserModel {
   List<SharePurchaseOrder> buyShares(String portfolioName,
                                      BigDecimal amountToInvest, Strategy strategy,
                                      double commissionPercentage)
-          throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException;
+          throws IllegalArgumentException, StockDataNotFoundException,
+          InsufficientCapitalException, StrategyExecutionException;
 }

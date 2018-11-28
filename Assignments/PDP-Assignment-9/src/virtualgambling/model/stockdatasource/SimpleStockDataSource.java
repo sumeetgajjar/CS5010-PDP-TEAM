@@ -39,6 +39,9 @@ public class SimpleStockDataSource implements StockDataSource {
    */
   @Override
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+    if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
+      throw new IllegalArgumentException("Cannot buy shares at given time");
+    }
     BigDecimal stockPrice = STOCK_PRICES.getOrDefault(tickerName, Collections.emptyMap()).get(date);
     if (Objects.nonNull(stockPrice)) {
       return stockPrice;

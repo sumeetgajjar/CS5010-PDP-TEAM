@@ -9,6 +9,7 @@ import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.strategy.Strategy;
 
@@ -37,12 +38,21 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
   @Override
   public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
                                             Strategy strategy,
-                                            double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
+                                            double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException, StrategyExecutionException {
     createPortfolioIfNotExists(portfolioName);
+    Utils.requireNonNull(strategy);
+    this.validateAmountToInvest(amountToInvest);
     return strategy.execute(amountToInvest, this.stockDAO).stream()
             .map(oldPurchaseOrder -> new SharePurchaseOrder(oldPurchaseOrder, commissionPercentage))
             .map(sharePurchaseOrder -> processPurchaseOrder(portfolioName, sharePurchaseOrder))
             .collect(Collectors.toList());
+  }
+
+  private void validateAmountToInvest(BigDecimal amountToInvest) throws IllegalArgumentException {
+    Utils.requireNonNull(amountToInvest);
+    if (amountToInvest.compareTo(BigDecimal.valueOf(1)) <= 0) {
+      throw new IllegalArgumentException("Investment amount cannot be less than 1");
+    }
   }
 
   private void createPortfolioIfNotExists(String portfolioName) {
