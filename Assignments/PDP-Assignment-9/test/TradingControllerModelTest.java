@@ -19,15 +19,11 @@ import virtualgambling.view.TextView;
  */
 public class TradingControllerModelTest {
 
-  protected String getMenuStringOfController() {
-    return TestUtils.getMenuStringOfTradingController();
-  }
-
   @Test
   public void creatingPortfolioWorks() {
     Readable readable = new StringReader("1 p1 2 q");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable, appendable));
     controller.run();
 
@@ -46,7 +42,7 @@ public class TradingControllerModelTest {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 3 p1 2018-11-01 quit");
 
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
@@ -74,7 +70,7 @@ public class TradingControllerModelTest {
   public void getPortfolioValueWorks() {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 4 p1 2018-11-01 quit");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable,
                     appendable));
 
@@ -124,7 +120,7 @@ public class TradingControllerModelTest {
   public void portfolioCompositionWorks() {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 5 p1 quit");
     Appendable appendable = new StringBuffer();
-    UserModel mockedUserModel = TestUtils.getMockedUserModel();
+    UserModel mockedUserModel = getUserModel();
     Controller controller = new TradingController(mockedUserModel,
             new TextView(readable, appendable));
 
@@ -152,7 +148,7 @@ public class TradingControllerModelTest {
   public void getRemainingCapitalWorks() {
     Readable readable = new StringReader("6 1 p1 6 q");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
+    Controller controller = new TradingController(getUserModel(), new TextView(
             readable, appendable));
     controller.run();
 
@@ -172,7 +168,7 @@ public class TradingControllerModelTest {
   public void commandNotFoundInformsUser() {
     Readable readable = new StringReader("asd q");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
+    Controller controller = new TradingController(getUserModel(), new TextView(
             readable, appendable));
     controller.run();
 
@@ -211,7 +207,7 @@ public class TradingControllerModelTest {
     Readable readable = new StringReader("1 p1 3 p1 2018-11-01:12:11:21 quit");
 
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
@@ -234,7 +230,7 @@ public class TradingControllerModelTest {
             "quit");
 
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
@@ -267,7 +263,7 @@ public class TradingControllerModelTest {
     Readable readable = new StringReader("1 word1 word2 2 quit");
 
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
+    Controller controller = new TradingController(getUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
@@ -328,5 +324,13 @@ public class TradingControllerModelTest {
     } catch (IllegalStateException e) {
       Assert.assertEquals("Cannot display data on view", e.getMessage());
     }
+  }
+
+  protected UserModel getUserModel() {
+    return TestUtils.getMockedUserModel();
+  }
+
+  private String getMenuStringOfController() {
+    return TestUtils.getMenuStringOfTradingController();
   }
 }
