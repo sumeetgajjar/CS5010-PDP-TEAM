@@ -19,6 +19,7 @@ import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
@@ -1241,6 +1242,56 @@ public class EnhancedUserModelTest extends UserModelTest {
 
     Long expectedGOOGCount = individualShareCount.get("GOOG");
     Assert.assertEquals(Long.valueOf(18 * 2), expectedGOOGCount);
+  }
+
+  @Test
+  public void strategyShouldBeAbleToBuyAtleast1StockForEachTicker() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new TestUtils.MockRecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights, 30,
+                    endCalendar.getTime());
+
+    for (double commission : Arrays.asList(0, 10)) {
+      try {
+        enhancedUserModel.buyShares(PORTFOLIO_P1, new BigDecimal(10),
+                recurringWeightedInvestmentStrategy, commission);
+        Assert.fail("should have failed");
+      } catch (StrategyExecutionException e) {
+        Assert.assertEquals("Unable to buy even a single stock", e.getMessage());
+      }
+    }
+  }
+
+  @Test
+  public void endDateOfShouldNotBeBeforeTheStartDateForRecurringStrategy() {
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.AUGUST, 27);
+    try {
+      new RecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+              stocksWeights, 30,
+              endCalendar.getTime());
+      Assert.fail("Should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("end date cannot be before the start date", e.getMessage());
+    }
   }
 
   private static BigDecimal getPriceAfterCommission(BigDecimal price, double commission) {

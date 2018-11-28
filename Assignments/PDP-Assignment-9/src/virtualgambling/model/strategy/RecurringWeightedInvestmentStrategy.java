@@ -15,8 +15,8 @@ import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.StockDAO;
 
 public class RecurringWeightedInvestmentStrategy implements Strategy {
-  protected final Date startDate;
-  protected final Map<String, Double> stockWeights;
+  private final Date startDate;
+  private final Map<String, Double> stockWeights;
   private final int dayFrequency;
   private Date endDate;
 
@@ -24,7 +24,7 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
                                              int dayFrequency,
                                              Date endDate) {
     this.checkInvariantForStockWeights(Utils.requireNonNull(stockWeights));
-    this.startDate = Utils.requireNonNull(startDate);
+    this.startDate = Utils.removeTimeFromDate(Utils.requireNonNull(startDate));
     this.stockWeights = stockWeights;
     if (dayFrequency < 1) {
       throw new IllegalArgumentException("Frequency cannot be less than 1 day");
@@ -32,6 +32,11 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     this.dayFrequency = dayFrequency;
     if (Objects.isNull(endDate)) {
       this.endDate = this.getDefaultEndDate();
+    } else {
+      endDate = Utils.removeTimeFromDate(endDate);
+      if (endDate.compareTo(startDate) < 0) {
+        throw new IllegalArgumentException("end date cannot be before the start date");
+      }
     }
   }
 
@@ -60,6 +65,9 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
                 );
                 long quantity =
                         amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValueExact();
+                if (quantity <= 0) {
+                  throw new StrategyExecutionException("Unable to buy even a single stock");
+                }
                 return stockDAO.createPurchaseOrder(tickerName, quantity, this.startDate);
               })
                       .collect(Collectors.toList());
