@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.exceptions.StrategyExecutionException;
+import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * {@link Strategy} represents a strategy of investing in stocks given the amount to invest and
@@ -23,5 +25,5 @@ public interface Strategy {
    * @param amountToInvest amount to invest in dollars
    * @return list of {@link SharePurchaseOrder}.
    */
-  List<SharePurchaseOrder> execute(BigDecimal amountToInvest) throws IllegalArgumentException;
+  List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO) throws IllegalArgumentException, StrategyExecutionException;
 }

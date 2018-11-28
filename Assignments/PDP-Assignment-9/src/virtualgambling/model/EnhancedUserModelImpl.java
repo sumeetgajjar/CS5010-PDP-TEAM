@@ -39,7 +39,7 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
                                             Strategy strategy,
                                             double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
     createPortfolioIfNotExists(portfolioName);
-    return strategy.execute(amountToInvest).stream()
+    return strategy.execute(amountToInvest, this.stockDAO).stream()
             .map(oldPurchaseOrder -> new SharePurchaseOrder(oldPurchaseOrder, commissionPercentage))
             .map(sharePurchaseOrder -> processPurchaseOrder(portfolioName, sharePurchaseOrder))
             .collect(Collectors.toList());
