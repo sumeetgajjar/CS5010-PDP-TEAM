@@ -105,23 +105,17 @@ public class TradingControllerModelTest {
   public void emptyPortfolioCompositionWorks() {
     Readable readable = new StringReader("1 p1 5 p1 quit");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getEmptySimpleUserModel(),
+    UserModel userModel = TestUtils.getEmptySimpleUserModel();
+    Controller controller = new TradingController(userModel,
             new TextView(readable, appendable));
 
     controller.run();
-
-    String expectedPortfolioComposition = "Buy Date         " +
-            "   Stocks              Quantity            Cost Price          Current Value\n" +
-            "\n" +
-            "Total Value:        $0.00\n" +
-            "Total Cost:         $0.00\n" +
-            "Profit:             $0.00\n" + System.lineSeparator();
 
     StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(expectedPortfolioComposition);
+    expectedOutput.append(System.lineSeparator()).append(userModel.getPortfolio("p1").toString());
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
 
@@ -130,8 +124,7 @@ public class TradingControllerModelTest {
 
   @Test
   public void portfolioCompositionWorks() {
-    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 1"
-            + "\nget_portfolio_composition p1\nquit");
+    Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 5 p1 quit");
     Appendable appendable = new StringBuffer();
     UserModel mockedUserModel = TestUtils.getMockedUserModel();
     Controller controller = new TradingController(mockedUserModel,
@@ -139,13 +132,22 @@ public class TradingControllerModelTest {
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 1 share"
-            + "(s) of "
-            + "'AAPL' at a rate of $30.00 per stock on 2018-10-30"
-            + System.lineSeparator()
-            + mockedUserModel.getPortfolio("p1").toString()
-            + System.lineSeparator();
-    Assert.assertEquals(builder, appendable.toString());
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(mockedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
@@ -185,45 +187,47 @@ public class TradingControllerModelTest {
 
   @Test
   public void invalidGetPortfolioValueCommandFails() {
-    Readable readable = new StringReader("create_portfolio p1\nbuy_shares AAPL p1 2018-10-30 10"
-            + "\nget_portfolio_value"
-            + "\nget_portfolio_value p1"
-            + "\nget_portfolio_value p1 2018-11-"
-            + "\nget_portfolio_value p1 2018-11-01\nquit");
+    Readable readable = new StringReader("1 p1 4 p2 2018-11-01 quit");
     Appendable appendable = new StringBuffer();
-    Controller controller = new TradingController(TestUtils.getMockedUserModel(),
-            new TextView(readable,
-                    appendable));
+    UserModel userModel = TestUtils.getEmptySimpleUserModel();
+    Controller controller = new TradingController(userModel,
+            new TextView(readable, appendable));
 
     controller.run();
-    String invalidCommand = "Incomplete Command, please enter valid parameters";
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator() + "Purchased 10 share"
-            + "(s) of "
-            + "'AAPL' at a rate of $30"
-            + ".00 per stock on 2018-10-30" + System.lineSeparator()
-            + invalidCommand + System.lineSeparator()
-            + invalidCommand + System.lineSeparator()
-            + "Invalid date format" + System.lineSeparator()
-            + Utils.getFormattedCurrencyNumberString(new BigDecimal("100"))
-            + System.lineSeparator();
-    Assert.assertEquals(builder, appendable.toString());
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("portfolio by the name 'p2' not found");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
   public void dateStringWithHourMinutesAndSecondsWorks() {
-    Readable readable = new StringReader("create_portfolio p1\nget_portfolio_cost_basis p1"
-            + " 2018-11-01:12:11:21\nquit");
+    Readable readable = new StringReader("1 p1 3 p1 2018-11-01:12:11:21 quit");
+
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
             new TextView(readable, appendable));
 
     controller.run();
 
-    String builder = TestUtils.getWelcomeMessage() + System.lineSeparator()
-            + Utils.getFormattedCurrencyNumberString(new BigDecimal("0"))
-            + System.lineSeparator();
-    Assert.assertEquals(builder, appendable.toString());
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("$0.00");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
