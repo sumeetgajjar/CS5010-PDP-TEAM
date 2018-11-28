@@ -51,9 +51,7 @@ public class Portfolio {
     this.checkSanity(date);
     return this.getPurchases().stream()
             .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
-            .map(sharePurchaseInfo ->
-                    sharePurchaseInfo.getUnitPrice()
-                            .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
+            .map(SharePurchaseOrder::getCostOfPurchase)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 

@@ -18,6 +18,7 @@ import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.StockDAO;
@@ -612,8 +613,14 @@ public class EnhancedUserModelTest extends UserModelTest {
   public void buySharesUsingWeightedStrategyWithDifferentWeightsInOldPortfolio() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
-    Assert.assertNull(enhancedUserModel.getPortfolio(PORTFOLIO_FANG));
+    try {
+      enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
+      Assert.fail("should have failed");
+    } catch (PortfolioNotFoundException e) {
+      Assert.assertEquals("portfolio by the name 'FANG' not found", e.getMessage());
+    }
 
+    enhancedUserModel.createPortfolio(PORTFOLIO_FANG);
     Date validDateForTrading = TestUtils.getValidDateForTrading();
     enhancedUserModel.buyShares("AAPL", PORTFOLIO_FANG, validDateForTrading, 1, 10);
 

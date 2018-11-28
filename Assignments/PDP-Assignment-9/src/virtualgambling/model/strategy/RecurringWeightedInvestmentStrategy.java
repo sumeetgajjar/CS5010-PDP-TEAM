@@ -33,8 +33,8 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     if (Objects.isNull(endDate)) {
       this.endDate = this.getDefaultEndDate();
     } else {
-      endDate = Utils.removeTimeFromDate(endDate);
-      if (endDate.compareTo(startDate) < 0) {
+      this.endDate = Utils.removeTimeFromDate(endDate);
+      if (this.endDate.compareTo(this.startDate) < 0) {
         throw new IllegalArgumentException("end date cannot be before the start date");
       }
     }
