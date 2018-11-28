@@ -8,7 +8,8 @@ import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
 /**
- * Created by gajjar.s, on 4:55 PM, 11/28/18
+ * The class represents a Junit test class.It contains all the tests for scenarios when
+ * EnhancedTradingController is given EnhancedUserModel.
  */
 public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelTest {
 

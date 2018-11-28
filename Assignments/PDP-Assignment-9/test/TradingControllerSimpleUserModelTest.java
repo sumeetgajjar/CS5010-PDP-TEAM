@@ -12,7 +12,8 @@ import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
 /**
- * The class represents a Junit class to test Controller and Model.
+ * The class represents a Junit test class.It contains all the tests for scenarios when
+ * TradingController is given SimpleUserModel.
  */
 public class TradingControllerSimpleUserModelTest extends ControllerModelTest {
 
