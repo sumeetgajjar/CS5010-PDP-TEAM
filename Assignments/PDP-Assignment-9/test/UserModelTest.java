@@ -111,14 +111,6 @@ public class UserModelTest {
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Portfolio Name", e.getMessage());
     }
-
-    userModel.createPortfolio("p1");
-    try {
-      userModel.createPortfolio("p1");
-      Assert.fail("should have failed");
-    } catch (IllegalArgumentException e) {
-      Assert.assertEquals("Portfolio already exists", e.getMessage());
-    }
   }
 
   @Test

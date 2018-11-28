@@ -39,7 +39,15 @@ public class SharePurchaseOrder {
 
   public SharePurchaseOrder(SharePurchaseOrder sharePurchaseOrder, double commissionPercentage) {
     this(sharePurchaseOrder.getTickerName(), sharePurchaseOrder.getUnitPrice(),
-            sharePurchaseOrder.getDate(), sharePurchaseOrder.getQuantity(), commissionPercentage);
+            sharePurchaseOrder.getDate(), sharePurchaseOrder.getQuantity(),
+            validateCommissionPercentage(commissionPercentage));
+  }
+
+  private static double validateCommissionPercentage(double commissionPercentage) {
+    if (commissionPercentage < 0) {
+      throw new IllegalArgumentException("Commission percentage cannot be less than 0");
+    }
+    return commissionPercentage;
   }
 
   /**
