@@ -22,21 +22,22 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
 
   public RecurringWeightedInvestmentStrategy(Date startDate, Map<String, Double> stockWeights,
                                              int dayFrequency,
-                                             Date endDate) {
+                                             Date endDate) throws IllegalArgumentException {
     this.checkInvariantForStockWeights(Utils.requireNonNull(stockWeights));
+    this.checkStartDate(startDate);
     this.startDate = Utils.removeTimeFromDate(Utils.requireNonNull(startDate));
     this.stockWeights = stockWeights;
     if (dayFrequency < 1) {
       throw new IllegalArgumentException("Frequency cannot be less than 1 day");
     }
     this.dayFrequency = dayFrequency;
-    if (Objects.isNull(endDate)) {
-      this.endDate = this.getDefaultEndDate();
-    } else {
-      this.endDate = Utils.removeTimeFromDate(endDate);
-      if (this.endDate.compareTo(this.startDate) < 0) {
-        throw new IllegalArgumentException("end date cannot be before the start date");
-      }
+    setEndDate(endDate);
+  }
+
+  private void checkStartDate(Date startDate) throws IllegalArgumentException {
+    Utils.requireNonNull(startDate);
+    if (Utils.doesDatesHaveSameDay(Utils.getTodayDate(), startDate)) {
+      throw new IllegalArgumentException("Strategy cannot start from today");
     }
   }
 
@@ -47,6 +48,10 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
 
   @Override
   public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO) throws IllegalArgumentException, StrategyExecutionException {
+    if (Objects.isNull(this.endDate)) {
+      setEndDate(getDefaultEndDate());
+    }
+
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(this.startDate);
 
@@ -64,7 +69,7 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
                         BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN)
                 );
                 long quantity =
-                        amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValueExact();
+                        amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValue();
                 if (quantity <= 0) {
                   throw new StrategyExecutionException("Unable to buy even a single stock");
                 }
@@ -85,6 +90,15 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     double weightSum = stockWeights.values().stream().mapToDouble(Double::doubleValue).sum();
     if (!Utils.areTwoDoublesEqual(weightSum, 100.0, 0.001)) {
       throw new IllegalArgumentException("Weights do not sum up to 100");
+    }
+  }
+
+  private void setEndDate(Date endDate) {
+    if (Objects.nonNull(endDate)) {
+      this.endDate = Utils.removeTimeFromDate(endDate);
+      if (this.endDate.compareTo(this.startDate) < 0) {
+        throw new IllegalArgumentException("end date cannot be before the start date");
+      }
     }
   }
 }

@@ -152,6 +152,10 @@ public class Utils {
     return calendar.getTime();
   }
 
+  public static Date getTodayDate() {
+    return getCalendarInstance().getTime();
+  }
+
   /**
    * Returns the number of days between two dates in terms of absolute days.
    *
