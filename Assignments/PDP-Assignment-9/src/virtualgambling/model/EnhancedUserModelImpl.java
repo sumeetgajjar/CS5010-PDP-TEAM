@@ -3,7 +3,9 @@ package virtualgambling.model;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -24,13 +26,29 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
   @Override
   public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
                                       long quantity, double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
-    return null;
+
+    SharePurchaseOrder sharePurchaseOrder = new SharePurchaseOrder(createPurchaseOrder(tickerName,
+            portfolioName, date, quantity),
+            commissionPercentage);
+
+    return processPurchaseOrder(portfolioName, sharePurchaseOrder);
   }
 
   @Override
   public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
                                             Strategy strategy,
                                             double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
-    return null;
+    createPortfolioIfNotExists(portfolioName);
+    return strategy.execute(amountToInvest).stream()
+            .map(oldPurchaseOrder -> new SharePurchaseOrder(oldPurchaseOrder, commissionPercentage))
+            .map(sharePurchaseOrder -> processPurchaseOrder(portfolioName, sharePurchaseOrder))
+            .collect(Collectors.toList());
+  }
+
+  private void createPortfolioIfNotExists(String portfolioName) {
+    Utils.requireNonNull(portfolioName);
+    if (!this.portfolios.containsKey(portfolioName)) {
+      this.createPortfolio(portfolioName);
+    }
   }
 }
