@@ -10,7 +10,8 @@ public class Constants {
 
   public static final String RECURRING_INTERVAL_MESSAGE = "Please the recurring interval";
 
-  public static final String COMMISSION_MESSAGE = "Please enter the commission per transaction";
+  public static final String COMMISSION_MESSAGE =
+          "Please enter the commission percentage per transaction";
 
   public static final String STOCK_PERCENTAGE_MESSAGE = "Please enter the percentage of the stock";
 
@@ -32,4 +33,6 @@ public class Constants {
           "Please enter the quantity of shares to purchase";
 
   public static final String COMMAND_NOT_FOUND_MESSAGE = "Command not found, please try again";
+
+  public static final String INVALID_CHOICE_MESSAGE = "Invalid option, please enter valid option";
 }

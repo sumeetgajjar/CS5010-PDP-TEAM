@@ -24,7 +24,7 @@ public class TradingApp {
    * @param args the args
    */
   public static void main(String[] args) {
-    runSimpleTradingApp();
+    runEnhancedTradingApp();
   }
 
   private static void runEnhancedTradingApp() {
