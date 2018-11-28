@@ -1,6 +1,11 @@
 package virtualgambling.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import util.Utils;
 import virtualgambling.view.View;
@@ -12,8 +17,6 @@ abstract class AbstractController implements Controller {
   AbstractController(View view) {
     this.view = Utils.requireNonNull(view);
   }
-
-  abstract String getWelcomeMessage();
 
   protected void displayOnView(String text) throws IllegalStateException {
     try {
@@ -32,4 +35,76 @@ abstract class AbstractController implements Controller {
     }
   }
 
+  protected String getStringInputFromUser(String message,
+                                          Supplier<String> supplier,
+                                          Consumer<String> consumer) {
+    consumer.accept(message);
+    return supplier.get();
+  }
+
+  protected Date getDateFromUser(String message, Supplier<String> supplier,
+                                 Consumer<String> consumer) {
+    while (true) {
+      try {
+        String dateString = getStringInputFromUser(message, supplier,
+                consumer);
+        return Utils.getDateFromDefaultFormattedDateString(dateString);
+      } catch (ParseException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected long getLongInputFromUser(String messageToDisplay,
+                                      Supplier<String> supplier,
+                                      Consumer<String> consumer) {
+    while (true) {
+      try {
+        return Long.parseLong(getStringInputFromUser(messageToDisplay, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected int getIntegerInputFromUser(String messageToDisplay,
+                                        Supplier<String> supplier,
+                                        Consumer<String> consumer) {
+    while (true) {
+      try {
+        return Integer.parseInt(getStringInputFromUser(messageToDisplay, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected double getDoubleInputFromUser(String messageToDisplay,
+                                          Supplier<String> supplier,
+                                          Consumer<String> consumer) {
+    while (true) {
+      try {
+        return Double.parseDouble(getStringInputFromUser(messageToDisplay, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected BigDecimal getBigDecimalInputFromUser(String message,
+                                                  Supplier<String> supplier,
+                                                  Consumer<String> consumer) {
+    while (true) {
+      try {
+        return new BigDecimal(getStringInputFromUser(message, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected boolean isQuitCommand(String commandString) {
+    return commandString.equalsIgnoreCase("q")
+            || commandString.equalsIgnoreCase("quit");
+  }
 }

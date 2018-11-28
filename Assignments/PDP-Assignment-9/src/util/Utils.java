@@ -6,9 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Represents utility functions that are independent of the state of the application.
@@ -151,22 +153,6 @@ public class Utils {
   }
 
   /**
-   * Returns a date from the string obtained from the supplier. The format of the string should be
-   * "yyyy-MM-dd"
-   *
-   * @param supplier supplier to obtain string to parse
-   * @return date
-   * @throws IllegalArgumentException if the date format is invalid
-   */
-  public static Date getDateFromStringSupplier(Supplier<String> supplier) throws IllegalArgumentException {
-    try {
-      return getDateFromDefaultFormattedDateString(supplier.get());
-    } catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date format");
-    }
-  }
-
-  /**
    * Returns the number of days between two dates in terms of absolute days.
    *
    * @param date1 first date
@@ -176,5 +162,18 @@ public class Utils {
   public static long absoluteDaysBetweenDates(Date date1, Date date2) {
     long difference = Math.abs(date1.getTime() - date2.getTime());
     return TimeUnit.MILLISECONDS.convert(difference, TimeUnit.DAYS);
+  }
+
+  /**
+   * Given a set of stocks, returns a Map of stock to its percentage. The percentage will be divided
+   * equally amongst the given stocks.
+   *
+   * @param tickerNames the set of stocks
+   * @return the Map of stock and its corresponding percentage
+   */
+  public static Map<String, Double> getStocksWithWeights(Set<String> tickerNames) {
+    double weight = 100.0 / tickerNames.size();
+    return tickerNames.stream().collect(Collectors.toMap(stock -> stock,
+            stock -> weight));
   }
 }
