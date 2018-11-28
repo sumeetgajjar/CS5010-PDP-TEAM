@@ -70,18 +70,18 @@ public class EnhancedUserModelTest extends UserModelTest {
       Map<String, Double> stocksWeights = new HashMap<>();
       stocksWeights.put("FB", 50.0D);
       stocksWeights.put("NFLX", 49.0D);
-      new RecurringWeightedInvestmentStrategy(
-              new WeightedInvestmentStrategy(
-                      TestUtils.getValidDateForTrading(), stocksWeights));
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(),
+              stocksWeights,
+              50);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Weights do not sum up to 100", e.getMessage());
     }
 
     try {
-      new RecurringWeightedInvestmentStrategy(
-              new WeightedInvestmentStrategy(
-                      TestUtils.getValidDateForTrading(), Collections.emptyMap()));
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(),
+              Collections.emptyMap(),
+              50);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -91,9 +91,9 @@ public class EnhancedUserModelTest extends UserModelTest {
       Map<String, Double> stocksWeights = new HashMap<>();
       stocksWeights.put("FB", 50.0D);
       stocksWeights.put("NFLX", 51.0D);
-      new RecurringWeightedInvestmentStrategy(
-              new WeightedInvestmentStrategy(
-                      TestUtils.getValidDateForTrading(), stocksWeights));
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(),
+              stocksWeights,
+              50);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
@@ -109,15 +109,30 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals("Invalid Input", e.getMessage());
     }
 
+    Map<String, Double> aapl = Collections.singletonMap("AAPL", 100D);
     try {
-      new WeightedInvestmentStrategy(null, Collections.singletonMap("AAPL", 100D));
+      new WeightedInvestmentStrategy(null, aapl);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
     }
 
     try {
-      new RecurringWeightedInvestmentStrategy(null);
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), aapl, -1);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Input", e.getMessage());
+    }
+
+    try {
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), aapl, 0);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid Input", e.getMessage());
+    }
+
+    try {
+      new RecurringWeightedInvestmentStrategy(TestUtils.getValidDateForTrading(), aapl, 100, null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid Input", e.getMessage());
