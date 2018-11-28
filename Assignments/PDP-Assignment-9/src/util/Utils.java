@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
@@ -150,8 +151,8 @@ public class Utils {
   }
 
   /**
-   * Returns a date from the string obtained from the supplier. The format of the string should
-   * be "yyyy-MM-dd"
+   * Returns a date from the string obtained from the supplier. The format of the string should be
+   * "yyyy-MM-dd"
    *
    * @param supplier supplier to obtain string to parse
    * @return date
@@ -163,5 +164,17 @@ public class Utils {
     } catch (ParseException e) {
       throw new IllegalArgumentException("Invalid date format");
     }
+  }
+
+  /**
+   * Returns the number of days between two dates in terms of absolute days.
+   *
+   * @param date1 first date
+   * @param date2 second date
+   * @return the number of days between the 2 dates
+   */
+  public static long absoluteDaysBetweenDates(Date date1, Date date2) {
+    long difference = Math.abs(date1.getTime() - date2.getTime());
+    return TimeUnit.MILLISECONDS.convert(difference, TimeUnit.DAYS);
   }
 }
