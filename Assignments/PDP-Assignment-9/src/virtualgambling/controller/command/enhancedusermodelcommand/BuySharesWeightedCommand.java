@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.Map;
 
 import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
-import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 
 /**
  * This class represents a Buy Share command with the enhancement that the each ticker can have an
@@ -43,7 +43,7 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
     super(enhancedUserModel);
     this.portfolioName = portfolioName;
     this.amountToInvest = amountToInvest;
-    this.strategy = new WeightedInvestmentStrategy(dateOfPurchase, stockWeights);
+    this.strategy = new OneTimeWeightedInvestmentStrategy(dateOfPurchase, stockWeights);
     this.commission = commission;
   }
 
