@@ -2,9 +2,7 @@ package virtualgambling.controller.command.enhancedusermodelcommand;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import util.Utils;
 import virtualgambling.controller.command.Command;
@@ -33,13 +31,7 @@ public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
             portfolioName,
             amountToInvest,
             dateOfPurchase,
-            getTickersWithWeights(Utils.requireNonNull(tickerNames)),
+            Utils.getTickersWithWeights(Utils.requireNonNull(tickerNames)),
             commission);
-  }
-
-  private static Map<String, Double> getTickersWithWeights(Set<String> tickerNames) {
-    double weight = 100.0 / tickerNames.size();
-    return tickerNames.stream().collect(Collectors.toMap(stock -> stock,
-            stock -> weight));
   }
 }
