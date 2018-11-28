@@ -23,15 +23,17 @@ public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
    * @param dateOfPurchase    the date of purchase for stocks
    * @param tickerNames       set of ticker names
    * @param commission        the commission for each transaction
+   * @throws IllegalArgumentException if the given model is null
    */
   public BuySharesEquiWeightedCommand(EnhancedUserModel enhancedUserModel, String portfolioName,
                                       BigDecimal amountToInvest, Date dateOfPurchase,
-                                      Set<String> tickerNames, double commission) {
+                                      Set<String> tickerNames, double commission)
+          throws IllegalArgumentException {
     super(enhancedUserModel,
             portfolioName,
             amountToInvest,
             dateOfPurchase,
-            Utils.getTickersWithWeights(Utils.requireNonNull(tickerNames)),
+            Utils.getStocksWithWeights(Utils.requireNonNull(tickerNames)),
             commission);
   }
 }

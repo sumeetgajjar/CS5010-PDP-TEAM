@@ -11,7 +11,7 @@ import virtualgambling.model.strategy.Strategy;
 
 /**
  * This class represents a command which buys Share with different weights on recurring basis. Each
- * ticker should have an associated percentage with it. It extends {@link
+ * stock should have an associated percentage with it. It extends {@link
  * AbstractEnhancedUserModelCommand} class.
  */
 public class BuySharesWithRecurringWeightedStrategyCommand extends AbstractEnhancedUserModelCommand {
@@ -59,8 +59,8 @@ public class BuySharesWithRecurringWeightedStrategyCommand extends AbstractEnhan
    * @param endDate           the end date for the recurring investment
    * @param dayFrequency      the recurring interval
    * @param commission        the commission for each transaction
-   * @throws IllegalArgumentException if the given params are null or if the weights do not sum up
-   *                                  to 100
+   * @throws IllegalArgumentException if any of the given params are null or if the weights do not
+   *                                  sum up to 100
    */
   public BuySharesWithRecurringWeightedStrategyCommand(EnhancedUserModel enhancedUserModel,
                                                        String portfolioName,
@@ -92,8 +92,8 @@ public class BuySharesWithRecurringWeightedStrategyCommand extends AbstractEnhan
    * @param startDate         the start date for the recurring investment
    * @param dayFrequency      the recurring interval
    * @param commission        the commission for each transaction
-   * @throws IllegalArgumentException if the given params are null or if the weights do not sum up
-   *                                  to 100
+   * @throws IllegalArgumentException if any of the given params are null or if the weights do not
+   *                                  sum up to 100
    */
   public BuySharesWithRecurringWeightedStrategyCommand(EnhancedUserModel enhancedUserModel,
                                                        String portfolioName,

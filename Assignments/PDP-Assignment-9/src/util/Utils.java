@@ -171,7 +171,7 @@ public class Utils {
    * @param tickerNames the set of stocks
    * @return the Map of stock and its corresponding percentage
    */
-  public static Map<String, Double> getTickersWithWeights(Set<String> tickerNames) {
+  public static Map<String, Double> getStocksWithWeights(Set<String> tickerNames) {
     double weight = 100.0 / tickerNames.size();
     return tickerNames.stream().collect(Collectors.toMap(stock -> stock,
             stock -> weight));

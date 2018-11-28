@@ -1,5 +1,6 @@
 package virtualgambling.controller.command.usermodelcommand;
 
+import util.Utils;
 import virtualgambling.controller.command.Command;
 import virtualgambling.model.UserModel;
 
@@ -15,8 +16,9 @@ public abstract class AbstractUserModelCommand implements Command {
    * Constructs a {@link AbstractUserModelCommand} object with given params.
    *
    * @param userModel the user model
+   * @throws IllegalArgumentException if the given model is null
    */
-  protected AbstractUserModelCommand(UserModel userModel) {
-    this.userModel = userModel;
+  protected AbstractUserModelCommand(UserModel userModel) throws IllegalArgumentException {
+    this.userModel = Utils.requireNonNull(userModel);
   }
 }

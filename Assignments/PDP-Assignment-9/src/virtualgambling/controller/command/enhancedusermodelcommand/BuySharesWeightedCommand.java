@@ -37,6 +37,7 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
                                   String portfolioName, BigDecimal amountToInvest,
                                   Date dateOfPurchase,
                                   Map<String, Double> stockWeights, double commission)
+
           throws IllegalArgumentException {
 
     super(enhancedUserModel);

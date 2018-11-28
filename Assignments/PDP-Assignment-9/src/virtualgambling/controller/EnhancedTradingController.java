@@ -14,6 +14,7 @@ import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuyShareWithCommissionCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesEquiWeightedCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeightedCommand;
+import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.view.View;
@@ -52,6 +53,34 @@ public class EnhancedTradingController extends TradingController {
     commandMap.put("11", getBuySharesWithRecurringSameWeightsCommand());
 
     return commandMap;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              "Please enter the amount to invest", supplier, consumer);
+
+      Date startDate = getDateFromUser("Please enter the start date for recurring investment",
+              supplier, consumer);
+      Date endDate = getDateFromUser("Please enter the end date for recurring investment",
+              supplier, consumer);
+      int recurringPeriod = getIntegerInputFromUser("Please the recurring interval",
+              supplier, consumer);
+      Set<String> shares = getSharesFromUser(supplier, consumer);
+      double commission = getDoubleInputFromUser(
+              "Please enter the commission per transaction", supplier, consumer);
+
+      return new BuySharesWithRecurringEquiWeightedStrategyCommand(
+              this.enhancedUserModel,
+              portfolioName,
+              amountToInvest,
+              shares,
+              startDate,
+              endDate,
+              recurringPeriod,
+              commission);
+    };
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command>
