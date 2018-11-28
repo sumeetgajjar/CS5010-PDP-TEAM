@@ -229,7 +229,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithSameWeights() {
-    Readable readable = new StringReader("1 p1 9 p1 2018-11-1 10000 2 AAPL GOOG 10 quit");
+    Readable readable = new StringReader("1 p1 9 p1 2018-11-1 10000 2 AAPL GOOG 10 5 p1 quit");
 
     Appendable appendable = new StringBuffer();
     Controller controller = getController(readable, appendable);
@@ -254,6 +254,9 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
             .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
@@ -261,7 +264,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   @Test
   public void buySharesWithDifferentWeights() {
     Readable readable = new StringReader(
-            "8 p1 2018-11-1 10000 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 quit");
+            "8 p1 2018-11-1 10000 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 5 p1 quit");
 
     Appendable appendable = new StringBuffer();
     Controller controller = getController(readable, appendable);
@@ -295,6 +298,9 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 25 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-01");
 
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
