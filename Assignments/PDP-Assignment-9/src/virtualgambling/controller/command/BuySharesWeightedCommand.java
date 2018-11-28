@@ -3,7 +3,6 @@ package virtualgambling.controller.command;
 import java.util.Date;
 import java.util.Map;
 
-import virtualgambling.model.UserModel;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 
@@ -33,7 +32,7 @@ public class BuySharesWeightedCommand implements Command {
   }
 
   @Override
-  public void execute(UserModel userModel) {
+  public void execute() {
 
   }
 }
