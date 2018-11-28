@@ -1,6 +1,7 @@
 package virtualgambling.controller.command;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import virtualgambling.model.UserModel;
@@ -10,17 +11,16 @@ import virtualgambling.model.bean.Portfolio;
  * This class represents a command to get list of all portfolios. It implements the {@link Command}
  * interface.
  */
-public class GetAllPortfolioCommand implements Command {
-
-  private final Consumer<String> consumer;
+public class GetAllPortfolioCommand extends AbstractCommand {
 
   /**
    * Constructs a object of {@link GetAllPortfolioCommand} with the given params.
    *
-   * @param consumer the consumer to consume the result of command
+   * @param supplier the supplier of type string
+   * @param consumer the consumer of type string
    */
-  public GetAllPortfolioCommand(Consumer<String> consumer) {
-    this.consumer = consumer;
+  public GetAllPortfolioCommand(Supplier<String> supplier, Consumer<String> consumer) {
+    super(supplier, consumer);
   }
 
   /**

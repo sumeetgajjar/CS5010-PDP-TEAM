@@ -215,7 +215,7 @@ public class UserModelTest {
 
 
     try {
-      Date futureTime = getFutureTime();
+      Date futureTime = TestUtils.getFutureTime();
       userModel.buyShares(appleShare.getTickerName(), "p1", futureTime, 1);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
@@ -641,12 +641,6 @@ public class UserModelTest {
 
   private Share getGoogleShare() {
     return new Share("GOOG", new BigDecimal("11"));
-  }
-
-  private static Date getFutureTime() {
-    Calendar calendar = Utils.getCalendarInstance();
-    calendar.add(Calendar.DATE, 1);
-    return calendar.getTime();
   }
 
   private static Date getDateAfterClosingTime() {

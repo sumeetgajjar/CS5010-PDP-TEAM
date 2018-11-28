@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Represents utility functions that are independent of the state of the application.
@@ -146,5 +147,21 @@ public class Utils {
     Calendar calendar = getCalendarInstance();
     calendar.add(Calendar.DATE, -1);
     return calendar.getTime();
+  }
+
+  /**
+   * Returns a date from the string obtained from the supplier. The format of the string should
+   * be "yyyy-MM-dd"
+   *
+   * @param supplier supplier to obtain string to parse
+   * @return date
+   * @throws IllegalArgumentException if the date format is invalid
+   */
+  public static Date getDateFromStringSupplier(Supplier<String> supplier) throws IllegalArgumentException {
+    try {
+      return getDateFromDefaultFormattedDateString(supplier.get());
+    } catch (ParseException e) {
+      throw new IllegalArgumentException("Invalid date format");
+    }
   }
 }

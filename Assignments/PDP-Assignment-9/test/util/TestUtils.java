@@ -135,6 +135,12 @@ public class TestUtils {
     return calendar.getTime();
   }
 
+  public static Date getFutureTime() {
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.add(Calendar.DATE, 1);
+    return calendar.getTime();
+  }
+
   public static class MockPortfolio extends Portfolio {
     private Date mockedTodayDate;
 
