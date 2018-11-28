@@ -44,10 +44,12 @@ abstract class AbstractController implements Controller {
     return supplier.get();
   }
 
-  protected Date getDateFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+  protected Date getDateFromUser(String message, Supplier<String> supplier,
+                                 Consumer<String> consumer) {
     while (true) {
       try {
-        String dateString = getStringInputFromUser("Please enter the date", supplier, consumer);
+        String dateString = getStringInputFromUser(message, supplier,
+                consumer);
         return Utils.getDateFromDefaultFormattedDateString(dateString);
       } catch (ParseException e) {
         consumer.accept(e.getMessage());
@@ -61,6 +63,18 @@ abstract class AbstractController implements Controller {
     while (true) {
       try {
         return Long.parseLong(getStringInputFromUser(messageToDisplay, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected int getIntegerInputFromUser(String messageToDisplay,
+                                        Supplier<String> supplier,
+                                        Consumer<String> consumer) {
+    while (true) {
+      try {
+        return Integer.parseInt(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
         consumer.accept(e.getMessage());
       }

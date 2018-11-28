@@ -164,7 +164,7 @@ public class TradingController extends AbstractController {
   protected BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser(supplier, consumer);
+      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
       return new CostBasisCommand(this.userModel, portfolioName, date, consumer);
     };
   }
@@ -179,7 +179,7 @@ public class TradingController extends AbstractController {
   protected BiFunction<Supplier<String>, Consumer<String>, Command> getPortfolioValueCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser(supplier, consumer);
+      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
       return new PortfolioValueCommand(this.userModel, portfolioName, date, consumer);
     };
   }
@@ -200,7 +200,7 @@ public class TradingController extends AbstractController {
       String stockName = getStockNameFromUser(supplier, consumer);
 
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser(supplier, consumer);
+      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
       long quantity = getShareQuantityFromUser(supplier, consumer);
       return new BuyShareCommand(this.userModel, stockName, portfolioName, date, quantity,
               consumer);
