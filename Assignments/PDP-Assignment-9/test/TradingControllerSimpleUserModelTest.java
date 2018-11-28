@@ -39,23 +39,6 @@ public class TradingControllerSimpleUserModelTest extends ControllerModelTest {
   }
 
   @Test
-  public void creatingPortfolioWorks() {
-    Readable readable = new StringReader("1 p1 2 q");
-    Appendable appendable = new StringBuffer();
-    Controller controller = getController(readable, appendable);
-    controller.run();
-
-    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
-    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
-    expectedOutput.append(System.lineSeparator()).append("p1");
-    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
-    expectedOutput.append(System.lineSeparator());
-
-    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
-  }
-
-  @Test
   public void getCostBasisForPortfolio() {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 3 p1 2018-11-01 quit");
 
