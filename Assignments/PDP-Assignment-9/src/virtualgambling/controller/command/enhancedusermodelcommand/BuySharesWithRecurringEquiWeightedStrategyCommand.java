@@ -3,6 +3,7 @@ package virtualgambling.controller.command.enhancedusermodelcommand;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import util.Utils;
 import virtualgambling.model.EnhancedUserModel;
@@ -26,6 +27,7 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
    * @param endDate           the end date for the recurring investment
    * @param dayFrequency      the recurring interval
    * @param commission        the commission for each transaction
+   * @param consumer          the consumer to consume output of command
    * @throws IllegalArgumentException if any of the given params are null
    */
   public BuySharesWithRecurringEquiWeightedStrategyCommand(EnhancedUserModel enhancedUserModel,
@@ -35,7 +37,8 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
                                                            Date startDate,
                                                            Date endDate,
                                                            int dayFrequency,
-                                                           double commission)
+                                                           double commission,
+                                                           Consumer<String> consumer)
           throws IllegalArgumentException {
 
     super(enhancedUserModel,
@@ -45,7 +48,8 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
             startDate,
             endDate,
             dayFrequency,
-            commission);
+            commission,
+            consumer);
   }
 
   /**
@@ -58,6 +62,7 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
    * @param startDate         the start date for the recurring investment
    * @param dayFrequency      the recurring interval
    * @param commission        the commission for each transaction
+   * @param consumer          the consumer to consume output of command
    * @throws IllegalArgumentException if any of the given params are null
    */
   public BuySharesWithRecurringEquiWeightedStrategyCommand(EnhancedUserModel enhancedUserModel,
@@ -66,7 +71,8 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
                                                            Set<String> stocks,
                                                            Date startDate,
                                                            int dayFrequency,
-                                                           double commission)
+                                                           double commission,
+                                                           Consumer<String> consumer)
           throws IllegalArgumentException {
 
     super(enhancedUserModel,
@@ -75,6 +81,7 @@ public class BuySharesWithRecurringEquiWeightedStrategyCommand extends
             Utils.getStocksWithWeights(stocks),
             startDate,
             dayFrequency,
-            commission);
+            commission,
+            consumer);
   }
 }

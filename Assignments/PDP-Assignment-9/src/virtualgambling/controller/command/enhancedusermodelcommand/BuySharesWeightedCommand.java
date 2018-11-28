@@ -2,9 +2,12 @@ package virtualgambling.controller.command.enhancedusermodelcommand;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
@@ -19,6 +22,7 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
   private final BigDecimal amountToInvest;
   private final Strategy strategy;
   private final double commission;
+  private final Consumer<String> consumer;
 
   /**
    * Constructs a BuySharesWeightedCommand that take in a set of tickers and their associated
@@ -32,11 +36,13 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
    * @param dateOfPurchase the date of purchase for the stocks
    * @param stockWeights   map of ticker to stocks
    * @param commission     the commission for each transaction
+   * @param consumer       the consumer to consume output of command
    */
   public BuySharesWeightedCommand(EnhancedUserModel enhancedUserModel,
                                   String portfolioName, BigDecimal amountToInvest,
                                   Date dateOfPurchase,
-                                  Map<String, Double> stockWeights, double commission)
+                                  Map<String, Double> stockWeights, double commission,
+                                  Consumer<String> consumer)
 
           throws IllegalArgumentException {
 
@@ -45,10 +51,16 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
     this.amountToInvest = amountToInvest;
     this.strategy = new OneTimeWeightedInvestmentStrategy(dateOfPurchase, stockWeights);
     this.commission = commission;
+    this.consumer = consumer;
   }
 
   @Override
   public void execute() {
-    this.enhancedUserModel.buyShares(portfolioName, amountToInvest, strategy, commission);
+    List<SharePurchaseOrder> sharePurchaseOrders = this.enhancedUserModel.buyShares(portfolioName
+            , amountToInvest, strategy, commission);
+    for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+      this.consumer.accept(sharePurchaseOrder.toString());
+    }
+
   }
 }

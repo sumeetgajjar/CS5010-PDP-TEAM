@@ -3,6 +3,7 @@ package virtualgambling.controller.command.enhancedusermodelcommand;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import util.Utils;
 import virtualgambling.controller.command.Command;
@@ -23,17 +24,19 @@ public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
    * @param dateOfPurchase    the date of purchase for stocks
    * @param tickerNames       set of ticker names
    * @param commission        the commission for each transaction
+   * @param consumer          the consumer to consume output of command
    * @throws IllegalArgumentException if the given model is null
    */
   public BuySharesEquiWeightedCommand(EnhancedUserModel enhancedUserModel, String portfolioName,
                                       BigDecimal amountToInvest, Date dateOfPurchase,
-                                      Set<String> tickerNames, double commission)
+                                      Set<String> tickerNames, double commission,
+                                      Consumer<String> consumer)
           throws IllegalArgumentException {
     super(enhancedUserModel,
             portfolioName,
             amountToInvest,
             dateOfPurchase,
             Utils.getStocksWithWeights(Utils.requireNonNull(tickerNames)),
-            commission);
+            commission, consumer);
   }
 }

@@ -115,7 +115,8 @@ public class EnhancedTradingController extends TradingController {
                 startDate,
                 endDate,
                 recurringPeriod,
-                commission);
+                commission,
+                consumer);
       } else {
         return new BuySharesWithRecurringEquiWeightedStrategyCommand(
                 this.enhancedUserModel,
@@ -124,7 +125,8 @@ public class EnhancedTradingController extends TradingController {
                 shares,
                 startDate,
                 recurringPeriod,
-                commission);
+                commission,
+                consumer);
       }
     };
   }
@@ -151,7 +153,8 @@ public class EnhancedTradingController extends TradingController {
                 startDate,
                 endDate,
                 recurringPeriod,
-                commission);
+                commission,
+                consumer);
       } else {
         return new BuySharesWithRecurringWeightedStrategyCommand(
                 this.enhancedUserModel,
@@ -160,7 +163,8 @@ public class EnhancedTradingController extends TradingController {
                 sharePercentage,
                 startDate,
                 recurringPeriod,
-                commission);
+                commission,
+                consumer);
       }
     };
   }
@@ -202,7 +206,8 @@ public class EnhancedTradingController extends TradingController {
               amountToInvest,
               date,
               sharePercentage,
-              commission);
+              commission,
+              consumer);
     };
   }
 
@@ -221,7 +226,8 @@ public class EnhancedTradingController extends TradingController {
               amountToInvest,
               date,
               shares,
-              commission);
+              commission,
+              consumer);
     };
   }
 
