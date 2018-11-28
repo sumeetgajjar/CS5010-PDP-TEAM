@@ -14,7 +14,7 @@ import virtualgambling.view.TextView;
 /**
  * The class represents a Junit class to test Controller and Model.
  */
-public class TradingControllerUserModelTest extends ControllerModelTest {
+public class TradingControllerSimpleUserModelTest extends ControllerModelTest {
 
   @Before
   public void setUp() {
