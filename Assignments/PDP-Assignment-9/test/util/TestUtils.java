@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.EnhancedUserModelImpl;
@@ -15,6 +16,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
 import virtualgambling.model.stockdatasource.StockDataSource;
+import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 
 /**
  * This class represents set of util functions which can be used by any class for testing purposes.
@@ -159,6 +161,23 @@ public class TestUtils {
     @Override
     protected Date getTodayDate() {
       return mockedTodayDate;
+    }
+  }
+
+  public static class MockRecurringWeightedInvestmentStrategy extends RecurringWeightedInvestmentStrategy {
+    private Date mockedYesterdayDate;
+
+    // only constructor without explicit end date
+    public MockRecurringWeightedInvestmentStrategy(Date startDate,
+                                                   Map<String, Double> stockWeights,
+                                                   int dayFrequency, Date mockedYesterdayDate) {
+      super(startDate, stockWeights, dayFrequency);
+      this.mockedYesterdayDate = mockedYesterdayDate;
+    }
+
+    @Override
+    protected Date getDefaultEndDate() {
+      return this.mockedYesterdayDate;
     }
   }
 

@@ -817,6 +817,52 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
+  public void buyingWithRecurringStrategyAndSameWeightsWithoutEndDateWorks() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new TestUtils.MockRecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights, 30,
+                    endCalendar.getTime());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    for (double commission : Arrays.asList(0, 10)) {
+      List<SharePurchaseOrder> sharePurchaseOrders =
+              enhancedUserModel.buyShares(PORTFOLIO_P1,
+                      new BigDecimal(2000),
+                      recurringWeightedInvestmentStrategy, commission);
+      Assert.assertEquals(6, sharePurchaseOrders.size());
+
+      for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+        );
+        // individual cost cannot be more than 1000 since
+        Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
+                1000)) >= 0
+        );
+      }
+
+      Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+      Long expectedAAPLCount = individualShareCount.get("AAPL");
+      Assert.assertEquals(Long.valueOf(333), expectedAAPLCount);
+
+      Long expectedGOOGCount = individualShareCount.get("GOOG");
+      Assert.assertEquals(Long.valueOf(270), expectedGOOGCount);
+    }
+  }
+
+
+  @Test
   public void buyingWithRecurringStrategyAndSingleStockWorks() {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
 
@@ -871,6 +917,40 @@ public class EnhancedUserModelTest extends UserModelTest {
     endCalendar.set(2018, Calendar.NOVEMBER, 27);
     Strategy recurringWeightedInvestmentStrategy =
             new RecurringWeightedInvestmentStrategy(startCalendar.getTime(), stocksWeights, 30,
+                    endCalendar.getTime());
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+    for (double commission : Arrays.asList(0, 10)) {
+      List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
+              new BigDecimal(1000),
+              recurringWeightedInvestmentStrategy, commission);
+      Assert.assertEquals(6, sharePurchaseOrders.size());
+
+      Map<String, Long> individualShareCount = getIndividualShareCount(sharePurchaseOrders);
+      Long expectedAAPLCount = individualShareCount.get("AAPL");
+      Assert.assertEquals(Long.valueOf(264), expectedAAPLCount);
+
+      Long expectedGOOGCount = individualShareCount.get("GOOG");
+      Assert.assertEquals(Long.valueOf(54), expectedGOOGCount);
+    }
+  }
+
+  @Test
+  public void buyingWithRecurringStrategyAndDifferentWeightsWithoutEndWorks() {
+    EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 80.0D);
+    stocksWeights.put("GOOG", 20.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new TestUtils.MockRecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights, 30,
                     endCalendar.getTime());
 
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
