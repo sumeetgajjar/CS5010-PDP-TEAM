@@ -17,6 +17,7 @@ public class SharePurchaseOrder {
 
   public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity,
                             double commissionPercentage) {
+    // todo validate arguments
     this.tickerName = tickerName;
     this.unitPrice = unitPrice;
     this.date = date;
@@ -34,6 +35,11 @@ public class SharePurchaseOrder {
    */
   public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
     this(tickerName, unitPrice, date, quantity, 0D);
+  }
+
+  public SharePurchaseOrder(SharePurchaseOrder sharePurchaseOrder, double commissionPercentage) {
+    this(sharePurchaseOrder.getTickerName(), sharePurchaseOrder.getUnitPrice(),
+            sharePurchaseOrder.getDate(), sharePurchaseOrder.getQuantity(), commissionPercentage);
   }
 
   /**

@@ -32,4 +32,8 @@ public class RecurringWeightedInvestmentStrategy extends AbstractWeightedInvestm
   public List<SharePurchaseOrder> execute(BigDecimal amountToInvest) throws IllegalArgumentException {
     return null;
   }
+
+  protected Date getDefaultEndDate() {
+    return Utils.getYesterdayDate();
+  }
 }

@@ -24,11 +24,11 @@ import virtualgambling.model.stockdao.StockDAO;
  */
 public class SimpleUserModel implements UserModel {
 
-  private static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
+  protected static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
-  private final StockDAO stockDAO;
-  private final Map<String, Portfolio> portfolios;
-  private BigDecimal remainingCapital;
+  protected final StockDAO stockDAO;
+  protected final Map<String, Portfolio> portfolios;
+  protected BigDecimal remainingCapital;
 
   /**
    * Constructs a {@link SimpleUserModel} object with given params.
@@ -91,14 +91,25 @@ public class SimpleUserModel implements UserModel {
   public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
                                       long quantity) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException {
-    Utils.requireNonNull(tickerName);
-    this.checkSanity(portfolioName, date);
+    SharePurchaseOrder sharePurchaseOrder = createPurchaseOrder(tickerName, portfolioName, date,
+            quantity);
+    return processPurchaseOrder(portfolioName, sharePurchaseOrder);
+  }
 
-    SharePurchaseOrder sharePurchaseOrder = this.stockDAO.createPurchaseOrder(tickerName, quantity,
-            date, this.remainingCapital);
+  protected SharePurchaseOrder processPurchaseOrder(String portfolioName,
+                                                    SharePurchaseOrder sharePurchaseOrder) {
     addOrderToPortfolio(sharePurchaseOrder, portfolioName);
     this.remainingCapital = this.remainingCapital.subtract(sharePurchaseOrder.getCostOfPurchase());
     return sharePurchaseOrder;
+  }
+
+  protected SharePurchaseOrder createPurchaseOrder(String tickerName, String portfolioName,
+                                                   Date date, long quantity) {
+    Utils.requireNonNull(tickerName);
+    this.checkSanity(portfolioName, date);
+
+    return this.stockDAO.createPurchaseOrder(tickerName, quantity,
+            date, this.remainingCapital);
   }
 
   @Override
@@ -111,7 +122,7 @@ public class SimpleUserModel implements UserModel {
     return new Portfolio(portfolioName, stockDAO, sharePurchaseOrders);
   }
 
-  private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
+  protected void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
 
@@ -124,7 +135,7 @@ public class SimpleUserModel implements UserModel {
     }
   }
 
-  private void addOrderToPortfolio(SharePurchaseOrder sharePurchaseOrder, String portfolioName) {
+  protected void addOrderToPortfolio(SharePurchaseOrder sharePurchaseOrder, String portfolioName) {
     Portfolio portfolio = this.portfolios.get(portfolioName);
     ArrayList<SharePurchaseOrder> newSharePurchaseOrders =
             new ArrayList<>(portfolio.getPurchases());
