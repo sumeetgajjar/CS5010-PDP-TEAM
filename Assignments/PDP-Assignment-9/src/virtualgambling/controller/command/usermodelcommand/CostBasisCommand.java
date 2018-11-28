@@ -1,4 +1,4 @@
-package virtualgambling.controller.command;
+package virtualgambling.controller.command.usermodelcommand;
 
 import java.math.BigDecimal;
 import java.util.Date;

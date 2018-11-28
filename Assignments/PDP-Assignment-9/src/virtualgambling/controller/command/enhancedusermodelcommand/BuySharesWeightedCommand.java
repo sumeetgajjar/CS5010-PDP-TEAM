@@ -1,8 +1,9 @@
-package virtualgambling.controller.command;
+package virtualgambling.controller.command.enhancedusermodelcommand;
 
 import java.util.Date;
 import java.util.Map;
 
+import virtualgambling.controller.command.Command;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.model.strategy.WeightedInvestmentStrategy;
 

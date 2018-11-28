@@ -1,4 +1,4 @@
-package virtualgambling.controller.command;
+package virtualgambling.controller.command.usermodelcommand;
 
 import java.util.function.Consumer;
 import java.util.stream.Collectors;

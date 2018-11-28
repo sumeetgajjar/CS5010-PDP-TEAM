@@ -1,5 +1,6 @@
-package virtualgambling.controller.command;
+package virtualgambling.controller.command.usermodelcommand;
 
+import virtualgambling.controller.command.Command;
 import virtualgambling.model.UserModel;
 
 /**

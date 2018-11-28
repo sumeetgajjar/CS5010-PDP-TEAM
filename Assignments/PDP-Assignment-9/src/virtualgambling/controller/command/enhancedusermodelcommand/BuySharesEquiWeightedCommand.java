@@ -1,4 +1,4 @@
-package virtualgambling.controller.command;
+package virtualgambling.controller.command.enhancedusermodelcommand;
 
 import java.util.Date;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import util.Utils;
+import virtualgambling.controller.command.Command;
 
 /**
  * This class represents a Buy Share weighted command with the modification that each ticker has
