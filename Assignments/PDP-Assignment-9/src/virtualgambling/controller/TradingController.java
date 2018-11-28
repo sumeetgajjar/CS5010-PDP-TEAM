@@ -79,7 +79,7 @@ public class TradingController extends AbstractController {
           this.displayOnView(Constants.COMMAND_NOT_FOUND_MESSAGE);
         }
       } catch (NoSuchElementException e) {
-        this.displayOnView("Incomplete Command, please enter valid parameters");
+        this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
       } catch (IllegalArgumentException | InsufficientCapitalException |
               StockDataNotFoundException | PortfolioNotFoundException e) {
         this.displayOnView(e.getMessage());

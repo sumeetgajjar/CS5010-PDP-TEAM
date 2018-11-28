@@ -72,7 +72,7 @@ public class OrchestratorController extends AbstractController {
                                   AlphaVantageAPIStockDataSource.getInstance())), view);
           break;
         default:
-          this.displayOnView("Please type one of in-memory OR alpha-vantage-api");
+          this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
       }
 
       if (controller != null) {
