@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 import util.TestUtils;
 import util.Utils;
+import virtualgambling.controller.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.UserModel;
@@ -19,16 +20,27 @@ import virtualgambling.view.TextView;
  * The class represents a Junit class to test Controller and Model.
  */
 public class TradingControllerModelTest {
+
+  protected String getMenuStringOfController() {
+    return TestUtils.getMenuStringOfTradingController();
+  }
+
   @Test
   public void creatingPortfolioWorks() {
-    Readable readable = new StringReader("create_portfolio p1\ncreate_portfolio p2\n"
-            + "get_all_portfolios\nquit");
+    Readable readable = new StringReader("1 p1 2 q");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(),
-            new TextView(readable,
-                    appendable));
+            new TextView(readable, appendable));
     controller.run();
-    Assert.assertEquals(TestUtils.getWelcomeMessage() + "\np1\np2\n", appendable.toString());
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append("p1");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
@@ -109,38 +121,37 @@ public class TradingControllerModelTest {
 
   @Test
   public void getRemainingCapitalWorks() {
-    Readable readable = new StringReader("get_remaining_capital\ncreate_portfolio p1\n"
-            + "get_remaining_capital\nquit");
+    Readable readable = new StringReader("6 1 p1 6 q");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
     controller.run();
 
-    String expected =
-            TestUtils.getWelcomeMessage() + System.lineSeparator()
-                    + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
-                    + System.lineSeparator()
-                    + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
-                    + System.lineSeparator();
-    Assert.assertEquals(expected, appendable.toString());
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append("$10,000,000.00");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append("$10,000,000.00");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test
   public void commandNotFoundInformsUser() {
-    Readable readable = new StringReader("anything_random\nget_remaining_capital\nrandom_hello"
-            + "\nquit");
+    Readable readable = new StringReader("asd q");
     Appendable appendable = new StringBuffer();
     Controller controller = new TradingController(TestUtils.getMockedUserModel(), new TextView(
             readable, appendable));
     controller.run();
 
-    String expected = TestUtils.getWelcomeMessage() + System.lineSeparator()
-            + "Command not found, please try again" + System.lineSeparator()
-            + Utils.getFormattedCurrencyNumberString(TestUtils.DEFAULT_USER_CAPITAL)
-            + System.lineSeparator() + "Command not found, please try again"
-            + System.lineSeparator();
-    Assert.assertEquals(expected,
-            appendable.toString());
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMAND_NOT_FOUND_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
   @Test

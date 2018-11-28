@@ -127,6 +127,117 @@ public class TestUtils {
   }
 
   /**
+   * Returns the welcome message for the App.
+   *
+   * @return the welcome message for the App
+   */
+  public static String getWelcomeMessage1() {
+    return "" + System.lineSeparator() + ""
+            + "__        __   _                            _____      __     ___      _            "
+            + "   _   _____              _ _             " + System.lineSeparator() + ""
+            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
+            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
+            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
+            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
+            + ""
+            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
+            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
+            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
+            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
+            + System.lineSeparator() + ""
+            + "                                                                                    "
+            + "                                    |___/ "
+            + System.lineSeparator();
+  }
+
+  /**
+   * Returns the menu message of the OrchestratorController.
+   *
+   * @return the menu message of the OrchestratorController
+   */
+  public static String getMenuMessageOfOrchestrator() {
+    return "Please enter the data source option" + System.lineSeparator()
+            + "Enter 1 for 'in-memory" + System.lineSeparator()
+            + "Enter 2 for 'alpha-vantage-api";
+  }
+
+  /**
+   * Returns the menu message of Trading Controller.
+   *
+   * @return the menu message of Trading Controller
+   */
+  public static String getMenuStringOfTradingController() {
+    return "=================================================================================="
+            + System.lineSeparator()
+            + "1 => to create a portfolio"
+            + System.lineSeparator()
+            + "2 => to list all portfolios"
+            + System.lineSeparator()
+            + "3 => to get the cost basis of a portfolio"
+            + System.lineSeparator()
+            + "4 => to get the value of a portfolio"
+            + System.lineSeparator()
+            + "5 => to get the composition of a portfolio"
+            + System.lineSeparator()
+            + "6 => to get the remaining capital"
+            + System.lineSeparator()
+            + "7 => to buy shares"
+            + System.lineSeparator()
+            + "q or quit => to quit"
+            + System.lineSeparator()
+            + "Please enter a choice"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator();
+  }
+
+  /**
+   * Returns the menu message of the EnhanceTradingController.
+   *
+   * @return the menu message of the EnhanceTradingController
+   */
+  public static String getMenuMessageOfEnhanceTradingController() {
+    return "=================================================================================="
+            + System.lineSeparator()
+            + "1 => to create a portfolio"
+            + System.lineSeparator()
+            + "2 => to list all portfolios"
+            + System.lineSeparator()
+            + "3 => to get the cost basis of a portfolio"
+            + System.lineSeparator()
+            + "4 => to get the value of a portfolio"
+            + System.lineSeparator()
+            + "5 => to get the composition of a portfolio"
+            + System.lineSeparator()
+            + "6 => to get the remaining capital"
+            + System.lineSeparator()
+            + "7 => to buy shares of same stock"
+            + System.lineSeparator()
+            + "8 => to buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "9 => to buy shares of various stocks with equal weights"
+            + System.lineSeparator()
+            + "10 => to recurrently buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "11 => to recurrently buy shares of various stocks with same individual weights"
+            + System.lineSeparator()
+            + "q or quit => to quit"
+            + System.lineSeparator()
+            + "Please enter a choice"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator();
+  }
+
+  /**
    * Returns a valid date for trading, which is 1 Nov 2018.
    *
    * @return a valid date for trading which is 1 Nov 2018

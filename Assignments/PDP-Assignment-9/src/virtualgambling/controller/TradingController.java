@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -64,9 +63,7 @@ public class TradingController extends AbstractController {
     while (true) {
       try {
         this.displayOnView(getMenuString());
-        String inputFromView = getInputFromView();
-        Scanner scanner = new Scanner(inputFromView);
-        String commandString = scanner.next();
+        String commandString = getInputFromView();
 
         if (isQuitCommand(commandString)) {
           return;
@@ -79,7 +76,7 @@ public class TradingController extends AbstractController {
           Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
           command.execute();
         } else {
-          this.displayOnView("Command not found, please try again");
+          this.displayOnView(Constants.COMMAND_NOT_FOUND_MESSAGE);
         }
       } catch (NoSuchElementException e) {
         this.displayOnView("Incomplete Command, please enter valid parameters");

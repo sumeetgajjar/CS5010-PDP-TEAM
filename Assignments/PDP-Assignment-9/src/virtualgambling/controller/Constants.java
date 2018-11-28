@@ -30,4 +30,6 @@ public class Constants {
 
   public static final String SHARE_QUANTITY_MESSAGE =
           "Please enter the quantity of shares to purchase";
+
+  public static final String COMMAND_NOT_FOUND_MESSAGE = "Command not found, please try again";
 }
