@@ -1,11 +1,28 @@
 package virtualgambling.controller;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import virtualgambling.controller.command.Command;
+import virtualgambling.controller.command.enhancedusermodelcommand.BuyShareWithCommissionCommand;
+import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesEquiWeightedCommand;
+import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeightedCommand;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.view.View;
 
 public class EnhancedTradingController extends TradingController {
+
+  private final EnhancedUserModel enhancedUserModel;
+
   /**
-   * Constructs a object of {@link TradingController} with the given params.
+   * Constructs a object of {@link EnhancedTradingController} with the given params.
    *
    * @param enhancedUserModel the userModel
    * @param view              the view
@@ -13,5 +30,117 @@ public class EnhancedTradingController extends TradingController {
    */
   public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view) throws IllegalArgumentException {
     super(enhancedUserModel, view);
+    this.enhancedUserModel = enhancedUserModel;
+  }
+
+  @Override
+  protected Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+            new HashMap<>();
+
+    commandMap.put("1", getCreatePortfolioCommand());
+    commandMap.put("2", getGetAllPortfolioCommand());
+    commandMap.put("3", getCostBasisCommand());
+    commandMap.put("4", getPortfolioValueCommand());
+    commandMap.put("5", getGetCompositionCommand());
+    commandMap.put("6", getRemainingCapitalCommand());
+    commandMap.put("7", getBuySharesWithCommissionCommand());
+    commandMap.put("8", getBuySharesWithDifferentWeightsCommand());
+    commandMap.put("9", getBuySharesWithSameWeightsCommand());
+    commandMap.put("10", getBuySharesWithRecurringDifferentWeightsCommand());
+    commandMap.put("11", getBuySharesWithRecurringSameWeightsCommand());
+
+    return commandMap;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithCommissionCommand() {
+    return (supplier, consumer) -> {
+      String stockName = getStockNameFromUser(supplier, consumer);
+
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(supplier, consumer);
+      long quantity = getShareQuantityFromUser(supplier, consumer);
+      double commission = getDoubleInputFromUser(
+              "Please enter the commission per transaction", supplier, consumer);
+
+      return new BuyShareWithCommissionCommand(
+              this.enhancedUserModel,
+              stockName,
+              portfolioName,
+              date,
+              quantity,
+              commission,
+              consumer);
+    };
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithDifferentWeightsCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(supplier, consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              "Please enter the amount to invest", supplier, consumer);
+      Map<String, Double> shareWeights = getShareCountFromUser(supplier, consumer);
+      double commission = getDoubleInputFromUser(
+              "Please enter the commission per transaction", supplier, consumer);
+
+      return new BuySharesWeightedCommand(
+              this.enhancedUserModel,
+              portfolioName,
+              amountToInvest,
+              date,
+              shareWeights,
+              commission);
+    };
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithSameWeightsCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(supplier, consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              "Please enter the amount to invest", supplier, consumer);
+      Set<String> shares = getSharesFromUser(supplier, consumer);
+      double commission = getDoubleInputFromUser(
+              "Please enter the commission per transaction", supplier, consumer);
+
+      return new BuySharesEquiWeightedCommand(
+              this.enhancedUserModel,
+              portfolioName,
+              amountToInvest,
+              date,
+              shares,
+              commission);
+    };
+  }
+
+  private Set<String> getSharesFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    long tickerNameCount = getLongInputFromUser(
+            "Please enter the count of ticker names", supplier, consumer);
+
+    Set<String> stocks = new LinkedHashSet<>();
+    for (long i = 0; i < tickerNameCount; i++) {
+      String stockName = getStockNameFromUser(supplier, consumer);
+      stocks.add(stockName);
+    }
+    return stocks;
+  }
+
+  private Map<String, Double> getShareCountFromUser(Supplier<String> supplier,
+                                                    Consumer<String> consumer) {
+
+    long tickerNameCount = getLongInputFromUser(
+            "Please enter the count of ticker names", supplier, consumer);
+
+    Map<String, Double> stockWeights = new HashMap<>();
+
+    for (long i = 0; i < tickerNameCount; i++) {
+      String stockName = getStockNameFromUser(supplier, consumer);
+      double stockPercentage = getDoubleInputFromUser(
+              "Please enter the percentage of the stock", supplier, consumer);
+      stockWeights.put(stockName, stockPercentage);
+    }
+
+    return stockWeights;
   }
 }

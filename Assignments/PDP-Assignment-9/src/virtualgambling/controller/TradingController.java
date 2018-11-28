@@ -1,5 +1,7 @@
 package virtualgambling.controller;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +13,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import util.Utils;
-import virtualgambling.controller.command.usermodelcommand.BuyShareCommand;
 import virtualgambling.controller.command.Command;
+import virtualgambling.controller.command.usermodelcommand.BuyShareCommand;
 import virtualgambling.controller.command.usermodelcommand.CostBasisCommand;
 import virtualgambling.controller.command.usermodelcommand.CreatePortfolioCommand;
 import virtualgambling.controller.command.usermodelcommand.GetAllPortfolioCommand;
@@ -141,7 +143,7 @@ public class TradingController extends AbstractController {
             + System.lineSeparator();
   }
 
-  private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+  protected Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();
 
@@ -156,12 +158,12 @@ public class TradingController extends AbstractController {
     return commandMap;
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getRemainingCapitalCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getRemainingCapitalCommand() {
     return (supplier, consumer) ->
             new RemainingCapitalCommand(this.userModel, consumer);
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
@@ -169,14 +171,14 @@ public class TradingController extends AbstractController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getGetCompositionCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getGetCompositionCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       return new GetCompositionCommand(this.userModel, portfolioName, consumer);
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getPortfolioValueCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getPortfolioValueCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
@@ -184,20 +186,21 @@ public class TradingController extends AbstractController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getGetAllPortfolioCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getGetAllPortfolioCommand() {
     return (supplier, consumer) -> new GetAllPortfolioCommand(this.userModel, consumer);
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getCreatePortfolioCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getCreatePortfolioCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       return new CreatePortfolioCommand(this.userModel, portfolioName);
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesCommand() {
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesCommand() {
     return (supplier, consumer) -> {
       String stockName = getStockNameFromUser(supplier, consumer);
+
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
       long quantity = getShareQuantityFromUser(supplier, consumer);
@@ -206,33 +209,68 @@ public class TradingController extends AbstractController {
     };
   }
 
-  private String getStockNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    consumer.accept("Please enter the stock name to purchase");
+  protected long getShareQuantityFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getLongInputFromUser(
+            "Please enter the quantity of shares to purchase", supplier, consumer);
+  }
+
+  protected String getPortfolioNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getStringInputFromUser("Please enter the portfolio name", supplier, consumer);
+  }
+
+  protected String getStockNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getStringInputFromUser("Please enter the stock name to purchase", supplier, consumer);
+  }
+
+  protected String getStringInputFromUser(String message,
+                                          Supplier<String> supplier,
+                                          Consumer<String> consumer) {
+    consumer.accept(message);
     return supplier.get();
   }
 
-  private long getShareQuantityFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+  protected Date getDateFromUser(Supplier<String> supplier, Consumer<String> consumer) {
     while (true) {
       try {
-        consumer.accept("Please enter the quantity of shares to purchase");
-        return Long.parseLong(supplier.get());
+        String dateString = getStringInputFromUser("Please enter the date", supplier, consumer);
+        return Utils.getDateFromDefaultFormattedDateString(dateString);
+      } catch (ParseException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected long getLongInputFromUser(String messageToDisplay,
+                                      Supplier<String> supplier,
+                                      Consumer<String> consumer) {
+    while (true) {
+      try {
+        return Long.parseLong(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
         consumer.accept(e.getMessage());
       }
     }
   }
 
-  private String getPortfolioNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    consumer.accept("Please enter the portfolio name");
-    return supplier.get();
-  }
-
-  private Date getDateFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+  protected double getDoubleInputFromUser(String messageToDisplay,
+                                          Supplier<String> supplier,
+                                          Consumer<String> consumer) {
     while (true) {
       try {
-        consumer.accept("Please enter the date");
-        return Utils.getDateFromStringSupplier(supplier);
-      } catch (IllegalArgumentException e) {
+        return Double.parseDouble(getStringInputFromUser(messageToDisplay, supplier, consumer));
+      } catch (NumberFormatException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
+  protected BigDecimal getBigDecimalInputFromUser(String message,
+                                                  Supplier<String> supplier,
+                                                  Consumer<String> consumer) {
+    while (true) {
+      try {
+        return new BigDecimal(getStringInputFromUser(message, supplier, consumer));
+      } catch (NumberFormatException e) {
         consumer.accept(e.getMessage());
       }
     }
