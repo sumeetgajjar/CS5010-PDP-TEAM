@@ -79,7 +79,7 @@ public class TradingController extends AbstractController {
 
         if (Objects.nonNull(biFunction)) {
           Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
-          command.execute(this.userModel);
+          command.execute();
         } else {
           this.displayOnView("Command not found, please try again");
         }
@@ -158,21 +158,21 @@ public class TradingController extends AbstractController {
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getRemainingCapitalCommand() {
     return (supplier, consumer) ->
-            new RemainingCapitalCommand(consumer);
+            new RemainingCapitalCommand(this.userModel, consumer);
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
-      return new CostBasisCommand(portfolioName, date, consumer);
+      return new CostBasisCommand(this.userModel, portfolioName, date, consumer);
     };
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getGetCompositionCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      return new GetCompositionCommand(portfolioName, consumer);
+      return new GetCompositionCommand(this.userModel, portfolioName, consumer);
     };
   }
 
@@ -180,18 +180,18 @@ public class TradingController extends AbstractController {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
-      return new PortfolioValueCommand(portfolioName, date, consumer);
+      return new PortfolioValueCommand(this.userModel, portfolioName, date, consumer);
     };
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getGetAllPortfolioCommand() {
-    return (supplier, consumer) -> new GetAllPortfolioCommand(consumer);
+    return (supplier, consumer) -> new GetAllPortfolioCommand(this.userModel, consumer);
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getCreatePortfolioCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      return new CreatePortfolioCommand(portfolioName);
+      return new CreatePortfolioCommand(this.userModel, portfolioName);
     };
   }
 
@@ -201,7 +201,8 @@ public class TradingController extends AbstractController {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(supplier, consumer);
       long quantity = getShareQuantityFromUser(supplier, consumer);
-      return new BuyShareCommand(stockName, portfolioName, date, quantity, consumer);
+      return new BuyShareCommand(this.userModel, stockName, portfolioName, date, quantity,
+              consumer);
     };
   }
 
