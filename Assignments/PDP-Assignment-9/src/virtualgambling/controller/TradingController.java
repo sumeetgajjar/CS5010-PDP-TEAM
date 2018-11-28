@@ -64,6 +64,7 @@ public class TradingController extends AbstractController {
 
     while (true) {
       try {
+        this.displayOnView(getMenuString());
         String inputFromView = getInputFromView();
         Scanner scanner = new Scanner(inputFromView);
         String commandString = scanner.next();
@@ -108,12 +109,10 @@ public class TradingController extends AbstractController {
             + System.lineSeparator() + ""
             + "                                                                                    "
             + "                                    |___/ "
-            + System.lineSeparator()
-            + getMenuString()
             + System.lineSeparator();
   }
 
-  private String getMenuString() {
+  protected String getMenuString() {
     return "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
@@ -138,7 +137,8 @@ public class TradingController extends AbstractController {
             + System.lineSeparator()
             + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
             + System.lineSeparator()
-            + "==================================================================================";
+            + "=================================================================================="
+            + System.lineSeparator();
   }
 
   private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
