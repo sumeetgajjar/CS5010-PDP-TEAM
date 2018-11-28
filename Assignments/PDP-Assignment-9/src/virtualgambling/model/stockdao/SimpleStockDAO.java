@@ -5,7 +5,6 @@ import java.util.Date;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
-import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
@@ -27,17 +26,11 @@ public class SimpleStockDAO implements StockDAO {
   }
 
   @Override
-  public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date,
-                                                BigDecimal remainingCapital) throws
+  public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date) throws
           IllegalArgumentException, IllegalStateException {
-    Utils.requireNonNull(remainingCapital);
     BigDecimal stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
       throw new IllegalArgumentException("Quantity has to be positive");
-    }
-    BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
-    if (costOfPurchase.compareTo(remainingCapital) > 0) {
-      throw new InsufficientCapitalException("Insufficient funds");
     }
     return new SharePurchaseOrder(tickerName, stockPrice, date,
             quantity);

@@ -18,18 +18,16 @@ public interface StockDAO {
    * Allows a user to create a purchase order given the tickerName, quantity, date and
    * remainingCapital.
    *
-   * @param tickerName       the stock ticker name
-   * @param quantity         the quantity of the stock to purchase
-   * @param date             the date of purchase
-   * @param remainingCapital the remaining capital that the user has
+   * @param tickerName the stock ticker name
+   * @param quantity   the quantity of the stock to purchase
+   * @param date       the date of purchase
    * @return a share purchase order
    * @throws IllegalArgumentException if the arguments are null or if the quantity is 0 or if the
    *                                  date represents a day in the future or a weekend
    * @throws IllegalStateException    if the arguments are valid but the remainingCapital is not
    *                                  sufficient to create a valid order.
    */
-  SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date,
-                                         BigDecimal remainingCapital)
+  SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date)
           throws IllegalStateException, IllegalArgumentException, StockDataNotFoundException;
 
   /**

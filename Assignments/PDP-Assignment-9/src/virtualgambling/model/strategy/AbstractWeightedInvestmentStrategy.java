@@ -7,6 +7,8 @@ import java.util.Map;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.exceptions.StrategyExecutionException;
+import virtualgambling.model.stockdao.StockDAO;
 
 abstract class AbstractWeightedInvestmentStrategy implements Strategy {
   protected final Date startDate;
@@ -26,7 +28,7 @@ abstract class AbstractWeightedInvestmentStrategy implements Strategy {
   }
 
   @Override
-  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest) throws IllegalArgumentException {
+  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO) throws IllegalArgumentException, StrategyExecutionException {
     return null;
   }
 }

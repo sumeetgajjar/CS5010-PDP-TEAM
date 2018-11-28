@@ -98,8 +98,12 @@ public class SimpleUserModel implements UserModel {
 
   protected SharePurchaseOrder processPurchaseOrder(String portfolioName,
                                                     SharePurchaseOrder sharePurchaseOrder) {
+    BigDecimal costOfPurchase = sharePurchaseOrder.getCostOfPurchase();
+    if (costOfPurchase.compareTo(remainingCapital) > 0) {
+      throw new InsufficientCapitalException("Insufficient funds");
+    }
     addOrderToPortfolio(sharePurchaseOrder, portfolioName);
-    this.remainingCapital = this.remainingCapital.subtract(sharePurchaseOrder.getCostOfPurchase());
+    this.remainingCapital = this.remainingCapital.subtract(costOfPurchase);
     return sharePurchaseOrder;
   }
 
@@ -109,7 +113,7 @@ public class SimpleUserModel implements UserModel {
     this.checkSanity(portfolioName, date);
 
     return this.stockDAO.createPurchaseOrder(tickerName, quantity,
-            date, this.remainingCapital);
+            date);
   }
 
   @Override
