@@ -14,7 +14,7 @@ public abstract class AbstractEnhancedUserModelCommand implements Command {
   /**
    * Constructs a {@link AbstractEnhancedUserModelCommand} object with given params.
    *
-   * @param enhancedUserModel the user model
+   * @param enhancedUserModel the enhanced user model
    */
   protected AbstractEnhancedUserModelCommand(EnhancedUserModel enhancedUserModel) {
     this.enhancedUserModel = enhancedUserModel;
