@@ -142,7 +142,7 @@ public class TradingController extends AbstractController {
   protected BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       return new CostBasisCommand(this.userModel, portfolioName, date, consumer);
     };
   }
@@ -157,7 +157,7 @@ public class TradingController extends AbstractController {
   protected BiFunction<Supplier<String>, Consumer<String>, Command> getPortfolioValueCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       return new PortfolioValueCommand(this.userModel, portfolioName, date, consumer);
     };
   }
@@ -178,7 +178,7 @@ public class TradingController extends AbstractController {
       String stockName = getStockNameFromUser(supplier, consumer);
 
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       long quantity = getShareQuantityFromUser(supplier, consumer);
       return new BuyShareCommand(this.userModel, stockName, portfolioName, date, quantity,
               consumer);
@@ -186,16 +186,15 @@ public class TradingController extends AbstractController {
   }
 
   protected long getShareQuantityFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    return getLongInputFromUser(
-            "Please enter the quantity of shares to purchase", supplier, consumer);
+    return getLongInputFromUser(Constants.SHARE_QUANTITY_MESSAGE, supplier, consumer);
   }
 
   protected String getPortfolioNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    return getStringInputFromUser("Please enter the portfolio name", supplier, consumer);
+    return getStringInputFromUser(Constants.PORTFOLIO_NAME_MESSAGE, supplier, consumer);
   }
 
   protected String getStockNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    return getStringInputFromUser("Please enter the stock name to purchase", supplier, consumer);
+    return getStringInputFromUser(Constants.STOCK_NAME_MESSAGE, supplier, consumer);
   }
 
 }

@@ -55,6 +55,24 @@ abstract class AbstractController implements Controller {
     }
   }
 
+  protected Date getEndDateFromUser(String message, Supplier<String> supplier,
+                                    Consumer<String> consumer) {
+    while (true) {
+      try {
+        message = message + System.lineSeparator() + "Please press enter if there is not end date";
+        String dateString = getStringInputFromUser(message, supplier,
+                consumer);
+        if (dateString.isEmpty()) {
+          return null;
+        } else {
+          return Utils.getDateFromDefaultFormattedDateString(dateString);
+        }
+      } catch (ParseException e) {
+        consumer.accept(e.getMessage());
+      }
+    }
+  }
+
   protected long getLongInputFromUser(String messageToDisplay,
                                       Supplier<String> supplier,
                                       Consumer<String> consumer) {

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -97,27 +98,34 @@ public class EnhancedTradingController extends TradingController {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              "Please enter the amount to invest", supplier, consumer);
-
-      Date startDate = getDateFromUser("Please enter the start date for recurring investment",
-              supplier, consumer);
-      Date endDate = getDateFromUser("Please enter the end date for recurring investment",
-              supplier, consumer);
-      int recurringPeriod = getIntegerInputFromUser("Please the recurring interval",
+              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
+      Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
+      Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
+      int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
       Set<String> shares = getSharesFromUser(supplier, consumer);
-      double commission = getDoubleInputFromUser(
-              "Please enter the commission per transaction", supplier, consumer);
+      double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
-      return new BuySharesWithRecurringEquiWeightedStrategyCommand(
-              this.enhancedUserModel,
-              portfolioName,
-              amountToInvest,
-              shares,
-              startDate,
-              endDate,
-              recurringPeriod,
-              commission);
+      if (Objects.nonNull(endDate)) {
+        return new BuySharesWithRecurringEquiWeightedStrategyCommand(
+                this.enhancedUserModel,
+                portfolioName,
+                amountToInvest,
+                shares,
+                startDate,
+                endDate,
+                recurringPeriod,
+                commission);
+      } else {
+        return new BuySharesWithRecurringEquiWeightedStrategyCommand(
+                this.enhancedUserModel,
+                portfolioName,
+                amountToInvest,
+                shares,
+                startDate,
+                recurringPeriod,
+                commission);
+      }
     };
   }
 
@@ -126,27 +134,34 @@ public class EnhancedTradingController extends TradingController {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              "Please enter the amount to invest", supplier, consumer);
-
-      Date startDate = getDateFromUser("Please enter the start date for recurring investment",
-              supplier, consumer);
-      Date endDate = getDateFromUser("Please enter the end date for recurring investment",
-              supplier, consumer);
-      int recurringPeriod = getIntegerInputFromUser("Please the recurring interval",
+              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
+      Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
+      Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
+      int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
       Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
-      double commission = getDoubleInputFromUser(
-              "Please enter the commission per transaction", supplier, consumer);
+      double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
-      return new BuySharesWithRecurringWeightedStrategyCommand(
-              this.enhancedUserModel,
-              portfolioName,
-              amountToInvest,
-              sharePercentage,
-              startDate,
-              endDate,
-              recurringPeriod,
-              commission);
+      if (Objects.nonNull(endDate)) {
+        return new BuySharesWithRecurringWeightedStrategyCommand(
+                this.enhancedUserModel,
+                portfolioName,
+                amountToInvest,
+                sharePercentage,
+                startDate,
+                endDate,
+                recurringPeriod,
+                commission);
+      } else {
+        return new BuySharesWithRecurringWeightedStrategyCommand(
+                this.enhancedUserModel,
+                portfolioName,
+                amountToInvest,
+                sharePercentage,
+                startDate,
+                recurringPeriod,
+                commission);
+      }
     };
   }
 
@@ -155,10 +170,10 @@ public class EnhancedTradingController extends TradingController {
       String stockName = getStockNameFromUser(supplier, consumer);
 
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       long quantity = getShareQuantityFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(
-              "Please enter the commission per transaction", supplier, consumer);
+              Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       return new BuyShareWithCommissionCommand(
               this.enhancedUserModel,
@@ -174,12 +189,12 @@ public class EnhancedTradingController extends TradingController {
   private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              "Please enter the amount to invest", supplier, consumer);
+              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(
-              "Please enter the commission per transaction", supplier, consumer);
+              Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       return new BuySharesWeightedCommand(
               this.enhancedUserModel,
@@ -194,12 +209,11 @@ public class EnhancedTradingController extends TradingController {
   private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date date = getDateFromUser("Please enter the date for investment", supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              "Please enter the amount to invest", supplier, consumer);
+              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Set<String> shares = getSharesFromUser(supplier, consumer);
-      double commission = getDoubleInputFromUser(
-              "Please enter the commission per transaction", supplier, consumer);
+      double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       return new BuySharesEquiWeightedCommand(
               this.enhancedUserModel,
@@ -212,8 +226,8 @@ public class EnhancedTradingController extends TradingController {
   }
 
   private Set<String> getSharesFromUser(Supplier<String> supplier, Consumer<String> consumer) {
-    int tickerNameCount = getIntegerInputFromUser(
-            "Please enter the count of ticker names", supplier, consumer);
+    int tickerNameCount = getIntegerInputFromUser(Constants.STOCK_COUNT_MESSAGE, supplier,
+            consumer);
 
     Set<String> stocks = new LinkedHashSet<>();
     for (int i = 0; i < tickerNameCount; i++) {
@@ -226,15 +240,14 @@ public class EnhancedTradingController extends TradingController {
   private Map<String, Double> getSharePercentageFromUser(Supplier<String> supplier,
                                                          Consumer<String> consumer) {
 
-    int tickerNameCount = getIntegerInputFromUser(
-            "Please enter the count of ticker names", supplier, consumer);
-
+    int tickerNameCount = getIntegerInputFromUser(Constants.STOCK_COUNT_MESSAGE, supplier,
+            consumer);
     Map<String, Double> stockWeights = new HashMap<>();
 
     for (int i = 0; i < tickerNameCount; i++) {
       String stockName = getStockNameFromUser(supplier, consumer);
-      double stockPercentage = getDoubleInputFromUser(
-              "Please enter the percentage of the stock", supplier, consumer);
+      double stockPercentage = getDoubleInputFromUser(Constants.STOCK_PERCENTAGE_MESSAGE,
+              supplier, consumer);
       stockWeights.put(stockName, stockPercentage);
     }
 
