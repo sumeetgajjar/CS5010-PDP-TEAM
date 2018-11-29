@@ -35,4 +35,7 @@ public class Constants {
   public static final String COMMAND_NOT_FOUND_MESSAGE = "Command not found, please try again";
 
   public static final String INVALID_CHOICE_MESSAGE = "Invalid option, please enter valid option";
+
+  public static final String STRATEGY_EXECUTION_EXCEPTION_MESSAGE = "Unable to buy even a single " +
+          "stock";
 }
