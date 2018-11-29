@@ -223,7 +223,8 @@ public class ModelControllerViewWiringTest {
     expectedOutput.append(System.lineSeparator())
             .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(enhancedUserModel.getPortfolio("p1").toString());
 
     expectedOutput.append(System.lineSeparator())
             .append(TestUtils.getMenuMessageOfEnhanceTradingController());
