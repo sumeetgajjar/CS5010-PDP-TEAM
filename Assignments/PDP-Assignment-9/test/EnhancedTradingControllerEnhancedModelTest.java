@@ -321,6 +321,39 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   }
 
   @Test
+  public void buySharesWithDifferentWeightsButStockEnteredMultipleTimes() {
+    Readable readable = new StringReader(
+            "8 p1 2018-11-1 100000 3 GOOG 10 FB 30 GOOG 70 10 5 p1 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    for (int i = 0; i < 3; i++) {
+      expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+      expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    }
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 6363 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 750 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-01");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
   public void buySharesWithSameWeightsWithRecurrentStrategy() {
     Readable readable = new StringReader("11 p1 2018-11-1 2018-11-4 1 10000 2 AAPL GOOG 10 " +
             "5 p1 quit");
