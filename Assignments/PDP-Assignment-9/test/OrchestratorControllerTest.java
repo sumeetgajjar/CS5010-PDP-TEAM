@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -24,9 +25,11 @@ public class OrchestratorControllerTest {
       Controller controller = new OrchestratorController(view);
       controller.run();
 
-      StringBuilder expectedOutput = new StringBuilder(TestUtils.getWelcomeMessage1());
-      expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfOrchestrator());
-      expectedOutput.append(System.lineSeparator());
+      String expectedOutput =
+              TestUtils.getWelcomeMessage() + System.lineSeparator()
+                      + TestUtils.getMenuMessageOfOrchestrator() +
+                      System.lineSeparator();
+      Assert.assertEquals(expectedOutput, appendable.toString());
     }
   }
 
@@ -38,11 +41,12 @@ public class OrchestratorControllerTest {
     Controller controller = new OrchestratorController(view);
     controller.run();
 
-    StringBuilder expectedOutput = new StringBuilder(TestUtils.getWelcomeMessage1());
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfOrchestrator());
-    expectedOutput.append(System.lineSeparator()).append(Constants.INVALID_CHOICE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfOrchestrator());
-    expectedOutput.append(System.lineSeparator());
+    String expectedOutput =
+            TestUtils.getWelcomeMessage() + System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
+                    System.lineSeparator() + Constants.INVALID_CHOICE_MESSAGE +
+                    System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
+                    System.lineSeparator();
+    Assert.assertEquals(expectedOutput, appendable.toString());
   }
 
   @Test
@@ -54,11 +58,12 @@ public class OrchestratorControllerTest {
       Controller controller = new OrchestratorController(view);
       controller.run();
 
-      StringBuilder expectedOutput = new StringBuilder(TestUtils.getWelcomeMessage1());
-      expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfOrchestrator());
-      expectedOutput.append(System.lineSeparator())
-              .append(TestUtils.getMenuMessageOfEnhanceTradingController());
-      expectedOutput.append(System.lineSeparator());
+      String expectedOutput =
+              TestUtils.getWelcomeMessage() + System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
+                      System.lineSeparator() +
+                      TestUtils.getMenuMessageOfEnhanceTradingController() +
+                      System.lineSeparator();
+      Assert.assertEquals(expectedOutput, appendable.toString());
     }
   }
 }
