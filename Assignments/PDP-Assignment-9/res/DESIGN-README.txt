@@ -36,3 +36,22 @@ The design is such that the view is abstracted from the command - that is the co
 The controller in turn uses a Supplier that supplies inputs to the command and a consumer that accepts outputs from the command.
 
 We have tried our best to keep the design such that it remains generic and one that will require minimal changes in the future.
+
+Changes in UserModel
+1. returning a Portfolio bean instead of returning String from UserModel
+2. moved method get composition, get cost basis, get portfolio value to Portfolio
+
+Added EnhancedUserModel which extends UserModel.
+Abstracted Strategy out
+
+No change in Controller Design
+Added EnhancedTradingController which extends TradingController
+
+Added OrchestratorController which uses Controller chaining to select the data source initially,
+then hands controller to EnhancedTradingController.
+
+Removed UserModel as a param to execute() method in Command Interface,
+as the Command can now be executed on both UserModel and EnhancedUserModel.
+
+No change in the View Interface
+
