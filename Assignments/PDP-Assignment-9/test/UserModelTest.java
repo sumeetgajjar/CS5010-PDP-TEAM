@@ -14,6 +14,7 @@ import util.TestUtils;
 import util.Utils;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -655,6 +656,38 @@ public class UserModelTest {
     actualPortfolioNames =
             userModel.getAllPortfolios().stream().map(Portfolio::getName).collect(Collectors.toList());
     Assert.assertEquals(Arrays.asList("p1", "p2"), actualPortfolioNames);
+  }
+
+  @Test
+  public void getAllPortfoliosInAPortfolioIsUnmodifiable() {
+    UserModel userModel = TestUtils.getMockedUserModel();
+    userModel.createPortfolio("p1");
+
+    Share appleShare = getAppleShare();
+
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
+    Date day3 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day2 = calendar.getTime();
+
+    calendar.add(Calendar.DATE, -1);
+    Date day1 = calendar.getTime();
+
+    userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
+    userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
+    userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
+
+    Portfolio portfolio = userModel.getPortfolio("p1");
+    List<SharePurchaseOrder> purchases = portfolio.getPurchases();
+    try {
+      purchases.add(new SharePurchaseOrder("AAPL", new BigDecimal(100),
+              TestUtils.getValidDateForTrading(), 100));
+      Assert.fail("should have failed");
+    } catch (UnsupportedOperationException ignored) {
+
+    }
   }
 
   protected static Share getAppleShare() {
