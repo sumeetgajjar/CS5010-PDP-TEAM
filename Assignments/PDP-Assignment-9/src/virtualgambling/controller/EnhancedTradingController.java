@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import util.Utils;
 import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuyShareWithCommissionCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesEquiWeightedCommand;
@@ -40,7 +41,7 @@ public class EnhancedTradingController extends TradingController {
    */
   public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view) throws IllegalArgumentException {
     super(enhancedUserModel, view);
-    this.enhancedUserModel = enhancedUserModel;
+    this.enhancedUserModel = Utils.requireNonNull(enhancedUserModel);
   }
 
   @Override
