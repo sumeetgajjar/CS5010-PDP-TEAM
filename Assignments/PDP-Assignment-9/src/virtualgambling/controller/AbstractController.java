@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -41,7 +42,7 @@ abstract class AbstractController implements Controller {
   protected String getInputFromView() throws IllegalStateException {
     try {
       return view.getInput();
-    } catch (IOException e) {
+    } catch (IOException | NoSuchElementException e) {
       throw new IllegalStateException("Cannot get data from view");
     }
   }

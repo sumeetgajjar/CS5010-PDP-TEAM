@@ -1451,7 +1451,6 @@ public class EnhancedUserModelTest extends UserModelTest {
             new BigDecimal(1000),
             recurringWeightedInvestmentStrategy, 1);
     Assert.assertFalse(sharePurchaseOrders.isEmpty());
-    System.out.println(enhancedUserModel.getPortfolio(PORTFOLIO_P1).toString());
   }
 
   private BigDecimal getTotalCostOfPurchase(List<SharePurchaseOrder> sharePurchaseOrders) {

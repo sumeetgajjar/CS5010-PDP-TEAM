@@ -60,7 +60,6 @@ public class AlphaVantageAPIStockDataSourceTest {
     Date validDateForTrading = calendar.getTime();
     try {
       BigDecimal aapl = dataSource.getPrice("AAPL", validDateForTrading);
-      System.out.println(aapl);
       Assert.fail("should have failed");
     } catch (RuntimeException e) {
       Assert.assertTrue(e.getCause() instanceof StockDataNotFoundException);
