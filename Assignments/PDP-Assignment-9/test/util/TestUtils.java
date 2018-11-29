@@ -364,6 +364,18 @@ public class TestUtils {
           return new BigDecimal("20");
         case "T":
           return new BigDecimal("10");
+        case "ASC":
+          return new BigDecimal("50");
+        case "MSFT":
+          return new BigDecimal("60");
+        case "AMD":
+          return new BigDecimal("70");
+        case "EBAY":
+          return new BigDecimal("80");
+        case "QCOM":
+          return new BigDecimal("90");
+        case "MU":
+          return new BigDecimal("100");
       }
 
       throw new StockDataNotFoundException("Stock Data not found");

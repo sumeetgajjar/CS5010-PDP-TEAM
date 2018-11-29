@@ -8,7 +8,10 @@ public class Constants {
 
   public static final String INVESTMENT_AMOUNT_MESSAGE = "Please enter the amount to invest";
 
-  public static final String RECURRING_INTERVAL_MESSAGE = "Please the recurring interval";
+  public static final String RECURRING_INVESTMENT_AMOUNT_MESSAGE =
+          "Please enter the amount to invest recurrently";
+
+  public static final String RECURRING_INTERVAL_MESSAGE = "Please the recurring interval(in days)";
 
   public static final String COMMISSION_MESSAGE =
           "Please enter the commission percentage per transaction";
@@ -20,7 +23,8 @@ public class Constants {
   public static final String INVESTMENT_DATE_MESSAGE = "Please enter the date for investment";
 
   public static final String END_DATE_MESSAGE =
-          "Please enter the end date for recurring investment";
+          "Please enter the end date for recurring investment" +
+                  "(Please press enter \"-\" if there is no end date)";
 
   public final static String START_DATE_MESSAGE =
           "Please enter the start date for recurring investment";
