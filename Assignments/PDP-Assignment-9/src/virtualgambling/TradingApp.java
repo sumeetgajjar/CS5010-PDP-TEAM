@@ -17,12 +17,6 @@ import virtualgambling.view.View;
  */
 public class TradingApp {
 
-  /**
-   * Initializes the Model, View and Controller and start the application. Starts the
-   * SimpleTradingApp if the args[0] is equal to "1", else starts EnhancedTradingApp by default.
-   *
-   * @param args the args
-   */
   public static void main(String[] args) {
     runEnhancedTradingApp();
   }
