@@ -93,7 +93,8 @@ public class TradingController extends AbstractController {
   }
 
   protected String getMenuString() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()

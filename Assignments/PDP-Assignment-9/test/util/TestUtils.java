@@ -167,7 +167,8 @@ public class TestUtils {
    * @return the menu message of Trading Controller
    */
   public static String getMenuStringOfTradingController() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()
@@ -201,7 +202,8 @@ public class TestUtils {
    * @return the menu message of the EnhanceTradingController
    */
   public static String getMenuMessageOfEnhanceTradingController() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()
@@ -232,6 +234,9 @@ public class TestUtils {
             + "=================================================================================="
             + System.lineSeparator()
             + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "While buying multiple stocks, if same stock is entered multiple times then the " +
+            "latest input will considered"
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator();

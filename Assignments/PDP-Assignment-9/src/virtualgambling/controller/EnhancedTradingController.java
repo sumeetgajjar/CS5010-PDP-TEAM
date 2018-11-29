@@ -53,7 +53,8 @@ public class EnhancedTradingController extends TradingController {
 
   @Override
   protected String getMenuString() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()
@@ -84,6 +85,9 @@ public class EnhancedTradingController extends TradingController {
             + "=================================================================================="
             + System.lineSeparator()
             + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "While buying multiple stocks, if same stock is entered multiple times then the " +
+            "latest input will considered"
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator();
