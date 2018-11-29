@@ -1,7 +1,6 @@
 package virtualgambling.controller;
 
 import virtualgambling.model.EnhancedUserModelImpl;
-import virtualgambling.model.stockdao.DAOV2;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
@@ -68,7 +67,7 @@ public class OrchestratorController extends AbstractController {
         case "2":
           controller =
                   new EnhancedTradingController(new EnhancedUserModelImpl(
-                          new DAOV2(
+                          new SimpleStockDAO(
                                   AlphaVantageAPIStockDataSource.getInstance())), view);
           break;
         default:
