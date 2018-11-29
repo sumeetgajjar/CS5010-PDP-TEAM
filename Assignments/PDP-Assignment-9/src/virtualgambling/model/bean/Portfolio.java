@@ -63,11 +63,20 @@ public class Portfolio {
    * @return the costBasis of the given portfolio
    * @throws IllegalArgumentException if the given params are invalid
    */
-  public BigDecimal getCostBasis(Date date) {
+  public BigDecimal getCostBasisIncludingCommission(Date date) {
     this.checkSanity(date);
     return this.getPurchases().stream()
             .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
             .map(SharePurchaseOrder::getCostOfPurchase)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  public BigDecimal getCostBasisExcludingCommission(Date dateTime) {
+    this.checkSanity(dateTime);
+    return this.getPurchases().stream()
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(dateTime) <= 0)
+            .map(sharePurchaseOrder -> sharePurchaseOrder.getUnitPrice()
+                    .multiply(BigDecimal.valueOf(sharePurchaseOrder.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
@@ -108,35 +117,41 @@ public class Portfolio {
     Date dateTime = getTodayDate();
 
     StringBuilder composition = new StringBuilder();
-    composition.append(String.format("%-20s%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Quantity",
-            "Cost Price", "Current Value"));
+    composition.append(String.format("%-20s%-20s%-20s%-20s%-20s%s", "Buy Date", "Stocks",
+            "Quantity", "Cost Price", "Current Value", "Commission Percentage"));
     composition.append(System.lineSeparator());
     List<SharePurchaseOrder> purchases = this.getPurchases();
     for (SharePurchaseOrder sharePurchaseOrder : purchases) {
-      composition.append(String.format("%-20s%-20s%-20s%-20s%s",
+      composition.append(String.format("%-20s%-20s%-20s%-20s%-20s%s",
               Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getDate()),
               sharePurchaseOrder.getTickerName(),
               sharePurchaseOrder.getQuantity(),
               Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getUnitPrice()),
               Utils.getFormattedCurrencyNumberString(
-                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime))));
+                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime)),
+              String.valueOf(sharePurchaseOrder.getCommissionPercentage()))).append("%");
       composition.append(System.lineSeparator());
     }
 
     BigDecimal portfolioValue = getValue(dateTime);
-    BigDecimal costBasisOfPortfolio = getCostBasis(dateTime);
+    BigDecimal costBasisOfPortfolioWithCommission = getCostBasisIncludingCommission(dateTime);
+    BigDecimal costBasisOfPortfolioWithoutCommission = getCostBasisExcludingCommission(dateTime);
 
     composition.append(System.lineSeparator());
-    composition.append(String.format("%-20s%s", "Total Value:",
+    composition.append(String.format("%-50s%s", "Total Value:",
             Utils.getFormattedCurrencyNumberString(portfolioValue)));
     composition.append(System.lineSeparator());
 
-    composition.append(String.format("%-20s%s", "Total Cost:",
-            Utils.getFormattedCurrencyNumberString(costBasisOfPortfolio)));
+    composition.append(String.format("%-50s%s", "Total Cost (excluding commission):",
+            Utils.getFormattedCurrencyNumberString(costBasisOfPortfolioWithoutCommission)));
     composition.append(System.lineSeparator());
 
-    composition.append(String.format("%-20s%s", "Profit:",
-            Utils.getFormattedCurrencyNumberString(portfolioValue.subtract(costBasisOfPortfolio))));
+    composition.append(String.format("%-50s%s", "Total Cost (including commission):",
+            Utils.getFormattedCurrencyNumberString(costBasisOfPortfolioWithCommission)));
+    composition.append(System.lineSeparator());
+
+    composition.append(String.format("%-50s%s", "Profit:",
+            Utils.getFormattedCurrencyNumberString(portfolioValue.subtract(costBasisOfPortfolioWithCommission))));
     return composition.toString();
   }
 

@@ -447,7 +447,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(100), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -497,7 +497,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(3), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(330), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(300), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
@@ -533,7 +533,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day1), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day1), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(80), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(day1), 2));
 
@@ -549,7 +549,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(176), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day2), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day2), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(160), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(day2), 2));
 
@@ -572,7 +572,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(new BigDecimal(279.4)
                     .setScale(2, BigDecimal.ROUND_HALF_DOWN)
                     .stripTrailingZeros(),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(day3), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day3), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(254), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(day3), 2));
   }
@@ -601,7 +601,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(80), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -628,7 +628,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -653,7 +653,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(121), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
@@ -678,7 +678,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -702,7 +702,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(99), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasis(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(90), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }

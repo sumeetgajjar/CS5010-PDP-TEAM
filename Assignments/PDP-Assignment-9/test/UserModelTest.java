@@ -48,14 +48,16 @@ public class UserModelTest {
 
     Date date = new Date();
 
-    Assert.assertEquals("Buy Date            Stocks              Quantity            " +
-            "Cost Price  " +
-            "        Current Value\n" +
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value       Commission Percentage\n" +
             "\n" +
-            "Total Value:        $0.00\n" +
-            "Total Cost:         $0.00\n" +
-            "Profit:             $0.00", userModel.getPortfolio("test").toString());
-    Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolio("test").getCostBasis(date));
+            "Total Value:                                      $0.00\n" +
+            "Total Cost (excluding commission):                $0.00\n" +
+            "Total Cost (including commission):                $0.00\n" +
+            "Profit:                                           $0.00", userModel.getPortfolio(
+            "test").toString());
+    Assert.assertEquals(BigDecimal.ZERO,
+            userModel.getPortfolio("test").getCostBasisIncludingCommission(date));
     Assert.assertEquals(BigDecimal.ZERO, userModel.getPortfolio("test").getValue(date));
 
     Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
@@ -65,13 +67,14 @@ public class UserModelTest {
   public void createPortfolioWorks() {
     UserModel userModel = getUserModelWithSimpleStockDao();
     userModel.createPortfolio("Hello world");
-    Assert.assertEquals("Buy Date            Stocks              Quantity            " +
-            "Cost Price  " +
-            "        Current Value\n" +
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value       Commission Percentage\n" +
             "\n" +
-            "Total Value:        $0.00\n" +
-            "Total Cost:         $0.00\n" +
-            "Profit:             $0.00", userModel.getPortfolio("Hello world").toString());
+            "Total Value:                                      $0.00\n" +
+            "Total Cost (excluding commission):                $0.00\n" +
+            "Total Cost (including commission):                $0.00\n" +
+            "Profit:                                           $0.00", userModel.getPortfolio(
+            "Hello world").toString());
   }
 
   @Test
@@ -284,14 +287,14 @@ public class UserModelTest {
     userModel.buyShares(getAppleShare().getTickerName(), "p1", date, 1);
 
     try {
-      userModel.getPortfolio(null).getCostBasis(date);
+      userModel.getPortfolio(null).getCostBasisIncludingCommission(date);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
     }
 
     try {
-      userModel.getPortfolio("p1").getCostBasis(null);
+      userModel.getPortfolio("p1").getCostBasisIncludingCommission(null);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Invalid input", e.getMessage());
@@ -336,49 +339,56 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p3", date, 1);
     userModel.buyShares(googleShare.getTickerName(), "p2", date, 1);
 
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(10),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p1").getValue(date));
     String expectedApplePurchaseComposition = "Buy Date            Stocks              Quantity  " +
-            "          Cost Price          Current Value\n" +
+            "          Cost Price          Current Value       Commission Percentage\n" +
             "2018-11-01          AAPL                1                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $10.00\n" +
-            "Total Cost:         $10.00\n" +
-            "Profit:             $0.00";
+            "Total Value:                                      $10.00\n" +
+            "Total Cost (excluding commission):                $10.00\n" +
+            "Total Cost (including commission):                $10.00\n" +
+            "Profit:                                           $0.00";
 
     String expectedGooglePurchase = "Buy Date            Stocks              Quantity            " +
-            "Cost Price          Current Value\n" +
+            "Cost Price          Current Value       Commission Percentage\n" +
             "2018-11-01          GOOG                1                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $11.00\n" +
-            "Total Cost:         $11.00\n" +
-            "Profit:             $0.00";
+            "Total Value:                                      $11.00\n" +
+            "Total Cost (excluding commission):                $11.00\n" +
+            "Total Cost (including commission):                $11.00\n" +
+            "Profit:                                           $0.00";
     Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p1").toString());
 
-    Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(11),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(date));
     Assert.assertEquals(new BigDecimal(11), userModel.getPortfolio("p2").getValue(date));
     Assert.assertEquals(expectedGooglePurchase, userModel.getPortfolio("p2").toString());
 
-    Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(10),
+            userModel.getPortfolio("p3").getCostBasisIncludingCommission(date));
     Assert.assertEquals(new BigDecimal(10), userModel.getPortfolio("p3").getValue(date));
     Assert.assertEquals(expectedApplePurchaseComposition, userModel.getPortfolio("p3").toString());
 
     userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
-    Assert.assertEquals(new BigDecimal(20), userModel.getPortfolio("p1").getCostBasis(date));
+    Assert.assertEquals(new BigDecimal(20),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(date));
     Assert.assertEquals(new BigDecimal(20), userModel.getPortfolio("p1").getValue(date));
-    Assert.assertEquals("Buy Date            Stocks              Quantity            " +
-            "Cost Price  " +
-            "        Current Value\n" +
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value       Commission Percentage\n" +
             "2018-11-01          AAPL                1                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          AAPL                1                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $20.00\n" +
-            "Total Cost:         $20.00\n" +
-            "Profit:             $0.00", userModel.getPortfolio("p1").toString());
+            "Total Value:                                      $20.00\n" +
+            "Total Cost (excluding commission):                $20.00\n" +
+            "Total Cost (including commission):                $20.00\n" +
+            "Profit:                                           $0.00", userModel.getPortfolio("p1"
+    ).toString());
   }
 
   @Test
@@ -400,26 +410,30 @@ public class UserModelTest {
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p1").getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(30),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p1").getCostBasis(day2));
+    Assert.assertEquals(new BigDecimal(90),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p1").getCostBasis(day3));
-    Assert.assertEquals("Buy Date            Stocks              Quantity           " +
-            " Cost Price  " +
-            "        Current Value\n" +
+    Assert.assertEquals(new BigDecimal(140),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day3));
+    Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
+            "        Current Value       Commission Percentage\n" +
             "2018-10-30          AAPL                1                   $30.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-31          AAPL                3                   $20.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          AAPL                5                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $90.00\n" +
-            "Total Cost:         $140.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolio("p1").toString());
+            "Total Value:                                      $90.00\n" +
+            "Total Cost (excluding commission):                $140.00\n" +
+            "Total Cost (including commission):                $140.00\n" +
+            "Profit:                                           ($50.00)", userModel.getPortfolio(
+            "p1").toString());
   }
 
   @Test
@@ -443,79 +457,95 @@ public class UserModelTest {
     Date day1 = calendar.getTime();
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p1").getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(30),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p1").getCostBasis(day2));
+    Assert.assertEquals(new BigDecimal(90),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p1").getCostBasis(day3));
+    Assert.assertEquals(new BigDecimal(140),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day3));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day1, 1);
-    Assert.assertEquals(new BigDecimal(41), userModel.getPortfolio("p1").getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(41),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day1));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day2, 3);
-    Assert.assertEquals(new BigDecimal(134), userModel.getPortfolio("p1").getCostBasis(day2));
+    Assert.assertEquals(new BigDecimal(134),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day2));
 
     userModel.buyShares(googleShare.getTickerName(), "p1", day3, 5);
-    Assert.assertEquals(new BigDecimal(239), userModel.getPortfolio("p1").getCostBasis(day3));
+    Assert.assertEquals(new BigDecimal(239),
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day3));
     Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
-            "        Current Value\n" +
+            "        Current Value       Commission Percentage\n" +
             "2018-10-30          AAPL                1                   $30.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-31          AAPL                3                   $20.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          AAPL                5                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-30          GOOG                1                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-31          GOOG                3                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          GOOG                5                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $189.00\n" +
-            "Total Cost:         $239.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolio("p1").toString());
+            "Total Value:                                      $189.00\n" +
+            "Total Cost (excluding commission):                $239.00\n" +
+            "Total Cost (including commission):                $239.00\n" +
+            "Profit:                                           ($50.00)", userModel.getPortfolio(
+            "p1").toString());
 
 
     //////// portfolio 2 ///////
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day1, 1);
-    Assert.assertEquals(new BigDecimal(30), userModel.getPortfolio("p2").getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(30),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day1));
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day2, 3);
-    Assert.assertEquals(new BigDecimal(90), userModel.getPortfolio("p2").getCostBasis(day2));
+    Assert.assertEquals(new BigDecimal(90),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day2));
 
     userModel.buyShares(appleShare.getTickerName(), "p2", day3, 5);
-    Assert.assertEquals(new BigDecimal(140), userModel.getPortfolio("p2").getCostBasis(day3));
+    Assert.assertEquals(new BigDecimal(140),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day3));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day1, 1);
-    Assert.assertEquals(new BigDecimal(41), userModel.getPortfolio("p2").getCostBasis(day1));
+    Assert.assertEquals(new BigDecimal(41),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day1));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day2, 3);
-    Assert.assertEquals(new BigDecimal(134), userModel.getPortfolio("p2").getCostBasis(day2));
+    Assert.assertEquals(new BigDecimal(134),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day2));
 
     userModel.buyShares(googleShare.getTickerName(), "p2", day3, 5);
-    Assert.assertEquals(new BigDecimal(239), userModel.getPortfolio("p2").getCostBasis(day3));
+    Assert.assertEquals(new BigDecimal(239),
+            userModel.getPortfolio("p2").getCostBasisIncludingCommission(day3));
     Assert.assertEquals("Buy Date            Stocks              Quantity            Cost Price  " +
-            "        Current Value\n" +
+            "        Current Value       Commission Percentage\n" +
             "2018-10-30          AAPL                1                   $30.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-31          AAPL                3                   $20.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          AAPL                5                   $10.00              $10" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-30          GOOG                1                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-10-31          GOOG                3                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "2018-11-01          GOOG                5                   $11.00              $11" +
-            ".00\n" +
+            ".00              0.0%\n" +
             "\n" +
-            "Total Value:        $189.00\n" +
-            "Total Cost:         $239.00\n" +
-            "Profit:             ($50.00)", userModel.getPortfolio("p2").toString());
+            "Total Value:                                      $189.00\n" +
+            "Total Cost (excluding commission):                $239.00\n" +
+            "Total Cost (including commission):                $239.00\n" +
+            "Profit:                                           ($50.00)", userModel.getPortfolio(
+            "p2").toString());
   }
 
   @Test
@@ -591,19 +621,19 @@ public class UserModelTest {
     userModel.buyShares(appleShare.getTickerName(), "p1", day2, 1);
     userModel.buyShares(appleShare.getTickerName(), "p1", day3, 1);
 
-    BigDecimal dayOneValue = userModel.getPortfolio("p1").getCostBasis(day0);
+    BigDecimal dayOneValue = userModel.getPortfolio("p1").getCostBasisIncludingCommission(day0);
     Assert.assertEquals(BigDecimal.ZERO, dayOneValue);
 
     Assert.assertEquals(new BigDecimal("60"),
-            userModel.getPortfolio("p1").getCostBasis(day3));
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day3));
 
     Assert.assertEquals(new BigDecimal("50"),
-            userModel.getPortfolio("p1").getCostBasis(day2));
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day2));
 
     Assert.assertEquals(new BigDecimal("30"),
-            userModel.getPortfolio("p1").getCostBasis(day1));
+            userModel.getPortfolio("p1").getCostBasisIncludingCommission(day1));
     try {
-      userModel.getPortfolio("p1").getCostBasis(after100Years);
+      userModel.getPortfolio("p1").getCostBasisIncludingCommission(after100Years);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals("Time cannot be in Future", e.getMessage());
