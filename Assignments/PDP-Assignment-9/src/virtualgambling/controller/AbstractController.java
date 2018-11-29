@@ -20,7 +20,7 @@ abstract class AbstractController implements Controller {
   protected final View view;
 
   /**
-   * Constructor to be used by the derived class.
+   * Constructor to be invoked by the derived class.
    *
    * @param view the view
    * @throws IllegalArgumentException if the given view is null
