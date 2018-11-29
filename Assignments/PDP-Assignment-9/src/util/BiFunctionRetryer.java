@@ -31,8 +31,7 @@ public class BiFunctionRetryer<T, U, R> {
    *
    * @param param1 param of type T
    * @param param2 param of type U
-   * @return R after running {@link BiFunctionWithCheckedException} at most the number of times one
-   * needs to retry.
+   * @return R after running the function at most the number of times one needs to retry.
    * @throws RuntimeException wraps any exception thrown by {@link BiFunctionWithCheckedException}
    *                          and throws it
    * @throws RetryException   in case it fails to get results after retrying numRetries times
