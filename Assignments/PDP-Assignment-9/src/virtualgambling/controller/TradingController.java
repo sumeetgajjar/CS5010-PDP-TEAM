@@ -88,8 +88,7 @@ public class TradingController extends AbstractController {
       }
     } catch (NoSuchElementException e) {
       this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
-    } catch (IllegalArgumentException | InsufficientCapitalException |
-            StockDataNotFoundException | PortfolioNotFoundException | RetryException e) {
+    } catch (RuntimeException e){
       this.displayOnView(e.getMessage());
     }
   }
