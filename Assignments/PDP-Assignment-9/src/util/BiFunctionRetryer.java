@@ -73,9 +73,9 @@ public class BiFunctionRetryer<T, U, R> {
    * @param <R> the type of the result of the function
    */
   public static class RetryerBuilder<T, U, R> {
+    private final BiFunctionWithCheckedException<T, U, R> functionToRetry;
     private int numRetries;
     private int backOffSeconds;
-    private BiFunctionWithCheckedException<T, U, R> functionToRetry;
     private Class<? extends Throwable> exceptionClass;
 
     /**
@@ -109,18 +109,6 @@ public class BiFunctionRetryer<T, U, R> {
      */
     public RetryerBuilder<T, U, R> setNumRetries(int numRetries) {
       this.numRetries = numRetries;
-      return this;
-    }
-
-    /**
-     * Sets the function that needs to be retried by the retryer.
-     *
-     * @param functionToRetry the function that needs to be retried
-     * @return builder with functionToRetry set
-     */
-    public RetryerBuilder<T, U, R> setFunctionToRetry(
-            BiFunctionWithCheckedException<T, U, R> functionToRetry) {
-      this.functionToRetry = functionToRetry;
       return this;
     }
 
