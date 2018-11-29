@@ -106,8 +106,8 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
         BigDecimal price = stockDAO.getPrice(tickerName, dateOfPurchase);
         BigDecimal amountAvailableForThisStock = amountToInvest.multiply(BigDecimal.valueOf(
                 stockWeight
-                ).divide(
-                BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN)
+        )).divide(
+                BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN
         );
         long quantity =
                 amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValue();

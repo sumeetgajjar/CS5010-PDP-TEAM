@@ -61,7 +61,7 @@ public class OrchestratorController extends AbstractController {
         case "1":
           controller = new EnhancedTradingController(
                   new EnhancedUserModelImpl(
-                          new DAOV2(
+                          new SimpleStockDAO(
                                   new SimpleStockDataSource())), view);
           break;
         case "2":

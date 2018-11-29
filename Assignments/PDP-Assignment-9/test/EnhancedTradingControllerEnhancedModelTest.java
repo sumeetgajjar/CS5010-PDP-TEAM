@@ -283,16 +283,34 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
       expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     }
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 50 share(s) of 'NFLX' at a rate of $20.00 per stock on 2018-11-01");
+            .append("Purchased 100 share(s) of 'MSFT' at a rate of $60.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 272 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+            .append("Purchased 400 share(s) of 'NFLX' at a rate of $20.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 200 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+            .append("Purchased 80 share(s) of 'ASC' at a rate of $50.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 100 share(s) of 'T' at a rate of $10.00 per stock on 2018-11-01");
+            .append("Purchased 1272 share(s) of 'GOOG' at a rate of $11.00 per stock on " +
+                    "2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 25 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-01");
+            .append("Purchased 1500 share(s) of 'AAPL' at a rate of $10.00 per stock on " +
+                    "2018-11-01");
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 1000 share(s) of 'T' at a rate of $10.00 per stock on 2018-11-01");
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 137 share(s) of 'EBAY' at a rate of $80.00 per stock on 2018-11-01");
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 111 share(s) of 'QCOM' at a rate of $90.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 71 share(s) of 'AMD' at a rate of $70.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 70 share(s) of 'MU' at a rate of $100.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 250 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-01");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
