@@ -6,7 +6,7 @@ import virtualgambling.model.UserModel;
 
 /**
  * This class represents a Abstract Command which has a {@link UserModel}. It implements {@link
- * Command} interface.
+ * Command} interface. It minimize the effort required to implement {@link Command} interface.
  */
 public abstract class AbstractUserModelCommand implements Command {
 
