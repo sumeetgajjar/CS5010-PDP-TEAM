@@ -52,7 +52,7 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   );
 
   private static final LRUCache<String, NavigableMap<String, BigDecimal>> LRU_CACHE =
-          new LRUCache<>(2);
+          new LRUCache<>(20);
   private static final Random RANDOM = new Random();
   private static final String DISK_CACHE_ROOT_PATH = "StocksPriceCache";
 
@@ -119,13 +119,16 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
       Path cacheFilePath = getCacheFilePath(tickerName);
       if (Files.exists(cacheFilePath)) {
         NavigableMap<String, BigDecimal> timeStampMap = readDataFromDisk(cacheFilePath);
-        if (timeStampMap.containsKey(dateString)) {
+        Map.Entry<String, BigDecimal> lastEntry = timeStampMap.lastEntry();
+        Map.Entry<String, BigDecimal> firstEntry = timeStampMap.firstEntry();
+        if (lastEntry.getKey().compareTo(dateString) >= 0 ||
+                firstEntry.getKey().compareTo(dateString) <= 0) {
           addToLruCache(tickerName, timeStampMap);
           return true;
+
         }
       }
     }
-
     return false;
   }
 
