@@ -72,6 +72,12 @@ public class Portfolio {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
+  /**
+   * Returns the cost of basis of the portfolio at a given time excluding any commission cost.
+   *
+   * @param dateTime the date
+   * @return the cost basis of the portfolio
+   */
   public BigDecimal getCostBasisExcludingCommission(Date dateTime) {
     this.checkSanity(dateTime);
     return this.getPurchases().stream()
