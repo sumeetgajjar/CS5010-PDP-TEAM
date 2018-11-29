@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import util.LRUCache;
 import util.Utils;
+import virtualgambling.model.exceptions.AlphaVantageAPILimitExceeded;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -230,7 +231,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     if (header.equalsIgnoreCase("{")) {
       String message = reader.readLine();
       if (message.contains("Note")) {
-        throw new RuntimeException(String.format("API Limit exceeded: %s", message));
+        throw new AlphaVantageAPILimitExceeded(String.format("API Limit exceeded for key %s: %s",
+                this.getApiKey(),
+                message));
       }
       if (message.contains("Error")) {
         throw new StockDataNotFoundException("Stock Data Not found");
