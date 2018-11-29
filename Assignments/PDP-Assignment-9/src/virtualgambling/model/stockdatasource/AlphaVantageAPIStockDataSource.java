@@ -25,6 +25,7 @@ import java.util.TreeMap;
 
 import util.LRUCache;
 import util.Utils;
+import virtualgambling.model.exceptions.AlphaVantageAPILimitExceeded;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -51,7 +52,7 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   );
 
   private static final LRUCache<String, NavigableMap<String, BigDecimal>> LRU_CACHE =
-          new LRUCache<>(2);
+          new LRUCache<>(20);
   private static final Random RANDOM = new Random();
   private static final String DISK_CACHE_ROOT_PATH = "StocksPriceCache";
 
@@ -118,13 +119,16 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
       Path cacheFilePath = getCacheFilePath(tickerName);
       if (Files.exists(cacheFilePath)) {
         NavigableMap<String, BigDecimal> timeStampMap = readDataFromDisk(cacheFilePath);
-        if (timeStampMap.containsKey(dateString)) {
+        Map.Entry<String, BigDecimal> lastEntry = timeStampMap.lastEntry();
+        Map.Entry<String, BigDecimal> firstEntry = timeStampMap.firstEntry();
+        if (lastEntry.getKey().compareTo(dateString) >= 0 ||
+                firstEntry.getKey().compareTo(dateString) <= 0) {
           addToLruCache(tickerName, timeStampMap);
           return true;
+
         }
       }
     }
-
     return false;
   }
 
@@ -230,7 +234,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     if (header.equalsIgnoreCase("{")) {
       String message = reader.readLine();
       if (message.contains("Note")) {
-        throw new RuntimeException(String.format("API Limit exceeded: %s", message));
+        throw new AlphaVantageAPILimitExceeded(String.format("API Limit exceeded for key %s: %s",
+                this.getApiKey(),
+                message));
       }
       if (message.contains("Error")) {
         throw new StockDataNotFoundException("Stock Data Not found");
