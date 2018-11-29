@@ -146,11 +146,13 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
         NavigableMap<String, BigDecimal> timeStampMap = readDataFromDisk(cacheFilePath);
         Map.Entry<String, BigDecimal> lastEntry = timeStampMap.lastEntry();
         Map.Entry<String, BigDecimal> firstEntry = timeStampMap.firstEntry();
-        if (lastEntry.getKey().compareTo(dateString) >= 0 &&
-                firstEntry.getKey().compareTo(dateString) <= 0) {
-          addToLruCache(tickerName, timeStampMap);
-          return true;
+        if (Objects.nonNull(firstEntry) && Objects.nonNull(lastEntry)) {
+          if (lastEntry.getKey().compareTo(dateString) >= 0 &&
+                  firstEntry.getKey().compareTo(dateString) <= 0) {
+            addToLruCache(tickerName, timeStampMap);
+            return true;
 
+          }
         }
       }
     }
