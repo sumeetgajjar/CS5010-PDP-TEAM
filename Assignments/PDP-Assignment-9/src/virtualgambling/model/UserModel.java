@@ -25,6 +25,13 @@ public interface UserModel {
    */
   void createPortfolio(String portfolioName);
 
+  /**
+   * Gets the portfolio matching portfolioName.
+   *
+   * @param portfolioName name of the portfolio
+   * @return gets the portfolio matching portfolioName
+   * @throws PortfolioNotFoundException if the portfolio is not found
+   */
   Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException;
 
   /**
