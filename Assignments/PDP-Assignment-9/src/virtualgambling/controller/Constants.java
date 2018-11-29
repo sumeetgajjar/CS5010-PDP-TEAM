@@ -24,7 +24,7 @@ public class Constants {
 
   public static final String END_DATE_MESSAGE =
           "Please enter the end date for recurring investment" +
-                  "(Please press enter if there is no end date)";
+                  "(Please press enter \"-\" if there is no end date)";
 
   public final static String START_DATE_MESSAGE =
           "Please enter the start date for recurring investment";

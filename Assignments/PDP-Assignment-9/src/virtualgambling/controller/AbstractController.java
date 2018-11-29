@@ -61,7 +61,7 @@ abstract class AbstractController implements Controller {
       try {
         String dateString = getStringInputFromUser(message, supplier,
                 consumer);
-        if (dateString.isEmpty()) {
+        if (dateString.equalsIgnoreCase("-")) {
           return null;
         } else {
           return Utils.getDateFromDefaultFormattedDateString(dateString);
