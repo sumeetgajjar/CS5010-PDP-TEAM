@@ -36,6 +36,10 @@ allows us to scale our design.
 10. Our previous design helped us a lot in that we merely had to implement a new StockDataSource - AlphaVantageAPIStockDataSource
 and it worked out of the box with our design.
 
+11. The controller now exposes commands (without changes to the public API) in a more user friendly manner
+(allows the user to execute commands step by step).
+In the previous design, we were sending the commands in a single line like in a terminal.
+
 Internal implementation changes: (Changes that do not affect the clients of the models, views, or controllers)
 We are now using an immutable data class - StockPrice instead of returning BigDecimal from the StockDataSource, and StockDAO.
 This change allows us to maintain data locality since any stock price has to have an associated date.
