@@ -394,7 +394,8 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
+                    new SimpleStockDAO(new SimpleStockDataSource()));
 
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
@@ -418,7 +419,8 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
+                    new SimpleStockDAO(new SimpleStockDataSource()));
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
@@ -610,7 +612,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(88), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(80), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 

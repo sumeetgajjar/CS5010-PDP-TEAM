@@ -142,7 +142,8 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     return null;
   }
 
-  private boolean addDataToLRUCacheFromDisk(String tickerName, String dateString) throws IOException {
+  private boolean addDataToLRUCacheFromDisk(String tickerName, String dateString)
+          throws IOException {
     Path cachePath = getCacheFolderPath(tickerName);
     if (Files.isDirectory(cachePath)) {
       Path cacheFilePath = getCacheFilePath(tickerName);
@@ -296,6 +297,11 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     return API_KEYS.get(this.apiKeyIndex++ % API_KEYS.size());
   }
 
+  /**
+   * Returns the Singleton instance of AlphaVantageAPIStockDataSource class.
+   *
+   * @return the Singleton instance of AlphaVantageAPIStockDataSource class.
+   */
   public static AlphaVantageAPIStockDataSource getInstance() {
     if (Objects.isNull(HOLDER)) {
       synchronized (AlphaVantageAPIStockDataSource.class) {
