@@ -274,6 +274,51 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   }
 
   @Test
+  public void incompleteBuySharesWithStrategyForPortfolioAsksToRetry() {
+    Readable readable = new StringReader("1 p1 11 p1 2018-10 2018-10-30 2018-10 2018-10-30 a 1 a " +
+            "10000 a 1 AAPL a 10 3 p1 2018-11-01 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-10\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-10\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input");
+    expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 333 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("$10,989.00");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
   public void buySharesWithSameWeights() {
     Readable readable = new StringReader("1 p1 9 p1 2018-11-1 10000 2 AAPL GOOG 10 5 p1 quit");
 

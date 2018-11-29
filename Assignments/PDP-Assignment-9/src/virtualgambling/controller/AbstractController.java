@@ -127,7 +127,7 @@ abstract class AbstractController implements Controller {
       try {
         return new BigDecimal(getStringInputFromUser(message, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept("Unparseable Input");
       }
     }
   }
