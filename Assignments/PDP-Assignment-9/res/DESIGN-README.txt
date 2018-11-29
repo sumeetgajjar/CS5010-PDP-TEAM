@@ -1,3 +1,50 @@
+Changes and enhancements to the previous design:
+
+1. We are now returning a Portfolio bean instead of returning Strings from UserModel:
+Justification: In order to incorporate feedback from the CodeWalk, our design now returns an
+immutable portfolio instead of strings. The portfolio has no setters and hence is safe with any client.
+
+2. moved method get composition, get cost basis, get portfolio value to Portfolio
+Moved all state describing methods of individual portfolio into the Portfolio class
+
+3. We have added EnhancedUserModel which extends UserModel according to the open close principle
+and adds methods that allow the user to buy shares by specifying commission percentage and another
+method that allows the user to buy using a strategy.
+
+4. Implemented strategy interface that has a single method by the name of execute - this is the strategy that is passed
+to the enhanced user model. Strategy#execute takes in the amount to invest per transaction that is executed by the strategy.
+
+There are then two implementations of the strategy - OneTimeWeightedInvestmentStrategy that extends the RecurringWeightedInvestmentStrategy.
+These implementations are initialized with the date and stock weights in terms of a map of tickerName (String) -> Double.
+
+5. The previous controllers and views have no changes to their public design.
+
+6. We added a new EnhancedTradingController which extends TradingController and constraints the user to buy stocks with commission (possibly 0)
+and adds a new feature that allows the user to buy stocks using strategies, according to our previous Command Design Pattern, we
+add new Commands to buy stocks using a strategy, since the model is generic and takes a map of ticker names to weights (percentage allocation),
+here we have 2 separate commands for equi-weighted strategy and allocations with unequal weights.
+
+7. The controllers now extend an abstract controller that shares the common logic of interacting with the view.
+
+8. We have added an OrchestratorController which uses Controller chaining to select the data source initially,
+then hands control to EnhancedTradingController.
+
+9. Our commands change in the sense that we removed UserModel as a param to execute() method in Command Interface,
+as the Command can now be executed on both UserModel and EnhancedUserModel. This makes the command free of any dependencies and
+allows us to scale our design.
+
+10. Our previous design helped us a lot in that we merely had to implement a new StockDataSource - AlphaVantageAPIStockDataSource
+and it worked out of the box with our design.
+
+Internal implementation changes: (Changes that do not affect the clients of the models, views, or controllers)
+We are now using an immutable data class - StockPrice instead of returning BigDecimal from the StockDataSource, and StockDAO.
+This change allows us to maintain data locality since any stock price has to have an associated date.
+
+Utility features added:
+1. We added an LRUCache in utils package that acts as an LRU Cache in order to save time on expensive API calls.
+2. We have added a BiFunctionRetryer that takes in any BiFunction and then follows the Builder pattern in order to
+allow the client of the class to perform retries to operations in a clean manner.
+
 Our application uses the Model-View-Controller architecture in order to implement a virtual trading application.
 
 According to the assignment description, the user can create and examine portfolios, get cost and value of a portfolio
@@ -36,22 +83,3 @@ The design is such that the view is abstracted from the command - that is the co
 The controller in turn uses a Supplier that supplies inputs to the command and a consumer that accepts outputs from the command.
 
 We have tried our best to keep the design such that it remains generic and one that will require minimal changes in the future.
-
-Changes in UserModel
-1. returning a Portfolio bean instead of returning String from UserModel
-2. moved method get composition, get cost basis, get portfolio value to Portfolio
-
-Added EnhancedUserModel which extends UserModel.
-Abstracted Strategy out
-
-No change in Controller Design
-Added EnhancedTradingController which extends TradingController
-
-Added OrchestratorController which uses Controller chaining to select the data source initially,
-then hands controller to EnhancedTradingController.
-
-Removed UserModel as a param to execute() method in Command Interface,
-as the Command can now be executed on both UserModel and EnhancedUserModel.
-
-No change in the View Interface
-
