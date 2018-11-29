@@ -26,7 +26,7 @@ import java.util.TreeMap;
 import util.BiFunctionRetryer;
 import util.LRUCache;
 import util.Utils;
-import virtualgambling.model.exceptions.AlphaVantageAPILimitExceededException;
+import virtualgambling.model.exceptions.APILimitExceededException;
 import virtualgambling.model.exceptions.RetryException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
@@ -66,7 +66,7 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
           new BiFunctionRetryer.RetryerBuilder<>(this::execute)
                   .setNumRetries(10)
                   .setBackOffSeconds(1)
-                  .setExceptionClass(AlphaVantageAPILimitExceededException.class)
+                  .setExceptionClass(APILimitExceededException.class)
                   .createRetryer();
 
   private AlphaVantageAPIStockDataSource() {
@@ -261,7 +261,7 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     if (header.equalsIgnoreCase("{")) {
       String message = reader.readLine();
       if (message.contains("Note")) {
-        throw new AlphaVantageAPILimitExceededException(String.format("API Limit exceeded for key" +
+        throw new APILimitExceededException(String.format("API Limit exceeded for key" +
                         " %s: %s",
                 this.getApiKey(),
                 message));
