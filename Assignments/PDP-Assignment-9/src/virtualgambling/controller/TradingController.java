@@ -21,6 +21,7 @@ import virtualgambling.controller.command.usermodelcommand.RemainingCapitalComma
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.RetryException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
@@ -87,7 +88,7 @@ public class TradingController extends AbstractController {
     } catch (NoSuchElementException e) {
       this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
     } catch (IllegalArgumentException | InsufficientCapitalException |
-            StockDataNotFoundException | PortfolioNotFoundException e) {
+            StockDataNotFoundException | PortfolioNotFoundException | RetryException e) {
       this.displayOnView(e.getMessage());
     }
   }

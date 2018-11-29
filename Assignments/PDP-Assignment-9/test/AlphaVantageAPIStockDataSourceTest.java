@@ -8,7 +8,6 @@ import java.util.Date;
 
 import util.TestUtils;
 import util.Utils;
-import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
@@ -33,7 +32,7 @@ public class AlphaVantageAPIStockDataSourceTest {
     Assert.assertEquals(new BigDecimal("174.62"), closePriceOn26Nov.stripTrailingZeros());
   }
 
-  @Test(expected = StockDataNotFoundException.class)
+  @Test(expected = RuntimeException.class)
   public void aFutureDayFails() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2118, Calendar.NOVEMBER, 22);
