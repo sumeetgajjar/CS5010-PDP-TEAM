@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Objects;
+import java.util.Random;
 import java.util.TreeMap;
 
 import util.LRUCache;
@@ -36,16 +37,27 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
   private static final List<String> API_KEYS = Arrays.asList(
-          "AOHAEN4D9GAK0UA3"
+          "AOHAEN4D9GAK0UA3",
+          "K9IVD1LFU0ADK7DM",
+          "GAS2GCX0FS3P1W2Q",
+          "5BRAHEABQTTA26CY",
+          "PUWAH0GSXGEZAGYR",
+          "9CHRB2XSF3MPTUS4",
+          "P5JQNGLDVSKL2NC8",
+          "R5GZNGO7Z7RCI2YS",
+          "4ZJVHW1GTDQUUP6H",
+          "98GZ1P3QGTJ9AN5F",
+          "7C6VFPULZK6DO30H"
   );
 
   private static final LRUCache<String, NavigableMap<String, BigDecimal>> LRU_CACHE =
           new LRUCache<>(2);
+  private static final Random RANDOM = new Random();
   private static final String DISK_CACHE_ROOT_PATH = "StocksPriceCache";
 
   private static AlphaVantageAPIStockDataSource HOLDER;
 
-  private int apiKeyIndex = 0;
+  private int apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
 
   private AlphaVantageAPIStockDataSource() {
 
