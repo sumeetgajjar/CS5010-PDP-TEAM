@@ -611,4 +611,220 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
+
+  @Test
+  public void buySameSharesMultipleTimesUsingStrategyInSamePortfolio() {
+    Readable readable = new StringReader("1 p1 " +
+            "9 p1 2018-11-1 10000 2 AAPL GOOG 10 " +
+            "9 p1 2018-11-14 10000 2 AAPL GOOG 10 " +
+            "5 p1 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-14");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
+  public void buySameSharesMultipleTimesUsingStrategyInDifferentPortfolio() {
+    Readable readable = new StringReader("1 p1 " +
+            "9 p1 2018-11-1 10000 2 AAPL GOOG 10 " +
+            "9 p2 2018-11-14 10000 2 AAPL GOOG 10 " +
+            "5 p1 5 p2 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p2").toString());
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
+  public void buyDifferentSharesMultipleTimesUsingStrategyInSamePortfolio() {
+    Readable readable = new StringReader("1 p1 " +
+            "9 p1 2018-11-1 10000 2 AAPL GOOG 10 " +
+            "9 p1 2018-11-14 10000 2 T FB 10 " +
+            "5 p1 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'T' at a rate of $10.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 125 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
+  public void buyDifferentSharesMultipleTimesUsingStrategyInDifferentPortfolio() {
+    Readable readable = new StringReader("1 p1 " +
+            "9 p1 2018-11-1 10000 2 AAPL GOOG 10 " +
+            "9 p2 2018-11-14 10000 2 T FB 10 " +
+            "5 p1 5 p2 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 500 share(s) of 'T' at a rate of $10.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator())
+            .append("Purchased 125 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-14");
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p2").toString());
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
 }
