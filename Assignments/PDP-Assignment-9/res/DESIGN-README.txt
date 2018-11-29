@@ -15,7 +15,7 @@ Justification: Now a command interface is not coupled to UserModel.
 
 The previous controllers and views have no changes to their public API.
 
-Enhancements to the previous design:
+Enhancements to the Trading App:
 
 1. We have added EnhancedUserModel which extends UserModel according to the open close principle
 and adds methods that allow the user to buy shares by specifying commission percentage and another
