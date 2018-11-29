@@ -1,9 +1,9 @@
 package virtualgambling.model.stockdao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -40,6 +40,6 @@ public interface StockDAO {
    *                                    the future or a weekend
    * @throws StockDataNotFoundException if the stock price at the given date is not found
    */
-  BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+  StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException,
           IllegalArgumentException;
 }

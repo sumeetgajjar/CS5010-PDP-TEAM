@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.StockDAO;
 
@@ -103,18 +104,22 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
       for (Map.Entry<String, Double> tickerAndAmount : this.stockWeights.entrySet()) {
         String tickerName = tickerAndAmount.getKey();
         Double stockWeight = tickerAndAmount.getValue();
-        BigDecimal price = stockDAO.getPrice(tickerName, dateOfPurchase);
+        StockPrice stockPrice = stockDAO.getPrice(tickerName, dateOfPurchase);
         BigDecimal amountAvailableForThisStock = amountToInvest.multiply(BigDecimal.valueOf(
                 stockWeight
         )).divide(
                 BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN
         );
         long quantity =
-                amountAvailableForThisStock.divide(price, BigDecimal.ROUND_DOWN).longValue();
+                amountAvailableForThisStock.divide(stockPrice.getUnitPrice(),
+                        BigDecimal.ROUND_DOWN).longValue();
         if (quantity <= 0) {
           break;
         }
-        purchaseOrders.add(stockDAO.createPurchaseOrder(tickerName, quantity, dateOfPurchase));
+        SharePurchaseOrder purchaseOrder = stockDAO.createPurchaseOrder(tickerName, quantity,
+                dateOfPurchase);
+        calendar.setTime(purchaseOrder.getStockPrice().getDate());
+        purchaseOrders.add(purchaseOrder);
       }
       if (purchaseOrders.size() == this.stockWeights.size()) {
         // add only if all orders could be executed

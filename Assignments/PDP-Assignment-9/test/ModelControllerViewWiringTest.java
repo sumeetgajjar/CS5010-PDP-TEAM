@@ -17,6 +17,7 @@ import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -308,7 +309,7 @@ public class ModelControllerViewWiringTest {
       this.log.append(System.lineSeparator());
       this.log.append(tickerName).append(portfolioName).append(date).append(quantity);
       this.log.append(System.lineSeparator());
-      return new SharePurchaseOrder(tickerName, BigDecimal.TEN, date, 11);
+      return new SharePurchaseOrder(tickerName, new StockPrice(BigDecimal.TEN, date), 11);
     }
   }
 
@@ -338,7 +339,8 @@ public class ModelControllerViewWiringTest {
       this.log.append(tickerName).append(portfolioName).append(date).append(quantity).append(commissionPercentage);
       this.log.append(System.lineSeparator());
 
-      return new SharePurchaseOrder("AAPL", BigDecimal.TEN, TestUtils.getValidDateForTrading(),
+      return new SharePurchaseOrder("AAPL", new StockPrice(BigDecimal.TEN,
+              TestUtils.getValidDateForTrading()),
               11, 10);
     }
 
@@ -352,8 +354,8 @@ public class ModelControllerViewWiringTest {
       this.log.append(portfolioName).append(amountToInvest).append(commissionPercentage);
       this.log.append(System.lineSeparator());
 
-      return Collections.singletonList(new SharePurchaseOrder("AAPL", BigDecimal.TEN,
-              TestUtils.getValidDateForTrading(),
+      return Collections.singletonList(new SharePurchaseOrder("AAPL", new StockPrice(BigDecimal.TEN,
+              TestUtils.getValidDateForTrading()),
               11, 10));
     }
   }

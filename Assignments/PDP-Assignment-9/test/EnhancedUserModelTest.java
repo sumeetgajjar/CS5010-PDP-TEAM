@@ -762,7 +762,7 @@ public class EnhancedUserModelTest extends UserModelTest {
             getValidStrategy(), commission);
 
     for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-      BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getUnitPrice().multiply(
+      BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
               BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
       );
       Assert.assertNotEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase());
@@ -790,7 +790,7 @@ public class EnhancedUserModelTest extends UserModelTest {
             getValidStrategy(), commission);
 
     for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-      BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getUnitPrice().multiply(
+      BigDecimal unitPriceIntoQuantity = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
               BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
       );
 
@@ -825,7 +825,8 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+        BigDecimal costOfPurchaseWithoutCommission =
+                sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
                 BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
         );
         // individual cost cannot be more than 1000 since
@@ -870,7 +871,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
                 BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
         );
         // individual cost cannot be more than 1000 since
@@ -922,7 +923,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(3, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
                 BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
         );
         // individual cost cannot be more than 1000 since
@@ -1381,7 +1382,7 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getUnitPrice().multiply(
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
                 BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
         );
         // individual cost cannot be more than 1000 since

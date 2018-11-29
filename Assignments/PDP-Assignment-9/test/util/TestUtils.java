@@ -12,6 +12,7 @@ import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
@@ -273,7 +274,7 @@ public class TestUtils {
   public static class MockDataSource implements StockDataSource {
 
     @Override
-    public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+    public StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException {
       switch (tickerName) {
         case "AAPL":
           Calendar calendar = Utils.getCalendarInstance();
@@ -281,58 +282,58 @@ public class TestUtils {
           calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
           Date day3 = calendar.getTime();
           if (Utils.doesDatesHaveSameDay(date, day3)) {
-            return BigDecimal.TEN;
+            return new StockPrice(BigDecimal.TEN, date);
           }
 
           calendar.add(Calendar.DATE, -1);
           Date day2 = calendar.getTime();
           if (Utils.doesDatesHaveSameDay(date, day2)) {
-            return new BigDecimal(20);
+            return new StockPrice(new BigDecimal(20), date);
           }
 
           calendar.add(Calendar.DATE, -1);
           Date day1 = calendar.getTime();
           if (Utils.doesDatesHaveSameDay(date, day1)) {
-            return new BigDecimal(30);
+            return new StockPrice(new BigDecimal(30), date);
           }
 
           calendar.set(2018, Calendar.NOVEMBER, 24);
           if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new BigDecimal(1000);
+            return new StockPrice(new BigDecimal(1000), date);
           }
 
           calendar.set(2018, Calendar.OCTOBER, 24);
           if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new BigDecimal(100);
+            return new StockPrice(new BigDecimal(100), date);
           }
 
           calendar.set(2018, Calendar.SEPTEMBER, 24);
           if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new BigDecimal(10);
+            return new StockPrice(new BigDecimal(10), date);
           } else {
-            return new BigDecimal(2000);
+            return new StockPrice(new BigDecimal(2000), date);
           }
 
         case "GOOG":
-          return new BigDecimal("11");
+          return new StockPrice(new BigDecimal("11"), date);
         case "FB":
-          return new BigDecimal("40");
+          return new StockPrice(new BigDecimal("40"), date);
         case "NFLX":
-          return new BigDecimal("20");
+          return new StockPrice(new BigDecimal("20"), date);
         case "T":
-          return new BigDecimal("10");
+          return new StockPrice(new BigDecimal("10"), date);
         case "ASC":
-          return new BigDecimal("50");
+          return new StockPrice(new BigDecimal("50"), date);
         case "MSFT":
-          return new BigDecimal("60");
+          return new StockPrice(new BigDecimal("60"), date);
         case "AMD":
-          return new BigDecimal("70");
+          return new StockPrice(new BigDecimal("70"), date);
         case "EBAY":
-          return new BigDecimal("80");
+          return new StockPrice(new BigDecimal("80"), date);
         case "QCOM":
-          return new BigDecimal("90");
+          return new StockPrice(new BigDecimal("90"), date);
         case "MU":
-          return new BigDecimal("100");
+          return new StockPrice(new BigDecimal("100"), date);
       }
 
       throw new StockDataNotFoundException("Stock Data not found");
