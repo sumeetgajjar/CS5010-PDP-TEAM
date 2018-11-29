@@ -9,7 +9,7 @@ public class Constants {
   public static final String INVESTMENT_AMOUNT_MESSAGE = "Please enter the amount to invest";
 
   public static final String RECURRING_INVESTMENT_AMOUNT_MESSAGE =
-          "Please enter the amount to invest recurrently";
+          "Please enter the amount to invest in each recurring transaction";
 
   public static final String RECURRING_INTERVAL_MESSAGE = "Please the recurring interval(in days)";
 

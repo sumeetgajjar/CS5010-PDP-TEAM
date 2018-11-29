@@ -12,14 +12,16 @@ import virtualgambling.model.exceptions.RetryException;
  */
 public class BiFunctionRetryer<T, U, R> {
   private final int numRetries;
+  private final int backOffSeconds;
   private final BiFunctionWithCheckedException<T, U, R> functionToRetry;
   private final Class<? extends Throwable> exceptionClass;
 
   private BiFunctionRetryer(
           int numRetries,
-          BiFunctionWithCheckedException<T, U, R> functionToRetry,
+          int backOffSeconds, BiFunctionWithCheckedException<T, U, R> functionToRetry,
           Class<? extends Throwable> exceptionClass) {
     this.numRetries = numRetries;
+    this.backOffSeconds = backOffSeconds;
     this.functionToRetry = functionToRetry;
     this.exceptionClass = exceptionClass;
   }
@@ -35,13 +37,15 @@ public class BiFunctionRetryer<T, U, R> {
    *                          and throws it
    * @throws RetryException   in case it fails to get results after retrying numRetries times
    */
-  public R retry(T param1, U param2) throws RuntimeException, RetryException {
+  public R retry(T param1, U param2) throws RuntimeException, RetryException, InterruptedException {
     for (int i = 0; i < numRetries; i++) {
       try {
         return functionToRetry.apply(param1, param2);
       } catch (Throwable e) {
         if (!exceptionClass.isInstance(e)) {
           throw new RuntimeException(e);
+        } else {
+          Thread.sleep(this.backOffSeconds * 1000);
         }
       }
     }
@@ -70,8 +74,14 @@ public class BiFunctionRetryer<T, U, R> {
    */
   public static class RetryerBuilder<T, U, R> {
     private int numRetries;
+    private int backOffSeconds;
     private BiFunctionWithCheckedException<T, U, R> functionToRetry;
     private Class<? extends Throwable> exceptionClass;
+
+    public RetryerBuilder<T, U, R> setBackOffSeconds(int backOffSeconds) {
+      this.backOffSeconds = backOffSeconds;
+      return this;
+    }
 
     public RetryerBuilder<T, U, R> setNumRetries(int numRetries) {
       this.numRetries = numRetries;
@@ -90,7 +100,7 @@ public class BiFunctionRetryer<T, U, R> {
     }
 
     public BiFunctionRetryer<T, U, R> createRetryer() {
-      return new BiFunctionRetryer<>(numRetries, functionToRetry, exceptionClass);
+      return new BiFunctionRetryer<>(numRetries, backOffSeconds, functionToRetry, exceptionClass);
     }
   }
 }
