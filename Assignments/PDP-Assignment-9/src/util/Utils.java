@@ -146,12 +146,22 @@ public class Utils {
     return calendar;
   }
 
+  /**
+   * Returns the yesterday's date.
+   *
+   * @return the yesterday's date
+   */
   public static Date getYesterdayDate() {
     Calendar calendar = getCalendarInstance();
     calendar.add(Calendar.DATE, -1);
     return calendar.getTime();
   }
 
+  /**
+   * Returns today's date.
+   *
+   * @return today's date
+   */
   public static Date getTodayDate() {
     return getCalendarInstance().getTime();
   }
