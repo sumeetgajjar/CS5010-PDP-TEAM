@@ -18,6 +18,7 @@ import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeig
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.exceptions.AlphaVantageAPILimitExceeded;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.view.View;
 
@@ -46,6 +47,8 @@ public class EnhancedTradingController extends TradingController {
   protected void executeCommand(String commandString) {
     try {
       super.executeCommand(commandString);
+    } catch (AlphaVantageAPILimitExceeded e) {
+      this.displayOnView("Error in Fetching stock data from API, please retry after 5 minutes");
     } catch (StrategyExecutionException e) {
       this.displayOnView(e.getMessage());
     }
