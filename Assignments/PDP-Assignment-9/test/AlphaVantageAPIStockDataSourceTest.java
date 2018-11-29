@@ -8,6 +8,7 @@ import java.util.Date;
 
 import util.TestUtils;
 import util.Utils;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
@@ -32,11 +33,16 @@ public class AlphaVantageAPIStockDataSourceTest {
     Assert.assertEquals(new BigDecimal("174.62"), closePriceOn26Nov.stripTrailingZeros());
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test
   public void aFutureDayFails() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2118, Calendar.NOVEMBER, 22);
-    dataSource.getPrice("AAPL", calendar.getTime());
+    try {
+      dataSource.getPrice("AAPL", calendar.getTime());
+      Assert.fail("should have failed");
+    } catch (RuntimeException e) {
+      Assert.assertTrue(e.getCause() instanceof StockDataNotFoundException);
+    }
   }
 
   @Test
@@ -45,5 +51,19 @@ public class AlphaVantageAPIStockDataSourceTest {
     BigDecimal aaplPrice = dataSource.getPrice("AAPL", validDateForTrading);
     BigDecimal expectedAAPLClosingPrice = new BigDecimal("222.2200");
     Assert.assertEquals(expectedAAPLClosingPrice, aaplPrice);
+  }
+
+  @Test
+  public void reallyOldDateFails() {
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.set(Calendar.YEAR, 1900);
+    Date validDateForTrading = calendar.getTime();
+    try {
+      BigDecimal aapl = dataSource.getPrice("AAPL", validDateForTrading);
+      System.out.println(aapl);
+      Assert.fail("should have failed");
+    } catch (RuntimeException e) {
+      Assert.assertTrue(e.getCause() instanceof StockDataNotFoundException);
+    }
   }
 }
