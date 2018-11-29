@@ -403,4 +403,41 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
+
+
+  @Test
+  public void buySharesWithInsufficientInvestmentAmountFails() {
+    Readable readable = new StringReader(
+            "8 p1 2018-11-1 10 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 5 p1 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_EXECUTION_EXCEPTION_MESSAGE);
+
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
 }
