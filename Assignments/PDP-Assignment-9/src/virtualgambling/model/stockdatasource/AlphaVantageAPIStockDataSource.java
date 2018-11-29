@@ -36,8 +36,10 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
  * {@link AlphaVantageAPIStockDataSource} is a {@link StockDataSource} that fetches stock data from
  * the Alpha Vantage API.
  *
- * <p> This implementation is a singleton and the only way to get an instance of this data source
+ * <p>This implementation is a singleton and the only way to get an instance of this data source
  * is to use the {@link AlphaVantageAPIStockDataSource#getInstance()} method.
+ *
+ * <p>The stock price that is returned is the closing price of the stock for a given day.
  */
 public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
