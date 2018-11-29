@@ -115,8 +115,8 @@ public class EnhancedTradingController extends TradingController {
     return commandMap;
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getBuySharesWithRecurringSameWeightsCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
@@ -153,8 +153,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getBuySharesWithRecurringDifferentWeightsCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getBuySharesWithRecurringDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
@@ -191,8 +191,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getBuySharesWithCommissionCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getBuySharesWithCommissionCommand() {
     return (supplier, consumer) -> {
       String stockName = getStockNameFromUser(supplier, consumer);
 
@@ -213,8 +213,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getBuySharesWithDifferentWeightsCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getBuySharesWithDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
@@ -235,8 +235,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getBuySharesWithSameWeightsCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getBuySharesWithSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
