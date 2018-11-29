@@ -44,6 +44,24 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   }
 
   @Test
+  public void invalidParamsGivenToEnhanceTradingControllerFails() {
+    try {
+      new EnhancedTradingController(null,
+              new TextView(new StringReader(""), System.out));
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+
+    try {
+      new EnhancedTradingController(this.enhancedUserModel, null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals("Invalid input", e.getMessage());
+    }
+  }
+
+  @Test
   public void buySharesWithCommissionWorks() {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 10 3 p1 2018-11-01 quit");
 
@@ -342,7 +360,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
 
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 6363 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+            .append("Purchased 6363 share(s) of 'GOOG' at a rate of $11.00 per stock on " +
+                    "2018-11-01");
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 750 share(s) of 'FB' at a rate of $40.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());

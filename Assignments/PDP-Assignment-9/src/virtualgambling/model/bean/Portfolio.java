@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import util.Utils;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.StockDAO;
 
 /**
@@ -22,10 +23,12 @@ public class Portfolio {
    * Constructs a Object of {@link Portfolio} with the given name.
    *
    * @param name the name of the portfolio.
+   * @throws IllegalArgumentException if any of the given params are null
    */
-  public Portfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases) {
-    this.name = name;
-    this.stockDAO = stockDAO;
+  public Portfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases)
+          throws IllegalArgumentException {
+    this.name = Utils.requireNonNull(name);
+    this.stockDAO = Utils.requireNonNull(stockDAO);
     this.purchases = Utils.requireNonNull(purchases);
   }
 
@@ -47,6 +50,19 @@ public class Portfolio {
     return Collections.unmodifiableList(this.purchases);
   }
 
+  /**
+   * Returns the costBasis of this portfolio at the given date. It throws {@link
+   * IllegalArgumentException} in the following cases.
+   * <ul>
+   * <li>If any of the given param is null</li>
+   * <li>If the given portfolio does not exists</li>
+   * <li>If the given date is greater than current date</li>
+   * </ul>
+   *
+   * @param date the date
+   * @return the costBasis of the given portfolio
+   * @throws IllegalArgumentException if the given params are invalid
+   */
   public BigDecimal getCostBasis(Date date) {
     this.checkSanity(date);
     return this.getPurchases().stream()
@@ -55,6 +71,20 @@ public class Portfolio {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
+  /**
+   * Returns the total value of this portfolio at the given date. It throws {@link
+   * IllegalArgumentException} in the following cases.
+   * <ul>
+   * <li>If any of the given param is null</li>
+   * <li>If the given portfolio does not exists</li>
+   * <li>If the given date is greater than current date</li>
+   * </ul>
+   *
+   * @param date the date
+   * @return the total value of the portfolio
+   * @throws StockDataNotFoundException if the data is not found for the given date
+   * @throws IllegalArgumentException   if the given params are invalid
+   */
   public BigDecimal getValue(Date date) {
     this.checkSanity(date);
     BigDecimal totalPortfolioValue = BigDecimal.ZERO;

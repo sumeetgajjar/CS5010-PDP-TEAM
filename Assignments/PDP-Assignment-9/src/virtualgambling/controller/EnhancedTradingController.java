@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import util.Utils;
 import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuyShareWithCommissionCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesEquiWeightedCommand;
@@ -18,6 +19,7 @@ import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeig
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.exceptions.AlphaVantageAPILimitExceeded;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.view.View;
 
@@ -39,13 +41,15 @@ public class EnhancedTradingController extends TradingController {
    */
   public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view) throws IllegalArgumentException {
     super(enhancedUserModel, view);
-    this.enhancedUserModel = enhancedUserModel;
+    this.enhancedUserModel = Utils.requireNonNull(enhancedUserModel);
   }
 
   @Override
   protected void executeCommand(String commandString) {
     try {
       super.executeCommand(commandString);
+    } catch (AlphaVantageAPILimitExceeded e) {
+      this.displayOnView("Error in Fetching stock data from API, please retry after 5 minutes");
     } catch (StrategyExecutionException e) {
       this.displayOnView(e.getMessage());
     }
@@ -53,7 +57,8 @@ public class EnhancedTradingController extends TradingController {
 
   @Override
   protected String getMenuString() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()
@@ -84,6 +89,9 @@ public class EnhancedTradingController extends TradingController {
             + "=================================================================================="
             + System.lineSeparator()
             + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "While buying multiple stocks, if same stock is entered multiple times then the " +
+            "latest input will considered"
             + System.lineSeparator()
             + "=================================================================================="
             + System.lineSeparator();

@@ -29,7 +29,7 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
    * weights.
    *
    * <p>The constructor will throw an IllegalArgumentException if any of the parameters are null
-   * or if the weights do not sum up to 1.
+   * or if the weights do not sum up to 100.
    *
    * @param portfolioName  the portfolio name
    * @param amountToInvest the amount to invest

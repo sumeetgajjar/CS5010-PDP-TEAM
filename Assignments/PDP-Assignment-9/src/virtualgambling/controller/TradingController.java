@@ -30,6 +30,7 @@ import virtualgambling.view.View;
  * Controller} interface.
  */
 public class TradingController extends AbstractController {
+
   private final UserModel userModel;
   private final Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap;
 
@@ -94,7 +95,8 @@ public class TradingController extends AbstractController {
   }
 
   protected String getMenuString() {
-    return "=================================================================================="
+    return System.lineSeparator()
+            + "=================================================================================="
             + System.lineSeparator()
             + "1 => to create a portfolio"
             + System.lineSeparator()

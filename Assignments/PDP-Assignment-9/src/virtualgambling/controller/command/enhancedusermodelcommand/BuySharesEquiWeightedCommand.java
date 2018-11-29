@@ -6,12 +6,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import util.Utils;
-import virtualgambling.controller.command.Command;
 import virtualgambling.model.EnhancedUserModel;
 
 /**
  * This class represents a Buy Share weighted command with the modification that each ticker has
- * equal weight. It implements the {@link Command} interface.
+ * equal weight. It extends the {@link BuySharesWeightedCommand} class.
  */
 public class BuySharesEquiWeightedCommand extends BuySharesWeightedCommand {
   /**
