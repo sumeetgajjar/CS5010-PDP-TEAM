@@ -18,6 +18,7 @@ import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeig
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.view.View;
 
 public class EnhancedTradingController extends TradingController {
@@ -34,6 +35,15 @@ public class EnhancedTradingController extends TradingController {
   public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view) throws IllegalArgumentException {
     super(enhancedUserModel, view);
     this.enhancedUserModel = enhancedUserModel;
+  }
+
+  @Override
+  protected void executeCommand(String commandString) {
+    try {
+      super.executeCommand(commandString);
+    } catch (StrategyExecutionException e) {
+      this.displayOnView(e.getMessage());
+    }
   }
 
   @Override

@@ -30,6 +30,7 @@ import virtualgambling.view.View;
  */
 public class TradingController extends AbstractController {
   private final UserModel userModel;
+  private final Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap;
 
   /**
    * Constructs a object of {@link TradingController} with the given params.
@@ -41,6 +42,7 @@ public class TradingController extends AbstractController {
   public TradingController(UserModel userModel, View view) throws IllegalArgumentException {
     super(view);
     this.userModel = Utils.requireNonNull(userModel);
+    this.commandMap = this.getCommandMap();
   }
 
   /**
@@ -57,33 +59,36 @@ public class TradingController extends AbstractController {
    */
   @Override
   public void run() throws IllegalStateException {
-    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
-            this.getCommandMap();
 
     while (true) {
-      try {
-        this.displayOnView(getMenuString());
-        String commandString = getInputFromView();
 
-        if (isQuitCommand(commandString)) {
-          return;
-        }
+      this.displayOnView(getMenuString());
+      String commandString = getInputFromView();
 
-        BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
-                commandMap.get(commandString);
-
-        if (Objects.nonNull(biFunction)) {
-          Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
-          command.execute();
-        } else {
-          this.displayOnView(Constants.COMMAND_NOT_FOUND_MESSAGE);
-        }
-      } catch (NoSuchElementException e) {
-        this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
-      } catch (IllegalArgumentException | InsufficientCapitalException |
-              StockDataNotFoundException | PortfolioNotFoundException e) {
-        this.displayOnView(e.getMessage());
+      if (isQuitCommand(commandString)) {
+        return;
       }
+
+      this.executeCommand(commandString);
+    }
+  }
+
+  protected void executeCommand(String commandString) {
+    try {
+      BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
+              this.commandMap.get(commandString);
+
+      if (Objects.nonNull(biFunction)) {
+        Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
+        command.execute();
+      } else {
+        this.displayOnView(Constants.COMMAND_NOT_FOUND_MESSAGE);
+      }
+    } catch (NoSuchElementException e) {
+      this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
+    } catch (IllegalArgumentException | InsufficientCapitalException |
+            StockDataNotFoundException | PortfolioNotFoundException e) {
+      this.displayOnView(e.getMessage());
     }
   }
 
