@@ -19,7 +19,10 @@ import virtualgambling.controller.command.usermodelcommand.GetCompositionCommand
 import virtualgambling.controller.command.usermodelcommand.PortfolioValueCommand;
 import virtualgambling.controller.command.usermodelcommand.RemainingCapitalCommand;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.exceptions.APILimitExceededException;
+import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.RetryException;
+import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
 /**
@@ -85,8 +88,12 @@ public class TradingController extends AbstractController {
       }
     } catch (NoSuchElementException e) {
       this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
-    } catch (APILimitExceededException e) {
-      this.displayOnView("Error in Fetching stock data from API, please retry after 5 minutes");
+    } catch (IllegalArgumentException | InsufficientCapitalException |
+            StockDataNotFoundException | PortfolioNotFoundException e) {
+      this.displayOnView(e.getMessage());
+    } catch (RetryException e) {
+      this.displayOnView("Cannot get Price from API, please try after sometime or try " +
+              "reducing the number of distinct shares to purchase");
     } catch (RuntimeException e) {
       this.displayOnView(e.getMessage());
     }
