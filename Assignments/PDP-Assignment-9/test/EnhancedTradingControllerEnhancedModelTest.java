@@ -333,15 +333,18 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-02");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-02");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-02");
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-03");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-03");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-03");
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-04");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-04");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-04");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
@@ -353,7 +356,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithDifferentWeightsWithRecurrentStrategy() {
-    Readable readable = new StringReader("10 p1 2018-11-1 2018-11-4 1 10000 2 AAPL 40 GOOG 10 " +
+    Readable readable = new StringReader("10 p1 2018-11-1 2018-11-4 1 10000 2 AAPL 40 GOOG 60 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -369,24 +372,29 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
+            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 500 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
+            .append("Purchased 400 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-02");
+            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-02");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-02");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-02");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-03");
+            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-03");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-03");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-03");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-04");
+            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-04");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-04");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-04");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
