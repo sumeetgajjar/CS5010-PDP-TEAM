@@ -21,6 +21,11 @@ import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.view.View;
 
+/**
+ * {@link EnhancedTradingController} represents a controller in the MVC pattern that extends a
+ * {@link TradingController} and adds new features with the possibility of using commission and
+ * strategies in purchasing stock.
+ */
 public class EnhancedTradingController extends TradingController {
 
   private final EnhancedUserModel enhancedUserModel;
