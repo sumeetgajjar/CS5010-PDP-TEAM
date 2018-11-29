@@ -82,6 +82,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
       return biFunctionRetryer.retry(tickerName, date);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
+    } catch (RetryException e) {
+      throw new RuntimeException("Cannot get Price from API, please try after sometime or try " +
+              "reducing the number of distinct shares to purchase", e);
     }
   }
 

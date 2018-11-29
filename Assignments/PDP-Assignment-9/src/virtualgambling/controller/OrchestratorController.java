@@ -91,6 +91,8 @@ public class OrchestratorController extends AbstractController {
             + System.lineSeparator()
             + "Note: If any given day is a holiday, Option 2 uses the next available working day " +
             "and Option 1 will be unable to find stock data."
+            + System.lineSeparator()
+            + "Note: All the stock prices are the closing price for the given date."
             + System.lineSeparator();
   }
 }
