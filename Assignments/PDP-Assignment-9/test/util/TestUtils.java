@@ -93,60 +93,6 @@ public class TestUtils {
             + System.lineSeparator() + ""
             + "                                                                                    "
             + "                                    |___/ "
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "You can use the following example commands where the first word is the "
-            + System.lineSeparator() + "command and the remaining are it's parameters"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "create_portfolio portfolioName (portfolioName should be one word)."
-            + System.lineSeparator()
-            + "get_all_portfolios"
-            + System.lineSeparator()
-            + "get_portfolio_cost_basis portfolioName date"
-            + System.lineSeparator()
-            + "get_portfolio_value portfolioName date"
-            + System.lineSeparator()
-            + "get_portfolio_composition portfolioName"
-            + System.lineSeparator()
-            + "get_remaining_capital"
-            + System.lineSeparator()
-            + "buy_shares tickerName portfolioName date quantity"
-            + System.lineSeparator()
-            + "q or quit"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + System.lineSeparator();
-  }
-
-  /**
-   * Returns the welcome message for the App.
-   *
-   * @return the welcome message for the App
-   */
-  public static String getWelcomeMessage1() {
-    return "" + System.lineSeparator() + ""
-            + "__        __   _                            _____      __     ___      _            "
-            + "   _   _____              _ _             " + System.lineSeparator() + ""
-            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
-            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
-            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
-            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
-            + ""
-            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
-            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
-            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
-            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
-            + System.lineSeparator() + ""
-            + "                                                                                    "
-            + "                                    |___/ "
             + System.lineSeparator();
   }
 
@@ -157,8 +103,9 @@ public class TestUtils {
    */
   public static String getMenuMessageOfOrchestrator() {
     return "Please enter the data source option" + System.lineSeparator()
-            + "Enter 1 for 'in-memory" + System.lineSeparator()
-            + "Enter 2 for 'alpha-vantage-api";
+            + "Enter 1 for 'in-memory'" + System.lineSeparator()
+            + "Enter 2 for 'alpha-vantage-api' (leads to long running operations, the application" +
+            " may become unresponsive for some time.)";
   }
 
   /**

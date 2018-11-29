@@ -8,6 +8,9 @@ import virtualgambling.view.View;
 
 /**
  * Represents an orchestrator that initializes the model correctly based on the input data source.
+ *
+ * <p>Note: AlphaVantage as a source leads to expensive IO operations and can block the terminal
+ * for some time.
  */
 public class OrchestratorController extends AbstractController {
   /**
@@ -41,8 +44,9 @@ public class OrchestratorController extends AbstractController {
 
   private String getMenuOptions() {
     return "Please enter the data source option" + System.lineSeparator()
-            + "Enter 1 for 'in-memory" + System.lineSeparator()
-            + "Enter 2 for 'alpha-vantage-api";
+            + "Enter 1 for 'in-memory'" + System.lineSeparator()
+            + "Enter 2 for 'alpha-vantage-api' (leads to long running operations, the application" +
+            " may become unresponsive for some time.)";
   }
 
   @Override
