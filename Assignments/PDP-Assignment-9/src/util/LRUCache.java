@@ -12,7 +12,9 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
   private final int cacheCapacity;
 
   /**
-   * Create an object of LRU Cache with the given size.
+   * Create an object of LRU Cache with the given capacity.
+   *
+   * <p>It will start removing older entries once the cache capacity is hit.
    *
    * @param cacheCapacity the capacity of the cache
    */
