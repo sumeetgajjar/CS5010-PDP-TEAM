@@ -4,18 +4,29 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by gajjar.s, on 2:05 PM, 11/25/18
+ * This class represents a LRU Key value cache of Generic Type. It extends {@link LinkedHashMap}
+ * class.
  */
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
 
-  private final int cacheSize;
+  private final int cacheCapacity;
 
-  public LRUCache(int cacheSize) {
-    this.cacheSize = cacheSize;
+  /**
+   * Create an object of LRU Cache with the given size.
+   *
+   * @param cacheCapacity the capacity of the cache
+   */
+  public LRUCache(int cacheCapacity) {
+    this.cacheCapacity = cacheCapacity;
   }
 
+  /**
+   * Returns true if the current size of the cache is greater than it's capacity.
+   *
+   * @return true if the current size of the cache is greater than it's capacity
+   */
   @Override
   protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-    return this.size() > cacheSize;
+    return this.size() > cacheCapacity;
   }
 }
