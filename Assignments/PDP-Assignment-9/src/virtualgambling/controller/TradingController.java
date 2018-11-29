@@ -19,7 +19,7 @@ import virtualgambling.controller.command.usermodelcommand.GetCompositionCommand
 import virtualgambling.controller.command.usermodelcommand.PortfolioValueCommand;
 import virtualgambling.controller.command.usermodelcommand.RemainingCapitalCommand;
 import virtualgambling.model.UserModel;
-import virtualgambling.model.exceptions.AlphaVantageAPILimitExceededException;
+import virtualgambling.model.exceptions.APILimitExceededException;
 import virtualgambling.view.View;
 
 /**
@@ -85,7 +85,7 @@ public class TradingController extends AbstractController {
       }
     } catch (NoSuchElementException e) {
       this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
-    } catch (AlphaVantageAPILimitExceededException e) {
+    } catch (APILimitExceededException e) {
       this.displayOnView("Error in Fetching stock data from API, please retry after 5 minutes");
     } catch (RuntimeException e) {
       this.displayOnView(e.getMessage());
