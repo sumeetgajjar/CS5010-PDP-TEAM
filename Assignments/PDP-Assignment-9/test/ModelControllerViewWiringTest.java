@@ -96,34 +96,42 @@ public class ModelControllerViewWiringTest {
     StringBuilder expectedOutput = new StringBuilder(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("$0.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("$0.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(userModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(userModel.getPortfolio("p1").toString());
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator());
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append("$5.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-11");
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuStringOfTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuStringOfTradingController());
     expectedOutput.append(System.lineSeparator());
 
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -185,7 +193,8 @@ public class ModelControllerViewWiringTest {
 
     expectedLog.append(buyShareWithCommissionCode);
     expectedLog.append(System.lineSeparator());
-    expectedLog.append("AAPL").append("p1").append("Sun Nov 11 00:00:00 EST 2018").append("11").append("11.0");
+    expectedLog.append("AAPL").append("p1")
+            .append("Sun Nov 11 00:00:00 EST 2018").append("11").append("11.0");
     expectedLog.append(System.lineSeparator());
 
     expectedLog.append(buyShareWithStrategyCode);
@@ -199,27 +208,33 @@ public class ModelControllerViewWiringTest {
             new StringBuilder(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("$0.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("$0.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(enhancedUserModel.getPortfolio("p1").toString());
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator());
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append("$5.00");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
@@ -228,12 +243,14 @@ public class ModelControllerViewWiringTest {
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
@@ -243,7 +260,8 @@ public class ModelControllerViewWiringTest {
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");
 
-    expectedOutput.append(System.lineSeparator()).append(TestUtils.getMenuMessageOfEnhanceTradingController());
+    expectedOutput.append(System.lineSeparator())
+            .append(TestUtils.getMenuMessageOfEnhanceTradingController());
     expectedOutput.append(System.lineSeparator());
 
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -336,7 +354,8 @@ public class ModelControllerViewWiringTest {
             InsufficientCapitalException {
       this.log.append(buyShareWithCommissionCode);
       this.log.append(System.lineSeparator());
-      this.log.append(tickerName).append(portfolioName).append(date).append(quantity).append(commissionPercentage);
+      this.log.append(tickerName).append(portfolioName)
+              .append(date).append(quantity).append(commissionPercentage);
       this.log.append(System.lineSeparator());
 
       return new SharePurchaseOrder("AAPL", new StockPrice(BigDecimal.TEN,

@@ -42,9 +42,11 @@ public class OrchestratorControllerTest {
     controller.run();
 
     String expectedOutput =
-            TestUtils.getWelcomeMessage() + System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
-                    System.lineSeparator() + Constants.INVALID_CHOICE_MESSAGE +
-                    System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
+            TestUtils.getWelcomeMessage() + System.lineSeparator()
+                    + TestUtils.getMenuMessageOfOrchestrator()
+                    + System.lineSeparator() + Constants.INVALID_CHOICE_MESSAGE
+                    + System.lineSeparator()
+                    + TestUtils.getMenuMessageOfOrchestrator() +
                     System.lineSeparator();
     Assert.assertEquals(expectedOutput, appendable.toString());
   }
@@ -59,10 +61,11 @@ public class OrchestratorControllerTest {
       controller.run();
 
       String expectedOutput =
-              TestUtils.getWelcomeMessage() + System.lineSeparator() + TestUtils.getMenuMessageOfOrchestrator() +
-                      System.lineSeparator() +
-                      TestUtils.getMenuMessageOfEnhanceTradingController() +
-                      System.lineSeparator();
+              TestUtils.getWelcomeMessage() + System.lineSeparator()
+                      + TestUtils.getMenuMessageOfOrchestrator()
+                      + System.lineSeparator()
+                      + TestUtils.getMenuMessageOfEnhanceTradingController()
+                      + System.lineSeparator();
       Assert.assertEquals(expectedOutput, appendable.toString());
     }
   }

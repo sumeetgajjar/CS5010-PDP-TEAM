@@ -251,7 +251,8 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buySingleShareWithCommissionForMissingPortfolioFails() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionForMissingPortfolioFails()
+          throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = TestUtils.getValidDateForTrading();
     Share appleShare = getAppleShare();
@@ -265,9 +266,11 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buySingleShareWithCommissionWhoseDataIsNotPresentFails() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionWhoseDataIsNotPresentFails()
+          throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
+                    new SimpleStockDAO(new SimpleStockDataSource()));
     enhancedUserModel.createPortfolio("p1");
     try {
       Calendar calendar = Utils.getCalendarInstance();
@@ -297,7 +300,9 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buySingleShareWithCommissionFailsDueToInsufficientFunds() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionFailsDueToInsufficientFunds()
+          throws StockDataNotFoundException {
+
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = TestUtils.getValidDateForTrading();
     enhancedUserModel.createPortfolio("p1");
@@ -498,7 +503,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(3), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(330), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(fangPortfolio
+                    .getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(300), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
@@ -654,7 +660,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(121), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
@@ -736,8 +743,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio(PORTFOLIO_P1);
     double commission = 5;
-    SharePurchaseOrder withoutCommission = enhancedUserModel.buyShares("AAPL", PORTFOLIO_P1,
-            TestUtils.getValidDateForTrading(), 10);
+    SharePurchaseOrder withoutCommission = enhancedUserModel
+            .buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10);
     SharePurchaseOrder withCommissionWithoutStrategy = enhancedUserModel.buyShares("AAPL",
             PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10, commission);
 
@@ -767,7 +774,9 @@ public class EnhancedUserModelTest extends UserModelTest {
       );
       Assert.assertNotEquals(unitPriceIntoQuantity, sharePurchaseOrder.getCostOfPurchase());
 
-      Assert.assertEquals(getScaledStrippedBigDecimal(getPriceAfterCommission(unitPriceIntoQuantity, commission), 2),
+      Assert.assertEquals(
+              getScaledStrippedBigDecimal(
+                      getPriceAfterCommission(unitPriceIntoQuantity, commission), 2),
               getScaledStrippedBigDecimal(sharePurchaseOrder.getCostOfPurchase(), 2));
     }
   }
@@ -827,8 +836,8 @@ public class EnhancedUserModelTest extends UserModelTest {
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
         BigDecimal costOfPurchaseWithoutCommission =
                 sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
-                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
-        );
+                        BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+                );
         // individual cost cannot be more than 1000 since
         Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
                 1000)) > 0
@@ -871,9 +880,10 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
-                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
-        );
+        BigDecimal costOfPurchaseWithoutCommission =
+                sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
+                        BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+                );
         // individual cost cannot be more than 1000 since
         Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
                 1000)) > 0
@@ -923,9 +933,8 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(3, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
-                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
-        );
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice()
+                .getUnitPrice().multiply(BigDecimal.valueOf(sharePurchaseOrder.getQuantity()));
         // individual cost cannot be more than 1000 since
         Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
                 1000)) > 0
@@ -1382,9 +1391,10 @@ public class EnhancedUserModelTest extends UserModelTest {
       Assert.assertEquals(4, sharePurchaseOrders.size());
 
       for (SharePurchaseOrder sharePurchaseOrder : sharePurchaseOrders) {
-        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice().getUnitPrice().multiply(
-                BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
-        );
+        BigDecimal costOfPurchaseWithoutCommission = sharePurchaseOrder.getStockPrice()
+                .getUnitPrice().multiply(
+                        BigDecimal.valueOf(sharePurchaseOrder.getQuantity())
+                );
         // individual cost cannot be more than 1000 since
         Assert.assertFalse(costOfPurchaseWithoutCommission.compareTo(new BigDecimal(
                 1000)) > 0

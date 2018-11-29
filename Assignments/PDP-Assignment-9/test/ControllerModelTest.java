@@ -40,7 +40,8 @@ public abstract class ControllerModelTest {
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.userModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.userModel.getPortfolio("p1").toString());
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
 

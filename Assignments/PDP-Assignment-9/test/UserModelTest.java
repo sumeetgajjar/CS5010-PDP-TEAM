@@ -651,11 +651,13 @@ public class UserModelTest {
 
     userModel.createPortfolio("p1");
     List<String> actualPortfolioNames =
-            userModel.getAllPortfolios().stream().map(Portfolio::getName).collect(Collectors.toList());
+            userModel.getAllPortfolios().stream()
+                    .map(Portfolio::getName).collect(Collectors.toList());
     Assert.assertEquals(Collections.singletonList("p1"), actualPortfolioNames);
     userModel.createPortfolio("p2");
     actualPortfolioNames =
-            userModel.getAllPortfolios().stream().map(Portfolio::getName).collect(Collectors.toList());
+            userModel.getAllPortfolios().stream()
+                    .map(Portfolio::getName).collect(Collectors.toList());
     Assert.assertEquals(Arrays.asList("p1", "p2"), actualPortfolioNames);
   }
 

@@ -211,6 +211,11 @@ public class TestUtils {
     return calendar.getTime();
   }
 
+  /**
+   * Returns the tomorrow's date.
+   *
+   * @return the tomorrow's date
+   */
   public static Date getFutureTime() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.add(Calendar.DATE, 1);
@@ -238,7 +243,9 @@ public class TestUtils {
     }
   }
 
-  public static class MockRecurringWeightedInvestmentStrategy extends RecurringWeightedInvestmentStrategy {
+  public static class MockRecurringWeightedInvestmentStrategy
+          extends RecurringWeightedInvestmentStrategy {
+
     private Date mockedYesterdayDate;
 
     // only constructor without explicit end date
@@ -339,6 +346,8 @@ public class TestUtils {
           return new StockPrice(new BigDecimal("90"), date);
         case "MU":
           return new StockPrice(new BigDecimal("100"), date);
+        default:
+          // stock data is not present for stocks which are not covered by above cases.
       }
 
       throw new StockDataNotFoundException("Stock Data not found");
