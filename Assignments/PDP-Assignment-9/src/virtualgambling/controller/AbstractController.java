@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -41,7 +42,7 @@ abstract class AbstractController implements Controller {
   protected String getInputFromView() throws IllegalStateException {
     try {
       return view.getInput();
-    } catch (IOException e) {
+    } catch (IOException | NoSuchElementException e) {
       throw new IllegalStateException("Cannot get data from view");
     }
   }
@@ -90,7 +91,7 @@ abstract class AbstractController implements Controller {
       try {
         return Long.parseLong(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
@@ -102,7 +103,7 @@ abstract class AbstractController implements Controller {
       try {
         return Integer.parseInt(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
@@ -114,7 +115,7 @@ abstract class AbstractController implements Controller {
       try {
         return Double.parseDouble(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
@@ -126,7 +127,7 @@ abstract class AbstractController implements Controller {
       try {
         return new BigDecimal(getStringInputFromUser(message, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept("Unparseable Input");
       }
     }
   }

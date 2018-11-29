@@ -139,7 +139,7 @@ public class TradingControllerSimpleUserModelTest extends ControllerModelTest {
     expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-10\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
