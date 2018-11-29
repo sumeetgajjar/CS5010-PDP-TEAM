@@ -10,11 +10,22 @@ import java.util.function.Supplier;
 import util.Utils;
 import virtualgambling.view.View;
 
+/**
+ * This class represents a AbstractController which has a {@link View}. It implements the {@link
+ * Controller} interface. It minimize the effort required to implement {@link Controller}
+ * interface.
+ */
 abstract class AbstractController implements Controller {
 
   protected final View view;
 
-  AbstractController(View view) {
+  /**
+   * Constructor to be used by the derived class.
+   *
+   * @param view the view
+   * @throws IllegalArgumentException if the given view is null
+   */
+  AbstractController(View view) throws IllegalArgumentException {
     this.view = Utils.requireNonNull(view);
   }
 
