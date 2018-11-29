@@ -94,6 +94,31 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   }
 
   @Test
+  public void buySharesWithNegativeCommissionFails() {
+    Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 -10 quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Commission percentage cannot be less " +
+            "than 0");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
+
+  @Test
   public void getCostBasisWorks() {
     Readable readable = new StringReader("1 p1 7 AAPL p1 2018-10-30 10 10 " +
             "3 p1 2018-10-29 " +
@@ -472,7 +497,6 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
-
 
   @Test
   public void buySharesWithInsufficientInvestmentAmountFails() {
@@ -920,7 +944,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
             .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-14");
 
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-14");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-14");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
