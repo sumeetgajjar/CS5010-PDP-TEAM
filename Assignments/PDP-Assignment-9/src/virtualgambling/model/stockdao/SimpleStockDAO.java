@@ -28,6 +28,9 @@ public class SimpleStockDAO implements StockDAO {
   @Override
   public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date) throws
           IllegalArgumentException, IllegalStateException {
+    Utils.requireNonNull(tickerName);
+    Utils.requireNonNull(date);
+    date = this.getValidDate(date);
     BigDecimal stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
       throw new IllegalArgumentException("Quantity has to be positive");

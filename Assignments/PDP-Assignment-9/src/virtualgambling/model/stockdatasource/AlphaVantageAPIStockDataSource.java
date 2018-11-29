@@ -23,9 +23,11 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
 
+import util.BiFunctionRetryer;
 import util.LRUCache;
 import util.Utils;
-import virtualgambling.model.exceptions.AlphaVantageAPILimitExceeded;
+import virtualgambling.model.exceptions.AlphaVantageAPILimitExceededException;
+import virtualgambling.model.exceptions.RetryException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -60,12 +62,24 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
   private int apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
 
+  private BiFunctionRetryer<String, Date, BigDecimal> biFunctionRetryer =
+          new BiFunctionRetryer.RetryerBuilder<String, Date, BigDecimal>()
+                  .setNumRetries(10)
+                  .setFunctionToRetry(this::execute)
+                  .setExceptionClass(AlphaVantageAPILimitExceededException.class)
+                  .createRetryer();
+
   private AlphaVantageAPIStockDataSource() {
 
   }
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+          RetryException {
+    return biFunctionRetryer.retry(tickerName, date);
+  }
+
+  private BigDecimal execute(String tickerName, Date date) {
     String dateString = Utils.getDefaultFormattedDateStringFromDate(Utils.removeTimeFromDate(date));
 
     BigDecimal stockPrice = getDataFromLruCache(tickerName, dateString);
@@ -73,9 +87,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
       return stockPrice;
     }
 
+    setAPIKeyIndex();
+
     if (addDataToLRUCacheIfAvailable(tickerName, dateString)) {
-      return LRU_CACHE.get(tickerName).get(dateString);
-    } else {
       NavigableMap<String, BigDecimal> dateToBigDecimalMap = LRU_CACHE.get(tickerName);
       if (Objects.nonNull(dateToBigDecimalMap)) {
         Map.Entry<String, BigDecimal> dateToPriceEntry =
@@ -85,11 +99,15 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
                   tickerName, dateString));
         }
         return dateToPriceEntry.getValue();
-
       }
-      throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
-              tickerName, dateString));
     }
+
+    throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
+            tickerName, dateString));
+  }
+
+  private void setAPIKeyIndex() {
+    apiKeyIndex = RANDOM.nextInt();
   }
 
   private boolean addDataToLRUCacheIfAvailable(String tickerName, String dateString) {
@@ -234,7 +252,8 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
     if (header.equalsIgnoreCase("{")) {
       String message = reader.readLine();
       if (message.contains("Note")) {
-        throw new AlphaVantageAPILimitExceeded(String.format("API Limit exceeded for key %s: %s",
+        throw new AlphaVantageAPILimitExceededException(String.format("API Limit exceeded for key" +
+                        " %s: %s",
                 this.getApiKey(),
                 message));
       }
