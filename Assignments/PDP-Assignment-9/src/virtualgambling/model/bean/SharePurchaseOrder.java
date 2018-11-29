@@ -40,17 +40,17 @@ public class SharePurchaseOrder {
     this(tickerName, stockPrice, quantity, 0D);
   }
 
+  /**
+   * Constructs an instance of {@link SharePurchaseOrder} out of an existing sharePurchaseOrder and
+   * given commissionPercentage.
+   *
+   * @param sharePurchaseOrder   share purchase order
+   * @param commissionPercentage commission in terms of percentage out of 100
+   */
   public SharePurchaseOrder(SharePurchaseOrder sharePurchaseOrder, double commissionPercentage) {
     this(sharePurchaseOrder.getTickerName(), sharePurchaseOrder.getStockPrice(),
             sharePurchaseOrder.getQuantity(),
             validateCommissionPercentage(commissionPercentage));
-  }
-
-  private static double validateCommissionPercentage(double commissionPercentage) {
-    if (commissionPercentage < 0) {
-      throw new IllegalArgumentException("Commission percentage cannot be less than 0");
-    }
-    return commissionPercentage;
   }
 
   /**
@@ -107,5 +107,12 @@ public class SharePurchaseOrder {
             quantity, tickerName,
             Utils.getFormattedCurrencyNumberString(getStockPrice().getUnitPrice()),
             Utils.getDefaultFormattedDateStringFromDate(getStockPrice().getDate()));
+  }
+
+  private static double validateCommissionPercentage(double commissionPercentage) {
+    if (commissionPercentage < 0) {
+      throw new IllegalArgumentException("Commission percentage cannot be less than 0");
+    }
+    return commissionPercentage;
   }
 }

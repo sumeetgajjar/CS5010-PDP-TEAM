@@ -4,7 +4,7 @@ import virtualgambling.model.exceptions.RetryException;
 
 /**
  * {@link BiFunctionRetryer} represents a retrying mechanism that allows a client to retry any
- * {@link java.util.function.BiFunction}
+ * {@link java.util.function.BiFunction}.
  *
  * @param <T> the type of the first argument to the function
  * @param <U> the type of the second argument to the function

@@ -17,7 +17,8 @@ import virtualgambling.model.strategy.Strategy;
  * stock should have an associated percentage with it. It extends {@link
  * AbstractEnhancedUserModelCommand} class.
  */
-public class BuySharesWithRecurringWeightedStrategyCommand extends AbstractEnhancedUserModelCommand {
+public class BuySharesWithRecurringWeightedStrategyCommand extends
+        AbstractEnhancedUserModelCommand {
 
   private final String portfolioName;
   private final BigDecimal amountToInvest;

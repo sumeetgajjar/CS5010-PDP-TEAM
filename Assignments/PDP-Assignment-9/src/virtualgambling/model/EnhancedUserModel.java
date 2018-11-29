@@ -17,15 +17,6 @@ import virtualgambling.model.strategy.Strategy;
  */
 public interface EnhancedUserModel extends UserModel {
 
-  /**
-   *
-   *
-   * @param tickerName    the name of the ticker
-   * @param portfolioName the name of the portfolio to buy these shares in
-   * @param date          the date at which the stocks need to be bought
-   * @param quantity      amount of shares to be bought
-   * @return a share purchase order that represents the order that was made
-   */
 
   /**
    * Allows the user the buy shares given the ticker name, date, quantity, commissionPercentage into

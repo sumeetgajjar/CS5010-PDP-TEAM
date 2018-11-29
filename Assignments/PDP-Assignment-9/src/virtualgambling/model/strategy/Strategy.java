@@ -25,5 +25,6 @@ public interface Strategy {
    * @param amountToInvest amount to invest in dollars
    * @return list of {@link SharePurchaseOrder}.
    */
-  List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO) throws IllegalArgumentException, StrategyExecutionException;
+  List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO)
+          throws IllegalArgumentException, StrategyExecutionException;
 }
