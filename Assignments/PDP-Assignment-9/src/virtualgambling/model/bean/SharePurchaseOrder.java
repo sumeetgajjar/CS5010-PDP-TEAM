@@ -15,14 +15,23 @@ public class SharePurchaseOrder {
   private final long quantity;
   private final double commissionPercentage;
 
+  /**
+   * Constructs an Object of Share purchase order with the given params.
+   *
+   * @param tickerName           the ticker name
+   * @param unitPrice            the unit price of the stock
+   * @param date                 the date at which the purchase is made
+   * @param quantity             the quantity of the shares purchased
+   * @param commissionPercentage the commission percentage for this purchase
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity,
                             double commissionPercentage) {
-    // todo validate arguments
-    this.tickerName = tickerName;
-    this.unitPrice = unitPrice;
-    this.date = date;
-    this.quantity = quantity;
-    this.commissionPercentage = commissionPercentage;
+    this.tickerName = Utils.requireNonNull(tickerName);
+    this.unitPrice = Utils.requireNonNull(unitPrice);
+    this.date = Utils.requireNonNull(date);
+    this.quantity = Utils.requireNonNull(quantity);
+    this.commissionPercentage = Utils.requireNonNull(commissionPercentage);
   }
 
   /**
