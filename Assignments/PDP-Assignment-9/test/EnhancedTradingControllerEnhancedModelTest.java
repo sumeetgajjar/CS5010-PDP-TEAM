@@ -256,10 +256,10 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-10\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.SHARE_QUANTITY_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
@@ -294,17 +294,17 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-10\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Unparseable Input");
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("For input string: \"a\"");
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: \"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 333 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");

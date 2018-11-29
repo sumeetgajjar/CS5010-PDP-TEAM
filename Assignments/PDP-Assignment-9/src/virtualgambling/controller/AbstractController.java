@@ -91,7 +91,7 @@ abstract class AbstractController implements Controller {
       try {
         return Long.parseLong(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
@@ -103,7 +103,7 @@ abstract class AbstractController implements Controller {
       try {
         return Integer.parseInt(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
@@ -115,7 +115,7 @@ abstract class AbstractController implements Controller {
       try {
         return Double.parseDouble(getStringInputFromUser(messageToDisplay, supplier, consumer));
       } catch (NumberFormatException e) {
-        consumer.accept(e.getMessage());
+        consumer.accept(String.format("Unparseable Input, %s", e.getMessage()));
       }
     }
   }
