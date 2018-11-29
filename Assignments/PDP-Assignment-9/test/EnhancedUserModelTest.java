@@ -24,6 +24,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
@@ -1426,6 +1427,31 @@ public class EnhancedUserModelTest extends UserModelTest {
       shareCount.put(sharePurchaseOrder.getTickerName(), count);
     }
     return shareCount;
+  }
+
+  @Test
+  public void gettingFrequentDataFromAlphaVantageWorks() {
+    EnhancedUserModel enhancedUserModel =
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
+                    new SimpleStockDAO(AlphaVantageAPIStockDataSource.getInstance()));
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("GOOG", 100.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2016, Calendar.NOVEMBER, 1);
+    Strategy recurringWeightedInvestmentStrategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights, 1);
+
+    enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+
+    List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
+            new BigDecimal(1000),
+            recurringWeightedInvestmentStrategy, 1);
+    Assert.assertFalse(sharePurchaseOrders.isEmpty());
+    System.out.println(enhancedUserModel.getPortfolio(PORTFOLIO_P1).toString());
   }
 
   private BigDecimal getTotalCostOfPurchase(List<SharePurchaseOrder> sharePurchaseOrders) {
