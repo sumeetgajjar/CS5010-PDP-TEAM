@@ -38,7 +38,7 @@ public class CostBasisCommand extends AbstractUserModelCommand {
   @Override
   public void execute() {
     BigDecimal costBasisOfPortfolio =
-            userModel.getPortfolio(this.portfolioName).getCostBasis(this.date);
+            userModel.getPortfolio(this.portfolioName).getCostBasisIncludingCommission(this.date);
     consumer.accept(Utils.getFormattedCurrencyNumberString(costBasisOfPortfolio));
   }
 }

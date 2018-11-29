@@ -104,8 +104,13 @@ public class TestUtils {
   public static String getMenuMessageOfOrchestrator() {
     return "Please enter the data source option" + System.lineSeparator()
             + "Enter 1 for 'in-memory'" + System.lineSeparator()
-            + "Enter 2 for 'alpha-vantage-api' (leads to long running operations, the application" +
-            " may become unresponsive for some time.)";
+            + "Enter 2 for 'alpha-vantage-api'" + System.lineSeparator()
+            + "Note: Option 2 leads to long running operations, the application" +
+            " may become unresponsive for some time."
+            + System.lineSeparator()
+            + "Note: If any given day is a holiday, Option 2 uses the next available working day " +
+            "and Option 1 will be unable to find stock data."
+            + System.lineSeparator();
   }
 
   /**
