@@ -79,13 +79,6 @@ public class BiFunctionRetryer<T, U, R> {
     private Class<? extends Throwable> exceptionClass;
 
     /**
-     * It should not be possible to create this builder without a function.
-     */
-    private RetryerBuilder() {
-
-    }
-
-    /**
      * Sets up the builder with default values.
      *
      * @param functionToRetry the function that needs to be retried
