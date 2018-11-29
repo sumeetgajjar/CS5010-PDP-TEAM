@@ -12,14 +12,16 @@ import virtualgambling.model.exceptions.RetryException;
  */
 public class BiFunctionRetryer<T, U, R> {
   private final int numRetries;
+  private final int backOffSeconds;
   private final BiFunctionWithCheckedException<T, U, R> functionToRetry;
   private final Class<? extends Throwable> exceptionClass;
 
   private BiFunctionRetryer(
           int numRetries,
-          BiFunctionWithCheckedException<T, U, R> functionToRetry,
+          int backOffSeconds, BiFunctionWithCheckedException<T, U, R> functionToRetry,
           Class<? extends Throwable> exceptionClass) {
     this.numRetries = numRetries;
+    this.backOffSeconds = backOffSeconds;
     this.functionToRetry = functionToRetry;
     this.exceptionClass = exceptionClass;
   }
@@ -35,13 +37,15 @@ public class BiFunctionRetryer<T, U, R> {
    *                          and throws it
    * @throws RetryException   in case it fails to get results after retrying numRetries times
    */
-  public R retry(T param1, U param2) throws RuntimeException, RetryException {
+  public R retry(T param1, U param2) throws RuntimeException, RetryException, InterruptedException {
     for (int i = 0; i < numRetries; i++) {
       try {
         return functionToRetry.apply(param1, param2);
       } catch (Throwable e) {
         if (!exceptionClass.isInstance(e)) {
           throw new RuntimeException(e);
+        } else {
+          Thread.sleep(this.backOffSeconds * 1000);
         }
       }
     }
@@ -70,27 +74,82 @@ public class BiFunctionRetryer<T, U, R> {
    */
   public static class RetryerBuilder<T, U, R> {
     private int numRetries;
+    private int backOffSeconds;
     private BiFunctionWithCheckedException<T, U, R> functionToRetry;
     private Class<? extends Throwable> exceptionClass;
 
+    /**
+     * It should not be possible to create this builder without a function.
+     */
+    private RetryerBuilder() {
+
+    }
+
+    /**
+     * Sets up the builder with default values.
+     *
+     * @param functionToRetry the function that needs to be retried
+     */
+    public RetryerBuilder(BiFunctionWithCheckedException<T, U, R> functionToRetry) {
+      this.numRetries = 1;
+      this.backOffSeconds = 1;
+      this.functionToRetry = Utils.requireNonNull(functionToRetry);
+      exceptionClass = Exception.class;
+    }
+
+    /**
+     * Sets the number of seconds after which a failed call should retry.
+     *
+     * @param backOffSeconds backOffSeconds
+     * @return builder with backOffSeconds set
+     */
+    public RetryerBuilder<T, U, R> setBackOffSeconds(int backOffSeconds) {
+      this.backOffSeconds = backOffSeconds;
+      return this;
+    }
+
+    /**
+     * Sets the maximum number of retries after which the function should not retry.
+     *
+     * @param numRetries maximum number of retries
+     * @return builder with numRetries set
+     */
     public RetryerBuilder<T, U, R> setNumRetries(int numRetries) {
       this.numRetries = numRetries;
       return this;
     }
 
+    /**
+     * Sets the function that needs to be retried by the retryer.
+     *
+     * @param functionToRetry the function that needs to be retried
+     * @return builder with functionToRetry set
+     */
     public RetryerBuilder<T, U, R> setFunctionToRetry(
             BiFunctionWithCheckedException<T, U, R> functionToRetry) {
       this.functionToRetry = functionToRetry;
       return this;
     }
 
+    /**
+     * Sets the exception on which to retry, any other exception other than the one that is passed
+     * here will lead to the exception being propagated.
+     *
+     * @param exceptionClass the exception that needs to be caught and then retried
+     * @return builder with exceptionClass set
+     */
     public RetryerBuilder<T, U, R> setExceptionClass(Class<? extends Throwable> exceptionClass) {
       this.exceptionClass = exceptionClass;
       return this;
     }
 
+    /**
+     * Creates a new retryer with the parameters correctly set.
+     *
+     * @return a {@link BiFunctionRetryer} with their parameters set
+     */
     public BiFunctionRetryer<T, U, R> createRetryer() {
-      return new BiFunctionRetryer<>(numRetries, functionToRetry, exceptionClass);
+      return new BiFunctionRetryer<>(numRetries, backOffSeconds, functionToRetry, exceptionClass);
     }
   }
 }

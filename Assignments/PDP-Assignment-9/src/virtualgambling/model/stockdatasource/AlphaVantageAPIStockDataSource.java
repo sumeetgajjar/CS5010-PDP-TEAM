@@ -63,9 +63,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   private int apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
 
   private BiFunctionRetryer<String, Date, BigDecimal> biFunctionRetryer =
-          new BiFunctionRetryer.RetryerBuilder<String, Date, BigDecimal>()
+          new BiFunctionRetryer.RetryerBuilder<>(this::execute)
                   .setNumRetries(10)
-                  .setFunctionToRetry(this::execute)
+                  .setBackOffSeconds(1)
                   .setExceptionClass(AlphaVantageAPILimitExceededException.class)
                   .createRetryer();
 
@@ -76,11 +76,19 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   @Override
   public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
           RetryException {
-    return biFunctionRetryer.retry(tickerName, date);
+    try {
+      return biFunctionRetryer.retry(tickerName, date);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private BigDecimal execute(String tickerName, Date date) {
     String dateString = Utils.getDefaultFormattedDateStringFromDate(Utils.removeTimeFromDate(date));
+    if (Utils.isFutureDate(date)) {
+      throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
+              tickerName, dateString));
+    }
 
     BigDecimal stockPrice = getDataFromLruCache(tickerName, dateString);
     if (Objects.nonNull(stockPrice)) {
@@ -101,7 +109,6 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
         return dateToPriceEntry.getValue();
       }
     }
-
     throw new StockDataNotFoundException(String.format("Stock Data Not found for: %s for %s",
             tickerName, dateString));
   }
