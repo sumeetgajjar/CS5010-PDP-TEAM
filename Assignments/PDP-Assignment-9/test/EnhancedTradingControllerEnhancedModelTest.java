@@ -1030,11 +1030,13 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.enhancedUserModel.getPortfolio("p1").toString());
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p2").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.enhancedUserModel.getPortfolio("p2").toString());
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
@@ -1086,7 +1088,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.enhancedUserModel.getPortfolio("p1").toString());
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
@@ -1137,12 +1140,14 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p1").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.enhancedUserModel.getPortfolio("p1").toString());
 
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(this.enhancedUserModel.getPortfolio("p2").toString());
+    expectedOutput.append(System.lineSeparator())
+            .append(this.enhancedUserModel.getPortfolio("p2").toString());
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator());

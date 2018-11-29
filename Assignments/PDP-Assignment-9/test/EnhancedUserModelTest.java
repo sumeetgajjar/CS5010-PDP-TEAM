@@ -288,7 +288,8 @@ public class EnhancedUserModelTest extends UserModelTest {
   }
 
   @Test
-  public void buySingleShareWithCommissionFailsForInvalidTickerName() throws StockDataNotFoundException {
+  public void buySingleShareWithCommissionFailsForInvalidTickerName()
+          throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     enhancedUserModel.createPortfolio("p1");
     try {
@@ -453,7 +454,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(1), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(110), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(100), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -635,7 +637,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Portfolio fangPortfolio = enhancedUserModel.getPortfolio(PORTFOLIO_FANG);
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -686,7 +689,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(1, fangPortfolio.getPurchases().size());
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(11), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(10), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
 
@@ -710,7 +714,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(99), 2),
-            getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
+            getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(validDateForTrading), 2));
     Assert.assertEquals(getScaledStrippedBigDecimal(new BigDecimal(90), 2),
             getScaledStrippedBigDecimal(fangPortfolio.getValue(validDateForTrading), 2));
   }
@@ -1135,9 +1140,6 @@ public class EnhancedUserModelTest extends UserModelTest {
             new TestUtils.MockRecurringWeightedInvestmentStrategy(startCalendar2.getTime(),
                     stocksWeights2, 15,
                     endCalendar2.getTime());
-
-//    enhancedUserModel.createPortfolio(PORTFOLIO_P1); you don't need to create a portfolio, it
-//    will be auto created if required.
 
     int amountToInvest = 1000;
     for (double commission : Arrays.asList(0, 10)) {
