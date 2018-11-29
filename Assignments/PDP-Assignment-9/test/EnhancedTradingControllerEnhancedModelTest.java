@@ -264,7 +264,9 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
   @Test
   public void buySharesWithDifferentWeights() {
     Readable readable = new StringReader(
-            "8 p1 2018-11-1 10000 5 FB 15 AAPL 25 GOOG 35 NFLX 15 T 10 10 5 p1 quit");
+            "8 p1 2018-11-1 100000 11 FB 10 AMD 5 ASC 4 AAPL 15 MSFT 6 EBAY 11 GOOG 14 QCOM 10 " +
+                    "MU " +
+                    "7 NFLX 8 T 10 10 5 p1 quit");
 
     Appendable appendable = new StringBuffer();
     Controller controller = getController(readable, appendable);
@@ -276,16 +278,10 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    for (int i = 0; i < 11; i++) {
+      expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+      expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    }
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 50 share(s) of 'NFLX' at a rate of $20.00 per stock on 2018-11-01");
@@ -505,11 +501,13 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-26");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-26");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-26");
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-27");
     expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on 2018-11-27");
+            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                    "2018-11-27");
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
