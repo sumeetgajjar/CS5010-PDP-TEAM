@@ -15,6 +15,7 @@ import util.Utils;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
@@ -682,8 +683,8 @@ public class UserModelTest {
     Portfolio portfolio = userModel.getPortfolio("p1");
     List<SharePurchaseOrder> purchases = portfolio.getPurchases();
     try {
-      purchases.add(new SharePurchaseOrder("AAPL", new BigDecimal(100),
-              TestUtils.getValidDateForTrading(), 100));
+      purchases.add(new SharePurchaseOrder("AAPL", new StockPrice(new BigDecimal(100),
+              TestUtils.getValidDateForTrading()), 100));
       Assert.fail("should have failed");
     } catch (UnsupportedOperationException ignored) {
 

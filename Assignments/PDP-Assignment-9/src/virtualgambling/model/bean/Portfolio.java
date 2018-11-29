@@ -66,7 +66,7 @@ public class Portfolio {
   public BigDecimal getCostBasisIncludingCommission(Date date) {
     this.checkSanity(date);
     return this.getPurchases().stream()
-            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getStockPrice().getDate().compareTo(date) <= 0)
             .map(SharePurchaseOrder::getCostOfPurchase)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
@@ -74,8 +74,8 @@ public class Portfolio {
   public BigDecimal getCostBasisExcludingCommission(Date dateTime) {
     this.checkSanity(dateTime);
     return this.getPurchases().stream()
-            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(dateTime) <= 0)
-            .map(sharePurchaseOrder -> sharePurchaseOrder.getUnitPrice()
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getStockPrice().getDate().compareTo(dateTime) <= 0)
+            .map(sharePurchaseOrder -> sharePurchaseOrder.getStockPrice().getUnitPrice()
                     .multiply(BigDecimal.valueOf(sharePurchaseOrder.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
@@ -99,14 +99,15 @@ public class Portfolio {
     BigDecimal totalPortfolioValue = BigDecimal.ZERO;
 
     List<SharePurchaseOrder> filteredPurchaseInfo = this.getPurchases().stream()
-            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
+            .filter(sharePurchaseInfo -> sharePurchaseInfo.getStockPrice().getDate().compareTo(date) <= 0)
             .collect(Collectors.toList());
 
     for (SharePurchaseOrder sharePurchaseOrder : filteredPurchaseInfo) {
       long quantity = sharePurchaseOrder.getQuantity();
-      BigDecimal price =
+      StockPrice stockPrice =
               this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), date);
-      totalPortfolioValue = totalPortfolioValue.add(price.multiply(new BigDecimal(quantity)));
+      totalPortfolioValue = totalPortfolioValue.add(stockPrice.getUnitPrice()
+              .multiply(new BigDecimal(quantity)));
 
     }
     return totalPortfolioValue;
@@ -123,12 +124,13 @@ public class Portfolio {
     List<SharePurchaseOrder> purchases = this.getPurchases();
     for (SharePurchaseOrder sharePurchaseOrder : purchases) {
       composition.append(String.format("%-20s%-20s%-20s%-20s%-20s%s",
-              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getDate()),
+              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getStockPrice().getDate()),
               sharePurchaseOrder.getTickerName(),
               sharePurchaseOrder.getQuantity(),
-              Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getUnitPrice()),
+              Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getStockPrice().getUnitPrice()),
               Utils.getFormattedCurrencyNumberString(
-                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime)),
+                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime)
+                              .getUnitPrice()),
               String.valueOf(sharePurchaseOrder.getCommissionPercentage()))).append("%");
       composition.append(System.lineSeparator());
     }

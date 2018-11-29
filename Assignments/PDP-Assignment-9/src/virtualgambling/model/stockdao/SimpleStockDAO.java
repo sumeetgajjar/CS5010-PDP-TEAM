@@ -1,10 +1,10 @@
 package virtualgambling.model.stockdao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
@@ -31,16 +31,15 @@ public class SimpleStockDAO implements StockDAO {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
     date = this.getValidDate(date);
-    BigDecimal stockPrice = this.getPrice(tickerName, date);
+    StockPrice stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
       throw new IllegalArgumentException("Quantity has to be positive");
     }
-    return new SharePurchaseOrder(tickerName, stockPrice, date,
-            quantity);
+    return new SharePurchaseOrder(tickerName, stockPrice, quantity);
   }
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+  public StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException,
           IllegalArgumentException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);

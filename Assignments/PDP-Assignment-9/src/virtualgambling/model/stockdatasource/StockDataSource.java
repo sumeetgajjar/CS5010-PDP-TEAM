@@ -1,8 +1,8 @@
 package virtualgambling.model.stockdatasource;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -19,5 +19,5 @@ public interface StockDataSource {
    * @throws StockDataNotFoundException if stock price for the ticker for the given date is not
    *                                    found
    */
-  BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException;
+  StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException;
 }

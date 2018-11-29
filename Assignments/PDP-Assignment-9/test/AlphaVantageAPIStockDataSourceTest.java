@@ -25,11 +25,11 @@ public class AlphaVantageAPIStockDataSourceTest {
   public void getPriceOnHolidayOfValidStockGetsNextAvailableDay() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 22); // thanksgiving goes to friday
-    BigDecimal closePriceOn23Nov = dataSource.getPrice("AAPL", calendar.getTime());
+    BigDecimal closePriceOn23Nov = dataSource.getPrice("AAPL", calendar.getTime()).getUnitPrice();
     Assert.assertEquals(new BigDecimal("172.29"), closePriceOn23Nov.stripTrailingZeros());
 
     calendar.set(2018, Calendar.NOVEMBER, 24); // saturday goes to monday
-    BigDecimal closePriceOn26Nov = dataSource.getPrice("AAPL", calendar.getTime());
+    BigDecimal closePriceOn26Nov = dataSource.getPrice("AAPL", calendar.getTime()).getUnitPrice();
     Assert.assertEquals(new BigDecimal("174.62"), closePriceOn26Nov.stripTrailingZeros());
   }
 
@@ -48,7 +48,7 @@ public class AlphaVantageAPIStockDataSourceTest {
   @Test
   public void priceReturnedIsClosingPrice() {
     Date validDateForTrading = TestUtils.getValidDateForTrading();
-    BigDecimal aaplPrice = dataSource.getPrice("AAPL", validDateForTrading);
+    BigDecimal aaplPrice = dataSource.getPrice("AAPL", validDateForTrading).getUnitPrice();
     BigDecimal expectedAAPLClosingPrice = new BigDecimal("222.2200");
     Assert.assertEquals(expectedAAPLClosingPrice, aaplPrice);
   }
@@ -59,7 +59,7 @@ public class AlphaVantageAPIStockDataSourceTest {
     calendar.set(Calendar.YEAR, 1900);
     Date validDateForTrading = calendar.getTime();
     try {
-      BigDecimal aapl = dataSource.getPrice("AAPL", validDateForTrading);
+      BigDecimal aapl = dataSource.getPrice("AAPL", validDateForTrading).getUnitPrice();
       System.out.println(aapl);
       Assert.fail("should have failed");
     } catch (RuntimeException e) {
