@@ -36,6 +36,17 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
     return processPurchaseOrder(portfolioName, sharePurchaseOrder);
   }
 
+  /**
+   * Allows a user to buy stocks into a given portfolio using a {@link Strategy}. In case the
+   * portfolio is not found, then it will be created instead of throwing an exception
+   *
+   * @param portfolioName        portfolio into which to buy the stock
+   * @param amountToInvest       amount to invest in each transaction that the strategy executes
+   * @param strategy             the strategy with which to purchase stock
+   * @param commissionPercentage the percentage out of 100 of the final amount to be added as
+   *                             commission charges.
+   * @throws StrategyExecutionException in case the user is unable to buy even a single stock
+   */
   @Override
   public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
                                             Strategy strategy,
