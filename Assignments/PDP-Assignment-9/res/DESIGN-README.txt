@@ -1,4 +1,4 @@
-Changes and enhancements to the previous design:
+Changes to the previous design:
 
 1. We are now returning a Portfolio bean instead of returning Strings from UserModel:
 Justification: In order to incorporate feedback from the CodeWalk, our design now returns an
@@ -8,37 +8,39 @@ immutable portfolio instead of strings. The portfolio has no setters and hence i
 Moved all state describing methods of individual portfolio into the Portfolio class
 Justification: To abstract the logic of above mentioned operations from the User model.
 
-3. We have added EnhancedUserModel which extends UserModel according to the open close principle
+3. Our commands change in the sense that we removed UserModel as a param to execute() method in Command Interface,
+as the Command can now be executed on both UserModel and EnhancedUserModel. This makes the command free of any dependencies and
+allows us to scale our design.
+Justification: Now a command interface is not coupled to UserModel.
+
+The previous controllers and views have no changes to their public API.
+
+Enhancements to the previous design:
+
+1. We have added EnhancedUserModel which extends UserModel according to the open close principle
 and adds methods that allow the user to buy shares by specifying commission percentage and another
 method that allows the user to buy using a strategy.
 
-4. Implemented strategy interface that has a single method by the name of execute - this is the strategy that is passed
+2. Implemented strategy interface that has a single method by the name of execute - this is the strategy that is passed
 to the enhanced user model. Strategy#execute takes in the amount to invest per transaction that is executed by the strategy.
 
 There are then two implementations of the strategy - OneTimeWeightedInvestmentStrategy that extends the RecurringWeightedInvestmentStrategy.
 These implementations are initialized with the date and stock weights in terms of a map of tickerName (String) -> Double.
 
-5. The previous controllers and views have no changes to their public design.
-
-6. We added a new EnhancedTradingController which extends TradingController and constraints the user to buy stocks with commission (possibly 0)
+3. We added a new EnhancedTradingController which extends TradingController and constraints the user to buy stocks with commission (possibly 0)
 and adds a new feature that allows the user to buy stocks using strategies, according to our previous Command Design Pattern, we
 add new Commands to buy stocks using a strategy, since the model is generic and takes a map of ticker names to weights (percentage allocation),
 here we have 2 separate commands for equi-weighted strategy and allocations with unequal weights.
 
-7. The controllers now extend an abstract controller that shares the common logic of interacting with the view.
+4. The controllers now extend an abstract controller that shares the common logic of interacting with the view.
 
-8. We have added an OrchestratorController which uses Controller chaining to select the data source initially,
+5. We have added an OrchestratorController which uses Controller chaining to select the data source initially,
 then hands control to EnhancedTradingController.
 
-9. Our commands change in the sense that we removed UserModel as a param to execute() method in Command Interface,
-as the Command can now be executed on both UserModel and EnhancedUserModel. This makes the command free of any dependencies and
-allows us to scale our design.
-Justification: Now a command interface is not coupled to UserModel.
-
-10. Our previous design helped us a lot in that we merely had to implement a new StockDataSource - AlphaVantageAPIStockDataSource
+6. Our previous design helped us a lot in that we merely had to implement a new StockDataSource - AlphaVantageAPIStockDataSource
 and it worked out of the box with our design.
 
-11. The controller now takes input (without changes to the public API) in a more user friendly manner
+7. The controller now takes input (without changes to the public API) in a more user friendly manner
 (allows the user to execute commands step by step).
 In the previous design, we were sending the commands in a single line like in a terminal.
 
@@ -51,7 +53,12 @@ Utility features added:
     a. In memory (JVM) in form of an LRU cache.
     b. On Disk in form of CSV files.
 
-2. We have added a BiFunctionRetryer that takes in any BiFunction and retries it in case of failures. We use the Builder pattern in order to instantiate the Retryer.
+2. We have added a BiFunctionRetryer that takes in any BiFunction and retries it in case of failures.
+We use the Builder pattern in order to instantiate the Retryer.
+
+AlphaVantageAPIStockDataSource uses the retryer(10 retries) and Multilayer caching
+
+
 
 Our application uses the Model-View-Controller architecture in order to implement a virtual trading application.
 
