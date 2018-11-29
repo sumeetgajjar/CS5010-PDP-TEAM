@@ -3,8 +3,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 
 import util.TestUtils;
+import util.Utils;
 import virtualgambling.controller.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.EnhancedTradingController;
@@ -509,7 +512,14 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithSameWeightsWithRecurrentStrategyWithoutEndDate() {
-    Readable readable = new StringReader("11 p1 2018-11-26 - 1 10000 2 AAPL GOOG 10 " +
+    Date todayDate = Utils.getTodayDate();
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.setTime(todayDate);
+    calendar.add(Calendar.DATE, -3);
+    Date dateBefore3Days = calendar.getTime();
+    String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
+
+    Readable readable = new StringReader("11 p1 " + startDateString + " - 1 10000 2 AAPL GOOG 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -527,16 +537,18 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-26");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
-                    "2018-11-26");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-27");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
-                    "2018-11-27");
+    for (int i = 0; i < 3; i++) {
+      Date date = calendar.getTime();
+      String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
+
+      expectedOutput.append(System.lineSeparator())
+              .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on " +
+                      dateString);
+      expectedOutput.append(System.lineSeparator())
+              .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                      dateString);
+      calendar.add(Calendar.DATE, 1);
+    }
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
@@ -548,7 +560,15 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithDifferentWeightsWithRecurrentStrategyWithoutDate() {
-    Readable readable = new StringReader("10 p1 2018-11-26 - 1 10000 2 AAPL 40 GOOG 60 10 " +
+    Date todayDate = Utils.getTodayDate();
+    Calendar calendar = Utils.getCalendarInstance();
+    calendar.setTime(todayDate);
+    calendar.add(Calendar.DATE, -3);
+    Date dateBefore3Days = calendar.getTime();
+    String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
+
+    Readable readable = new StringReader("10 p1 " + startDateString + " - 1 10000 2 AAPL 40 GOOG " +
+            "60 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -568,16 +588,19 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-26");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
-                    "2018-11-26");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-27");
-    expectedOutput.append(System.lineSeparator())
-            .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
-                    "2018-11-27");
+
+    for (int i = 0; i < 3; i++) {
+      Date date = calendar.getTime();
+      String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
+
+      expectedOutput.append(System.lineSeparator())
+              .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on " +
+                      dateString);
+      expectedOutput.append(System.lineSeparator())
+              .append("Purchased 2 share(s) of 'AAPL' at a rate of $2,000.00 per stock on " +
+                      dateString);
+      calendar.add(Calendar.DATE, 1);
+    }
 
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
