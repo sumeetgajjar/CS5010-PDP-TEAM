@@ -63,10 +63,9 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   private int apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
 
   private BiFunctionRetryer<String, Date, BigDecimal> biFunctionRetryer =
-          new BiFunctionRetryer.RetryerBuilder<String, Date, BigDecimal>()
+          new BiFunctionRetryer.RetryerBuilder<>(this::execute)
                   .setNumRetries(10)
                   .setBackOffSeconds(1)
-                  .setFunctionToRetry(this::execute)
                   .setExceptionClass(AlphaVantageAPILimitExceededException.class)
                   .createRetryer();
 
