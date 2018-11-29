@@ -114,7 +114,7 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
   }
 
   private void setAPIKeyIndex() {
-    apiKeyIndex = RANDOM.nextInt();
+    apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
   }
 
   private boolean addDataToLRUCacheIfAvailable(String tickerName, String dateString) {
