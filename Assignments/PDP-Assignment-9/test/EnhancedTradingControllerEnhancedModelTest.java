@@ -515,7 +515,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     Date todayDate = Utils.getTodayDate();
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(todayDate);
-    calendar.add(Calendar.DATE, -3);
+    int numberOfDays = 3;
+    calendar.add(Calendar.DATE, -numberOfDays);
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 
@@ -537,7 +538,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < numberOfDays; i++) {
       Date date = calendar.getTime();
       String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
 
@@ -563,7 +564,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     Date todayDate = Utils.getTodayDate();
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(todayDate);
-    calendar.add(Calendar.DATE, -3);
+    int numberOfDays = 3;
+    calendar.add(Calendar.DATE, -numberOfDays);
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 
@@ -589,7 +591,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < numberOfDays; i++) {
       Date date = calendar.getTime();
       String dateString = Utils.getDefaultFormattedDateStringFromDate(date);
 
