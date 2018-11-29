@@ -13,6 +13,7 @@ import virtualgambling.view.View;
  * for some time.
  */
 public class OrchestratorController extends AbstractController {
+
   /**
    * Constructs a new Orchestrator Controller by taking in a view as input.
    *
