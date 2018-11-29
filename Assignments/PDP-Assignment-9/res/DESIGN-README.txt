@@ -6,6 +6,7 @@ immutable portfolio instead of strings. The portfolio has no setters and hence i
 
 2. moved method get composition, get cost basis, get portfolio value to Portfolio
 Moved all state describing methods of individual portfolio into the Portfolio class
+Justification: To abstract the logic of above mentioned operations from the User model.
 
 3. We have added EnhancedUserModel which extends UserModel according to the open close principle
 and adds methods that allow the user to buy shares by specifying commission percentage and another
@@ -32,11 +33,12 @@ then hands control to EnhancedTradingController.
 9. Our commands change in the sense that we removed UserModel as a param to execute() method in Command Interface,
 as the Command can now be executed on both UserModel and EnhancedUserModel. This makes the command free of any dependencies and
 allows us to scale our design.
+Justification: Now a command interface is not coupled to UserModel.
 
 10. Our previous design helped us a lot in that we merely had to implement a new StockDataSource - AlphaVantageAPIStockDataSource
 and it worked out of the box with our design.
 
-11. The controller now exposes commands (without changes to the public API) in a more user friendly manner
+11. The controller now takes input (without changes to the public API) in a more user friendly manner
 (allows the user to execute commands step by step).
 In the previous design, we were sending the commands in a single line like in a terminal.
 
@@ -45,9 +47,11 @@ We are now using an immutable data class - StockPrice instead of returning BigDe
 This change allows us to maintain data locality since any stock price has to have an associated date.
 
 Utility features added:
-1. We added an LRUCache in utils package that acts as an LRU Cache in order to save time on expensive API calls.
-2. We have added a BiFunctionRetryer that takes in any BiFunction and then follows the Builder pattern in order to
-allow the client of the class to perform retries to operations in a clean manner.
+1. We added a multi-layer caching mechanism with following Levels in order to save time on expensive API calls:
+    a. In memory (JVM) in form of an LRU cache.
+    b. On Disk in form of CSV files.
+
+2. We have added a BiFunctionRetryer that takes in any BiFunction and retries it in case of failures. We use the Builder pattern in order to instantiate the Retryer.
 
 Our application uses the Model-View-Controller architecture in order to implement a virtual trading application.
 
