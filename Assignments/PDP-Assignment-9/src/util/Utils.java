@@ -52,6 +52,7 @@ public class Utils {
    */
   public static String getDefaultFormattedDateStringFromDate(Date date) {
     Utils.requireNonNull(date);
+    SIMPLE_DATE_FORMAT.setLenient(false);
     return SIMPLE_DATE_FORMAT.format(date);
   }
 
@@ -67,6 +68,7 @@ public class Utils {
           throws ParseException {
 
     Utils.requireNonNull(dateString);
+    SIMPLE_DATE_FORMAT.setLenient(false);
     return SIMPLE_DATE_FORMAT.parse(dateString);
   }
 

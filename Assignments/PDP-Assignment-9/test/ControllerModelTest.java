@@ -225,4 +225,27 @@ public abstract class ControllerModelTest {
 
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
+
+  @Test
+  public void unparseableDateFails() {
+    Readable readable = new StringReader("1 p1 3 p1 2018-11-00 2018-09-31 2018-11-01 q");
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-11-00\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable date: \"2018-09-31\"");
+    expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_DATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("$0.00");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
 }
