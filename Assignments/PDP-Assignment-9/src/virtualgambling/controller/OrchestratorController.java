@@ -22,33 +22,6 @@ public class OrchestratorController extends AbstractController {
     super(view);
   }
 
-  private String getWelcomeMessage() {
-    return "" + System.lineSeparator() + ""
-            + "__        __   _                            _____      __     ___      _            "
-            + "   _   _____              _ _             " + System.lineSeparator() + ""
-            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
-            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
-            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
-            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
-            + ""
-            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
-            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
-            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
-            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
-            + System.lineSeparator() + ""
-            + "                                                                                    "
-            + "                                    |___/ "
-            + System.lineSeparator();
-
-  }
-
-  private String getMenuOptions() {
-    return "Please enter the data source option" + System.lineSeparator()
-            + "Enter 1 for 'in-memory'" + System.lineSeparator()
-            + "Enter 2 for 'alpha-vantage-api' (leads to long running operations, the application" +
-            " may become unresponsive for some time.)";
-  }
-
   @Override
   public void run() {
     this.displayOnView(this.getWelcomeMessage());
@@ -85,4 +58,30 @@ public class OrchestratorController extends AbstractController {
     }
   }
 
+  private String getWelcomeMessage() {
+    return "" + System.lineSeparator() + ""
+            + "__        __   _                            _____      __     ___      _            "
+            + "   _   _____              _ _             " + System.lineSeparator() + ""
+            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
+            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
+            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
+            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
+            + ""
+            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
+            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
+            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
+            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
+            + System.lineSeparator() + ""
+            + "                                                                                    "
+            + "                                    |___/ "
+            + System.lineSeparator();
+
+  }
+
+  private String getMenuOptions() {
+    return "Please enter the data source option" + System.lineSeparator()
+            + "Enter 1 for 'in-memory'" + System.lineSeparator()
+            + "Enter 2 for 'alpha-vantage-api' (leads to long running operations, the application" +
+            " may become unresponsive for some time.)";
+  }
 }

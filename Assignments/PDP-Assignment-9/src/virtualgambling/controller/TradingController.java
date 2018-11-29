@@ -29,6 +29,7 @@ import virtualgambling.view.View;
  * Controller} interface.
  */
 public class TradingController extends AbstractController {
+
   private final UserModel userModel;
   private final Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap;
 
