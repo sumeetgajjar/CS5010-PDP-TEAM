@@ -106,8 +106,11 @@ public class TestUtils {
     return "Please enter the data source option" + System.lineSeparator()
             + "Enter 1 for 'in-memory'" + System.lineSeparator()
             + "Enter 2 for 'alpha-vantage-api'" + System.lineSeparator()
-            + "Note: Option 2 leads to long running operations, the application" +
-            " may become unresponsive for some time."
+            + "Note: Option 1 provides stock prices for the last 100 days of the following "
+            + "tickers [\"AAPL\", \"GOOG\", \"GE\", \"BAC\", \"ORCL\", \"VZ\", \"MS\", \"T\"]"
+            + System.lineSeparator()
+            + "Note: Option 2 may lead to longer running time for operations like buying stocks, " +
+            "querying composition or value of a portfolio"
             + System.lineSeparator()
             + "Note: If any given day is a holiday, Option 2 uses the next available working day " +
             "and Option 1 will be unable to find stock data."
