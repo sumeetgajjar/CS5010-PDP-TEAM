@@ -107,12 +107,12 @@ public class EnhancedTradingController extends TradingController {
   private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
       Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
       int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Set<String> shares = getSharesFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
@@ -145,12 +145,12 @@ public class EnhancedTradingController extends TradingController {
   getBuySharesWithRecurringDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      BigDecimal amountToInvest = getBigDecimalInputFromUser(
-              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
       Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
       int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 

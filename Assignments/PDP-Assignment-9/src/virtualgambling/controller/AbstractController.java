@@ -59,7 +59,6 @@ abstract class AbstractController implements Controller {
                                     Consumer<String> consumer) {
     while (true) {
       try {
-        message = message + System.lineSeparator() + "Please press enter if there is not end date";
         String dateString = getStringInputFromUser(message, supplier,
                 consumer);
         if (dateString.isEmpty()) {
