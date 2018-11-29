@@ -18,7 +18,7 @@ import virtualgambling.model.stockdao.StockDAO;
  * {@link RecurringWeightedInvestmentStrategy} is a strategy to invest in a set of stocks that takes
  * ticker and weights and invest in them in a recurring fashion starting from some given day.
  *
- * <p> Optionally, a user may specify an end date. If no end date is specified, yesterday's date
+ * <p>Optionally, a user may specify an end date. If no end date is specified, yesterday's date
  * is the end date.
  */
 public class RecurringWeightedInvestmentStrategy implements Strategy {
@@ -87,7 +87,8 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
    * @return list of {@link SharePurchaseOrder}.
    */
   @Override
-  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO) throws IllegalArgumentException, StrategyExecutionException {
+  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO)
+          throws IllegalArgumentException, StrategyExecutionException {
     if (Objects.isNull(this.endDate)) {
       // by default set endDate to yesterday.
       setEndDate(getDefaultEndDate());

@@ -19,7 +19,6 @@ import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeig
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
-import virtualgambling.model.exceptions.APILimitExceededException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.view.View;
 
@@ -39,7 +38,8 @@ public class EnhancedTradingController extends TradingController {
    * @param view              the view
    * @throws IllegalArgumentException if the given params are null
    */
-  public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view) throws IllegalArgumentException {
+  public EnhancedTradingController(EnhancedUserModel enhancedUserModel, View view)
+          throws IllegalArgumentException {
     super(enhancedUserModel, view);
     this.enhancedUserModel = Utils.requireNonNull(enhancedUserModel);
   }
@@ -48,8 +48,6 @@ public class EnhancedTradingController extends TradingController {
   protected void executeCommand(String commandString) {
     try {
       super.executeCommand(commandString);
-    } catch (APILimitExceededException e) {
-      this.displayOnView("Error in Fetching stock data from API, please retry after 5 minutes");
     } catch (StrategyExecutionException e) {
       this.displayOnView(e.getMessage());
     }
@@ -117,7 +115,8 @@ public class EnhancedTradingController extends TradingController {
     return commandMap;
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
+  private BiFunction<Supplier<String>, Consumer<String>, Command>
+  getBuySharesWithRecurringSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
@@ -192,7 +191,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithCommissionCommand() {
+  private BiFunction<Supplier<String>, Consumer<String>, Command>
+  getBuySharesWithCommissionCommand() {
     return (supplier, consumer) -> {
       String stockName = getStockNameFromUser(supplier, consumer);
 
@@ -213,7 +213,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithDifferentWeightsCommand() {
+  private BiFunction<Supplier<String>, Consumer<String>, Command>
+  getBuySharesWithDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
@@ -234,7 +235,8 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithSameWeightsCommand() {
+  private BiFunction<Supplier<String>, Consumer<String>, Command>
+  getBuySharesWithSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
       Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);

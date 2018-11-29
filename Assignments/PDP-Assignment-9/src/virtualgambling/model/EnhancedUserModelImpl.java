@@ -26,7 +26,8 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
 
   @Override
   public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
-                                      long quantity, double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
+                                      long quantity, double commissionPercentage) throws
+          IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
 
     SharePurchaseOrder sharePurchaseOrder = new SharePurchaseOrder(createPurchaseOrder(tickerName,
             portfolioName, date, quantity),
@@ -38,7 +39,9 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
   @Override
   public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
                                             Strategy strategy,
-                                            double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException, StrategyExecutionException {
+                                            double commissionPercentage) throws
+          IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException,
+          StrategyExecutionException {
     createPortfolioIfNotExists(portfolioName);
     Utils.requireNonNull(strategy);
     this.validateAmountToInvest(amountToInvest);
