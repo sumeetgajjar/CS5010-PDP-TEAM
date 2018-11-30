@@ -1,7 +1,6 @@
 package virtualgambling.model.bean;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import util.Utils;
 
@@ -10,23 +9,48 @@ import util.Utils;
  */
 public class SharePurchaseOrder {
   private final String tickerName;
-  private final BigDecimal unitPrice;
-  private final Date date;
   private final long quantity;
+  private final double commissionPercentage;
+  private final StockPrice stockPrice;
+
+  /**
+   * Constructs an Object of Share purchase order with the given params.
+   *
+   * @param tickerName           the ticker name
+   * @param quantity             the quantity of the shares purchased
+   * @param commissionPercentage the commission percentage for this purchase
+   * @throws IllegalArgumentException if any of the given params are null
+   */
+  public SharePurchaseOrder(String tickerName, StockPrice stockPrice, long quantity,
+                            double commissionPercentage) {
+    Utils.requireNonNull(stockPrice);
+    this.tickerName = Utils.requireNonNull(tickerName);
+    this.stockPrice = Utils.requireNonNull(stockPrice);
+    this.quantity = Utils.requireNonNull(quantity);
+    this.commissionPercentage = Utils.requireNonNull(commissionPercentage);
+  }
 
   /**
    * Constructs an instance of {@link SharePurchaseOrder} with the given params.
    *
    * @param tickerName the tickerName of the purchased share
-   * @param unitPrice  the unit price of the purchased share
-   * @param date       the date at which the share was purchased
    * @param quantity   the quantity of the purchased share
    */
-  public SharePurchaseOrder(String tickerName, BigDecimal unitPrice, Date date, long quantity) {
-    this.tickerName = tickerName;
-    this.unitPrice = unitPrice;
-    this.date = date;
-    this.quantity = quantity;
+  public SharePurchaseOrder(String tickerName, StockPrice stockPrice, long quantity) {
+    this(tickerName, stockPrice, quantity, 0D);
+  }
+
+  /**
+   * Constructs an instance of {@link SharePurchaseOrder} out of an existing sharePurchaseOrder and
+   * given commissionPercentage.
+   *
+   * @param sharePurchaseOrder   share purchase order
+   * @param commissionPercentage commission in terms of percentage out of 100
+   */
+  public SharePurchaseOrder(SharePurchaseOrder sharePurchaseOrder, double commissionPercentage) {
+    this(sharePurchaseOrder.getTickerName(), sharePurchaseOrder.getStockPrice(),
+            sharePurchaseOrder.getQuantity(),
+            validateCommissionPercentage(commissionPercentage));
   }
 
   /**
@@ -39,21 +63,12 @@ public class SharePurchaseOrder {
   }
 
   /**
-   * Returns the unit price of the Share.
+   * Gets {@link StockPrice} of the purchase order.
    *
-   * @return the unit price of the Share
+   * @return {@link StockPrice} of the purchase order.
    */
-  public BigDecimal getUnitPrice() {
-    return unitPrice;
-  }
-
-  /**
-   * Returns the date at which the share was purchased.
-   *
-   * @return the date at which the share was purchased
-   */
-  public Date getDate() {
-    return date;
+  public StockPrice getStockPrice() {
+    return stockPrice;
   }
 
   /**
@@ -66,18 +81,38 @@ public class SharePurchaseOrder {
   }
 
   /**
+   * Returns the commission percentage associated with this purchase.
+   *
+   * @return the commission percentage associated with this purchase
+   */
+  public double getCommissionPercentage() {
+    return commissionPercentage;
+  }
+
+  /**
    * Returns the total cost of this purchase.
    *
    * @return the total cost of this purchase
    */
   public BigDecimal getCostOfPurchase() {
-    return this.unitPrice.multiply(BigDecimal.valueOf(quantity));
+    BigDecimal costOfAllShares =
+            this.getStockPrice().getUnitPrice().multiply(BigDecimal.valueOf(quantity));
+    BigDecimal commission = costOfAllShares.multiply(new BigDecimal(commissionPercentage / 100D));
+    return costOfAllShares.add(commission);
   }
 
   @Override
   public String toString() {
     return String.format("Purchased %d share(s) of '%s' at a rate of %s per stock on %s",
-            quantity, tickerName, Utils.getFormattedCurrencyNumberString(unitPrice),
-            Utils.getDefaultFormattedDateStringFromDate(date));
+            quantity, tickerName,
+            Utils.getFormattedCurrencyNumberString(getStockPrice().getUnitPrice()),
+            Utils.getDefaultFormattedDateStringFromDate(getStockPrice().getDate()));
+  }
+
+  private static double validateCommissionPercentage(double commissionPercentage) {
+    if (commissionPercentage < 0) {
+      throw new IllegalArgumentException("Commission percentage cannot be less than 0");
+    }
+    return commissionPercentage;
   }
 }

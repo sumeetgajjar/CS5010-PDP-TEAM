@@ -36,7 +36,7 @@ public class TextView implements View {
    */
   @Override
   public String getInput() {
-    return scanner.nextLine();
+    return scanner.next();
   }
 
   /**

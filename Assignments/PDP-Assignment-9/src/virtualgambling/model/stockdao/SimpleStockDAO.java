@@ -1,11 +1,10 @@
 package virtualgambling.model.stockdao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
-import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
@@ -27,30 +26,32 @@ public class SimpleStockDAO implements StockDAO {
   }
 
   @Override
-  public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date,
-                                                BigDecimal remainingCapital) throws
+  public SharePurchaseOrder createPurchaseOrder(String tickerName, long quantity, Date date) throws
           IllegalArgumentException, IllegalStateException {
-    Utils.requireNonNull(remainingCapital);
-    BigDecimal stockPrice = this.getPrice(tickerName, date);
+    Utils.requireNonNull(tickerName);
+    Utils.requireNonNull(date);
+    date = this.getValidDate(date);
+    StockPrice stockPrice = this.getPrice(tickerName, date);
     if (quantity <= 0) {
       throw new IllegalArgumentException("Quantity has to be positive");
     }
-    BigDecimal costOfPurchase = stockPrice.multiply(BigDecimal.valueOf(quantity));
-    if (costOfPurchase.compareTo(remainingCapital) > 0) {
-      throw new InsufficientCapitalException("Insufficient funds");
-    }
-    return new SharePurchaseOrder(tickerName, stockPrice, date,
-            quantity);
+    return new SharePurchaseOrder(tickerName, stockPrice, quantity);
   }
 
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException,
+  public StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException,
           IllegalArgumentException {
     Utils.requireNonNull(tickerName);
     Utils.requireNonNull(date);
-    if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
+    if (Utils.isFutureDate(date)) {
       throw new IllegalArgumentException("Cannot buy shares at given time");
     }
+
+    date = this.getValidDate(date);
     return stockDataSource.getPrice(tickerName, date);
+  }
+
+  protected Date getValidDate(Date date) {
+    return Utils.removeTimeFromDate(date);
   }
 }

@@ -9,8 +9,10 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
+import util.Utils;
+import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
@@ -22,7 +24,7 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
  */
 public class SimpleStockDataSource implements StockDataSource {
 
-  private static final Map<String, Map<Date, BigDecimal>> STOCK_PRICES =
+  private static final Map<String, List<StockPrice>> STOCK_PRICES =
           getStockPricesForLast10Days();
 
   /**
@@ -37,38 +39,46 @@ public class SimpleStockDataSource implements StockDataSource {
    *                                    found
    */
   @Override
-  public BigDecimal getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-    BigDecimal stockPrice = STOCK_PRICES.getOrDefault(tickerName, Collections.emptyMap()).get(date);
-    if (Objects.nonNull(stockPrice)) {
-      return stockPrice;
+  public StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException {
+    if (Utils.isFutureDate(date) || Utils.isNonWorkingDayOfTheWeek(date)) {
+      throw new IllegalArgumentException("Cannot buy shares at given time");
+    }
+
+    List<StockPrice> stockPrices =
+            STOCK_PRICES.getOrDefault(tickerName, Collections.emptyList()).stream()
+                    .filter(stockPrice -> Utils.doesDatesHaveSameDay(stockPrice.getDate(), date))
+                    .collect(Collectors.toList());
+    if (!stockPrices.isEmpty()) {
+      // only a single entry will exist
+      return stockPrices.get(0);
     } else {
       throw new StockDataNotFoundException(
               String.format("Stock Data not found for Stock:%s for Date:%s", tickerName, date));
     }
   }
 
-  private static Map<String, Map<Date, BigDecimal>> getStockPricesForLast10Days() {
+  private static Map<String, List<StockPrice>> getStockPricesForLast10Days() {
     List<Date> dates = getDatesForLast100Days();
 
-    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T");
+    List<String> stocks = Arrays.asList("AAPL", "GOOG", "GE", "BAC", "ORCL", "VZ", "MS", "T", "FB"
+            , "NFLX");
     BigDecimal stockPrice = new BigDecimal(10);
-    Map<String, Map<Date, BigDecimal>> stockPrices = new LinkedHashMap<>();
+    Map<String, List<StockPrice>> stockPrices = new LinkedHashMap<>();
     for (String stockName : stocks) {
+      List<StockPrice> stockPriceList = new ArrayList<>();
       for (Date date : dates) {
 
-        Map<Date, BigDecimal> dateToPriceMap =
-                stockPrices.getOrDefault(stockName, new LinkedHashMap<>());
-        dateToPriceMap.put(date, stockPrice);
+        stockPriceList.add(new StockPrice(stockPrice, date));
 
         stockPrice = stockPrice.add(BigDecimal.TEN);
-        stockPrices.put(stockName, dateToPriceMap);
       }
+      stockPrices.put(stockName, stockPriceList);
     }
     return stockPrices;
   }
 
   private static List<Date> getDatesForLast100Days() {
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar = Utils.getCalendarInstance();
     calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);

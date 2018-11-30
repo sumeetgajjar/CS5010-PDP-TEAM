@@ -1,17 +1,18 @@
 package virtualgambling.model;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import util.Utils;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.stockdao.StockDAO;
 
@@ -23,11 +24,11 @@ import virtualgambling.model.stockdao.StockDAO;
  */
 public class SimpleUserModel implements UserModel {
 
-  private static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
+  protected static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
-  private final StockDAO stockDAO;
-  private final Map<String, Portfolio> portfolios;
-  private BigDecimal remainingCapital;
+  protected final StockDAO stockDAO;
+  protected final Map<String, Portfolio> portfolios;
+  protected BigDecimal remainingCapital;
 
   /**
    * Constructs a {@link SimpleUserModel} object with given params.
@@ -55,7 +56,7 @@ public class SimpleUserModel implements UserModel {
   public void createPortfolio(String portfolioName) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     if (this.portfolios.containsKey(portfolioName)) {
-      throw new IllegalArgumentException("Portfolio already exists");
+      return;
     }
 
     if (portfolioName.length() == 0) {
@@ -66,139 +67,53 @@ public class SimpleUserModel implements UserModel {
       throw new IllegalArgumentException("Invalid Portfolio Name");
     }
 
-    Portfolio portfolio = new Portfolio(portfolioName);
+    Portfolio portfolio = instantiatePortfolio(portfolioName, Collections.emptyList());
     this.portfolios.put(portfolioName, portfolio);
   }
 
-  /**
-   * Returns the costBasis of the given portfolio at the given date. It throws {@link
-   * IllegalArgumentException} in the following cases.
-   * <ul>
-   * <li>If any of the given param is null</li>
-   * <li>If the given portfolio does not exists</li>
-   * <li>If the given date is greater than current date</li>
-   * </ul>
-   *
-   * @param portfolioName the portfolioName
-   * @param date          the date
-   * @return the costBasis of the given portfolio
-   * @throws IllegalArgumentException if the given params are invalid
-   */
   @Override
-  public BigDecimal getCostBasisOfPortfolio(String portfolioName, Date date)
-          throws IllegalArgumentException {
-
-    this.checkSanity(portfolioName, date);
-
-    Portfolio portfolio = this.portfolios.get(portfolioName);
-
-    return portfolio.getPurchases().stream()
-            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
-            .map(sharePurchaseInfo ->
-                    sharePurchaseInfo.getUnitPrice()
-                            .multiply(new BigDecimal(sharePurchaseInfo.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-  }
-
-  /**
-   * Returns the total value of the given portfolio at the given date. It throws {@link
-   * IllegalArgumentException} in the following cases.
-   * <ul>
-   * <li>If any of the given param is null</li>
-   * <li>If the given portfolio does not exists</li>
-   * <li>If the given date is greater than current date</li>
-   * </ul>
-   *
-   * @param portfolioName the portfolioName
-   * @param date          the date
-   * @return the total value of the portfolio
-   * @throws StockDataNotFoundException if the data is not found for the given date
-   * @throws IllegalArgumentException   if the given params are invalid
-   */
-  @Override
-  public BigDecimal getPortfolioValue(String portfolioName, Date date)
-          throws StockDataNotFoundException, IllegalArgumentException {
-
-    this.checkSanity(portfolioName, date);
-
-    Portfolio portfolio = this.portfolios.get(portfolioName);
-    BigDecimal totalPortfolioValue = BigDecimal.ZERO;
-
-    List<SharePurchaseOrder> filteredPurchaseInfo = portfolio.getPurchases().stream()
-            .filter(sharePurchaseInfo -> sharePurchaseInfo.getDate().compareTo(date) <= 0)
-            .collect(Collectors.toList());
-
-    for (SharePurchaseOrder sharePurchaseOrder : filteredPurchaseInfo) {
-      long quantity = sharePurchaseOrder.getQuantity();
-      BigDecimal price =
-              this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), date);
-      totalPortfolioValue = totalPortfolioValue.add(price.multiply(new BigDecimal(quantity)));
-
+  public Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException {
+    Utils.requireNonNull(portfolioName);
+    if (this.portfolios.containsKey(portfolioName)) {
+      return this.portfolios.get(portfolioName);
+    } else {
+      throw new PortfolioNotFoundException(String.format("portfolio by the name '%s' not found",
+              portfolioName));
     }
-    return totalPortfolioValue;
   }
 
   @Override
-  public String getPortfolioComposition(String portfolioName) throws IllegalArgumentException {
-    if (!this.portfolios.containsKey(portfolioName)) {
-      throw new IllegalArgumentException("Portfolio not found");
-    }
-
-    Date dateTime = getTodayDate();
-    Portfolio portfolio = this.portfolios.get(portfolioName);
-
-    StringBuilder composition = new StringBuilder();
-    composition.append(String.format("%-20s%-20s%-20s%-20s%s", "Buy Date", "Stocks", "Quantity",
-            "Cost Price", "Current Value"));
-    composition.append(System.lineSeparator());
-    List<SharePurchaseOrder> purchases = portfolio.getPurchases();
-    for (SharePurchaseOrder sharePurchaseOrder : purchases) {
-      composition.append(String.format("%-20s%-20s%-20s%-20s%s",
-              Utils.getDefaultFormattedDateStringFromDate(sharePurchaseOrder.getDate()),
-              sharePurchaseOrder.getTickerName(),
-              sharePurchaseOrder.getQuantity(),
-              Utils.getFormattedCurrencyNumberString(sharePurchaseOrder.getUnitPrice()),
-              Utils.getFormattedCurrencyNumberString(
-                      this.stockDAO.getPrice(sharePurchaseOrder.getTickerName(), dateTime))));
-      composition.append(System.lineSeparator());
-    }
-
-    BigDecimal portfolioValue = getPortfolioValue(portfolioName, dateTime);
-    BigDecimal costBasisOfPortfolio = getCostBasisOfPortfolio(portfolioName, dateTime);
-
-    composition.append(System.lineSeparator());
-    composition.append(String.format("%-20s%s", "Total Value:",
-            Utils.getFormattedCurrencyNumberString(portfolioValue)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Total Cost:",
-            Utils.getFormattedCurrencyNumberString(costBasisOfPortfolio)));
-    composition.append(System.lineSeparator());
-
-    composition.append(String.format("%-20s%s", "Profit:",
-            Utils.getFormattedCurrencyNumberString(portfolioValue.subtract(costBasisOfPortfolio))));
-    return composition.toString();
-  }
-
-  @Override
-  public String getAllPortfolioNames() {
-    return this.portfolios.values().stream()
-            .map(Portfolio::getName)
-            .collect(Collectors.joining(System.lineSeparator()));
+  public List<Portfolio> getAllPortfolios() {
+    return new ArrayList<>(this.portfolios.values());
   }
 
   @Override
   public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
                                       long quantity) throws IllegalArgumentException,
           StockDataNotFoundException, InsufficientCapitalException {
+    SharePurchaseOrder sharePurchaseOrder = createPurchaseOrder(tickerName, portfolioName, date,
+            quantity);
+    return processPurchaseOrder(portfolioName, sharePurchaseOrder);
+  }
+
+  protected SharePurchaseOrder processPurchaseOrder(String portfolioName,
+                                                    SharePurchaseOrder sharePurchaseOrder) {
+    BigDecimal costOfPurchase = sharePurchaseOrder.getCostOfPurchase();
+    if (costOfPurchase.compareTo(remainingCapital) > 0) {
+      throw new InsufficientCapitalException("Insufficient funds");
+    }
+    addOrderToPortfolio(sharePurchaseOrder, portfolioName);
+    this.remainingCapital = this.remainingCapital.subtract(costOfPurchase);
+    return sharePurchaseOrder;
+  }
+
+  protected SharePurchaseOrder createPurchaseOrder(String tickerName, String portfolioName,
+                                                   Date date, long quantity) {
     Utils.requireNonNull(tickerName);
     this.checkSanity(portfolioName, date);
 
-    SharePurchaseOrder sharePurchaseOrder = this.stockDAO.createPurchaseOrder(tickerName, quantity,
-            date, this.remainingCapital);
-    this.portfolios.get(portfolioName).addPurchaseOrder(sharePurchaseOrder);
-    this.remainingCapital = this.remainingCapital.subtract(sharePurchaseOrder.getCostOfPurchase());
-    return sharePurchaseOrder;
+    return this.stockDAO.createPurchaseOrder(tickerName, quantity,
+            date);
   }
 
   @Override
@@ -206,11 +121,12 @@ public class SimpleUserModel implements UserModel {
     return this.remainingCapital;
   }
 
-  protected Date getTodayDate() {
-    return Utils.removeTimeFromDate(Calendar.getInstance().getTime());
+  protected Portfolio instantiatePortfolio(String portfolioName,
+                                           List<SharePurchaseOrder> sharePurchaseOrders) {
+    return new Portfolio(portfolioName, stockDAO, sharePurchaseOrders);
   }
 
-  private void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
+  protected void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     Utils.requireNonNull(date);
 
@@ -221,5 +137,13 @@ public class SimpleUserModel implements UserModel {
     if (Utils.isFutureDate(date)) {
       throw new IllegalArgumentException("Time cannot be in Future");
     }
+  }
+
+  protected void addOrderToPortfolio(SharePurchaseOrder sharePurchaseOrder, String portfolioName) {
+    Portfolio portfolio = this.portfolios.get(portfolioName);
+    ArrayList<SharePurchaseOrder> newSharePurchaseOrders =
+            new ArrayList<>(portfolio.getPurchases());
+    newSharePurchaseOrders.add(sharePurchaseOrder);
+    this.portfolios.put(portfolioName, instantiatePortfolio(portfolioName, newSharePurchaseOrders));
   }
 }

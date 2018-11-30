@@ -1,28 +1,27 @@
 package virtualgambling.controller;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import util.Utils;
-import virtualgambling.controller.command.BuyShareCommand;
 import virtualgambling.controller.command.Command;
-import virtualgambling.controller.command.CostBasisCommand;
-import virtualgambling.controller.command.CreatePortfolioCommand;
-import virtualgambling.controller.command.GetAllPortfolioCommand;
-import virtualgambling.controller.command.GetCompositionCommand;
-import virtualgambling.controller.command.PortfolioValueCommand;
-import virtualgambling.controller.command.RemainingCapitalCommand;
+import virtualgambling.controller.command.usermodelcommand.BuyShareCommand;
+import virtualgambling.controller.command.usermodelcommand.CostBasisCommand;
+import virtualgambling.controller.command.usermodelcommand.CreatePortfolioCommand;
+import virtualgambling.controller.command.usermodelcommand.GetAllPortfolioCommand;
+import virtualgambling.controller.command.usermodelcommand.GetCompositionCommand;
+import virtualgambling.controller.command.usermodelcommand.PortfolioValueCommand;
+import virtualgambling.controller.command.usermodelcommand.RemainingCapitalCommand;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
+import virtualgambling.model.exceptions.RetryException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.view.View;
 
@@ -30,10 +29,10 @@ import virtualgambling.view.View;
  * This class represents a Trading Controller for our VirtualGambling MVC app. It implements {@link
  * Controller} interface.
  */
-public class TradingController implements Controller {
+public class TradingController extends AbstractController {
 
   private final UserModel userModel;
-  private final View view;
+  private final Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap;
 
   /**
    * Constructs a object of {@link TradingController} with the given params.
@@ -43,8 +42,9 @@ public class TradingController implements Controller {
    * @throws IllegalArgumentException if the given params are null
    */
   public TradingController(UserModel userModel, View view) throws IllegalArgumentException {
+    super(view);
     this.userModel = Utils.requireNonNull(userModel);
-    this.view = Utils.requireNonNull(view);
+    this.commandMap = this.getCommandMap();
   }
 
   /**
@@ -61,156 +61,150 @@ public class TradingController implements Controller {
    */
   @Override
   public void run() throws IllegalStateException {
-    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
-            this.getCommandMap();
-    this.displayOnView(getWelcomeMessage());
 
     while (true) {
-      try {
-        String inputFromView = getInputFromView();
-        Scanner scanner = new Scanner(inputFromView);
-        String commandString = scanner.next();
 
-        if (commandString.equalsIgnoreCase("q")
-                || commandString.equalsIgnoreCase("quit")) {
-          return;
-        }
+      this.displayOnView(getMenuString());
+      String commandString = getInputFromView();
 
-        BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
-                commandMap.get(commandString);
-
-        if (Objects.nonNull(biFunction)) {
-          Command command = biFunction.apply(scanner::next, this::displayOnView);
-          command.execute(this.userModel);
-        } else {
-          this.displayOnView("Command not found, please try again");
-        }
-      } catch (NoSuchElementException e) {
-        this.displayOnView("Incomplete Command, please enter valid parameters");
-      } catch (IllegalArgumentException
-              | InsufficientCapitalException | StockDataNotFoundException e) {
-        this.displayOnView(e.getMessage());
+      if (isQuitCommand(commandString)) {
+        return;
       }
+
+      this.executeCommand(commandString);
     }
   }
 
-  private Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+  protected void executeCommand(String commandString) {
+    try {
+      BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
+              this.commandMap.get(commandString);
+
+      if (Objects.nonNull(biFunction)) {
+        Command command = biFunction.apply(this::getInputFromView, this::displayOnView);
+        command.execute();
+      } else {
+        this.displayOnView(Constants.COMMAND_NOT_FOUND_MESSAGE);
+      }
+    } catch (NoSuchElementException e) {
+      this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);
+    } catch (IllegalArgumentException | InsufficientCapitalException |
+            StockDataNotFoundException | PortfolioNotFoundException e) {
+      this.displayOnView(e.getMessage());
+    } catch (RetryException e) {
+      this.displayOnView("Cannot get Price from API, please try after sometime or try " +
+              "reducing the number of distinct shares to purchase");
+    } catch (RuntimeException e) {
+      this.displayOnView(e.getMessage());
+    }
+  }
+
+  protected String getMenuString() {
+    return System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "1 => to create a portfolio"
+            + System.lineSeparator()
+            + "2 => to list all portfolios"
+            + System.lineSeparator()
+            + "3 => to get the cost basis of a portfolio"
+            + System.lineSeparator()
+            + "4 => to get the value of a portfolio"
+            + System.lineSeparator()
+            + "5 => to get the composition of a portfolio"
+            + System.lineSeparator()
+            + "6 => to get the remaining capital"
+            + System.lineSeparator()
+            + "7 => to buy shares"
+            + System.lineSeparator()
+            + "q or quit => to quit"
+            + System.lineSeparator()
+            + "Please enter a choice"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator();
+  }
+
+  protected Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
     Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
             new HashMap<>();
 
-    commandMap.put("create_portfolio", (supplier, consumer) ->
-            new CreatePortfolioCommand(supplier.get()));
-
-    commandMap.put("get_all_portfolios", (supplier, consumer) ->
-            new GetAllPortfolioCommand(consumer));
-
-    commandMap.put("get_portfolio_cost_basis", (supplier, consumer) ->
-            new CostBasisCommand(supplier.get(),
-                    getDateFromString(supplier), consumer));
-
-    commandMap.put("get_portfolio_value", (supplier, consumer) ->
-            new PortfolioValueCommand(supplier.get(),
-                    getDateFromString(supplier), consumer));
-
-    commandMap.put("get_portfolio_composition", (supplier, consumer) ->
-            new GetCompositionCommand(supplier.get(), consumer));
-
-    commandMap.put("get_remaining_capital", (supplier, consumer) ->
-            new RemainingCapitalCommand(consumer));
-
-    commandMap.put("buy_shares", this::getBuySharesCommand);
+    commandMap.put("1", getCreatePortfolioCommand());
+    commandMap.put("2", getGetAllPortfolioCommand());
+    commandMap.put("3", getCostBasisCommand());
+    commandMap.put("4", getPortfolioValueCommand());
+    commandMap.put("5", getGetCompositionCommand());
+    commandMap.put("6", getRemainingCapitalCommand());
+    commandMap.put("7", getBuySharesCommand());
 
     return commandMap;
   }
 
-  private Command getBuySharesCommand(Supplier<String> supplier, Consumer<String> consumer) {
-    String stockName = supplier.get();
-    String portfolioName = supplier.get();
-    Date date = getDateFromString(supplier);
-    try {
-      long quantity = Long.parseLong(supplier.get());
-      return new BuyShareCommand(
-              stockName,
-              portfolioName,
-              date,
-              quantity,
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getRemainingCapitalCommand() {
+    return (supplier, consumer) ->
+            new RemainingCapitalCommand(this.userModel, consumer);
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getCostBasisCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
+      return new CostBasisCommand(this.userModel, portfolioName, date, consumer);
+    };
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getGetCompositionCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      return new GetCompositionCommand(this.userModel, portfolioName, consumer);
+    };
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getPortfolioValueCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
+      return new PortfolioValueCommand(this.userModel, portfolioName, date, consumer);
+    };
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getGetAllPortfolioCommand() {
+    return (supplier, consumer) -> new GetAllPortfolioCommand(this.userModel, consumer);
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getCreatePortfolioCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      return new CreatePortfolioCommand(this.userModel, portfolioName);
+    };
+  }
+
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesCommand() {
+    return (supplier, consumer) -> {
+      String stockName = getStockNameFromUser(supplier, consumer);
+
+      String portfolioName = getPortfolioNameFromUser(supplier, consumer);
+      Date date = getDateFromUser(Constants.INVESTMENT_DATE_MESSAGE, supplier, consumer);
+      long quantity = getShareQuantityFromUser(supplier, consumer);
+      return new BuyShareCommand(this.userModel, stockName, portfolioName, date, quantity,
               consumer);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Invalid quantity of shares");
-    }
+    };
   }
 
-  private void displayOnView(String text) throws IllegalStateException {
-    try {
-      this.view.display(text);
-      this.view.display(System.lineSeparator());
-    } catch (IOException e) {
-      throw new IllegalStateException("Cannot display data on view");
-    }
+  protected long getShareQuantityFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getLongInputFromUser(Constants.SHARE_QUANTITY_MESSAGE, supplier, consumer);
   }
 
-  private String getInputFromView() throws IllegalStateException {
-    try {
-      return view.getInput();
-    } catch (IOException e) {
-      throw new IllegalStateException("Cannot get data from view");
-    }
+  protected String getPortfolioNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getStringInputFromUser(Constants.PORTFOLIO_NAME_MESSAGE, supplier, consumer);
   }
 
-  private static Date getDateFromString(Supplier<String> supplier) throws IllegalArgumentException {
-    try {
-      return Utils.getDateFromDefaultFormattedDateString(supplier.get());
-    } catch (ParseException e) {
-      throw new IllegalArgumentException("Invalid date format");
-    }
+  protected String getStockNameFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+    return getStringInputFromUser(Constants.STOCK_NAME_MESSAGE, supplier, consumer);
   }
 
-  private String getWelcomeMessage() {
-    return "" + System.lineSeparator() + ""
-            + "__        __   _                            _____      __     ___      _            "
-            + "   _   _____              _ _             " + System.lineSeparator() + ""
-            + "\\ \\      / /__| | ___ ___  _ __ ___   ___  |_   _|__   \\ \\   / (_)_ __| |_ _   _"
-            + "  __ _| | |_   _| __ __ _  __| (_)_ __   __ _ " + System.lineSeparator() + ""
-            + " \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\   | |/ _ \\   \\ \\ / /| | '__| "
-            + "__| | | |/ _` | |   | || '__/ _` |/ _` | | '_ \\ / _` |" + System.lineSeparator()
-            + ""
-            + "  \\ V  V /  __/ | (_| (_) | | | | | |  __/   | | (_) |   \\ V / | | |  | |_| |_| | "
-            + "(_| | |   | || | | (_| | (_| | | | | | (_| |" + System.lineSeparator() + ""
-            + "   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|   |_|\\___/     \\_/  |_|_|   "
-            + "\\__|\\__,_|\\__,_|_|   |_||_|  \\__,_|\\__,_|_|_| |_|\\__, |"
-            + System.lineSeparator() + ""
-            + "                                                                                    "
-            + "                                    |___/ "
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "You can use the following example commands where the first word is the "
-            + System.lineSeparator() + "command and the remaining are it's parameters"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "create_portfolio portfolioName (portfolioName should be one word)."
-            + System.lineSeparator()
-            + "get_all_portfolios"
-            + System.lineSeparator()
-            + "get_portfolio_cost_basis portfolioName date"
-            + System.lineSeparator()
-            + "get_portfolio_value portfolioName date"
-            + System.lineSeparator()
-            + "get_portfolio_composition portfolioName"
-            + System.lineSeparator()
-            + "get_remaining_capital"
-            + System.lineSeparator()
-            + "buy_shares tickerName portfolioName date quantity"
-            + System.lineSeparator()
-            + "q or quit"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "All dates must be in this format 'yyyy-MM-DD' and the date should not be a weekend."
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + System.lineSeparator();
-  }
 }
