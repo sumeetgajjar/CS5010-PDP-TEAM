@@ -1061,7 +1061,7 @@ public class EnhancedUserModelTest extends UserModelTest {
     startCalendar.set(2018, Calendar.SEPTEMBER, 24);
     endCalendar.set(2018, Calendar.NOVEMBER, 27);
 
-    long numberOfDaysBetweenStartDateAndEndDate = Utils.absoluteDaysBetweenDates(
+    long numberOfDaysBetweenStartDateAndEndDate = Utils.absoluteInclusiveDaysBetweenDates(
             startCalendar.getTime(), endCalendar.getTime()
     );
 
@@ -1069,7 +1069,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     int amountToInvest = 1000;
 
     for (int dayFrequency : Arrays.asList(5, 10, 30, 50)) {
-      long numberOfPurchases = numberOfDaysBetweenStartDateAndEndDate / dayFrequency + 1;
+      long numberOfPurchases =
+              (long) Math.ceil(numberOfDaysBetweenStartDateAndEndDate * 1.0 / dayFrequency);
       totalNumberOfPurchases += numberOfPurchases;
 
       Strategy recurringWeightedInvestmentStrategy =
