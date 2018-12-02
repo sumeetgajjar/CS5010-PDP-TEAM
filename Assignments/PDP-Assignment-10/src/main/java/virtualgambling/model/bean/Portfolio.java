@@ -16,7 +16,8 @@ import virtualgambling.model.stockdao.StockDAO;
  * purchases of Share associated with it.
  */
 public class Portfolio implements Serializable {
-  public static final long serialVersionUID = 1234567890L;
+
+  private static final long serialVersionUID = -8134764875103300708L;
   private final String name;
   private final StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
@@ -32,6 +33,16 @@ public class Portfolio implements Serializable {
     this.name = Utils.requireNonNull(name);
     this.stockDAO = Utils.requireNonNull(stockDAO);
     this.purchases = Utils.requireNonNull(purchases);
+  }
+
+  /**
+   * Returns the Portfolio from the given serializedString of the portfolio.
+   *
+   * @param serializedString the serialized string
+   * @return the Portfolio from the given serializedString of the portfolio
+   */
+  public static Portfolio deserialize(String serializedString) {
+    return null;
   }
 
   /**
@@ -122,6 +133,15 @@ public class Portfolio implements Serializable {
 
     }
     return totalPortfolioValue;
+  }
+
+  /**
+   * Returns the serialized string of this object.
+   *
+   * @return the serialized string of this object
+   */
+  public String serialize() {
+    return null;
   }
 
   @Override
