@@ -1,5 +1,14 @@
 package util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -211,5 +220,41 @@ public class Utils {
 
     calendar.add(Calendar.DATE, -numDaysToReduce);
     return calendar.getTime();
+  }
+
+  /**
+   * Saves the given string to a file at the given path.
+   *
+   * @param path             the path to save the string
+   * @param serializedString the string to save
+   * @throws IOException if unable to save to file
+   */
+  public static void saveToFile(Path path, String serializedString) throws IOException {
+    try (BufferedWriter writer =
+                 new BufferedWriter(
+                         new OutputStreamWriter(
+                                 new FileOutputStream(new File(path.toUri()))))) {
+
+      writer.write(serializedString);
+    }
+  }
+
+  /**
+   * Returns the string read from the file at given path.
+   *
+   * @param path the path to read file from
+   * @return the string read from the file at given path
+   * @throws IOException if unable to read from file
+   */
+  public static String readStringFromFile(Path path) throws IOException {
+    StringBuilder builder = new StringBuilder();
+    try (BufferedReader reader =
+                 new BufferedReader(
+                         new InputStreamReader(
+                                 new FileInputStream(new File(path.toUri()))))) {
+
+      builder.append(reader.readLine());
+    }
+    return builder.toString();
   }
 }
