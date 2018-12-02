@@ -1,5 +1,6 @@
 package virtualgambling.model.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
@@ -14,7 +15,8 @@ import virtualgambling.model.stockdao.StockDAO;
  * This class represents {@link Portfolio} of the User. The portfolio has a Name and a list of
  * purchases of Share associated with it.
  */
-public class Portfolio {
+public class Portfolio implements Serializable {
+  public static final long serialVersionUID = 1234567890L;
   private final String name;
   private final StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
