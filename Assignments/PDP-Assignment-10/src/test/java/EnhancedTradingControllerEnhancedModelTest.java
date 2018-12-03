@@ -633,8 +633,9 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     Date todayDate = Utils.getTodayDate();
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(todayDate);
-    int numberOfDays = 3;
-    calendar.add(Calendar.DATE, -numberOfDays);
+    calendar.add(Calendar.DATE, -7);
+
+    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(), Utils.getLastWorkingDay());
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 
@@ -684,8 +685,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     Date todayDate = Utils.getTodayDate();
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(todayDate);
-    int numberOfDays = 3;
-    calendar.add(Calendar.DATE, -numberOfDays);
+    calendar.add(Calendar.DATE, -7);
+    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(), Utils.getLastWorkingDay());
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 

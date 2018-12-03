@@ -106,14 +106,9 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
         String tickerName = tickerAndAmount.getKey();
         Double stockWeight = tickerAndAmount.getValue();
         StockPrice stockPrice = stockDAO.getPrice(tickerName, dateOfPurchase);
-        BigDecimal amountAvailableForThisStock = amountToInvest.multiply(BigDecimal.valueOf(
-                stockWeight
-        )).divide(
-                BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN
-        );
-        long quantity =
-                amountAvailableForThisStock.divide(stockPrice.getUnitPrice(),
-                        BigDecimal.ROUND_DOWN).longValue();
+        BigDecimal amountAvailableForThisStock = getAmountAvailableForThisStock(amountToInvest,
+                stockWeight);
+        long quantity = getQuantityToBePurchased(stockPrice, amountAvailableForThisStock);
         if (quantity <= 0) {
           break;
         }
@@ -134,13 +129,27 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
     return sharePurchaseOrders;
   }
 
+  private long getQuantityToBePurchased(StockPrice stockPrice,
+                                        BigDecimal amountAvailableForThisStock) {
+    return amountAvailableForThisStock.divide(stockPrice.getUnitPrice(),
+            BigDecimal.ROUND_DOWN).longValue();
+  }
+
+  private BigDecimal getAmountAvailableForThisStock(BigDecimal amountToInvest, Double stockWeight) {
+    return amountToInvest.multiply(BigDecimal.valueOf(
+            stockWeight
+    )).divide(
+            BigDecimal.valueOf(100), BigDecimal.ROUND_DOWN
+    );
+  }
+
   /**
    * Gets the default end date if the endDate has not been provided to the constructor.
    *
    * @return a default end date if the endDate has not been provided via the constructor.
    */
   protected Date getDefaultEndDate() {
-    return Utils.removeTimeFromDate(Utils.getYesterdayDate());
+    return Utils.removeTimeFromDate(Utils.getLastWorkingDay());
   }
 
   private void checkInvariantForStockWeights(Map<String, Double> stockWeights) {

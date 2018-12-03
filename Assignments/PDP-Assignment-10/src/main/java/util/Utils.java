@@ -184,9 +184,9 @@ public class Utils {
    * @param date2 second date
    * @return the number of days between the 2 dates
    */
-  public static long absoluteDaysBetweenDates(Date date1, Date date2) {
+  public static long absoluteInclusiveDaysBetweenDates(Date date1, Date date2) {
     long difference = Math.abs(date1.getTime() - date2.getTime());
-    return TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+    return TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS) + 1;
   }
 
   /**
@@ -199,6 +199,27 @@ public class Utils {
   public static Map<String, Double> getStocksWithWeights(Set<String> tickerNames) {
     double weight = 100.0 / tickerNames.size();
     return tickerNames.stream().collect(Collectors.toMap(stock -> stock, stock -> weight));
+  }
+
+  /**
+   * This method returns the last working day of the week before this day.
+   *
+   * <p>This does not deal with public holidays, it merely treats Saturday and Sunday as holiday.
+   *
+   * @return the last working day of the week.
+   */
+  public static Date getLastWorkingDay() {
+    Calendar calendar = getCalendarInstance();
+    int numDaysToReduce = 1;
+    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+      numDaysToReduce = 3;
+    }
+    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+      numDaysToReduce = 2;
+    }
+
+    calendar.add(Calendar.DATE, -numDaysToReduce);
+    return calendar.getTime();
   }
 
   /**
