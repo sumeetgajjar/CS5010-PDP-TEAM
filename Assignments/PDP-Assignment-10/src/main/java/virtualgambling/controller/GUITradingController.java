@@ -1,5 +1,6 @@
 package virtualgambling.controller;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +45,7 @@ public class GUITradingController implements Controller {
       try {
         this.enhancedUserModel.createPortfolio(portfolio);
         return true;
-      } catch (IllegalArgumentException e) {
+      } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return false;
       }
@@ -104,6 +105,24 @@ public class GUITradingController implements Controller {
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
+      }
+    }
+
+    @Override
+    public boolean loadPortfolio(String portfolioName, File portfolioFile) {
+      try {
+        return true;
+      } catch (Exception e) {
+        return false;
+      }
+    }
+
+    @Override
+    public boolean savePortfolio(String portfolioName) {
+      try {
+        return true;
+      } catch (Exception e) {
+        return false;
       }
     }
 

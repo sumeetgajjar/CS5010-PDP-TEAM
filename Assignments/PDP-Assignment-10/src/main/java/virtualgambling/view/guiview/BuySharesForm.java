@@ -26,11 +26,6 @@ public class BuySharesForm extends AbstractForm {
   }
 
   @Override
-  protected void appendOutput(String message) {
-    this.mainForm.appendOutput(message);
-  }
-
-  @Override
   protected void initComponents() {
 
     this.setLayout(new GridLayout(6, 1));

@@ -56,11 +56,6 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
     this.add(buttonJPanel);
   }
 
-  @Override
-  protected void appendOutput(String message) {
-    this.mainForm.appendOutput(message);
-  }
-
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
                                                              JTextField dateTextField) {
     return e -> {

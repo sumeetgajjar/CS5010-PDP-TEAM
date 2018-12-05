@@ -40,10 +40,6 @@ public abstract class AbstractForm extends JFrame {
 
   protected abstract void initComponents();
 
-  protected void appendOutput(String message) {
-
-  }
-
   protected void postInit() {
     this.addJFrameClosingEvent();
     this.pack();

@@ -25,14 +25,6 @@ public class MainForm extends AbstractForm implements GUIView {
     this.setVisible(true);
   }
 
-  private JTextArea getJTextArea() {
-    JTextArea jTextArea = new JTextArea();
-    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
-    jTextArea.setEditable(false);
-    jTextArea.setLineWrap(true);
-    return jTextArea;
-  }
-
   @Override
   public void addFeatures(Features features) {
     this.features = features;
@@ -50,13 +42,8 @@ public class MainForm extends AbstractForm implements GUIView {
 
   @Override
   public void display(String text) {
-    this.appendOutput(text);
-  }
-
-  @Override
-  protected void appendOutput(String message) {
     this.jTextArea.append(System.lineSeparator());
-    this.jTextArea.append(message);
+    this.jTextArea.append(text);
     this.jTextArea.append(System.lineSeparator());
     this.jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
   }
@@ -97,6 +84,9 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton createPortfolioButton = getCreatePortfolioJButton();
     buttonJPanel.add(createPortfolioButton);
 
+    JButton loadPortfolioButton = getLoadPortfolioButton();
+    buttonJPanel.add(loadPortfolioButton);
+
     JButton getAllPortfoliosButton = getGetAllPortfolioJButton();
     buttonJPanel.add(getAllPortfoliosButton);
 
@@ -120,6 +110,16 @@ public class MainForm extends AbstractForm implements GUIView {
 
     JButton quitButton = getQuitJButton();
     buttonJPanel.add(quitButton);
+  }
+
+  private JButton getLoadPortfolioButton() {
+    JButton jButton = new JButton("Load Portfolio");
+    jButton.addActionListener(e -> {
+      LoadPortfolioForm loadPortfolioForm =
+              new LoadPortfolioForm(this, features);
+      GUIUtils.showPrevious(loadPortfolioForm, this);
+    });
+    return jButton;
   }
 
   private JButton getPortfolioCompositionButton() {
@@ -215,5 +215,13 @@ public class MainForm extends AbstractForm implements GUIView {
       GUIUtils.showPrevious(createPortfolioForm, this);
     });
     return createPortfolioButton;
+  }
+
+  private JTextArea getJTextArea() {
+    JTextArea jTextArea = new JTextArea();
+    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+    jTextArea.setEditable(false);
+    jTextArea.setLineWrap(true);
+    return jTextArea;
   }
 }

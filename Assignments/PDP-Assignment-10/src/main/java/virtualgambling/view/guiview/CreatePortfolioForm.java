@@ -38,11 +38,6 @@ public class CreatePortfolioForm extends AbstractForm {
     this.add(jPanel);
   }
 
-  @Override
-  protected void appendOutput(String message) {
-    this.mainForm.appendOutput(message);
-  }
-
   protected ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
       if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
