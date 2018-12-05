@@ -1,6 +1,7 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -19,11 +20,12 @@ public class MainForm extends AbstractForm implements GUIView {
 
   public MainForm() throws HeadlessException {
     super(null);
+    this.display("Welcome to Virtual Trading");
     this.setVisible(true);
   }
 
   private JTextArea getJTextArea() {
-    JTextArea jTextArea = new JTextArea("Welcome to Virtual Trading");
+    JTextArea jTextArea = new JTextArea();
     jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
     jTextArea.setEditable(false);
     jTextArea.setLineWrap(true);
@@ -155,11 +157,16 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get all Portfolios");
     jButton.addActionListener(e -> {
 
-      String portfolioNames = this.features.getAllPortfolios().stream()
-              .map(Portfolio::getName).collect(Collectors.joining(System.lineSeparator()));
+      List<Portfolio> allPortfolios = this.features.getAllPortfolios();
+      if (allPortfolios.isEmpty()) {
+        this.display("There are not portfolios present");
+      } else {
+        String portfolioNames = allPortfolios.stream()
+                .map(Portfolio::getName).collect(Collectors.joining(System.lineSeparator()));
 
-      this.display(
-              String.format("All the portfolios:%s%s", System.lineSeparator(), portfolioNames));
+        this.display(
+                String.format("All the portfolios:%s%s", System.lineSeparator(), portfolioNames));
+      }
     });
     return jButton;
   }
@@ -183,10 +190,5 @@ public class MainForm extends AbstractForm implements GUIView {
       GUIUtils.showPrevious(createPortfolioForm, this);
     });
     return createPortfolioButton;
-  }
-
-  public static void main(String[] args) {
-    new MainForm();
-    System.out.println();
   }
 }

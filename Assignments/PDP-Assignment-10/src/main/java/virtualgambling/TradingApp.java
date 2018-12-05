@@ -3,14 +3,19 @@ package virtualgambling;
 import java.io.InputStreamReader;
 
 import virtualgambling.controller.Controller;
+import virtualgambling.controller.GUITradingController;
 import virtualgambling.controller.OrchestratorController;
 import virtualgambling.controller.TradingController;
+import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.stockdao.SimpleStockDAO;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.view.TextView;
 import virtualgambling.view.View;
+import virtualgambling.view.guiview.GUIView;
+import virtualgambling.view.guiview.MainForm;
 
 /**
  * The class represents a Runner for the VirtualGambling MVC app.
@@ -18,7 +23,16 @@ import virtualgambling.view.View;
 public class TradingApp {
 
   public static void main(String[] args) {
-    runEnhancedTradingApp();
+    runGUITradingApp();
+  }
+
+  private static void runGUITradingApp() {
+    GUIView guiView = new MainForm();
+    EnhancedUserModel enhancedUserModel = new EnhancedUserModelImpl(
+            new SimpleStockDAO(
+                    new SimpleStockDataSource()));
+    Controller controller = new GUITradingController(enhancedUserModel, guiView);
+    controller.run();
   }
 
   private static void runEnhancedTradingApp() {
