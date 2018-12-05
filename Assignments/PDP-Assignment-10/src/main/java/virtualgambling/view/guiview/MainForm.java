@@ -26,7 +26,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea getJTextArea() {
     JTextArea jTextArea = new JTextArea();
-    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
     jTextArea.setEditable(false);
     jTextArea.setLineWrap(true);
     return jTextArea;

@@ -77,8 +77,8 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
       Optional<BigDecimal> optional = this.executeFeature(portfolioName, date);
       if (optional.isPresent()) {
         String numberString = Utils.getFormattedCurrencyNumberString(optional.get());
-        this.mainForm.display(getPrefix(portfolioName, date));
-        this.mainForm.display(numberString);
+        this.mainForm.display(String.format("%s%s%s", getPrefix(portfolioName, date),
+                System.lineSeparator(), numberString));
         this.showPrevious();
       }
     };
