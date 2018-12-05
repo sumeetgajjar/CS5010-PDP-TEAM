@@ -27,9 +27,10 @@ public class GetPorfolioCompositionForm extends CreatePortfolioForm {
 
       String portfolioName = portfolioNameJTextField.getText();
       Optional<Portfolio> optional = this.features.getPortfolioComposition(portfolioName);
-      optional.ifPresent(portfolio -> this.mainForm.display(portfolio.toString()));
-
-      this.showPrevious();
+      if (optional.isPresent()) {
+        this.mainForm.display(optional.get().toString());
+        this.showPrevious();
+      }
     };
 
   }
