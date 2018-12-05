@@ -1,6 +1,5 @@
 package virtualgambling.controller;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -41,12 +40,13 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public void createPortfolio(String portfolio) {
+    public boolean createPortfolio(String portfolio) {
       try {
-        this.createPortfolio(portfolio);
-        this.guiView.display("Portfolio Successfully Created");
-      } catch (IllegalArgumentException | IOException e) {
+        this.enhancedUserModel.createPortfolio(portfolio);
+        return true;
+      } catch (IllegalArgumentException e) {
         this.guiView.displayError(e.getMessage());
+        return false;
       }
     }
 

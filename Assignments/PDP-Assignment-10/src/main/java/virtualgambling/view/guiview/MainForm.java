@@ -118,9 +118,9 @@ public class MainForm extends AbstractForm implements GUIView {
   private JButton getPortfolioCompositionButton() {
     JButton jButton = new JButton("Get Portfolio Composition");
     jButton.addActionListener(e -> {
-      GetPorfolioCompositionForm getPorfolioCompositionForm =
-              new GetPorfolioCompositionForm(this, features);
-      GUIUtils.showPrevious(getPorfolioCompositionForm, this);
+      GetPortfolioCompositionForm getPortfolioCompositionForm =
+              new GetPortfolioCompositionForm(this, features);
+      GUIUtils.showPrevious(getPortfolioCompositionForm, this);
     });
     return jButton;
   }

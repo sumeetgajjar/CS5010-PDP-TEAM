@@ -13,7 +13,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
  */
 public interface Features {
 
-  void createPortfolio(String portfolio);
+  boolean createPortfolio(String portfolio);
 
   List<Portfolio> getAllPortfolios();
 

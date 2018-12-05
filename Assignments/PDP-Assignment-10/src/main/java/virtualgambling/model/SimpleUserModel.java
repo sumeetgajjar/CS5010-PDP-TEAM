@@ -56,6 +56,7 @@ public class SimpleUserModel implements UserModel {
   public void createPortfolio(String portfolioName) throws IllegalArgumentException {
     Utils.requireNonNull(portfolioName);
     if (this.portfolios.containsKey(portfolioName)) {
+      //todo throw an exception if the portfolio is already present
       return;
     }
 
