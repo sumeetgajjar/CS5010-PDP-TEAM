@@ -173,8 +173,8 @@ public class PortfolioPerformanceForm extends AbstractForm {
 
       JFreeChart chart = ChartFactory.createXYLineChart(
               String.format("Performance of '%s' portfolio", portfolioName),
-              "Value",
               "Time",
+              "Value",
               dataset,
               PlotOrientation.VERTICAL,
               true,
