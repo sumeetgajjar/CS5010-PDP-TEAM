@@ -1,6 +1,7 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,12 @@ public class MainForm extends AbstractForm implements GUIView {
   @Override
   protected void addJFrameClosingEvent() {
     //closing event should not be added to this MainForm since there is no previous form to go to.
+  }
+
+  @Override
+  protected KeyListener getEscKeyListener(AbstractForm abstractForm) {
+    //returning null since the main form does not need to exit on press of esc key
+    return null;
   }
 
   private void addButtonsToPanel(JPanel buttonJPanel) {
