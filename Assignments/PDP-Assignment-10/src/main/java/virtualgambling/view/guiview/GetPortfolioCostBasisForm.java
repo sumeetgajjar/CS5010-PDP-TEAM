@@ -88,9 +88,9 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   protected void executeFeature(String portfolioName, Date date) {
     Optional<BigDecimal> portfolioCostBasis = this.features.getPortfolioCostBasis(portfolioName,
             date);
-    if (portfolioCostBasis.isPresent()) {
-      String numberString = Utils.getFormattedCurrencyNumberString(portfolioCostBasis.get());
+    portfolioCostBasis.ifPresent(bigDecimal -> {
+      String numberString = Utils.getFormattedCurrencyNumberString(bigDecimal);
       this.mainForm.display(numberString);
-    }
+    });
   }
 }

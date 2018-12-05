@@ -96,6 +96,9 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton getPortfolioCostBasisButton = getPortfolioCostBasisButton();
     buttonJPanel.add(getPortfolioCostBasisButton);
 
+    JButton getPortfolioCompositionButton = getPortfolioCompositionButton();
+    buttonJPanel.add(getPortfolioCompositionButton);
+
     JButton getPortfolioValueButton = getPortfolioValueButton();
     buttonJPanel.add(getPortfolioValueButton);
 
@@ -110,6 +113,16 @@ public class MainForm extends AbstractForm implements GUIView {
 
     JButton quitButton = getQuitJButton();
     buttonJPanel.add(quitButton);
+  }
+
+  private JButton getPortfolioCompositionButton() {
+    JButton jButton = new JButton("Get Portfolio Composition");
+    jButton.addActionListener(e -> {
+      GetPorfolioCompositionForm getPorfolioCompositionForm =
+              new GetPorfolioCompositionForm(this, features);
+      GUIUtils.showPrevious(getPorfolioCompositionForm, this);
+    });
+    return jButton;
   }
 
   private JButton getBuySharesButton() {

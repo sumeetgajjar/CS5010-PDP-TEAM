@@ -12,8 +12,8 @@ import virtualgambling.controller.Features;
  */
 public class CreatePortfolioForm extends AbstractForm {
 
-  private final MainForm mainForm;
-  private final Features features;
+  protected final MainForm mainForm;
+  protected final Features features;
 
   public CreatePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
@@ -43,7 +43,7 @@ public class CreatePortfolioForm extends AbstractForm {
     this.mainForm.appendOutput(message);
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
+  protected ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
       if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
         return;

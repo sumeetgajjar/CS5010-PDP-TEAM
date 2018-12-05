@@ -23,9 +23,9 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
   @Override
   protected void executeFeature(String portfolioName, Date date) {
     Optional<BigDecimal> portfolioValue = this.features.getPortfolioValue(portfolioName, date);
-    if (portfolioValue.isPresent()) {
-      String numberString = Utils.getFormattedCurrencyNumberString(portfolioValue.get());
+    portfolioValue.ifPresent(bigDecimal -> {
+      String numberString = Utils.getFormattedCurrencyNumberString(bigDecimal);
       this.mainForm.display(numberString);
-    }
+    });
   }
 }

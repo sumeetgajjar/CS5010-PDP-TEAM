@@ -77,6 +77,16 @@ public class GUITradingController implements Controller {
     }
 
     @Override
+    public Optional<Portfolio> getPortfolioComposition(String portfolio) {
+      try {
+        return Optional.of(this.enhancedUserModel.getPortfolio(portfolio));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
+    }
+
+    @Override
     public BigDecimal getRemainingCapital() {
       return this.enhancedUserModel.getRemainingCapital();
     }

@@ -21,6 +21,8 @@ public interface Features {
 
   Optional<BigDecimal> getPortfolioValue(String portfolio, Date date);
 
+  Optional<Portfolio> getPortfolioComposition(String portfolio);
+
   BigDecimal getRemainingCapital();
 
   Optional<SharePurchaseOrder> buyShares(String tickerName,
