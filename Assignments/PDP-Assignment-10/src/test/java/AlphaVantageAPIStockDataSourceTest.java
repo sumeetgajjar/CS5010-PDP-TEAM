@@ -57,6 +57,8 @@ public class AlphaVantageAPIStockDataSourceTest {
   public void reallyOldDateFails() {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(Calendar.YEAR, 1900);
+    calendar.set(Calendar.MONTH, Calendar.DECEMBER);
+    calendar.set(Calendar.DATE, 2);
     Date validDateForTrading = calendar.getTime();
     try {
       dataSource.getPrice("AAPL", validDateForTrading).getUnitPrice();

@@ -14,7 +14,9 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.factory.StockDAOFactory;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 
 /**
  * This class represents a Simple User Model. It implements {@link UserModel} interface.
@@ -26,20 +28,23 @@ public class SimpleUserModel implements UserModel {
 
   protected static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
-  protected StockDAO stockDAO;
   protected final Map<String, Portfolio> portfolios;
   protected BigDecimal remainingCapital;
+  protected StockDAOType stockDAOType;
+  protected StockDataSourceType stockDataSourceType;
 
   /**
    * Constructs a {@link SimpleUserModel} object with given params.
    *
-   * @param stockDAO the stockDAO
+   * @param stockDAOType        type of the stock DAO
+   * @param stockDataSourceType type of the stock data source
    * @throws IllegalArgumentException if the given stockDAO is null
    */
-  public SimpleUserModel(StockDAO stockDAO) throws IllegalArgumentException {
-    this.stockDAO = Utils.requireNonNull(stockDAO);
+  public SimpleUserModel(StockDAOType stockDAOType, StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
     this.portfolios = new HashMap<>();
     this.remainingCapital = DEFAULT_USER_CAPITAL;
+    this.stockDAOType = Utils.requireNonNull(stockDAOType);
+    this.stockDataSourceType = Utils.requireNonNull(stockDataSourceType);
   }
 
   /**
@@ -103,8 +108,9 @@ public class SimpleUserModel implements UserModel {
     Utils.requireNonNull(tickerName);
     this.checkSanity(portfolioName, date);
 
-    return this.stockDAO.createPurchaseOrder(tickerName, quantity,
-            date);
+    return StockDAOFactory.fromStockDAOAndDataSource(stockDAOType, stockDataSourceType)
+            .createPurchaseOrder(tickerName, quantity,
+                    date);
   }
 
   @Override
@@ -114,7 +120,7 @@ public class SimpleUserModel implements UserModel {
 
   protected Portfolio instantiatePortfolio(String portfolioName,
                                            List<SharePurchaseOrder> sharePurchaseOrders) {
-    return new Portfolio(portfolioName, stockDAO, sharePurchaseOrders);
+    return new Portfolio(portfolioName, stockDAOType, stockDataSourceType, sharePurchaseOrders);
   }
 
   protected void checkSanity(String portfolioName, Date date) throws IllegalArgumentException {

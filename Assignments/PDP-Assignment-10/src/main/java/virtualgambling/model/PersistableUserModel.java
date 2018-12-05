@@ -2,9 +2,10 @@ package virtualgambling.model;
 
 import java.io.IOException;
 
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.Loader;
 import virtualgambling.model.persistence.Persister;
-import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * This interface represents an enhancement over {@link EnhancedUserModel}. It implements {@link
@@ -38,7 +39,11 @@ public interface PersistableUserModel extends EnhancedUserModel {
 
   void loadIntoModel(Loader loader) throws IOException;
 
-  StockDAO getStockDAO();
+  StockDAOType getStockDAOType();
 
-  void setStockDao(StockDAO stockDao);
+  StockDataSourceType getStockDataSourceType();
+
+  void setStockDAOType(StockDAOType stockDAOType);
+
+  void setStockDataSourceType(StockDataSourceType stockDataSourceType);
 }

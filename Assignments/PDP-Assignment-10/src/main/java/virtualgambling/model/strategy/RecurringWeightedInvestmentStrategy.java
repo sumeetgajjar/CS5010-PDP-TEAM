@@ -12,6 +12,9 @@ import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StrategyExecutionException;
+import virtualgambling.model.factory.StockDAOFactory;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.stockdao.StockDAO;
 
 /**
@@ -87,7 +90,8 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
    * @return list of {@link SharePurchaseOrder}.
    */
   @Override
-  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAO stockDAO)
+  public List<SharePurchaseOrder> execute(BigDecimal amountToInvest, StockDAOType stockDAOType,
+                                          StockDataSourceType stockDataSourceType)
           throws IllegalArgumentException, StrategyExecutionException {
     if (Objects.isNull(this.endDate)) {
       // by default set endDate to yesterday.
@@ -96,6 +100,9 @@ public class RecurringWeightedInvestmentStrategy implements Strategy {
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(this.startDate);
+
+    StockDAO stockDAO = StockDAOFactory.fromStockDAOAndDataSource(stockDAOType,
+            stockDataSourceType);
 
     List<SharePurchaseOrder> sharePurchaseOrders = new ArrayList<>();
 

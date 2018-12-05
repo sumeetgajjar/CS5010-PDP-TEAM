@@ -4,8 +4,9 @@ import java.io.IOException;
 
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.serdes.SerDes;
-import virtualgambling.model.stockdao.StockDAO;
 
 public class PortfolioLoader implements Loader {
   private final PersistableUserModel userModel;
@@ -23,8 +24,11 @@ public class PortfolioLoader implements Loader {
   public void load() throws IOException {
     Portfolio portfolio = this.serDes.deserialize();
     userModel.createPortfolio(portfolio.getName());
-    StockDAO originalStockDAO = userModel.getStockDAO();
-    userModel.setStockDao(portfolio.getStockDAO());
+    StockDAOType stockDAOType = userModel.getStockDAOType();
+    StockDataSourceType stockDataSourceType = userModel.getStockDataSourceType();
+
+    userModel.setStockDAOType(portfolio.getStockDAOType());
+    userModel.setStockDataSourceType(portfolio.getStockDataSourceType());
     portfolio.getPurchases().forEach(sharePurchaseOrder ->
             userModel.buyShares(sharePurchaseOrder.getTickerName(),
                     this.portfolioName,
@@ -32,6 +36,8 @@ public class PortfolioLoader implements Loader {
                     sharePurchaseOrder.getQuantity(),
                     sharePurchaseOrder.getCommissionPercentage())
     );
-    userModel.setStockDao(originalStockDAO);
+
+    userModel.setStockDAOType(stockDAOType);
+    userModel.setStockDataSourceType(stockDataSourceType);
   }
 }

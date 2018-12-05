@@ -3,23 +3,29 @@ package virtualgambling.model;
 import java.io.IOException;
 
 import util.Utils;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.Loader;
 import virtualgambling.model.persistence.Persister;
-import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * Created by gajjar.s, on 12:20 PM, 12/2/18
  */
 public class PersistableUserModelImpl extends EnhancedUserModelImpl implements PersistableUserModel {
 
-  /**
-   * Constructs a {@link PersistableUserModelImpl} object with given params.
-   *
-   * @param stockDAO the stockDAO
-   * @throws IllegalArgumentException if the given stockDAO is null
-   */
-  public PersistableUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
-    super(stockDAO);
+//  /**
+//   * Constructs a {@link PersistableUserModelImpl} object with given params.
+//   *
+//   * @param stockDAO the stockDAO
+//   * @throws IllegalArgumentException if the given stockDAO is null
+//   */
+//  public PersistableUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
+//    super(stockDAO);
+//  }
+
+  public PersistableUserModelImpl(StockDAOType stockDAOType,
+                                  StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
+    super(stockDAOType, stockDataSourceType);
   }
 
   @Override
@@ -39,16 +45,26 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl implements P
   }
 
   @Override
-  public StockDAO getStockDAO() {
-    return this.stockDAO;
+  public StockDAOType getStockDAOType() {
+    return this.stockDAOType;
   }
 
   @Override
-  public void setStockDao(StockDAO stockDao) {
-    this.stockDAO = stockDao;
+  public StockDataSourceType getStockDataSourceType() {
+    return this.stockDataSourceType;
   }
 
-//  /**
+  @Override
+  public void setStockDAOType(StockDAOType stockDAOType) {
+    this.stockDAOType = Utils.requireNonNull(stockDAOType);
+  }
+
+  @Override
+  public void setStockDataSourceType(StockDataSourceType stockDataSourceType) {
+    this.stockDataSourceType = Utils.requireNonNull(stockDataSourceType);
+  }
+
+  //  /**
 //   * Saves the given portfolio in a file at the give path.
 //   *
 //   * @param portfolioName the portfolio to save

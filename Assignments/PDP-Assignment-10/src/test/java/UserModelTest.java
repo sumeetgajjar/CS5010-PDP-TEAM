@@ -19,21 +19,21 @@ import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdao.SimpleStockDAO;
-import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 
 /**
  * The class represents a Junit class to test Model in isolation.
  */
 public class UserModelTest {
 
-  protected UserModel getUserModel(StockDAO stockDAO) {
-    return TestUtils.getEmptySimpleUserModelUsingStockDAO(stockDAO);
+  protected UserModel getUserModel(StockDAOType stockDAOType,
+                                   StockDataSourceType stockDataSourceType) {
+    return TestUtils.getEmptySimpleUserModelUsingStockDAO(stockDAOType, stockDataSourceType);
   }
 
   private UserModel getUserModelWithSimpleStockDao() {
-    return getUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
+    return getUserModel(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE);
   }
 
   @Test
@@ -192,7 +192,7 @@ public class UserModelTest {
 
   @Test
   public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
-    UserModel userModel = getUserModel(new SimpleStockDAO(new SimpleStockDataSource()));
+    UserModel userModel = getUserModel(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE);
     Share appleShare = getAppleShare();
     userModel.createPortfolio("p1");
 
