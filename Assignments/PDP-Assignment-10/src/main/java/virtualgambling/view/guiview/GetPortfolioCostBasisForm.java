@@ -2,11 +2,14 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -71,11 +74,8 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
       }
 
       String portfolioName = portfolioTextField.getText();
+      this.executeFeature(portfolioName, date);
 
-//      this.executeFeature(portfolioTextField.getText(), date);
-      //todo insert command here
-
-      this.appendOutput("Get portfolio cost basis");
       this.showPrevious();
     };
   }
@@ -86,6 +86,11 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   }
 
   protected void executeFeature(String portfolioName, Date date) {
-    this.features.getPortfolioCostBasis(portfolioName, date);
+    Optional<BigDecimal> portfolioCostBasis = this.features.getPortfolioCostBasis(portfolioName,
+            date);
+    if (portfolioCostBasis.isPresent()) {
+      String numberString = Utils.getFormattedCurrencyNumberString(portfolioCostBasis.get());
+      this.mainForm.display(numberString);
+    }
   }
 }
