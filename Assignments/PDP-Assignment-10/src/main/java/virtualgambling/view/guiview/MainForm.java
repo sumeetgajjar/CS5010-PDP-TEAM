@@ -1,10 +1,13 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
+import virtualgambling.model.bean.Portfolio;
 
 /**
  * Created by gajjar.s, on 11:27 PM, 12/4/18
@@ -152,12 +155,11 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get all Portfolios");
     jButton.addActionListener(e -> {
 
-//      List<String> allPortfolios = features.getAllPortfolios();
-//      allPortfolios.forEach(this::display);
+      String portfolioNames = this.features.getAllPortfolios().stream()
+              .map(Portfolio::getName).collect(Collectors.joining(System.lineSeparator()));
 
-      this.appendOutput("YOLO");
-      this.appendOutput("Was that an Earthquake or did I Just rocked your world?");
-      //todo insert command here
+      this.display(
+              String.format("All the portfolios:%s%s", System.lineSeparator(), portfolioNames));
     });
     return jButton;
   }
@@ -166,10 +168,9 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get Remaining Capital");
     jButton.addActionListener(e -> {
 
-//      this.display(this.features.getRemainingCapital());
-
-      this.appendOutput("You have infinite money, jao jee lo apni zindagi");
-      //todo insert command here
+      String formattedRemainingCapital =
+              Utils.getFormattedCurrencyNumberString(this.features.getRemainingCapital());
+      this.display(String.format("Remaining Capital: %s", formattedRemainingCapital));
     });
     return jButton;
   }
