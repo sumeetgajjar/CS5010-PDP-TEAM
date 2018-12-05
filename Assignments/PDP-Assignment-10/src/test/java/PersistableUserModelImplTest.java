@@ -1,4 +1,4 @@
-import com.owlike.genson.GenericType;
+import com.google.gson.reflect.TypeToken;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,8 +35,8 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     userModel.createPortfolio(PORTFOLIO_P1);
 
     Path test = Utils.getPathInDefaultFolder(Paths.get("test.json"));
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new GenericType<Portfolio>() {
-    });
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
+    }.getType());
 
     try {
       userModel.persistFromModel(new PortfolioPersister(serDes,

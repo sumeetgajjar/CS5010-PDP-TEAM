@@ -20,9 +20,9 @@ import virtualgambling.model.stockdao.StockDAO;
  */
 public class Portfolio implements Serializable {
 
-  private static final long serialVersionUID = -8134764875103300708L;
+//  private static final long serialVersionUID = -8134764875103300708L;
   private final String name;
-  private final StockDAO stockDAO;
+  private final transient StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
   private final StockDAOType stockDAOType;
   private final StockDataSourceType stockDataSourceType;
