@@ -1,8 +1,11 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Optional;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -15,7 +18,13 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
   }
 
   @Override
-  protected void executeFeature(String portfolioName, Date date) {
-    this.features.getPortfolioValue(portfolioName, date);
+  protected String getPrefix(String portfolioName, Date date) {
+    return "Value of portfolio '" + portfolioName + "' on '"
+            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
+  }
+
+  @Override
+  protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
+    return this.features.getPortfolioValue(portfolioName, date);
   }
 }

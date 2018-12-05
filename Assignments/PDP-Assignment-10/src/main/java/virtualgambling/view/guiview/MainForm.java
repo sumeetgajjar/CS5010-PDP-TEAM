@@ -1,34 +1,45 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
+import virtualgambling.model.bean.Portfolio;
 
 /**
  * Created by gajjar.s, on 11:27 PM, 12/4/18
  */
-public class MainForm extends AbstractForm implements GuiView {
+public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea jTextArea;
   private Features features;
 
   public MainForm() throws HeadlessException {
     super(null);
+    this.display("Welcome to Virtual Trading");
     this.setVisible(true);
   }
 
   private JTextArea getJTextArea() {
-    JTextArea jTextArea = new JTextArea("Welcome to Virtual Trading");
+    JTextArea jTextArea = new JTextArea();
     jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
     jTextArea.setEditable(false);
+    jTextArea.setLineWrap(true);
     return jTextArea;
   }
 
   @Override
   public void addFeatures(Features features) {
     this.features = features;
+  }
+
+  @Override
+  public void displayError(String message) {
+    this.showError(message);
   }
 
   @Override
@@ -45,6 +56,8 @@ public class MainForm extends AbstractForm implements GuiView {
   protected void appendOutput(String message) {
     this.jTextArea.append(System.lineSeparator());
     this.jTextArea.append(message);
+    this.jTextArea.append(System.lineSeparator());
+    this.jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
   }
 
   @Override
@@ -68,6 +81,11 @@ public class MainForm extends AbstractForm implements GuiView {
     this.add(outputJPanel);
   }
 
+  @Override
+  protected void addJFrameClosingEvent() {
+    //closing event should not be added to this MainForm since there is no previous form to go to.
+  }
+
   private void addButtonsToPanel(JPanel buttonJPanel) {
     JButton createPortfolioButton = getCreatePortfolioJButton();
     buttonJPanel.add(createPortfolioButton);
@@ -78,6 +96,9 @@ public class MainForm extends AbstractForm implements GuiView {
     JButton getPortfolioCostBasisButton = getPortfolioCostBasisButton();
     buttonJPanel.add(getPortfolioCostBasisButton);
 
+    JButton getPortfolioCompositionButton = getPortfolioCompositionButton();
+    buttonJPanel.add(getPortfolioCompositionButton);
+
     JButton getPortfolioValueButton = getPortfolioValueButton();
     buttonJPanel.add(getPortfolioValueButton);
 
@@ -87,14 +108,24 @@ public class MainForm extends AbstractForm implements GuiView {
     JButton plotPortfolioPerformanceButton = getDrawPortfolioPerformanceButton();
     buttonJPanel.add(plotPortfolioPerformanceButton);
 
-    JButton buySharesButton = getbuySharesButton();
+    JButton buySharesButton = getBuySharesButton();
     buttonJPanel.add(buySharesButton);
 
     JButton quitButton = getQuitJButton();
     buttonJPanel.add(quitButton);
   }
 
-  private JButton getbuySharesButton() {
+  private JButton getPortfolioCompositionButton() {
+    JButton jButton = new JButton("Get Portfolio Composition");
+    jButton.addActionListener(e -> {
+      GetPortfolioCompositionForm getPortfolioCompositionForm =
+              new GetPortfolioCompositionForm(this, features);
+      GUIUtils.showPrevious(getPortfolioCompositionForm, this);
+    });
+    return jButton;
+  }
+
+  private JButton getBuySharesButton() {
     JButton jButton = new JButton("Buy Shares");
     jButton.addActionListener(e -> {
       BuySharesForm buySharesForm =
@@ -107,9 +138,9 @@ public class MainForm extends AbstractForm implements GuiView {
   private JButton getDrawPortfolioPerformanceButton() {
     JButton jButton = new JButton("Plot Portfolio Performance");
     jButton.addActionListener(e -> {
-      PlotPortfolioPerformance plotPortfolioPerformance =
-              new PlotPortfolioPerformance(this, features);
-      GUIUtils.showPrevious(plotPortfolioPerformance, this);
+      PortfolioPerformanceForm portfolioPerformanceForm =
+              new PortfolioPerformanceForm(this, features);
+      GUIUtils.showPrevious(portfolioPerformanceForm, this);
     });
     return jButton;
   }
@@ -144,12 +175,16 @@ public class MainForm extends AbstractForm implements GuiView {
     JButton jButton = new JButton("Get all Portfolios");
     jButton.addActionListener(e -> {
 
-//      List<String> allPortfolios = features.getAllPortfolios();
-//      allPortfolios.forEach(this::display);
+      List<Portfolio> allPortfolios = this.features.getAllPortfolios();
+      if (allPortfolios.isEmpty()) {
+        this.display("There are not portfolios present");
+      } else {
+        String portfolioNames = allPortfolios.stream()
+                .map(Portfolio::getName).collect(Collectors.joining(System.lineSeparator()));
 
-      this.appendOutput("YOLO");
-      this.appendOutput("Was that an Earthquake or did I Just rocked your world?");
-      //todo insert command here
+        this.display(
+                String.format("All the portfolios:%s%s", System.lineSeparator(), portfolioNames));
+      }
     });
     return jButton;
   }
@@ -158,10 +193,9 @@ public class MainForm extends AbstractForm implements GuiView {
     JButton jButton = new JButton("Get Remaining Capital");
     jButton.addActionListener(e -> {
 
-//      this.display(this.features.getRemainingCapital());
-
-      this.appendOutput("You have infinite money, jao jee lo apni zindagi");
-      //todo insert command here
+      String formattedRemainingCapital =
+              Utils.getFormattedCurrencyNumberString(this.features.getRemainingCapital());
+      this.display(String.format("Remaining Capital: %s", formattedRemainingCapital));
     });
     return jButton;
   }
@@ -174,10 +208,5 @@ public class MainForm extends AbstractForm implements GuiView {
       GUIUtils.showPrevious(createPortfolioForm, this);
     });
     return createPortfolioButton;
-  }
-
-  public static void main(String[] args) {
-    new MainForm();
-    System.out.println();
   }
 }

@@ -2,8 +2,10 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.*;
 
@@ -49,8 +51,6 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
 
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     this.add(portfolioPanel);
     this.add(datePanel);
     this.add(buttonJPanel);
@@ -64,34 +64,37 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
                                                              JTextField dateTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(portfolioTextField)) {
-        this.showError("Portfolio Name cannot be empty");
+      if (this.areInputsEmpty(portfolioTextField, dateTextField)) {
         return;
       }
 
-      if (this.isTextFieldEmpty(dateTextField)) {
-        this.showError("Date cannot be empty");
+      Date date = getDateFromTextField(dateTextField, this::showError);
+      if (Objects.isNull(date)) {
         return;
       }
 
-      String dateString = dateTextField.getText();
-      Date date;
-      try {
-        date = Utils.getDateFromDefaultFormattedDateString(dateString);
-      } catch (ParseException e1) {
-        this.showError(String.format("Invalid Date Format: %s", dateString));
-        return;
+      String portfolioName = portfolioTextField.getText();
+      Optional<BigDecimal> optional = this.executeFeature(portfolioName, date);
+      if (optional.isPresent()) {
+        String numberString = Utils.getFormattedCurrencyNumberString(optional.get());
+        this.mainForm.display(getPrefix(portfolioName, date));
+        this.mainForm.display(numberString);
+        this.showPrevious();
       }
-
-//      this.executeFeature(portfolioTextField.getText(), date);
-      //todo insert command here
-
-      this.appendOutput("Get portfolio cost basis");
-      this.showPrevious();
     };
   }
 
-  protected void executeFeature(String portfolioName, Date date) {
-    this.features.getPortfolioCostBasis(portfolioName, date);
+  protected String getPrefix(String portfolioName, Date date) {
+    return "Cost basis of portfolio '" + portfolioName + "' on '"
+            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
+  }
+
+  protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
+    return this.features.getPortfolioCostBasis(portfolioName, date);
+  }
+
+  private boolean areInputsEmpty(JTextField portfolioTextField, JTextField dateTextField) {
+    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isDateTextFieldEmpty(dateTextField);
   }
 }

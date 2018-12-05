@@ -12,8 +12,8 @@ import virtualgambling.controller.Features;
  */
 public class CreatePortfolioForm extends AbstractForm {
 
-  private final MainForm mainForm;
-  private final Features features;
+  protected final MainForm mainForm;
+  protected final Features features;
 
   public CreatePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
@@ -34,8 +34,6 @@ public class CreatePortfolioForm extends AbstractForm {
     ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     jPanel.add(buttonJPanel);
     this.add(jPanel);
   }
@@ -45,18 +43,18 @@ public class CreatePortfolioForm extends AbstractForm {
     this.mainForm.appendOutput(message);
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
+  protected ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(portfolioNameJTextField)) {
-        this.showError("Portfolio Name cannot be empty");
+      if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
         return;
       }
 
-//      this.features.createPortfolio(portfolioNameJTextField.getText());
-      //todo insert command here
-
-      this.appendOutput("Create portfolio");
-      this.showPrevious();
+      String portfolioName = portfolioNameJTextField.getText();
+      boolean success = this.features.createPortfolio(portfolioName);
+      if (success) {
+        this.showPrevious();
+        this.mainForm.display(String.format("Portfolio '%s' Successfully Created", portfolioName));
+      }
     };
   }
 }
