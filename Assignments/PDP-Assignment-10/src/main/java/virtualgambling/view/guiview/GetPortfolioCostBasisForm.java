@@ -79,7 +79,7 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
       try {
         date = Utils.getDateFromDefaultFormattedDateString(dateString);
       } catch (ParseException e1) {
-        this.showError("Invalid Date Format");
+        this.showError(String.format("Invalid Date Format: %s", dateString));
         return;
       }
 

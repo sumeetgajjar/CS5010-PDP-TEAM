@@ -2,8 +2,13 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.Date;
 
 import javax.swing.*;
+
+import util.Utils;
+import virtualgambling.controller.Features;
 
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
@@ -11,10 +16,17 @@ import javax.swing.*;
 public class BuySharesForm extends AbstractForm {
 
   private final MainForm mainForm;
+  private final Features features;
 
-  public BuySharesForm(MainForm mainForm) throws HeadlessException {
+  public BuySharesForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
     this.mainForm = mainForm;
+    this.features = features;
+  }
+
+  @Override
+  protected void appendOutput(String message) {
+    this.mainForm.appendOutput(message);
   }
 
   @Override
@@ -76,11 +88,6 @@ public class BuySharesForm extends AbstractForm {
     this.add(buttonJPanel);
   }
 
-  @Override
-  protected void appendOutput(String message) {
-    this.mainForm.appendOutput(message);
-  }
-
   private ActionListener getActionListenerForCreatePortfolio(JTextField tickerNameTextField,
                                                              JTextField portfolioTextField,
                                                              JTextField dateTextField,
@@ -112,14 +119,42 @@ public class BuySharesForm extends AbstractForm {
         return;
       }
 
+      String tickerName = tickerNameTextField.getText();
+      String portfolioName = portfolioTextField.getText();
+      String dateString = dateTextField.getText();
+      Date date;
+      try {
+        date = Utils.getDateFromDefaultFormattedDateString(dateString);
+      } catch (ParseException e1) {
+        this.showError(String.format("Invalid Date Format: %s", dateString));
+        return;
+      }
+
+
+      long quantity;
+      String quantityString = quantityTextField.getText();
+      try {
+        quantity = Long.parseLong(quantityString);
+      } catch (NumberFormatException e1) {
+        this.showError(String.format("Invalid Quantity: %s", quantityString));
+        return;
+      }
+
+      double commission;
+      String commissionString = commissionTextField.getText();
+      try {
+        commission = Double.parseDouble(commissionString);
+      } catch (NumberFormatException e1) {
+        this.showError(String.format("Invalid Commission: %s", commissionString));
+        return;
+      }
+
+
+//      this.features.buyShares(tickerName, portfolioName, date, quantity, commission);
       //todo insert command here
 
       this.appendOutput("Buy single share");
       this.showPrevious();
     };
-  }
-
-  public static void main(String[] args) {
-    new BuySharesForm(null).setVisible(true);
   }
 }
