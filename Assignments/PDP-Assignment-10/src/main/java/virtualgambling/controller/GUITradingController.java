@@ -61,6 +61,7 @@ public class GUITradingController implements Controller {
         return Optional.of(this.enhancedUserModel
                 .getPortfolio(portfolio).getCostBasisIncludingCommission(date));
       } catch (PortfolioNotFoundException e) {
+        this.guiView.displayError(e.getMessage());
         return Optional.empty();
       }
     }
@@ -70,6 +71,7 @@ public class GUITradingController implements Controller {
       try {
         return Optional.of(this.enhancedUserModel.getPortfolio(portfolio).getValue(date));
       } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
         return Optional.empty();
       }
     }
@@ -90,6 +92,7 @@ public class GUITradingController implements Controller {
                 .buyShares(tickerName, portfolioName, date, quantity, commissionPercentage));
 
       } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
         return Optional.empty();
       }
     }

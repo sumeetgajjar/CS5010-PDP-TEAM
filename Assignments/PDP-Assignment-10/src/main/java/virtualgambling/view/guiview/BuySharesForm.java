@@ -4,10 +4,12 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.*;
 
 import virtualgambling.controller.Features;
+import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
@@ -118,10 +120,13 @@ public class BuySharesForm extends AbstractForm {
         return;
       }
 
-//      this.features.buyShares(tickerName, portfolioName, date, quantity, commission);
-      //todo insert command here
+      Optional<SharePurchaseOrder> optional = this.features.buyShares(tickerName,
+              portfolioName, date, quantity, commission);
+      if (optional.isPresent()) {
+        SharePurchaseOrder sharePurchaseOrder = optional.get();
+        this.mainForm.display(sharePurchaseOrder.toString());
+      }
 
-      this.appendOutput("Buy single share");
       this.showPrevious();
     };
   }
