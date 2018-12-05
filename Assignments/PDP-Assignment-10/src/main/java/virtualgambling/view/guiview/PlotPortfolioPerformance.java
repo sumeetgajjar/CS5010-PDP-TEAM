@@ -2,12 +2,11 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.swing.*;
 
-import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -54,8 +53,6 @@ public class PlotPortfolioPerformance extends AbstractForm {
 
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     JPanel rightPanel = new JPanel();
     this.add(leftPanel);
     this.add(rightPanel);
@@ -66,42 +63,34 @@ public class PlotPortfolioPerformance extends AbstractForm {
                                                              JTextField startDateTextField,
                                                              JTextField endDateTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(portfolioTextField)) {
-        this.showError("Portfolio Name cannot be empty");
+
+      if (this.areInputsEmpty(portfolioTextField, startDateTextField, endDateTextField)) {
         return;
       }
 
-      if (this.isTextFieldEmpty(startDateTextField)) {
-        this.showError("Date cannot be empty");
+      String portfolioName = portfolioTextField.getText();
+      Date startDate = this.getDateFromTextField(startDateTextField, this::showError);
+      if (Objects.isNull(startDate)) {
         return;
       }
 
-      if (this.isTextFieldEmpty(endDateTextField)) {
-        this.showError("Date cannot be empty");
-        return;
-      }
-
-      String startDateString = startDateTextField.getText();
-      Date startDate;
-      try {
-        startDate = Utils.getDateFromDefaultFormattedDateString(startDateString);
-      } catch (ParseException e1) {
-        this.showError(String.format("Invalid Start Date: %s", startDateString));
-        return;
-      }
-
-      String endDateString = startDateTextField.getText();
-      Date endDate;
-      try {
-        endDate = Utils.getDateFromDefaultFormattedDateString(endDateString);
-      } catch (ParseException e1) {
-        this.showError(String.format("Invalid End Date: %s", endDateString));
+      Date endDate = this.getDateFromTextField(endDateTextField, this::showError);
+      if (Objects.isNull(endDate)) {
         return;
       }
 
       this.plotGraph();
       //todo insert command here
     };
+  }
+
+  private boolean areInputsEmpty(JTextField portfolioTextField,
+                                 JTextField startDateTextField,
+                                 JTextField endDateTextField) {
+
+    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isStartDateTextFieldEmpty(startDateTextField) ||
+            isEndDateTextFieldEmpty(endDateTextField);
   }
 
   private void plotGraph() {

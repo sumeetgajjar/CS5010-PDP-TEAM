@@ -34,8 +34,6 @@ public class CreatePortfolioForm extends AbstractForm {
     ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     jPanel.add(buttonJPanel);
     this.add(jPanel);
   }
@@ -47,10 +45,11 @@ public class CreatePortfolioForm extends AbstractForm {
 
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(portfolioNameJTextField)) {
-        this.showError("Portfolio Name cannot be empty");
+      if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
         return;
       }
+
+      String portfolioName = portfolioNameJTextField.getText();
 
 //      this.features.createPortfolio(portfolioNameJTextField.getText());
       //todo insert command here

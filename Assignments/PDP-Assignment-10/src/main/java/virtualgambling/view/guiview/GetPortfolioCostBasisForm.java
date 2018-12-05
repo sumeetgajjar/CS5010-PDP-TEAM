@@ -2,12 +2,11 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.swing.*;
 
-import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -49,8 +48,6 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
 
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     this.add(portfolioPanel);
     this.add(datePanel);
     this.add(buttonJPanel);
@@ -64,24 +61,16 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
                                                              JTextField dateTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(portfolioTextField)) {
-        this.showError("Portfolio Name cannot be empty");
+      if (this.areInputsEmpty(portfolioTextField, dateTextField)) {
         return;
       }
 
-      if (this.isTextFieldEmpty(dateTextField)) {
-        this.showError("Date cannot be empty");
+      Date date = getDateFromTextField(dateTextField, this::showError);
+      if (Objects.isNull(date)) {
         return;
       }
 
-      String dateString = dateTextField.getText();
-      Date date;
-      try {
-        date = Utils.getDateFromDefaultFormattedDateString(dateString);
-      } catch (ParseException e1) {
-        this.showError(String.format("Invalid Date Format: %s", dateString));
-        return;
-      }
+      String portfolioName = portfolioTextField.getText();
 
 //      this.executeFeature(portfolioTextField.getText(), date);
       //todo insert command here
@@ -89,6 +78,11 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
       this.appendOutput("Get portfolio cost basis");
       this.showPrevious();
     };
+  }
+
+  private boolean areInputsEmpty(JTextField portfolioTextField, JTextField dateTextField) {
+    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isDateTextFieldEmpty(dateTextField);
   }
 
   protected void executeFeature(String portfolioName, Date date) {

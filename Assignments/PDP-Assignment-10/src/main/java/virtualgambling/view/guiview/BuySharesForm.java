@@ -2,12 +2,11 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.swing.*;
 
-import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -78,8 +77,6 @@ public class BuySharesForm extends AbstractForm {
 
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    this.addJFrameClosingEvent();
-
     this.add(tickerNamePanel);
     this.add(portfolioPanel);
     this.add(datePanel);
@@ -94,61 +91,32 @@ public class BuySharesForm extends AbstractForm {
                                                              JTextField quantityTextField,
                                                              JTextField commissionTextField) {
     return e -> {
-      if (this.isTextFieldEmpty(tickerNameTextField)) {
-        this.showError("Ticker Name cannot be empty");
-        return;
-      }
+      boolean areInputsEmpty = this.areInputsEmpty(tickerNameTextField,
+              portfolioTextField,
+              dateTextField,
+              quantityTextField,
+              commissionTextField);
 
-      if (this.isTextFieldEmpty(portfolioTextField)) {
-        this.showError("Portfolio Name cannot be empty");
-        return;
-      }
-
-      if (this.isTextFieldEmpty(dateTextField)) {
-        this.showError("Date cannot be empty");
-        return;
-      }
-
-      if (this.isTextFieldEmpty(quantityTextField)) {
-        this.showError("Quantity cannot be empty");
-        return;
-      }
-
-      if (this.isTextFieldEmpty(commissionTextField)) {
-        this.showError("Commission cannot be empty");
+      if (areInputsEmpty) {
         return;
       }
 
       String tickerName = tickerNameTextField.getText();
       String portfolioName = portfolioTextField.getText();
-      String dateString = dateTextField.getText();
-      Date date;
-      try {
-        date = Utils.getDateFromDefaultFormattedDateString(dateString);
-      } catch (ParseException e1) {
-        this.showError(String.format("Invalid Date Format: %s", dateString));
+      Date date = getDateFromTextField(dateTextField, this::showError);
+      if (Objects.isNull(date)) {
         return;
       }
 
-
-      long quantity;
-      String quantityString = quantityTextField.getText();
-      try {
-        quantity = Long.parseLong(quantityString);
-      } catch (NumberFormatException e1) {
-        this.showError(String.format("Invalid Quantity: %s", quantityString));
+      Long quantity = getLongFromTextField(quantityTextField, this::showError);
+      if (Objects.isNull(quantity)) {
         return;
       }
 
-      double commission;
-      String commissionString = commissionTextField.getText();
-      try {
-        commission = Double.parseDouble(commissionString);
-      } catch (NumberFormatException e1) {
-        this.showError(String.format("Invalid Commission: %s", commissionString));
+      Double commission = getDoubleFromTextField(commissionTextField, this::showError);
+      if (Objects.isNull(commission)) {
         return;
       }
-
 
 //      this.features.buyShares(tickerName, portfolioName, date, quantity, commission);
       //todo insert command here
@@ -157,4 +125,18 @@ public class BuySharesForm extends AbstractForm {
       this.showPrevious();
     };
   }
+
+  private boolean areInputsEmpty(JTextField tickerNameTextField,
+                                 JTextField portfolioTextField,
+                                 JTextField dateTextField,
+                                 JTextField quantityTextField,
+                                 JTextField commissionTextField) {
+
+    return isTickerNameTextFieldEmpty(tickerNameTextField) ||
+            isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isDateTextFieldEmpty(dateTextField) ||
+            isQuantityTextFieldEmpty(quantityTextField) ||
+            isCommissionTextFieldEmpty(commissionTextField);
+  }
+
 }

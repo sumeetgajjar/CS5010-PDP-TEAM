@@ -9,7 +9,7 @@ import virtualgambling.controller.Features;
 /**
  * Created by gajjar.s, on 11:27 PM, 12/4/18
  */
-public class MainForm extends AbstractForm implements GuiView {
+public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea jTextArea;
   private Features features;
@@ -66,6 +66,11 @@ public class MainForm extends AbstractForm implements GuiView {
     JScrollPane outputJPanel = new JScrollPane(this.jTextArea);
     outputJPanel.setPreferredSize(new Dimension(600, 800));
     this.add(outputJPanel);
+  }
+
+  @Override
+  protected void addJFrameClosingEvent() {
+    //closing event should not be added to this MainForm since there is no previous form to go to.
   }
 
   private void addButtonsToPanel(JPanel buttonJPanel) {
