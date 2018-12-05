@@ -2,6 +2,7 @@ package virtualgambling.model.bean;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 import util.Utils;
 
@@ -22,6 +23,20 @@ public class StockPrice {
   public StockPrice(BigDecimal stockPrice, Date date) throws IllegalArgumentException {
     this.date = Utils.requireNonNull(date);
     this.stockPrice = Utils.requireNonNull(stockPrice);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof StockPrice)) return false;
+    StockPrice that = (StockPrice) o;
+    return Objects.equals(getDate(), that.getDate()) &&
+            Objects.equals(stockPrice, that.stockPrice);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getDate(), stockPrice);
   }
 
   /**

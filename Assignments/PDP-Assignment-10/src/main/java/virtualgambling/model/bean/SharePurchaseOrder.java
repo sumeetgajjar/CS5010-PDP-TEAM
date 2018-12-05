@@ -1,6 +1,7 @@
 package virtualgambling.model.bean;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import util.Utils;
 
@@ -107,6 +108,22 @@ public class SharePurchaseOrder {
             quantity, tickerName,
             Utils.getFormattedCurrencyNumberString(getStockPrice().getUnitPrice()),
             Utils.getDefaultFormattedDateStringFromDate(getStockPrice().getDate()));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof SharePurchaseOrder)) return false;
+    SharePurchaseOrder that = (SharePurchaseOrder) o;
+    return getQuantity() == that.getQuantity() &&
+            Double.compare(that.getCommissionPercentage(), getCommissionPercentage()) == 0 &&
+            Objects.equals(getTickerName(), that.getTickerName()) &&
+            Objects.equals(getStockPrice(), that.getStockPrice());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getTickerName(), getQuantity(), getCommissionPercentage(), getStockPrice());
   }
 
   private static double validateCommissionPercentage(double commissionPercentage) {

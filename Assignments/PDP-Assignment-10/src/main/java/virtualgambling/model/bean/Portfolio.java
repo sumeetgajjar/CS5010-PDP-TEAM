@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import util.Utils;
@@ -20,7 +21,7 @@ import virtualgambling.model.stockdao.StockDAO;
  */
 public class Portfolio implements Serializable {
 
-//  private static final long serialVersionUID = -8134764875103300708L;
+  //  private static final long serialVersionUID = -8134764875103300708L;
   private final String name;
   private final transient StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
@@ -150,6 +151,21 @@ public class Portfolio implements Serializable {
     return totalPortfolioValue;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Portfolio)) return false;
+    Portfolio portfolio = (Portfolio) o;
+    return Objects.equals(getName(), portfolio.getName()) &&
+            Objects.equals(getPurchases(), portfolio.getPurchases()) &&
+            getStockDAOType() == portfolio.getStockDAOType() &&
+            getStockDataSourceType() == portfolio.getStockDataSourceType();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getName(), getPurchases(), getStockDAOType(), getStockDataSourceType());
+  }
 
   @Override
   public String toString() {
