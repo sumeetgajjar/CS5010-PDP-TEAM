@@ -122,9 +122,11 @@ public class BuySharesForm extends AbstractForm {
 
       Optional<SharePurchaseOrder> optional = this.features.buyShares(tickerName,
               portfolioName, date, quantity, commission);
-      optional.ifPresent(sharePurchaseOrder -> this.mainForm.display(sharePurchaseOrder.toString()));
 
-      this.showPrevious();
+      if (optional.isPresent()) {
+        this.mainForm.display(optional.get().toString());
+        this.showPrevious();
+      }
     };
   }
 
