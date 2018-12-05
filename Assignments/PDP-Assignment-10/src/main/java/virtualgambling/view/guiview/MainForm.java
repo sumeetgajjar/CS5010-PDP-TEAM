@@ -60,6 +60,9 @@ public class MainForm extends AbstractForm {
     JButton getPortfolioCostBasisButton = getPortfolioCostBasisButton();
     buttonJPanel.add(getPortfolioCostBasisButton);
 
+    JButton getPortfolioValueButton = getPortfolioValueButton();
+    buttonJPanel.add(getPortfolioValueButton);
+
     JButton quitButton = GUIUtils.getQuitJButton();
     buttonJPanel.add(quitButton);
   }
@@ -69,6 +72,15 @@ public class MainForm extends AbstractForm {
     jButton.addActionListener(e -> {
       GetPortfolioCostBasisForm getPortfolioCostBasisForm = new GetPortfolioCostBasisForm(this);
       GUIUtils.showPrevious(getPortfolioCostBasisForm, this);
+    });
+    return jButton;
+  }
+
+  private JButton getPortfolioValueButton() {
+    JButton jButton = new JButton("Get Portfolios Value");
+    jButton.addActionListener(e -> {
+      GetPortfolioCostBasisForm getPortfolioValueForm = new GetPortfolioValueForm(this);
+      GUIUtils.showPrevious(getPortfolioValueForm, this);
     });
     return jButton;
   }
