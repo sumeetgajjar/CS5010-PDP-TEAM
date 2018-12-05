@@ -29,9 +29,8 @@ public class GetPortfolioCompositionForm extends CreatePortfolioForm {
       Optional<Portfolio> optional = this.features.getPortfolioComposition(portfolioName);
       if (optional.isPresent()) {
         this.mainForm.display(
-                String.format("Cost basis of portfolio %s: %s",
-                        portfolioName,
-                        optional.get().toString()));
+                String.format("Portfolio Composition of portfolio '%s'", portfolioName));
+        this.mainForm.display(optional.get().toString());
         this.showPrevious();
       }
     };
