@@ -1,5 +1,6 @@
 package virtualgambling.view.guiview;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -28,8 +29,8 @@ public abstract class AbstractForm extends JFrame {
   }
 
   protected void postInit() {
-    this.setLocationRelativeTo(null);
     this.pack();
+    this.centerThisJFrame();
   }
 
   protected JPanel getActionButtonJPanel(ActionListener executeButtonAction) {
@@ -63,5 +64,12 @@ public abstract class AbstractForm extends JFrame {
 
   protected void showPrevious() {
     GUIUtils.showPrevious(previousJFrame, currentJFrame);
+  }
+
+  protected void centerThisJFrame() {
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    int x = (int) (dim.getWidth() / 2 - this.getSize().getWidth() / 2);
+    int y = (int) (dim.getHeight() / 2 - this.getSize().getHeight() / 2);
+    this.setLocation(x, y);
   }
 }
