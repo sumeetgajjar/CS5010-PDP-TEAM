@@ -23,6 +23,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JTextArea jTextArea = new JTextArea("Welcome to Virtual Trading");
     jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
     jTextArea.setEditable(false);
+    jTextArea.setLineWrap(true);
     return jTextArea;
   }
 
@@ -45,6 +46,8 @@ public class MainForm extends AbstractForm implements GUIView {
   protected void appendOutput(String message) {
     this.jTextArea.append(System.lineSeparator());
     this.jTextArea.append(message);
+    this.jTextArea.append(System.lineSeparator());
+    this.jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
   }
 
   @Override
@@ -92,14 +95,14 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton plotPortfolioPerformanceButton = getDrawPortfolioPerformanceButton();
     buttonJPanel.add(plotPortfolioPerformanceButton);
 
-    JButton buySharesButton = getbuySharesButton();
+    JButton buySharesButton = getBuySharesButton();
     buttonJPanel.add(buySharesButton);
 
     JButton quitButton = getQuitJButton();
     buttonJPanel.add(quitButton);
   }
 
-  private JButton getbuySharesButton() {
+  private JButton getBuySharesButton() {
     JButton jButton = new JButton("Buy Shares");
     jButton.addActionListener(e -> {
       BuySharesForm buySharesForm =
