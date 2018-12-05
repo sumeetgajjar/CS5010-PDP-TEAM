@@ -255,7 +255,10 @@ public class Utils {
                          new InputStreamReader(
                                  new FileInputStream(new File(path.toUri()))))) {
 
-      builder.append(reader.readLine());
+      String line;
+      while ((line = reader.readLine()) != null) {
+        builder.append(line);
+      }
     }
     return builder.toString();
   }
@@ -263,7 +266,7 @@ public class Utils {
   public static Path getPathInDefaultFolder(Path path) throws IOException {
     Utils.requireNonNull(path);
     Path defaultPath = Paths.get(Constants.DEFAULT_PERSISTENCE_PATH);
-    if (!Files.isDirectory(defaultPath)){
+    if (!Files.isDirectory(defaultPath)) {
       Files.createDirectory(defaultPath);
     }
     return Paths.get(Constants.DEFAULT_PERSISTENCE_PATH, path.toString());

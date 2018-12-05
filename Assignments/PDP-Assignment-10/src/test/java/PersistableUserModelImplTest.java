@@ -38,6 +38,8 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
     }.getType());
 
+    userModel.buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10);
+
     try {
       userModel.persistFromModel(new PortfolioPersister(serDes,
               userModel.getPortfolio(PORTFOLIO_P1)));

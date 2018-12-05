@@ -12,13 +12,15 @@ import util.Utils;
 
 public class JSONSerDes<T> implements SerDes<T> {
   private static final Gson GSON =
-          new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
+          new GsonBuilder()
+                  .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+                  .setPrettyPrinting()
+                  .create();
   private final Path path;
   private Type instanceType;
 
   public JSONSerDes(Path path, Type type) {
     this.path = Utils.requireNonNull(path);
-//    this.instanceType = instanceType;
     this.instanceType = type;
   }
 
