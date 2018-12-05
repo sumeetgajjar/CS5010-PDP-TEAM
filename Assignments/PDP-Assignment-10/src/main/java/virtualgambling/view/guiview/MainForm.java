@@ -7,58 +7,13 @@ import javax.swing.*;
 /**
  * Created by gajjar.s, on 11:27 PM, 12/4/18
  */
-public class MainForm extends JFrame {
+public class MainForm extends AbstractForm {
 
-  private final JScrollPane outputJPanel;
-  //  private final JPanel outputJPanel;
-  private final JTextArea jTextArea;
-  private final MainForm mainForm;
+  private JTextArea jTextArea;
 
   public MainForm() throws HeadlessException {
-    this.mainForm = this;
-
-    this.setLocation(200, 200);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    this.setLayout(new FlowLayout());
-
-    JPanel buttonJPanel = new JPanel();
-    buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
-
-
-    JButton createPortfolioButton = getCreatePortfolioJButton(this.mainForm);
-
-    JButton quitButton = GUIUtils.getQuitJButton();
-
-    buttonJPanel.add(createPortfolioButton);
-    buttonJPanel.add(quitButton);
-
-    buttonJPanel.setBackground(Color.BLUE);
-    buttonJPanel.setPreferredSize(new Dimension(300, 800));
-    this.add(buttonJPanel);
-
-    this.add(new JSeparator(SwingConstants.VERTICAL));
-
-    this.jTextArea = getJTextArea();
-
-    this.outputJPanel = new JScrollPane(this.jTextArea);
-    this.outputJPanel.setPreferredSize(new Dimension(600, 800));
-
-    this.add(this.outputJPanel);
-
-    this.pack();
-    this.setLocationRelativeTo(null);
+    super(null);
     this.setVisible(true);
-  }
-
-  private JButton getCreatePortfolioJButton(MainForm mainForm) {
-    JButton createPortfolioButton = new JButton("Create Portfolio");
-
-    createPortfolioButton.addActionListener(e -> {
-      CreatePortfolioForm createPortfolioForm = new CreatePortfolioForm(mainForm);
-      GUIUtils.showPrevious(createPortfolioForm, mainForm);
-    });
-    return createPortfolioButton;
   }
 
   private JTextArea getJTextArea() {
@@ -68,9 +23,45 @@ public class MainForm extends JFrame {
     return jTextArea;
   }
 
-  public void appendOutput(String message) {
+  @Override
+  protected void appendOutput(String message) {
     this.jTextArea.append(System.lineSeparator());
     this.jTextArea.append(message);
+  }
+
+  @Override
+  protected void initComponents() {
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setLayout(new FlowLayout());
+
+
+    JButton createPortfolioButton = getCreatePortfolioJButton();
+    JButton quitButton = GUIUtils.getQuitJButton();
+
+    JPanel buttonJPanel = new JPanel();
+    buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
+    buttonJPanel.add(createPortfolioButton);
+    buttonJPanel.add(quitButton);
+    buttonJPanel.setBackground(Color.BLUE);
+    buttonJPanel.setPreferredSize(new Dimension(300, 800));
+    this.add(buttonJPanel);
+
+    this.add(new JSeparator(SwingConstants.VERTICAL));
+
+    this.jTextArea = getJTextArea();
+    JScrollPane outputJPanel = new JScrollPane(this.jTextArea);
+    outputJPanel.setPreferredSize(new Dimension(600, 800));
+    this.add(outputJPanel);
+  }
+
+  private JButton getCreatePortfolioJButton() {
+    JButton createPortfolioButton = new JButton("Create Portfolio");
+
+    createPortfolioButton.addActionListener(e -> {
+      CreatePortfolioForm createPortfolioForm = new CreatePortfolioForm(this);
+      GUIUtils.showPrevious(createPortfolioForm, this);
+    });
+    return createPortfolioButton;
   }
 
   public static void main(String[] args) {

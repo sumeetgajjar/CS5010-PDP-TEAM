@@ -8,15 +8,17 @@ import javax.swing.*;
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
  */
-public class CreatePortfolioForm extends JFrame {
+public class CreatePortfolioForm extends AbstractForm {
 
-  private final JFrame previousJFrame;
-  private final JFrame currentJFrame;
+  private final MainForm mainForm;
 
   public CreatePortfolioForm(MainForm mainForm) throws HeadlessException {
-    this.currentJFrame = this;
-    this.previousJFrame = mainForm;
+    super(mainForm);
+    this.mainForm = mainForm;
+  }
 
+  @Override
+  protected void initComponents() {
     JPanel jPanel = new JPanel();
 
     JLabel jLabel = new JLabel("Please enter the name of the Portfolio");
@@ -26,29 +28,30 @@ public class CreatePortfolioForm extends JFrame {
     JTextField portfolioNameJTextField = new JTextField(10);
     jPanel.add(portfolioNameJTextField);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio(mainForm,
-            portfolioNameJTextField);
-    JPanel buttonJPanel = GUIUtils.getActionButtonJPanel(this, previousJFrame, actionListener);
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
+    JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    GUIUtils.addJFrameClosingEvent(this, previousJFrame, currentJFrame);
+    this.addJFrameClosingEvent();
 
     jPanel.add(buttonJPanel);
     this.add(jPanel);
-    this.setLocationRelativeTo(null);
-    this.pack();
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(MainForm mainForm,
-                                                             JTextField portfolioNameJTextField) {
+  @Override
+  protected void appendOutput(String message) {
+    this.mainForm.appendOutput(message);
+  }
+
+  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
       String portfolioName = portfolioNameJTextField.getText();
       if (portfolioName.isEmpty()) {
-        GUIUtils.displayError(this, "Portfolio Name cannot be empty!");
+        this.showError("Portfolio Name cannot be empty");
         return;
       }
 
-      mainForm.appendOutput(portfolioName);
-      GUIUtils.showPrevious(this.previousJFrame, this.currentJFrame);
+      this.appendOutput(portfolioName);
+      this.showPrevious();
     };
   }
 
