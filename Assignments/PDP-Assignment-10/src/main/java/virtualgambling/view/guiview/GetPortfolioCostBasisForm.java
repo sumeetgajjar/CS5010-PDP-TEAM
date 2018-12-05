@@ -77,18 +77,24 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
       Optional<BigDecimal> optional = this.executeFeature(portfolioName, date);
       if (optional.isPresent()) {
         String numberString = Utils.getFormattedCurrencyNumberString(optional.get());
+        this.mainForm.display(getPrefix(portfolioName, date));
         this.mainForm.display(numberString);
         this.showPrevious();
       }
     };
   }
 
-  private boolean areInputsEmpty(JTextField portfolioTextField, JTextField dateTextField) {
-    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
-            isDateTextFieldEmpty(dateTextField);
+  protected String getPrefix(String portfolioName, Date date) {
+    return "Cost basis of portfolio '" + portfolioName + "' on '"
+            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
   }
 
   protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
     return this.features.getPortfolioCostBasis(portfolioName, date);
+  }
+
+  private boolean areInputsEmpty(JTextField portfolioTextField, JTextField dateTextField) {
+    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isDateTextFieldEmpty(dateTextField);
   }
 }

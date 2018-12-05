@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -14,6 +15,12 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
 
   public GetPortfolioValueForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm, features);
+  }
+
+  @Override
+  protected String getPrefix(String portfolioName, Date date) {
+    return "Value of portfolio '" + portfolioName + "' on '"
+            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
   }
 
   @Override
