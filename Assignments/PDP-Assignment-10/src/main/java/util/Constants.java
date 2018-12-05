@@ -1,4 +1,4 @@
-package virtualgambling.controller;
+package util;
 
 /**
  * This class represents a Constants class. It contains various Constants that can be used by any
@@ -42,4 +42,6 @@ public class Constants {
 
   public static final String STRATEGY_EXECUTION_EXCEPTION_MESSAGE = "Unable to buy even a single " +
           "stock";
+
+  public static final String DEFAULT_PERSISTENCE_PATH = "Files";
 }

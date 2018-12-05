@@ -1,9 +1,9 @@
 package virtualgambling.controller;
 
+import util.Constants;
 import virtualgambling.model.EnhancedUserModelImpl;
-import virtualgambling.model.stockdao.SimpleStockDAO;
-import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.view.View;
 
 /**
@@ -38,15 +38,12 @@ public class OrchestratorController extends AbstractController {
       switch (commandString) {
         case "1":
           controller = new EnhancedTradingController(
-                  new EnhancedUserModelImpl(
-                          new SimpleStockDAO(
-                                  new SimpleStockDataSource())), view);
+                  new EnhancedUserModelImpl(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE), view);
           break;
         case "2":
           controller =
-                  new EnhancedTradingController(new EnhancedUserModelImpl(
-                          new SimpleStockDAO(
-                                  AlphaVantageAPIStockDataSource.getInstance())), view);
+                  new EnhancedTradingController(new EnhancedUserModelImpl(StockDAOType.SIMPLE,
+                          StockDataSourceType.ALPHA_VANTAGE), view);
           break;
         default:
           this.displayOnView(Constants.INVALID_CHOICE_MESSAGE);

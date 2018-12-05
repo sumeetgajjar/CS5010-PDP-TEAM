@@ -22,10 +22,8 @@ import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
-import virtualgambling.model.stockdao.SimpleStockDAO;
-import virtualgambling.model.stockdao.StockDAO;
-import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
@@ -39,8 +37,9 @@ public class EnhancedUserModelTest extends UserModelTest {
   private static final String PORTFOLIO_FANG = "FANG";
 
   @Override
-  protected UserModel getUserModel(StockDAO stockDAO) {
-    return TestUtils.getEmptyEnhancedUserModelWithStockDAO(stockDAO);
+  protected UserModel getUserModel(StockDAOType stockDAOType,
+                                   StockDataSourceType stockDataSourceType) {
+    return TestUtils.getEmptyEnhancedUserModelWithStockDAO(stockDAOType, stockDataSourceType);
   }
 
   @Test
@@ -269,8 +268,8 @@ public class EnhancedUserModelTest extends UserModelTest {
   public void buySingleShareWithCommissionWhoseDataIsNotPresentFails()
           throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
-                    new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE,
+                    StockDataSourceType.SIMPLE);
     enhancedUserModel.createPortfolio("p1");
     try {
       Calendar calendar = Utils.getCalendarInstance();
@@ -394,8 +393,8 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
-                    new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE,
+                    StockDataSourceType.SIMPLE);
 
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
@@ -419,8 +418,8 @@ public class EnhancedUserModelTest extends UserModelTest {
             stocksWeights);
 
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
-                    new SimpleStockDAO(new SimpleStockDataSource()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE,
+                    StockDataSourceType.SIMPLE);
     try {
       enhancedUserModel.buyShares(PORTFOLIO_FANG, new BigDecimal(100), strategy, 10);
       Assert.fail("should have failed");
@@ -1449,8 +1448,8 @@ public class EnhancedUserModelTest extends UserModelTest {
   @Test
   public void gettingFrequentDataFromAlphaVantageWorks() {
     EnhancedUserModel enhancedUserModel =
-            TestUtils.getEmptyEnhancedUserModelWithStockDAO(
-                    new SimpleStockDAO(AlphaVantageAPIStockDataSource.getInstance()));
+            TestUtils.getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE,
+                    StockDataSourceType.ALPHA_VANTAGE);
 
     Map<String, Double> stocksWeights = new HashMap<>();
     stocksWeights.put("GOOG", 100.0D);

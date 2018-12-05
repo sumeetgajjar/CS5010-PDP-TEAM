@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 
 import util.Utils;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
+import virtualgambling.model.factory.StockDAOFactory;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.stockdao.StockDAO;
 
 /**
@@ -21,28 +24,32 @@ public class Portfolio implements Serializable {
   private final String name;
   private final StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
+  private final StockDAOType stockDAOType;
+  private final StockDataSourceType stockDataSourceType;
 
-  /**
-   * Constructs a Object of {@link Portfolio} with the given name.
-   *
-   * @param name the name of the portfolio.
-   * @throws IllegalArgumentException if any of the given params are null
-   */
-  public Portfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases)
-          throws IllegalArgumentException {
-    this.name = Utils.requireNonNull(name);
-    this.stockDAO = Utils.requireNonNull(stockDAO);
-    this.purchases = Utils.requireNonNull(purchases);
-  }
+//  /**
+//   * Constructs a Object of {@link Portfolio} with the given name.
+//   *
+//   * @param name the name of the portfolio.
+//   * @throws IllegalArgumentException if any of the given params are null
+//   */
+//  public Portfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases)
+//          throws IllegalArgumentException {
+//    this.name = Utils.requireNonNull(name);
+//    this.stockDAO = Utils.requireNonNull(stockDAO);
+//    this.purchases = Utils.requireNonNull(purchases);
+//  }
 
-  /**
-   * Returns the Portfolio from the given serializedString of the portfolio.
-   *
-   * @param serializedString the serialized string
-   * @return the Portfolio from the given serializedString of the portfolio
-   */
-  public static Portfolio deserialize(String serializedString) {
-    return null;
+  public Portfolio(String portfolioName, StockDAOType stockDAOType,
+                   StockDataSourceType stockDataSourceType,
+                   List<SharePurchaseOrder> sharePurchaseOrders) {
+    this.stockDataSourceType = Utils.requireNonNull(stockDataSourceType);
+    this.stockDAOType = Utils.requireNonNull(stockDAOType);
+    this.stockDAO = StockDAOFactory.fromStockDAOAndDataSource(this.stockDAOType,
+            this.stockDataSourceType);
+
+    this.name = Utils.requireNonNull(portfolioName);
+    this.purchases = Utils.requireNonNull(sharePurchaseOrders);
   }
 
   /**
@@ -61,6 +68,14 @@ public class Portfolio implements Serializable {
    */
   public List<SharePurchaseOrder> getPurchases() {
     return Collections.unmodifiableList(this.purchases);
+  }
+
+  public StockDAOType getStockDAOType() {
+    return stockDAOType;
+  }
+
+  public StockDataSourceType getStockDataSourceType() {
+    return stockDataSourceType;
   }
 
   /**
@@ -135,14 +150,6 @@ public class Portfolio implements Serializable {
     return totalPortfolioValue;
   }
 
-  /**
-   * Returns the serialized string of this object.
-   *
-   * @return the serialized string of this object
-   */
-  public String serialize() {
-    return null;
-  }
 
   @Override
   public String toString() {

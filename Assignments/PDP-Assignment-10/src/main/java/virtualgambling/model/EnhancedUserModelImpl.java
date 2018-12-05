@@ -10,18 +10,24 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
-import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.strategy.Strategy;
 
 public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUserModel {
-  /**
-   * Constructs a {@link EnhancedUserModelImpl} object with given params.
-   *
-   * @param stockDAO the stockDAO
-   * @throws IllegalArgumentException if the given stockDAO is null
-   */
-  public EnhancedUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
-    super(stockDAO);
+//  /**
+//   * Constructs a {@link EnhancedUserModelImpl} object with given params.
+//   *
+//   * @param stockDAO the stockDAO
+//   * @throws IllegalArgumentException if the given stockDAO is null
+//   */
+//  public EnhancedUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
+//    super(stockDAO);
+//  }
+
+  public EnhancedUserModelImpl(StockDAOType stockDAOType,
+                               StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
+    super(stockDAOType, stockDataSourceType);
   }
 
   @Override
@@ -56,7 +62,7 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
     createPortfolioIfNotExists(portfolioName);
     Utils.requireNonNull(strategy);
     this.validateAmountToInvest(amountToInvest);
-    return strategy.execute(amountToInvest, this.stockDAO).stream()
+    return strategy.execute(amountToInvest, this.stockDAOType, this.stockDataSourceType).stream()
             .map(oldPurchaseOrder -> new SharePurchaseOrder(oldPurchaseOrder, commissionPercentage))
             .map(sharePurchaseOrder -> processPurchaseOrder(portfolioName, sharePurchaseOrder))
             .collect(Collectors.toList());

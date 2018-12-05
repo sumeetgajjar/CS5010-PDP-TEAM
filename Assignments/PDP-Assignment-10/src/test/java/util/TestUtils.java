@@ -8,14 +8,16 @@ import java.util.Map;
 
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.EnhancedUserModelImpl;
+import virtualgambling.model.PersistableUserModel;
+import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
-import virtualgambling.model.stockdao.SimpleStockDAO;
-import virtualgambling.model.stockdao.StockDAO;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.stockdatasource.StockDataSource;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 
@@ -42,8 +44,28 @@ public class TestUtils {
    *
    * @return a SimpleUserModel
    */
-  public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(StockDAO stockDAO) {
-    return new EnhancedUserModelImpl(stockDAO);
+  public static PersistableUserModel getEmptyPersistableUserModelWithStockDAO(StockDAOType stockDAOType,
+                                                                              StockDataSourceType stockDataSourceType) {
+    return new PersistableUserModelImpl(stockDAOType, stockDataSourceType);
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static PersistableUserModel getEmptyPersistableUserModel() {
+    return getEmptyPersistableUserModelWithStockDAO(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(StockDAOType stockDAOType,
+                                                                        StockDataSourceType stockDataSourceType) {
+    return new EnhancedUserModelImpl(stockDAOType, stockDataSourceType);
   }
 
   /**
@@ -52,7 +74,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static EnhancedUserModel getEmptyEnhancedUserModel() {
-    return getEmptyEnhancedUserModelWithStockDAO(new SimpleStockDAO(new MockDataSource()));
+    return getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
   }
 
   /**
@@ -60,8 +82,9 @@ public class TestUtils {
    *
    * @return a SimpleUserModel
    */
-  public static UserModel getEmptySimpleUserModelUsingStockDAO(StockDAO stockDAO) {
-    return new SimpleUserModel(stockDAO);
+  public static UserModel getEmptySimpleUserModelUsingStockDAO(StockDAOType stockDAOType,
+                                                               StockDataSourceType stockDataSourceType) {
+    return new SimpleUserModel(stockDAOType, stockDataSourceType);
   }
 
   /**
@@ -70,7 +93,7 @@ public class TestUtils {
    * @return a SimpleUserModel
    */
   public static UserModel getEmptySimpleUserModel() {
-    return getEmptySimpleUserModelUsingStockDAO(new SimpleStockDAO(new MockDataSource()));
+    return getEmptySimpleUserModelUsingStockDAO(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
   }
 
   /**
@@ -228,12 +251,13 @@ public class TestUtils {
     /**
      * Constructs a Object of {@link Portfolio} with the given name.
      *
-     * @param name            the name of the portfolio.
+     * @param portfolioName   the name of the portfolio.
      * @param mockedTodayDate mocked date for testing
      */
-    public MockPortfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases,
-                         Date mockedTodayDate) {
-      super(name, stockDAO, purchases);
+    public MockPortfolio(String portfolioName, StockDAOType stockDAOType,
+                         StockDataSourceType stockDataSourceType,
+                         List<SharePurchaseOrder> sharePurchaseOrders, Date mockedTodayDate) {
+      super(portfolioName, stockDAOType, stockDataSourceType, sharePurchaseOrders);
       this.mockedTodayDate = mockedTodayDate;
     }
 
@@ -264,93 +288,22 @@ public class TestUtils {
 
   public static class MockUserModel extends SimpleUserModel {
     private Date mockedTodayDate;
-    private StockDAO simpleStockDAO;
 
-    private MockUserModel(StockDAO stockDAO) {
-      super(stockDAO);
-      this.simpleStockDAO = stockDAO;
+    private MockUserModel(StockDAOType stockDAOType, StockDataSourceType stockDataSourceType) {
+      super(stockDAOType, stockDataSourceType);
     }
 
     MockUserModel(Date mockedTodayDate) throws IllegalArgumentException {
-      this(new SimpleStockDAO(new MockDataSource()));
+      this(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
       this.mockedTodayDate = Utils.requireNonNull(mockedTodayDate);
     }
 
     @Override
     protected Portfolio instantiatePortfolio(String portfolioName,
                                              List<SharePurchaseOrder> sharePurchaseOrders) {
-      return new MockPortfolio(portfolioName, simpleStockDAO, sharePurchaseOrders, mockedTodayDate);
-    }
-  }
-
-  public static class MockDataSource implements StockDataSource {
-
-    @Override
-    public StockPrice getPrice(String tickerName, Date date) throws StockDataNotFoundException {
-      switch (tickerName) {
-        case "AAPL":
-          Calendar calendar = Utils.getCalendarInstance();
-
-          calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
-          Date day3 = calendar.getTime();
-          if (Utils.doesDatesHaveSameDay(date, day3)) {
-            return new StockPrice(BigDecimal.TEN, date);
-          }
-
-          calendar.add(Calendar.DATE, -1);
-          Date day2 = calendar.getTime();
-          if (Utils.doesDatesHaveSameDay(date, day2)) {
-            return new StockPrice(new BigDecimal(20), date);
-          }
-
-          calendar.add(Calendar.DATE, -1);
-          Date day1 = calendar.getTime();
-          if (Utils.doesDatesHaveSameDay(date, day1)) {
-            return new StockPrice(new BigDecimal(30), date);
-          }
-
-          calendar.set(2018, Calendar.NOVEMBER, 24);
-          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new StockPrice(new BigDecimal(1000), date);
-          }
-
-          calendar.set(2018, Calendar.OCTOBER, 24);
-          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new StockPrice(new BigDecimal(100), date);
-          }
-
-          calendar.set(2018, Calendar.SEPTEMBER, 24);
-          if (Utils.doesDatesHaveSameDay(date, calendar.getTime())) {
-            return new StockPrice(new BigDecimal(10), date);
-          } else {
-            return new StockPrice(new BigDecimal(2000), date);
-          }
-
-        case "GOOG":
-          return new StockPrice(new BigDecimal("11"), date);
-        case "FB":
-          return new StockPrice(new BigDecimal("40"), date);
-        case "NFLX":
-          return new StockPrice(new BigDecimal("20"), date);
-        case "T":
-          return new StockPrice(new BigDecimal("10"), date);
-        case "ASC":
-          return new StockPrice(new BigDecimal("50"), date);
-        case "MSFT":
-          return new StockPrice(new BigDecimal("60"), date);
-        case "AMD":
-          return new StockPrice(new BigDecimal("70"), date);
-        case "EBAY":
-          return new StockPrice(new BigDecimal("80"), date);
-        case "QCOM":
-          return new StockPrice(new BigDecimal("90"), date);
-        case "MU":
-          return new StockPrice(new BigDecimal("100"), date);
-        default:
-          // stock data is not present for stocks which are not covered by above cases.
-      }
-
-      throw new StockDataNotFoundException("Stock Data not found");
+      return new MockPortfolio(portfolioName, StockDAOType.SIMPLE, StockDataSourceType.MOCK,
+              sharePurchaseOrders,
+              mockedTodayDate);
     }
   }
 }

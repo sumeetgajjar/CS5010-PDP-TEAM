@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import util.Constants;
 import util.TestUtils;
-import virtualgambling.controller.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.EnhancedTradingController;
 import virtualgambling.controller.TradingController;
@@ -22,8 +22,8 @@ import virtualgambling.model.exceptions.InsufficientCapitalException;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.exceptions.StrategyExecutionException;
-import virtualgambling.model.stockdao.SimpleStockDAO;
-import virtualgambling.model.stockdatasource.SimpleStockDataSource;
+import virtualgambling.model.factory.StockDAOType;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.TextView;
 
@@ -302,7 +302,7 @@ public class ModelControllerViewWiringTest {
       this.log.append(System.lineSeparator());
       this.log.append(portfolioName);
       this.log.append(System.lineSeparator());
-      return new Portfolio("random", new SimpleStockDAO(new SimpleStockDataSource()),
+      return new Portfolio("random", StockDAOType.SIMPLE, StockDataSourceType.SIMPLE,
               Collections.emptyList());
     }
 
