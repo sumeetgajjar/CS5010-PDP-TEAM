@@ -1,39 +1,37 @@
 package virtualgambling.model.persistence.serdes;
 
-import com.owlike.genson.GenericType;
-import com.owlike.genson.Genson;
-import com.owlike.genson.GensonBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
 import java.nio.file.Path;
 
 import util.Utils;
 
 public class JSONSerDes<T> implements SerDes<T> {
-  private static final Genson GSON = new GensonBuilder()
-          .useRuntimeType(true)
-          .useConstructorWithArguments(true)
-          .create();
-
+  private static final Gson GSON =
+          new GsonBuilder().excludeFieldsWithModifiers(Modifier.TRANSIENT).create();
   private final Path path;
-  private GenericType<T> instanceType;
+  private Type instanceType;
 
-  public JSONSerDes(Path path, GenericType<T> genericType) {
+  public JSONSerDes(Path path, Type type) {
     this.path = Utils.requireNonNull(path);
 //    this.instanceType = instanceType;
-    this.instanceType = genericType;
+    this.instanceType = type;
   }
 
 
   @Override
   public void serialize(T data) throws IOException {
-    String json = GSON.serialize(data);
+    String json = GSON.toJson(data);
     Utils.saveToFile(path, json);
   }
 
   @Override
   public T deserialize() throws IOException {
     String json = Utils.readStringFromFile(path);
-    return GSON.deserialize(json, instanceType);
+    return GSON.fromJson(json, instanceType);
   }
 }

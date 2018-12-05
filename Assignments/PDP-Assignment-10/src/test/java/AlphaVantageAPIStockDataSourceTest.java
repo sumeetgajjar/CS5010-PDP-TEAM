@@ -41,7 +41,7 @@ public class AlphaVantageAPIStockDataSourceTest {
       dataSource.getPrice("AAPL", calendar.getTime());
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
-      Assert.assertEquals("Stock Data Not found for: AAPL for 2118-11-22",e.getMessage());
+      Assert.assertEquals("Stock Data Not found for: AAPL for 2118-11-22", e.getMessage());
     }
   }
 
@@ -64,7 +64,7 @@ public class AlphaVantageAPIStockDataSourceTest {
       dataSource.getPrice("AAPL", validDateForTrading).getUnitPrice();
       Assert.fail("should have failed");
     } catch (StockDataNotFoundException e) {
-      Assert.assertEquals("Stock Data Not found for: AAPL for 1900-12-02",e.getMessage());
+      Assert.assertEquals("Stock Data Not found for: AAPL for 1900-12-02", e.getMessage());
     }
   }
 }
