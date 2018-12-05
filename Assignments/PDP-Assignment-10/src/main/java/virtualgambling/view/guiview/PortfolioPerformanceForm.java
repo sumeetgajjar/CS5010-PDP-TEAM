@@ -24,12 +24,12 @@ import virtualgambling.controller.Features;
 /**
  * Created by gajjar.s, on 4:06 AM, 12/5/18
  */
-public class PlotPortfolioPerformance extends AbstractForm {
+public class PortfolioPerformanceForm extends AbstractForm {
 
   private final MainForm mainForm;
   private final Features features;
 
-  protected PlotPortfolioPerformance(MainForm mainForm, Features features) {
+  protected PortfolioPerformanceForm(MainForm mainForm, Features features) {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;

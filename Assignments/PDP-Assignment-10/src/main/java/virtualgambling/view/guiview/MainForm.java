@@ -115,9 +115,9 @@ public class MainForm extends AbstractForm implements GUIView {
   private JButton getDrawPortfolioPerformanceButton() {
     JButton jButton = new JButton("Plot Portfolio Performance");
     jButton.addActionListener(e -> {
-      PlotPortfolioPerformance plotPortfolioPerformance =
-              new PlotPortfolioPerformance(this, features);
-      GUIUtils.showPrevious(plotPortfolioPerformance, this);
+      PortfolioPerformanceForm portfolioPerformanceForm =
+              new PortfolioPerformanceForm(this, features);
+      GUIUtils.showPrevious(portfolioPerformanceForm, this);
     });
     return jButton;
   }
