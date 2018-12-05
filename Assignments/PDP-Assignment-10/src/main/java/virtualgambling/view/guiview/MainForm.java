@@ -90,6 +90,16 @@ public class MainForm extends AbstractForm {
     jButton.addActionListener(e -> {
       this.appendOutput("YOLO");
       this.appendOutput("Was that an Earthquake or did I Just rocked your world?");
+      //todo insert command here
+    });
+    return jButton;
+  }
+
+  private JButton getRemainingCapital() {
+    JButton jButton = new JButton("Get Remaining Capital");
+    jButton.addActionListener(e -> {
+      this.appendOutput("You have infinite money, jao jee lo apni zindagi");
+      //todo insert command here
     });
     return jButton;
   }
