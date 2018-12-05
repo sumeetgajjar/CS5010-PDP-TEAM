@@ -2,6 +2,8 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
@@ -33,6 +35,7 @@ public abstract class AbstractForm extends JFrame {
     this.currentJFrame = this;
     this.initComponents();
     this.postInit();
+    this.setFocusable(true);
   }
 
   protected abstract void initComponents();
@@ -44,7 +47,29 @@ public abstract class AbstractForm extends JFrame {
   protected void postInit() {
     this.addJFrameClosingEvent();
     this.pack();
+    this.addKeyListener(this.getEscKeyListener(this));
     this.centerThisJFrame();
+  }
+
+  protected KeyListener getEscKeyListener(AbstractForm abstractForm) {
+    return new KeyListener() {
+      @Override
+      public void keyTyped(KeyEvent e) {
+        if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
+          abstractForm.showPrevious();
+        }
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e) {
+        // ignoring this event
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e) {
+        // ignoring this event
+      }
+    };
   }
 
   protected JPanel getActionButtonJPanel(ActionListener executeButtonAction) {
