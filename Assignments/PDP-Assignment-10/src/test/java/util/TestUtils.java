@@ -8,6 +8,8 @@ import java.util.Map;
 
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.EnhancedUserModelImpl;
+import virtualgambling.model.PersistableUserModel;
+import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
@@ -35,6 +37,24 @@ public class TestUtils {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1);
     return new MockUserModel(calendar.getTime());
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static PersistableUserModel getEmptyPersistableUserModelWithStockDAO(StockDAO stockDAO) {
+    return new PersistableUserModelImpl(stockDAO);
+  }
+
+  /**
+   * Returns a SimpleUserModel.
+   *
+   * @return a SimpleUserModel
+   */
+  public static PersistableUserModel getEmptyPersistableUserModel() {
+    return getEmptyPersistableUserModelWithStockDAO(new SimpleStockDAO(new MockDataSource()));
   }
 
   /**

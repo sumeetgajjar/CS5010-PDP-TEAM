@@ -8,7 +8,7 @@ import java.util.Date;
 
 import util.TestUtils;
 import util.Utils;
-import virtualgambling.controller.Constants;
+import util.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.EnhancedTradingController;
 import virtualgambling.model.EnhancedUserModel;

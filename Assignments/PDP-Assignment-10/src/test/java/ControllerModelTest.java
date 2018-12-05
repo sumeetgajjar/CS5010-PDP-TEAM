@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 
 import util.TestUtils;
-import virtualgambling.controller.Constants;
+import util.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.model.UserModel;
 

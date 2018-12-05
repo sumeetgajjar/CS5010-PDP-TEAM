@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import util.TestUtils;
-import virtualgambling.controller.Constants;
+import util.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.EnhancedTradingController;
 import virtualgambling.controller.TradingController;
