@@ -35,13 +35,9 @@ public class MainForm extends AbstractForm {
     this.setLayout(new FlowLayout());
 
 
-    JButton createPortfolioButton = getCreatePortfolioJButton();
-    JButton quitButton = GUIUtils.getQuitJButton();
-
     JPanel buttonJPanel = new JPanel();
     buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
-    buttonJPanel.add(createPortfolioButton);
-    buttonJPanel.add(quitButton);
+    this.addButtonsToPanel(buttonJPanel);
     buttonJPanel.setBackground(Color.BLUE);
     buttonJPanel.setPreferredSize(new Dimension(300, 800));
     this.add(buttonJPanel);
@@ -52,6 +48,26 @@ public class MainForm extends AbstractForm {
     JScrollPane outputJPanel = new JScrollPane(this.jTextArea);
     outputJPanel.setPreferredSize(new Dimension(600, 800));
     this.add(outputJPanel);
+  }
+
+  private void addButtonsToPanel(JPanel buttonJPanel) {
+    JButton createPortfolioButton = getCreatePortfolioJButton();
+    buttonJPanel.add(createPortfolioButton);
+
+    JButton getAllPortfoliosButton = getGetAllPortfolioJButton();
+    buttonJPanel.add(getAllPortfoliosButton);
+
+    JButton quitButton = GUIUtils.getQuitJButton();
+    buttonJPanel.add(quitButton);
+  }
+
+  private JButton getGetAllPortfolioJButton() {
+    JButton jButton = new JButton("Get all Portfolios");
+    jButton.addActionListener(e -> {
+      this.appendOutput("YOLO");
+      this.appendOutput("Was that an Earthquake or did I Just rocked your world?");
+    });
+    return jButton;
   }
 
   private JButton getCreatePortfolioJButton() {
