@@ -26,7 +26,7 @@ public class SimpleUserModel implements UserModel {
 
   protected static final BigDecimal DEFAULT_USER_CAPITAL = new BigDecimal("10000000");
 
-  protected final StockDAO stockDAO;
+  protected StockDAO stockDAO;
   protected final Map<String, Portfolio> portfolios;
   protected BigDecimal remainingCapital;
 
@@ -59,16 +59,7 @@ public class SimpleUserModel implements UserModel {
       return;
     }
 
-    if (portfolioName.length() == 0) {
-      throw new IllegalArgumentException("Invalid Portfolio Name");
-    }
-
-    if (portfolioName.trim().length() != portfolioName.length()) {
-      throw new IllegalArgumentException("Invalid Portfolio Name");
-    }
-
-    Portfolio portfolio = instantiatePortfolio(portfolioName, Collections.emptyList());
-    this.portfolios.put(portfolioName, portfolio);
+    validateAndCreatePortfolio(portfolioName);
   }
 
   @Override
@@ -145,5 +136,18 @@ public class SimpleUserModel implements UserModel {
             new ArrayList<>(portfolio.getPurchases());
     newSharePurchaseOrders.add(sharePurchaseOrder);
     this.portfolios.put(portfolioName, instantiatePortfolio(portfolioName, newSharePurchaseOrders));
+  }
+
+  protected void validateAndCreatePortfolio(String portfolioName) {
+    if (portfolioName.length() == 0) {
+      throw new IllegalArgumentException("Invalid Portfolio Name");
+    }
+
+    if (portfolioName.trim().length() != portfolioName.length()) {
+      throw new IllegalArgumentException("Invalid Portfolio Name");
+    }
+
+    Portfolio portfolio = instantiatePortfolio(portfolioName, Collections.emptyList());
+    this.portfolios.put(portfolioName, portfolio);
   }
 }

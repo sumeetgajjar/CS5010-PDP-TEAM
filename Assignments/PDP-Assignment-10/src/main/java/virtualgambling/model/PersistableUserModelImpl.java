@@ -2,6 +2,7 @@ package virtualgambling.model;
 
 import java.io.IOException;
 
+import util.Utils;
 import virtualgambling.model.persistence.Loader;
 import virtualgambling.model.persistence.Persister;
 import virtualgambling.model.stockdao.StockDAO;
@@ -22,6 +23,12 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl implements P
   }
 
   @Override
+  public void createPortfolio(String portfolioName) throws IllegalArgumentException {
+    Utils.requireNonNull(portfolioName);
+    this.validateAndCreatePortfolio(portfolioName);
+  }
+
+  @Override
   public void persistFromModel(Persister persister) throws IOException {
     persister.persist();
   }
@@ -29,6 +36,16 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl implements P
   @Override
   public void loadIntoModel(Loader loader) throws IOException {
     loader.load();
+  }
+
+  @Override
+  public StockDAO getStockDAO() {
+    return this.stockDAO;
+  }
+
+  @Override
+  public void setStockDao(StockDAO stockDao) {
+    this.stockDAO = stockDao;
   }
 
 //  /**

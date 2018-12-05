@@ -135,13 +135,8 @@ public class Portfolio implements Serializable {
     return totalPortfolioValue;
   }
 
-  /**
-   * Returns the serialized string of this object.
-   *
-   * @return the serialized string of this object
-   */
-  public String serialize() {
-    return null;
+  public StockDAO getStockDAO() {
+    return stockDAO;
   }
 
   @Override

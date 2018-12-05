@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import virtualgambling.model.persistence.Loader;
 import virtualgambling.model.persistence.Persister;
+import virtualgambling.model.stockdao.StockDAO;
 
 /**
  * This interface represents an enhancement over {@link EnhancedUserModel}. It implements {@link
@@ -36,4 +37,8 @@ public interface PersistableUserModel extends EnhancedUserModel {
   void persistFromModel(Persister persister) throws IOException;
 
   void loadIntoModel(Loader loader) throws IOException;
+
+  StockDAO getStockDAO();
+
+  void setStockDao(StockDAO stockDao);
 }

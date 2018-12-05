@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -256,5 +258,14 @@ public class Utils {
       builder.append(reader.readLine());
     }
     return builder.toString();
+  }
+
+  public static Path getPathInDefaultFolder(Path path) throws IOException {
+    Utils.requireNonNull(path);
+    Path defaultPath = Paths.get(Constants.DEFAULT_PERSISTENCE_PATH);
+    if (!Files.isDirectory(defaultPath)){
+      Files.createDirectory(defaultPath);
+    }
+    return Paths.get(Constants.DEFAULT_PERSISTENCE_PATH, path.toString());
   }
 }
