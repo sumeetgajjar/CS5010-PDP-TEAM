@@ -22,7 +22,6 @@ public class CreatePortfolioForm extends AbstractForm {
     JPanel jPanel = new JPanel();
 
     JLabel jLabel = new JLabel("Please enter the name of the Portfolio");
-    jLabel.setHorizontalTextPosition(SwingConstants.CENTER);
     jPanel.add(jLabel);
 
     JTextField portfolioNameJTextField = new JTextField(10);
@@ -49,6 +48,8 @@ public class CreatePortfolioForm extends AbstractForm {
         this.showError("Portfolio Name cannot be empty");
         return;
       }
+
+      //todo insert command here
 
       this.appendOutput(portfolioName);
       this.showPrevious();
