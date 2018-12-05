@@ -2,8 +2,13 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.Date;
 
 import javax.swing.*;
+
+import util.Utils;
+import virtualgambling.controller.Features;
 
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
@@ -11,10 +16,12 @@ import javax.swing.*;
 public class GetPortfolioCostBasisForm extends AbstractForm {
 
   private final MainForm mainForm;
+  protected final Features features;
 
-  public GetPortfolioCostBasisForm(MainForm mainForm) throws HeadlessException {
+  public GetPortfolioCostBasisForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
     this.mainForm = mainForm;
+    this.features = features;
   }
 
   @Override
@@ -67,6 +74,16 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
         return;
       }
 
+      String dateString = dateTextField.getText();
+      Date date;
+      try {
+        date = Utils.getDateFromDefaultFormattedDateString(dateString);
+      } catch (ParseException e1) {
+        this.showError("Invalid Date Format");
+        return;
+      }
+
+//      this.executeFeature(portfolioTextField.getText(), date);
       //todo insert command here
 
       this.appendOutput("Get portfolio cost basis");
@@ -74,7 +91,7 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
     };
   }
 
-  public static void main(String[] args) {
-    new GetPortfolioCostBasisForm(null).setVisible(true);
+  protected void executeFeature(String portfolioName, Date date) {
+    this.features.getPortfolioCostBasis(portfolioName, date);
   }
 }

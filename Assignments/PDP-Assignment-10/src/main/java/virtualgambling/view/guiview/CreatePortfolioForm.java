@@ -5,16 +5,20 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import virtualgambling.controller.Features;
+
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
  */
 public class CreatePortfolioForm extends AbstractForm {
 
   private final MainForm mainForm;
+  private final Features features;
 
-  public CreatePortfolioForm(MainForm mainForm) throws HeadlessException {
+  public CreatePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
     this.mainForm = mainForm;
+    this.features = features;
   }
 
   @Override
@@ -48,14 +52,11 @@ public class CreatePortfolioForm extends AbstractForm {
         return;
       }
 
+//      this.features.createPortfolio(portfolioNameJTextField.getText());
       //todo insert command here
 
       this.appendOutput("Create portfolio");
       this.showPrevious();
     };
-  }
-
-  public static void main(String[] args) {
-    new CreatePortfolioForm(null).setVisible(true);
   }
 }
