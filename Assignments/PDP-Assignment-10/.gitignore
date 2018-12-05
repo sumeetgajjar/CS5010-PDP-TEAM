@@ -73,6 +73,7 @@ out/
 submissions/*
 docs/*
 StocksPriceCache/
+Files/
 target/
 
 # mpeltonen/sbt-idea plugin
