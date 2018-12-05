@@ -9,4 +9,6 @@ import virtualgambling.view.View;
 public interface GUIView extends View {
 
   void addFeatures(Features features);
+
+  void displayError(String message);
 }

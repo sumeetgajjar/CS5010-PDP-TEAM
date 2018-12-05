@@ -50,11 +50,8 @@ public class CreatePortfolioForm extends AbstractForm {
       }
 
       String portfolioName = portfolioNameJTextField.getText();
+      this.features.createPortfolio(portfolioName);
 
-//      this.features.createPortfolio(portfolioNameJTextField.getText());
-      //todo insert command here
-
-      this.appendOutput("Create portfolio");
       this.showPrevious();
     };
   }

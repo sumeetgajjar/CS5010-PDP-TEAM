@@ -3,6 +3,7 @@ package virtualgambling.controller;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
@@ -16,17 +17,17 @@ public interface Features {
 
   List<Portfolio> getAllPortfolios();
 
-  BigDecimal getPortfolioCostBasis(String portfolio, Date date);
+  Optional<BigDecimal> getPortfolioCostBasis(String portfolio, Date date);
 
-  BigDecimal getPortfolioValue(String portfolio, Date date);
+  Optional<BigDecimal> getPortfolioValue(String portfolio, Date date);
 
   BigDecimal getRemainingCapital();
 
-  SharePurchaseOrder buyShares(String tickerName,
-                               String portfolioName,
-                               Date date,
-                               long quantity,
-                               double commissionPercentage);
+  Optional<SharePurchaseOrder> buyShares(String tickerName,
+                                         String portfolioName,
+                                         Date date,
+                                         long quantity,
+                                         double commissionPercentage);
 
   void quit();
 }

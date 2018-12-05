@@ -1,12 +1,15 @@
 package virtualgambling.controller;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.view.guiview.GUIView;
 
 /**
@@ -24,20 +27,27 @@ public class GUITradingController implements Controller {
 
   @Override
   public void run() {
-    this.guiView.addFeatures(new FeaturesImpl(enhancedUserModel));
+    this.guiView.addFeatures(new FeaturesImpl(enhancedUserModel, guiView));
   }
 
   private static class FeaturesImpl implements Features {
 
     private final EnhancedUserModel enhancedUserModel;
+    private final GUIView guiView;
 
-    private FeaturesImpl(EnhancedUserModel enhancedUserModel) {
+    private FeaturesImpl(EnhancedUserModel enhancedUserModel, GUIView guiView) {
       this.enhancedUserModel = enhancedUserModel;
+      this.guiView = guiView;
     }
 
     @Override
     public void createPortfolio(String portfolio) {
-      this.createPortfolio(portfolio);
+      try {
+        this.createPortfolio(portfolio);
+        this.guiView.display("Portfolio Successfully Created");
+      } catch (IllegalArgumentException | IOException e) {
+        this.guiView.displayError(e.getMessage());
+      }
     }
 
     @Override
@@ -46,13 +56,22 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public BigDecimal getPortfolioCostBasis(String portfolio, Date date) {
-      return this.enhancedUserModel.getPortfolio(portfolio).getCostBasisIncludingCommission(date);
+    public Optional<BigDecimal> getPortfolioCostBasis(String portfolio, Date date) {
+      try {
+        return Optional.of(this.enhancedUserModel
+                .getPortfolio(portfolio).getCostBasisIncludingCommission(date));
+      } catch (PortfolioNotFoundException e) {
+        return Optional.empty();
+      }
     }
 
     @Override
-    public BigDecimal getPortfolioValue(String portfolio, Date date) {
-      return this.enhancedUserModel.getPortfolio(portfolio).getValue(date);
+    public Optional<BigDecimal> getPortfolioValue(String portfolio, Date date) {
+      try {
+        return Optional.of(this.enhancedUserModel.getPortfolio(portfolio).getValue(date));
+      } catch (Exception e) {
+        return Optional.empty();
+      }
     }
 
     @Override
@@ -61,14 +80,18 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public SharePurchaseOrder buyShares(String tickerName,
-                                        String portfolioName,
-                                        Date date,
-                                        long quantity,
-                                        double commissionPercentage) {
+    public Optional<SharePurchaseOrder> buyShares(String tickerName,
+                                                  String portfolioName,
+                                                  Date date,
+                                                  long quantity,
+                                                  double commissionPercentage) {
+      try {
+        return Optional.of(this.enhancedUserModel
+                .buyShares(tickerName, portfolioName, date, quantity, commissionPercentage));
 
-      return this.enhancedUserModel.buyShares(tickerName, portfolioName, date, quantity,
-              commissionPercentage);
+      } catch (Exception e) {
+        return Optional.empty();
+      }
     }
 
     @Override

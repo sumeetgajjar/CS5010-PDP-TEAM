@@ -38,6 +38,11 @@ public class MainForm extends AbstractForm implements GUIView {
   }
 
   @Override
+  public void displayError(String message) {
+    this.showError(message);
+  }
+
+  @Override
   public String getInput() {
     return GUIUtils.getInput(this);
   }
