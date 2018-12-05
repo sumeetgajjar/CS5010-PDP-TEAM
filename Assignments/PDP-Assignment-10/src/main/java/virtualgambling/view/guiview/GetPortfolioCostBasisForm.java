@@ -57,22 +57,19 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
                                                              JTextField dateTextField) {
     return e -> {
-      String portfolioName = portfolioTextField.getText();
-      if (portfolioName.isEmpty()) {
+      if (this.isTextFieldEmpty(portfolioTextField)) {
         this.showError("Portfolio Name cannot be empty");
         return;
       }
 
-      String date = dateTextField.getText();
-      if (date.isEmpty()) {
+      if (this.isTextFieldEmpty(dateTextField)) {
         this.showError("Date cannot be empty");
         return;
       }
 
       //todo insert command here
 
-      this.appendOutput(portfolioName);
-      this.appendOutput(date);
+      this.appendOutput("Get portfolio cost basis");
       this.showPrevious();
     };
   }

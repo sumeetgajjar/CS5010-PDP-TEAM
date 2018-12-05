@@ -72,4 +72,9 @@ public abstract class AbstractForm extends JFrame {
     int y = (int) (dim.getHeight() / 2 - this.getSize().getHeight() / 2);
     this.setLocation(x, y);
   }
+
+  protected boolean isTextFieldEmpty(JTextField jTextField) {
+    String input = jTextField.getText();
+    return input.isEmpty();
+  }
 }

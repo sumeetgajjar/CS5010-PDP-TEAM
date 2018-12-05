@@ -43,15 +43,14 @@ public class CreatePortfolioForm extends AbstractForm {
 
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
-      String portfolioName = portfolioNameJTextField.getText();
-      if (portfolioName.isEmpty()) {
+      if (this.isTextFieldEmpty(portfolioNameJTextField)) {
         this.showError("Portfolio Name cannot be empty");
         return;
       }
 
       //todo insert command here
 
-      this.appendOutput(portfolioName);
+      this.appendOutput("Create portfolio");
       this.showPrevious();
     };
   }
