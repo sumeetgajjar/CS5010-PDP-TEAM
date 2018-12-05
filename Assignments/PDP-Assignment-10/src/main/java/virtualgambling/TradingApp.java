@@ -28,9 +28,8 @@ public class TradingApp {
 
   private static void runGUITradingApp() {
     GUIView guiView = new MainForm();
-    EnhancedUserModel enhancedUserModel = new EnhancedUserModelImpl(
-            new SimpleStockDAO(
-                    new SimpleStockDataSource()));
+    EnhancedUserModel enhancedUserModel = new EnhancedUserModelImpl(StockDAOType.SIMPLE,
+            StockDataSourceType.SIMPLE);
     Controller controller = new GUITradingController(enhancedUserModel, guiView);
     controller.run();
   }
