@@ -77,4 +77,8 @@ public class Constants {
 
   public static final String INVALID_OPTION_FOR_STRATEGY_CREATION_MESSAGE =
           "Invalid option, please enter either 1 or 2";
+  public static final String ABSOLUTE_PATH_FILE_SAVE = "Enter the absolute path of file to save " +
+          "the portfolio";
+
+  public static final String PORTFOLIO_FILE_SAVE_SUCCESS = "Portfolio successfully saved";
 }
