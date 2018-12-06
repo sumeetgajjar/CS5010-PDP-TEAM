@@ -65,7 +65,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
     this.jTextArea = getJTextArea();
     JScrollPane scrollPane = new JScrollPane(this.jTextArea);
-    scrollPane.setPreferredSize(new Dimension(600, 750));
+    scrollPane.setPreferredSize(new Dimension(800, 750));
     scrollPane.add(new JSeparator(JSeparator.HORIZONTAL));
     outputPanel.add(scrollPane);
 

@@ -45,7 +45,7 @@ public class TradingApp {
     GUIView guiView = new MainForm();
     PersistableUserModelImpl persistableUserModel =
             new PersistableUserModelImpl(StockDAOType.SIMPLE,
-                    StockDataSourceType.ALPHA_VANTAGE);
+                    StockDataSourceType.MOCK);
     Controller controller = new GUITradingController(persistableUserModel, guiView);
     controller.run();
   }
