@@ -7,24 +7,34 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import util.Constants;
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
 
 /**
- * Created by gajjar.s, on 10:54 PM, 12/5/18
+ * This class represents a command to Load a Portfolio in Model. It extends {@link
+ * AbstractPersistableUserModelCommand}.
  */
 public class LoadPortfolioCommand extends AbstractPersistableUserModelCommand {
 
   private final Path path;
   private final Consumer<String> consumer;
 
+  /**
+   * Constructs the object of LoadPortfolioCommand with the given params.
+   *
+   * @param persistableUserModel the persistable user model
+   * @param path                 the path of the strategy file to load
+   * @param consumer             the consumer
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public LoadPortfolioCommand(PersistableUserModel persistableUserModel, Path path,
                               Consumer<String> consumer) throws IllegalArgumentException {
     super(persistableUserModel);
-    this.path = path;
-    this.consumer = consumer;
+    this.path = Utils.requireNonNull(path);
+    this.consumer = Utils.requireNonNull(consumer);
   }
 
   @Override

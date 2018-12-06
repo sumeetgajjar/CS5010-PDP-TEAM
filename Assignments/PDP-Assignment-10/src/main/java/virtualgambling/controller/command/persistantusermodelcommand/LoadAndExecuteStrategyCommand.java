@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import util.Constants;
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.persistence.StrategyLoader;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
@@ -15,7 +16,8 @@ import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
 /**
- * Created by gajjar.s, on 11:31 PM, 12/5/18
+ * This class represents a command to Load and execute a Strategy on a Portfolio. It extends {@link
+ * AbstractPersistableUserModelCommand}.
  */
 public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelCommand {
 
@@ -25,6 +27,17 @@ public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelC
   private final double commission;
   private final Consumer<String> consumer;
 
+  /**
+   * Constructs the object of LoadAndExecuteStrategyCommand with the given params.
+   *
+   * @param persistableUserModel the persistable user model
+   * @param portfolioName        the portfolio on which the strategy is to be executed
+   * @param path                 the path of the strategy file to load
+   * @param amountToInvest       the amount to invest
+   * @param commission           the commission percentage per transaction
+   * @param consumer             the consumer
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public LoadAndExecuteStrategyCommand(PersistableUserModel persistableUserModel,
                                        String portfolioName,
                                        Path path,
@@ -32,11 +45,11 @@ public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelC
                                        double commission,
                                        Consumer<String> consumer) throws IllegalArgumentException {
     super(persistableUserModel);
-    this.portfolioName = portfolioName;
-    this.path = path;
-    this.amountToInvest = amountToInvest;
+    this.portfolioName = Utils.requireNonNull(portfolioName);
+    this.path = Utils.requireNonNull(path);
+    this.amountToInvest = Utils.requireNonNull(amountToInvest);
     this.commission = commission;
-    this.consumer = consumer;
+    this.consumer = Utils.requireNonNull(consumer);
   }
 
   @Override
