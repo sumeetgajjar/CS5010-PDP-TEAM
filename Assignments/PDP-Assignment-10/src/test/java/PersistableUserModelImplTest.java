@@ -4,8 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import util.TestUtils;
 import util.Utils;
@@ -16,7 +20,11 @@ import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.PortfolioPersister;
+import virtualgambling.model.persistence.StrategyLoader;
+import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
+import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
+import virtualgambling.model.strategy.Strategy;
 
 public class PersistableUserModelImplTest extends EnhancedUserModelTest {
   private static final String PORTFOLIO_P1 = "p1";
@@ -89,7 +97,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     try {
       userModel.persistFromModel(new PortfolioPersister(serDes,
               portfolio));
-    } catch (IOException e) {
+    } catch (Exception e) {
       Assert.fail();
     }
 
@@ -98,11 +106,56 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
 
     try {
       userModel.loadIntoModel(new PortfolioLoader(userModel, serDes, "p2"));
-    } catch (IOException e) {
+    } catch (Exception e) {
       Assert.fail();
     }
 
     Assert.assertEquals("p2", userModel.getPortfolio("p2").getName());
     Assert.assertEquals(1, userModel.getPortfolio("p2").getPurchases().size());
+  }
+
+  @Test
+  public void serializationOfStrategyWorks() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+    Strategy recurringWeightedInvestmentStrategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights,
+                    30,
+                    endCalendar.getTime());
+
+    Path test = Utils.getPathInDefaultFolder(Paths.get("strategy1" + ".json"));
+    JSONSerDes<Strategy> serDes = new JSONSerDes<>(test,
+            new TypeToken<RecurringWeightedInvestmentStrategy>() {
+            }.getType());
+
+    try {
+      userModel.persistFromModel(new StrategyPersister(serDes,
+              recurringWeightedInvestmentStrategy));
+    } catch (Exception e) {
+      Assert.fail();
+    }
+
+    Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
+
+    try {
+      userModel.loadIntoModel(new StrategyLoader(serDes, userModel, PORTFOLIO_P1,
+              new BigDecimal(1000), 10));
+    } catch (Exception e) {
+      Assert.fail(e.getMessage());
+    }
+
+    Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
+    Assert.assertEquals(userModel.getPortfolio(PORTFOLIO_P1).getValue(Utils.getTodayDate()),
+            new BigDecimal(110990));
   }
 }
