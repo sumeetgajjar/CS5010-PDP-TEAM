@@ -10,6 +10,7 @@ import java.util.Set;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.factory.StockDataSourceType;
+import virtualgambling.model.strategy.Strategy;
 
 /**
  * {@link TradingFeatures} represents a list of tradingFeatures that a GUI view uses in it's
@@ -36,7 +37,7 @@ public interface TradingFeatures {
   Optional<Portfolio> getPortfolio(String portfolioName);
 
   /**
-   * Returns a list of immutable Portfolios
+   * Returns a list of immutable Portfolios.
    *
    * @return a list of portfolios
    */
@@ -203,8 +204,17 @@ public interface TradingFeatures {
                                                double commission
   );
 
-  boolean loadAndExecuteStrategy(String portfolioName, String filePath, BigDecimal amountToInvest
-          , double commissionPercentage);
+  /**
+   * Loads and executes a {@link Strategy} into the model with the given parameters.
+   *
+   * @param portfolioName        the portfolio in which the stock needs to be purchased
+   * @param filePath             the file path where the {@link Strategy} is to be loaded from
+   * @param amountToInvest       the amount to invest in each transaction
+   * @param commissionPercentage the commission percentage for each transaction
+   * @return true if the strategy was executed successfully
+   */
+  boolean loadAndExecuteStrategy(String portfolioName, String filePath,
+                                 BigDecimal amountToInvest, double commissionPercentage);
 
   boolean saveStrategy(String filePath, Date startDate, int dayFrequency, Set<String> tickerNames);
 
