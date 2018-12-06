@@ -23,6 +23,8 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
   protected final MainForm mainForm;
   protected final Features features;
   protected final Map<String, Double> stockPercentageMap;
+  protected JTextField stockPercentageJTextField;
+  protected JLabel stockPercentageJLabel;
 
   public RecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
     super(mainForm);
@@ -80,8 +82,9 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
     JTextField stockNameJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockNameJTextField);
 
-    stocksAdditionPanel.add(new JLabel("Stock Percentage:"));
-    JTextField stockPercentageJTextField = new JTextField(10);
+    stockPercentageJLabel = new JLabel("Stock Percentage:");
+    stocksAdditionPanel.add(stockPercentageJLabel);
+    stockPercentageJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockPercentageJTextField);
 
     JButton addStockJButton = new JButton("Add Stock");

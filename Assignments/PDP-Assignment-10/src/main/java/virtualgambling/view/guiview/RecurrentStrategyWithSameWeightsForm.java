@@ -20,6 +20,8 @@ public class RecurrentStrategyWithSameWeightsForm extends RecurrentStrategyWithD
 
   public RecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
     super(mainForm, features);
+    this.stockPercentageJTextField.setVisible(false);
+    this.stockPercentageJLabel.setVisible(false);
   }
 
   @Override

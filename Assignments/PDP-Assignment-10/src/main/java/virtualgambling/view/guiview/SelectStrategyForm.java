@@ -22,7 +22,7 @@ public class SelectStrategyForm extends AbstractForm {
 
   @Override
   protected void initComponents() {
-    this.setLayout(new GridLayout(2, 1));
+    this.setLayout(new GridLayout(3, 1));
 
     JButton oneTimeDifferentWeights = new JButton("One Time Strategy");
     oneTimeDifferentWeights.addActionListener(e -> {
