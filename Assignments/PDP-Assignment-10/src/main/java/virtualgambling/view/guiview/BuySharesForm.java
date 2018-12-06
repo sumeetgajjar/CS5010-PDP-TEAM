@@ -59,7 +59,7 @@ public class BuySharesForm extends AbstractForm {
     quantityPanel.add(quantityTextField);
 
     JPanel commissionPanel = new JPanel();
-    JLabel commissionLabel = new JLabel("Please enter the commission per transaction");
+    JLabel commissionLabel = new JLabel("Please enter the commission percentage per transaction");
     commissionPanel.add(commissionLabel);
 
     JTextField commissionTextField = new JTextField(10);
