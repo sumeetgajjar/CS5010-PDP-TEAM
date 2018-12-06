@@ -175,10 +175,10 @@ public class PortfolioPerformanceForm extends AbstractForm {
     }
 
     private void setTitles() {
-      this.setTitle(String.format("Performance of '%s' sharePurchaseOrders", portfolio.getName()));
+      this.setTitle(String.format("Performance of portfolio '%s'", portfolio.getName()));
       this.jFreeChart.setTitle(
               new TextTitle(
-                      String.format("Performance of '%s' sharePurchaseOrders", portfolio.getName()),
+                      String.format("Performance of portfolio '%s'", portfolio.getName()),
                       new Font(Font.SANS_SERIF, Font.BOLD, 20)));
     }
 
@@ -228,10 +228,10 @@ public class PortfolioPerformanceForm extends AbstractForm {
       XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 
       renderer.setSeriesPaint(0, Color.RED);
-      renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+      renderer.setSeriesStroke(0, new BasicStroke(1.0f));
 
       renderer.setSeriesPaint(1, Color.BLUE);
-      renderer.setSeriesStroke(1, new BasicStroke(2.0f));
+      renderer.setSeriesStroke(1, new BasicStroke(1.0f));
 
       plot.setRenderer(renderer);
       plot.setBackgroundPaint(Color.white);
