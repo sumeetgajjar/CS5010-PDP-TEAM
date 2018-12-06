@@ -1,6 +1,5 @@
 package virtualgambling.controller;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -32,9 +31,9 @@ public interface Features {
                                          long quantity,
                                          double commissionPercentage);
 
-  String loadPortfolio(File portfolioFile);
+  String loadPortfolio(String filePath);
 
-  boolean savePortfolio(String portfolioName, File selectedFile);
+  boolean savePortfolio(String portfolioName, String filePath);
 
   void quit();
 }

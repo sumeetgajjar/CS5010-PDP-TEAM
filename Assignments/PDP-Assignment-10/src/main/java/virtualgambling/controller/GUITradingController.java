@@ -1,6 +1,5 @@
 package virtualgambling.controller;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -109,7 +108,7 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public String loadPortfolio(File portfolioFile) {
+    public String loadPortfolio(String filePath) {
       try {
         //todo implement this
         return "asd";
@@ -119,7 +118,7 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public boolean savePortfolio(String portfolioName, File selectedFile) {
+    public boolean savePortfolio(String portfolioName, String filePath) {
       try {
         return true;
       } catch (Exception e) {

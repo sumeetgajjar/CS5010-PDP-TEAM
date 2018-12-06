@@ -12,14 +12,14 @@ import virtualgambling.controller.Features;
 /**
  * Created by gajjar.s, on 11:43 PM, 12/4/18
  */
-public class LoadPortfolioForm extends AbstractForm {
+public class SavePortfolioForm extends AbstractForm {
 
-  protected final MainForm mainForm;
-  protected final Features features;
+  private final MainForm mainForm;
+  private final Features features;
   private JLabel filePathLabel;
   private File selectedFile;
 
-  public LoadPortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
+  public SavePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
@@ -33,6 +33,15 @@ public class LoadPortfolioForm extends AbstractForm {
     JPanel fileChooserPanel = new JPanel();
     fileChooserPanel.setLayout(new GridLayout(2, 1));
 
+    JPanel jPanel = new JPanel();
+    JLabel jLabel = new JLabel("Please enter the name of the Portfolio to save");
+    jPanel.add(jLabel);
+
+    JTextField portfolioNameJTextField = new JTextField(10);
+    jPanel.add(portfolioNameJTextField);
+
+    fileChooserPanel.add(jPanel);
+
     JButton selectPortfolioFileButton = new JButton("Select portfolio file");
     selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
     fileChooserPanel.add(selectPortfolioFileButton);
@@ -42,7 +51,7 @@ public class LoadPortfolioForm extends AbstractForm {
     filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio();
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
     outerPanel.add(fileChooserPanel);
@@ -62,16 +71,22 @@ public class LoadPortfolioForm extends AbstractForm {
     };
   }
 
-  private ActionListener getActionListenerForCreatePortfolio() {
+  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
+
+      if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
+        return;
+      }
+
+      String portfolioName = portfolioNameJTextField.getText();
+
       if (Objects.isNull(this.selectedFile)) {
         this.mainForm.displayError("Please select the file for loading portfolio");
         return;
       }
 
-      String portfolioName = this.features.loadPortfolio(selectedFile.getAbsolutePath());
-
-      if (Objects.nonNull(portfolioName)) {
+      boolean success = this.features.savePortfolio(portfolioName, selectedFile.getAbsolutePath());
+      if (success) {
         this.showPrevious();
         this.mainForm.display(String.format("Portfolio '%s' loaded Successfully",
                 portfolioName));
