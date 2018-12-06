@@ -1,8 +1,8 @@
 package virtualgambling.view.guiview;
 
-import java.awt.*;
+import java.awt.GridLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
 
 import util.Utils;
 import virtualgambling.controller.Features;

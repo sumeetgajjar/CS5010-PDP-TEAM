@@ -4,7 +4,8 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import virtualgambling.controller.Features;
 

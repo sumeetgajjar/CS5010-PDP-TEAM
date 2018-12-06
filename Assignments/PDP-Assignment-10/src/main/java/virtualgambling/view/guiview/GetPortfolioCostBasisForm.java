@@ -1,13 +1,16 @@
 package virtualgambling.view.guiview;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import util.Utils;
 import virtualgambling.controller.Features;

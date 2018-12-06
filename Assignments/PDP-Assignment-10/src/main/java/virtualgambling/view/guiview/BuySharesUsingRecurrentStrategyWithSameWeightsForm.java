@@ -8,7 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;

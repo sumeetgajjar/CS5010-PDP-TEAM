@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;

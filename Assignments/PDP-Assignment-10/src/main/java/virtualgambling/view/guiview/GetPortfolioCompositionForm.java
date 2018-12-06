@@ -1,10 +1,10 @@
 package virtualgambling.view.guiview;
 
-import java.awt.*;
+import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.Portfolio;

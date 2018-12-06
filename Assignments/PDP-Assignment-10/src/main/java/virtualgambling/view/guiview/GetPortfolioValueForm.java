@@ -1,6 +1,6 @@
 package virtualgambling.view.guiview;
 
-import java.awt.*;
+import java.awt.HeadlessException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;

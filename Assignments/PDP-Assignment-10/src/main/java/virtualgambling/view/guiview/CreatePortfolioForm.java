@@ -1,9 +1,11 @@
 package virtualgambling.view.guiview;
 
-import java.awt.*;
+import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import virtualgambling.controller.Features;
 
