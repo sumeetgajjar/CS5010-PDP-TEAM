@@ -4,22 +4,26 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.block.BlockBorder;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.title.TextTitle;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
+import virtualgambling.model.bean.Portfolio;
 
 /**
  * Created by gajjar.s, on 4:06 AM, 12/5/18
@@ -93,8 +97,11 @@ public class PortfolioPerformanceForm extends AbstractForm {
         return;
       }
 
-      this.plotGraph(portfolioName);
-      //todo insert command here
+      Optional<Portfolio> optional = this.features.getPortfolio(portfolioName);
+      if (optional.isPresent()) {
+        Portfolio portfolio = optional.get();
+        this.plotGraph(portfolio, startDate, endDate);
+      }
     };
   }
 
@@ -107,27 +114,33 @@ public class PortfolioPerformanceForm extends AbstractForm {
             isEndDateTextFieldEmpty(endDateTextField);
   }
 
-  private void plotGraph(String portfolioName) {
+  private void plotGraph(Portfolio portfolio, Date startDate, Date endDate) {
     SwingUtilities.invokeLater(() -> {
-      PlotJFrame ex = new PlotJFrame(this, portfolioName);
+      PortfolioPlotJFrame ex = new PortfolioPlotJFrame(this, portfolio, startDate, endDate);
       ex.setVisible(true);
     });
   }
 
-  private static class PlotJFrame extends AbstractForm {
+  private static class PortfolioPlotJFrame extends JFrame {
 
-    private final String portfolioName;
+    private final JFrame previousFrame;
+    private final Portfolio portfolio;
+    private final Date startDate;
+    private final Date endDate;
     private JFreeChart jFreeChart;
 
-    private PlotJFrame(JFrame previousFrame, String portfolioName) {
-      super(previousFrame);
-      this.portfolioName = portfolioName;
+    private PortfolioPlotJFrame(JFrame previousFrame, Portfolio portfolio,
+                                Date startDate, Date endDate) {
+      super();
+      this.previousFrame = previousFrame;
+      this.portfolio = portfolio;
+      this.startDate = startDate;
+      this.endDate = endDate;
+      this.initComponents();
       this.setTitles();
     }
 
-    @Override
     protected void initComponents() {
-
       XYDataset dataset = createDataSet();
       this.jFreeChart = createChart(dataset);
       ChartPanel chartPanel = new ChartPanel(jFreeChart);
@@ -137,46 +150,49 @@ public class PortfolioPerformanceForm extends AbstractForm {
     }
 
     private void setTitles() {
-      this.setTitle(String.format("Performance of '%s' portfolio", portfolioName));
+      this.setTitle(String.format("Performance of '%s' sharePurchaseOrders", portfolio.getName()));
       this.jFreeChart.setTitle(
               new TextTitle(
-                      String.format("Performance of '%s' portfolio", portfolioName),
+                      String.format("Performance of '%s' sharePurchaseOrders", portfolio.getName()),
                       new Font(Font.SANS_SERIF, Font.BOLD, 20)));
     }
 
     private XYDataset createDataSet() {
 
-      XYSeries series1 = new XYSeries("2014");
-      series1.add(18, 530);
-      series1.add(20, 580);
-      series1.add(25, 740);
-      series1.add(30, 901);
-      series1.add(40, 1300);
-      series1.add(50, 2219);
+      TimeSeriesCollection dataSet = new TimeSeriesCollection();
 
-      XYSeries series2 = new XYSeries("2016");
-      series2.add(18, 567);
-      series2.add(20, 612);
-      series2.add(25, 800);
-      series2.add(30, 980);
-      series2.add(40, 1210);
-      series2.add(50, 2350);
+      TimeSeries portfolioValue = new TimeSeries("Portfolio Value");
+      TimeSeries portfolioCostBasis = new TimeSeries("Portfolio Cost Basis");
 
-      XYSeriesCollection dataset = new XYSeriesCollection();
-      dataset.addSeries(series1);
-      dataset.addSeries(series2);
+      Date startDate = this.startDate;
+      Date endDate = this.endDate;
+      Calendar calendar = Utils.getCalendarInstance();
+      while (startDate.compareTo(endDate) != 0) {
 
-      return dataset;
+        portfolioCostBasis.add(new Day(startDate),
+                portfolio.getCostBasisIncludingCommission(startDate));
+
+        portfolioValue.add(new Day(startDate),
+                portfolio.getValue(startDate));
+
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DATE, 1);
+        startDate = calendar.getTime();
+      }
+
+      dataSet.addSeries(portfolioValue);
+      dataSet.addSeries(portfolioCostBasis);
+
+      return dataSet;
     }
 
     private JFreeChart createChart(final XYDataset dataset) {
 
-      JFreeChart chart = ChartFactory.createXYLineChart(
-              String.format("Performance of '%s' portfolio", portfolioName),
+      JFreeChart chart = ChartFactory.createTimeSeriesChart(
+              "Portfolio Performance",
               "Time",
               "Value",
               dataset,
-              PlotOrientation.VERTICAL,
               true,
               true,
               false

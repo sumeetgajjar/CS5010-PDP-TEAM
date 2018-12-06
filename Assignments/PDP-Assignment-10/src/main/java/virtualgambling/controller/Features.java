@@ -17,6 +17,8 @@ public interface Features {
 
   boolean createPortfolio(String portfolio);
 
+  Optional<Portfolio> getPortfolio(String portfolioName);
+
   List<Portfolio> getAllPortfolios();
 
   Optional<BigDecimal> getPortfolioCostBasis(String portfolio, Date date);

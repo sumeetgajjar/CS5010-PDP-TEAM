@@ -14,7 +14,6 @@ import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
-import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.StrategyLoader;
@@ -63,6 +62,16 @@ public class GUITradingController implements Controller {
     }
 
     @Override
+    public Optional<Portfolio> getPortfolio(String portfolioName) {
+      try {
+        return Optional.of(this.userModel.getPortfolio(portfolioName));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
+    }
+
+    @Override
     public List<Portfolio> getAllPortfolios() {
       return this.userModel.getAllPortfolios();
     }
@@ -72,7 +81,7 @@ public class GUITradingController implements Controller {
       try {
         return Optional.of(this.userModel
                 .getPortfolio(portfolio).getCostBasisIncludingCommission(date));
-      } catch (PortfolioNotFoundException e) {
+      } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
       }
