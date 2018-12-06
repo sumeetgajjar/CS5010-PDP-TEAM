@@ -216,19 +216,70 @@ public interface TradingFeatures {
   boolean loadAndExecuteStrategy(String portfolioName, String filePath,
                                  BigDecimal amountToInvest, double commissionPercentage);
 
+  /**
+   * Saves a {@link Strategy} into the given file path and the following parameters.
+   *
+   * @param filePath     the file path where the {@link Strategy} is to be loaded from
+   * @param startDate    the startDate of the strategy
+   * @param dayFrequency the frequency with which to invest
+   * @param tickerNames  the set of tickerNames, each with equal weight
+   * @return true if the strategy was saved successfully
+   */
   boolean saveStrategy(String filePath, Date startDate, int dayFrequency, Set<String> tickerNames);
 
+  /**
+   * Saves a {@link Strategy} into the given file path and the following parameters.
+   *
+   * @param filePath     the file path where the {@link Strategy} is to be loaded from
+   * @param startDate    the startDate of the strategy
+   * @param endDate      the endDate of the strategy
+   * @param dayFrequency the frequency with which to invest
+   * @param tickerNames  the set of tickerNames, each with equal weight
+   * @return true if the strategy was saved successfully
+   */
   boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
                        Set<String> tickerNames);
 
+  /**
+   * Saves a {@link Strategy} into the given file path and the following parameters.
+   *
+   * @param filePath     the file path where the {@link Strategy} is to be loaded from
+   * @param startDate    the startDate of the strategy
+   * @param dayFrequency the frequency with which to invest
+   * @param stockWeights the set of tickerNames and their weights
+   * @return true if the strategy was saved successfully
+   */
   boolean saveStrategy(String filePath, Date startDate, int dayFrequency,
                        Map<String, Double> stockWeights);
 
+  /**
+   * Saves a {@link Strategy} into the given file path and the following parameters.
+   *
+   * @param filePath     the file path where the {@link Strategy} is to be loaded from
+   * @param startDate    the startDate of the strategy
+   * @param endDate      the endDate of the strategy
+   * @param dayFrequency the frequency with which to invest
+   * @param stockWeights the set of tickerNames and their weights
+   * @return true if the strategy was saved successfully
+   */
   boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
                        Map<String, Double> stockWeights);
 
+  /**
+   * Loads a Portfolio from the filePath into the model.
+   *
+   * @param filePath the path of the file
+   * @return true if the portfolio was loaded successfully
+   */
   boolean loadPortfolio(String filePath);
 
+  /**
+   * Saves a portfolio with the given name into filePath.
+   *
+   * @param portfolioName name of the portfolio to serialize
+   * @param filePath      the path of the file where the portfolio is to be stored
+   * @return true if the portfolio was saved successfully
+   */
   boolean savePortfolio(String portfolioName, String filePath);
 
   /**
