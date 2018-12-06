@@ -14,6 +14,7 @@ import virtualgambling.controller.Features;
  */
 public class LoadPortfolioForm extends AbstractForm {
 
+  public static final String PORTFOLIO_FILE_PATH = "Portfolio File Path: ";
   protected final MainForm mainForm;
   protected final Features features;
   private JLabel filePathLabel;
@@ -37,7 +38,7 @@ public class LoadPortfolioForm extends AbstractForm {
     selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
     fileChooserPanel.add(selectPortfolioFileButton);
 
-    this.filePathLabel = new JLabel();
+    this.filePathLabel = new JLabel(PORTFOLIO_FILE_PATH);
 
     filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
@@ -56,7 +57,7 @@ public class LoadPortfolioForm extends AbstractForm {
     return e -> {
       this.selectedFile = getFileToLoadUsingFileChooser();
       if (Objects.nonNull(this.selectedFile)) {
-        this.filePathLabel.setText(String.format("Portfolio File Path: %s",
+        this.filePathLabel.setText(String.format("%s%s", PORTFOLIO_FILE_PATH,
                 selectedFile.getAbsolutePath()));
       }
     };
