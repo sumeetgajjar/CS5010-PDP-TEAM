@@ -7,13 +7,15 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import util.Constants;
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
 
 /**
- * Created by gajjar.s, on 10:54 PM, 12/5/18
+ * This class represents a command to Save a Portfolio to a file. It extends {@link
+ * AbstractPersistableUserModelCommand}.
  */
 public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
 
@@ -22,13 +24,22 @@ public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
   private final Path path;
   private final Consumer<String> consumer;
 
+  /**
+   * Constructs a Object of SavePortfolioCommand with the given params
+   *
+   * @param persistableUserModel the persistable user model
+   * @param portfolioName        the name of the portfolio to save
+   * @param path                 the path at which the portfolio is to be saved
+   * @param consumer             the consumer
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public SavePortfolioCommand(PersistableUserModel persistableUserModel, String portfolioName,
                               Path path, Consumer<String> consumer) throws IllegalArgumentException {
     super(persistableUserModel);
-    this.persistableUserModel = persistableUserModel;
-    this.portfolioName = portfolioName;
-    this.path = path;
-    this.consumer = consumer;
+    this.persistableUserModel = Utils.requireNonNull(persistableUserModel);
+    this.portfolioName = Utils.requireNonNull(portfolioName);
+    this.path = Utils.requireNonNull(path);
+    this.consumer = Utils.requireNonNull(consumer);
   }
 
   @Override

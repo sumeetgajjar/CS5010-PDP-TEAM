@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import util.Constants;
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
@@ -14,7 +15,8 @@ import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
 /**
- * Created by gajjar.s, on 12:18 AM, 12/6/18
+ * This class represents a command to Save a Strategy to a file. It extends {@link
+ * AbstractPersistableUserModelCommand}.
  */
 public class SaveStrategyCommand extends AbstractPersistableUserModelCommand {
 
@@ -22,12 +24,21 @@ public class SaveStrategyCommand extends AbstractPersistableUserModelCommand {
   private final Path path;
   private final Consumer<String> consumer;
 
+  /**
+   * Constructs an object of SaveStrategyCommand with the given params.
+   *
+   * @param persistableUserModel the persistable user model
+   * @param strategy             the strategy to save
+   * @param path                 the path at which the strategy is to be saved
+   * @param consumer             the consumer
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public SaveStrategyCommand(PersistableUserModel persistableUserModel, Strategy strategy,
                              Path path, Consumer<String> consumer) throws IllegalArgumentException {
     super(persistableUserModel);
-    this.strategy = strategy;
-    this.path = path;
-    this.consumer = consumer;
+    this.strategy = Utils.requireNonNull(strategy);
+    this.path = Utils.requireNonNull(path);
+    this.consumer = Utils.requireNonNull(consumer);
   }
 
   @Override
