@@ -35,7 +35,8 @@ public class SavePortfolioForm extends AbstractForm {
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public SavePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures) throws IllegalArgumentException {
+  public SavePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures)
+          throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
     this.tradingFeatures = Utils.requireNonNull(tradingFeatures);

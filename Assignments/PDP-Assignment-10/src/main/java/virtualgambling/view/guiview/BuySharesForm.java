@@ -26,11 +26,12 @@ public class BuySharesForm extends AbstractForm {
   /**
    * Constructs a BuySharesForm Object with the given params.
    *
-   * @param mainForm the mainForm
+   * @param mainForm        the mainForm
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public BuySharesForm(MainForm mainForm, TradingFeatures tradingFeatures) throws IllegalArgumentException {
+  public BuySharesForm(MainForm mainForm, TradingFeatures tradingFeatures)
+          throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
     this.tradingFeatures = Utils.requireNonNull(tradingFeatures);

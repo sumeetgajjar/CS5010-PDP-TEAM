@@ -1,6 +1,5 @@
 package virtualgambling.view.guiview;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
@@ -26,7 +25,8 @@ public class CreatePortfolioForm extends AbstractForm {
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public CreatePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures) throws HeadlessException {
+  public CreatePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures)
+          throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
     this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
