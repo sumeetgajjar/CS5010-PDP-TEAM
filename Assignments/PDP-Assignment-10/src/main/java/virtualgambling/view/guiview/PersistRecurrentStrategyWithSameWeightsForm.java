@@ -33,9 +33,10 @@ public class PersistRecurrentStrategyWithSameWeightsForm extends
   }
 
   @Override
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
     return getActionListenerForAddStockButtonForSameWeight(stocksJTextArea, stockNameJTextField,
             this.stockPercentageMap);
   }

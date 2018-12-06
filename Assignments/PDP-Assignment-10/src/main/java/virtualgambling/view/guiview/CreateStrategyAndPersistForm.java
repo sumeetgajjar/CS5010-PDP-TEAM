@@ -37,7 +37,8 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
 
     JButton recurringDifferentWeights = new JButton("Recurring Strategy with Different Weights");
     recurringDifferentWeights.addActionListener(e -> {
-      PersistRecurrentStrategyWithDifferentWeightsForm persistRecurrentStrategyWithDifferentWeightsForm =
+      PersistRecurrentStrategyWithDifferentWeightsForm
+              persistRecurrentStrategyWithDifferentWeightsForm =
               new PersistRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
       Utils.showPrevious(persistRecurrentStrategyWithDifferentWeightsForm, this);
     });

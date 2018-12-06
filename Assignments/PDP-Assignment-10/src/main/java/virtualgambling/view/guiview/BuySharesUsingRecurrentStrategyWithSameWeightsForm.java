@@ -39,9 +39,10 @@ public class BuySharesUsingRecurrentStrategyWithSameWeightsForm
   }
 
   @Override
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
     return e -> {
       if (this.isTickerNameTextFieldEmpty(stockNameJTextField)) {
         return;

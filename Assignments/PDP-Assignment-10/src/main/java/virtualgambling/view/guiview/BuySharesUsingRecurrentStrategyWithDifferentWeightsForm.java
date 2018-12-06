@@ -161,9 +161,10 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
     }
   }
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
     return getActionListenerForAddStockButtonForDifferentWeight(
             stocksJTextArea,
             stockNameJTextField,

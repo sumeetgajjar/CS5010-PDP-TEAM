@@ -37,7 +37,8 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
 
     JButton oneTimeDifferentWeights = new JButton("One Time Strategy with Different Weights");
     oneTimeDifferentWeights.addActionListener(e -> {
-      BuySharesUsingOneTimeStrategyWithDifferentWeightsForm buySharesUsingOneTimeStrategyWithDifferentWeightsForm =
+      BuySharesUsingOneTimeStrategyWithDifferentWeightsForm
+              buySharesUsingOneTimeStrategyWithDifferentWeightsForm =
               new BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(mainForm, features);
       Utils.showPrevious(buySharesUsingOneTimeStrategyWithDifferentWeightsForm, this);
     });
@@ -53,7 +54,8 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
 
     JButton recurringDifferentWeights = new JButton("Recurring Strategy with Different Weights");
     recurringDifferentWeights.addActionListener(e -> {
-      BuySharesUsingRecurrentStrategyWithDifferentWeightsForm buySharesUsingRecurrentStrategyWithDifferentWeightsForm =
+      BuySharesUsingRecurrentStrategyWithDifferentWeightsForm
+              buySharesUsingRecurrentStrategyWithDifferentWeightsForm =
               new BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
       Utils.showPrevious(buySharesUsingRecurrentStrategyWithDifferentWeightsForm, this);
     });

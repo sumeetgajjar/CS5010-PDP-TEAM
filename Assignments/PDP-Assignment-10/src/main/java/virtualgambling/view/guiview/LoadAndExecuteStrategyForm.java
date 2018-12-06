@@ -37,7 +37,8 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
    * @param features the features
    * @throws IllegalArgumentException if the given params are null
    */
-  public LoadAndExecuteStrategyForm(MainForm mainForm, Features features) throws IllegalArgumentException {
+  public LoadAndExecuteStrategyForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
     this.features = Utils.requireNonNull(features);

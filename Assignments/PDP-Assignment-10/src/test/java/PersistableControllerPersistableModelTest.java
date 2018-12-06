@@ -12,7 +12,12 @@ import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.view.TextView;
 
-public class PersistableControllerPersistableModelTest extends EnhancedTradingControllerPersistableModelTest {
+/**
+ * The class represents a Junit test class.It contains all the tests for scenarios when
+ * PersistableController is given PersistableModel.
+ */
+public class PersistableControllerPersistableModelTest
+        extends EnhancedTradingControllerPersistableModelTest {
   private PersistableUserModel persistableUserModel;
 
   @Before
@@ -149,7 +154,8 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
             "Profit:                                           $19,700.00");
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_PORTFOLIO_FROM_FILE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Buy Date            Stocks             " +
@@ -199,20 +205,23 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
 
     StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_FILE_SAVE_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_STRATEGY_FROM_FILE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).
+            append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("" +
@@ -373,7 +382,8 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
 
     StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_FILE_SAVE_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
@@ -382,13 +392,15 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_STRATEGY_FROM_FILE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Buy Date            Stocks             " +
@@ -559,20 +571,23 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
             .append("Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_FILE_SAVE_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_STRATEGY_FROM_FILE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("" +
@@ -746,7 +761,8 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
             .append("Purchased 10 share(s) of 'AAPL' at a rate of $30.00 per stock on 2018-10-30");
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_FILE_SAVE_NAME_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
@@ -755,13 +771,15 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_STRATEGY_FROM_FILE);
     expectedOutput.append(System.lineSeparator()).append(Constants.INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
     expectedOutput.append(System.lineSeparator()).append(Constants.PORTFOLIO_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Buy Date            Stocks             " +
