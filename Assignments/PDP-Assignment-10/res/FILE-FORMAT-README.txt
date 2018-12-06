@@ -10,16 +10,16 @@ A file for a valid Portfolio looks like this:
       "quantity": 10,
       "commissionPercentage": 0.0,
       "stockPrice": {
-        "date": "Nov 1, 2018 12:00:00 AM",
+        "date": "2018-11-01",
         "stockPrice": 10
       }
     },
     {
-      "tickerName": "RANDOM_TICKER_NOT_AVAILABLE",
+      "tickerName": "GOOG",
       "quantity": 100,
       "commissionPercentage": 10.0,
       "stockPrice": {
-        "date": "Nov 2, 2018 12:00:00 AM",
+        "date": "2018-11-02",
         "stockPrice": 10
       }
     }
@@ -33,11 +33,11 @@ A file for a valid Portfolio looks like this:
 A file for Strategy looks like this:
 
 {
-  "startDate": "Sep 24, 2018 12:00:00 AM", // start date
+  "startDate": "2018-01-01", // start date
   "stockWeights": { // the distribution of the stock weights - these should sum to 100%
     "GOOG": 50.0,
     "AAPL": 50.0
   },
   "dayFrequency": 1, // the frequency with which to buy from startDate to endDate (inclusive)
-  "endDate": "Sep 24, 2018 12:00:00 AM" // the endDate (this is optional and may be skipped)
+  "endDate": "2018-11-30" // the endDate (this is optional and may be skipped)
 }
