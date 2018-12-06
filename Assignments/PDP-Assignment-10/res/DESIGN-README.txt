@@ -21,7 +21,7 @@ In-memory data to Alpha Vantage at run time instead of restarting the applicatio
 
 This is the only change in design from the previous design.
 
-New features and enhancements:
+New tradingFeatures and enhancements:
 We have a new model that supports the strategy pattern discussed above (using 2 setters - one for StockDAOType and one
 for StockDataSourceType)
 and it supports persistence using composition through 2 classes - Loader and Persister.
@@ -29,13 +29,13 @@ and it supports persistence using composition through 2 classes - Loader and Per
 Loader takes a serialized strategy/portfolio, deserializes it and loads it into the model
 Persister takes a strategy/portfolio through the model and serializes it.
 
-We have 2 implementations each of these features - one for Strategy and one for Portfolio.
+We have 2 implementations each of these tradingFeatures - one for Strategy and one for Portfolio.
 
 We have a GUI now using Java Swing and in order to support that, we have a new controller,
-Features interface (that supports the UI features) and a new View that uses actionListeners and
+Features interface (that supports the UI tradingFeatures) and a new View that uses actionListeners and
 Features delegate to the controller.
 
-We also have a new Controller to support the new persistence features and work on the console.
+We also have a new Controller to support the new persistence tradingFeatures and work on the console.
 In order to support that feature, we have have extended the older design and simply added new commands.
 ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ Internal implementation changes: (Changes that do not affect the clients of the 
 We are now using an immutable data class - StockPrice instead of returning BigDecimal from the StockDataSource, and StockDAO.
 This change allows us to maintain data locality since any stock price has to have an associated date.
 
-Utility features added:
+Utility tradingFeatures added:
 1. We added a multi-layer caching mechanism with following Levels in order to save time on expensive API calls:
     a. In memory (JVM) in form of an LRU cache.
     b. On Disk in form of CSV files.

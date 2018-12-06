@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to get the cost basis of a portfolio. It extends {@link
@@ -21,20 +21,20 @@ import virtualgambling.controller.Features;
 public class GetPortfolioCostBasisForm extends AbstractForm {
 
   private final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of GetPortfolioCostBasisForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public GetPortfolioCostBasisForm(MainForm mainForm, Features features)
+  public GetPortfolioCostBasisForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Portfolio Cost basis");
   }
 
@@ -74,7 +74,7 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
   }
 
   protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
-    return this.features.getPortfolioCostBasis(portfolioName, date);
+    return this.tradingFeatures.getPortfolioCostBasis(portfolioName, date);
   }
 
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,

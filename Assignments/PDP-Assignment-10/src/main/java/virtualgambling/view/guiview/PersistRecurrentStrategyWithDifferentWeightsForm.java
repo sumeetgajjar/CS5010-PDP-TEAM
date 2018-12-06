@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to Persists a Strategy with different weights. It extends {@link
@@ -28,7 +28,7 @@ import virtualgambling.controller.Features;
 public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
   protected final Map<String, Double> stockPercentageMap;
 
   protected File selectedFile;
@@ -44,15 +44,16 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
    * Constructs a object of PersistRecurrentStrategyWithDifferentWeightsForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public PersistRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features)
+  public PersistRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm,
+                                                          TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Persist Strategy");
@@ -139,7 +140,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
 
     boolean success;
     if (endDateTextField.getText().isEmpty()) {
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+      success = this.tradingFeatures.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
               dayFrequency,
               this.stockPercentageMap);
     } else {
@@ -147,7 +148,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
       if (Objects.isNull(endDate)) {
         return false;
       }
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+      success = this.tradingFeatures.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
               endDate,
               dayFrequency,
               this.stockPercentageMap);

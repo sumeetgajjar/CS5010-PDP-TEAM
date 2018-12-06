@@ -11,7 +11,7 @@ import java.util.Optional;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
@@ -27,13 +27,14 @@ public class BuySharesUsingRecurrentStrategyWithSameWeightsForm
    * params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public BuySharesUsingRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+  public BuySharesUsingRecurrentStrategyWithSameWeightsForm(MainForm mainForm,
+                                                            TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
-    super(mainForm, features);
+    super(mainForm, tradingFeatures);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
   }
@@ -70,7 +71,7 @@ public class BuySharesUsingRecurrentStrategyWithSameWeightsForm
                                                               Double commissionPercentage,
                                                               JTextField endDateTextField) {
     if (endDateTextField.getText().isEmpty()) {
-      return this.features.buyShares(portfolioName, startDate, dayFrequency,
+      return this.tradingFeatures.buyShares(portfolioName, startDate, dayFrequency,
               this.stockPercentageMap.keySet(),
               amountToInvest, commissionPercentage);
     } else {
@@ -78,7 +79,7 @@ public class BuySharesUsingRecurrentStrategyWithSameWeightsForm
       if (Objects.isNull(endDate)) {
         return Optional.empty();
       }
-      return this.features.buyShares(portfolioName, startDate, endDate,
+      return this.tradingFeatures.buyShares(portfolioName, startDate, endDate,
               dayFrequency,
               this.stockPercentageMap.keySet(), amountToInvest, commissionPercentage);
     }

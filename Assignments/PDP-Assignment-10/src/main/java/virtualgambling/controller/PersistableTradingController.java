@@ -21,7 +21,8 @@ import virtualgambling.view.View;
 
 /**
  * {@link PersistableTradingController} represents a controller in the MVC pattern that extends a
- * {@link EnhancedTradingController} and adds new features with the possibility of persisting and
+ * {@link EnhancedTradingController} and adds new tradingFeatures with the possibility of
+ * persisting and
  * loading back the portfolios and strategies.
  */
 public class PersistableTradingController extends EnhancedTradingController {

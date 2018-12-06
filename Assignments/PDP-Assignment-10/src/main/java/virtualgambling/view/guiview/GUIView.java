@@ -1,6 +1,6 @@
 package virtualgambling.view.guiview;
 
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.view.View;
 
 /**
@@ -11,11 +11,11 @@ import virtualgambling.view.View;
 public interface GUIView extends View {
 
   /**
-   * Sets the given Features for this View.
+   * Sets the given TradingFeatures for this View.
    *
-   * @param features the feature for this view
+   * @param tradingFeatures the feature for this view
    */
-  void addFeatures(Features features);
+  void addFeatures(TradingFeatures tradingFeatures);
 
   /**
    * Displays the given message as error to the user.

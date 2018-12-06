@@ -12,22 +12,59 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.factory.StockDataSourceType;
 
 /**
- * TODO
+ * {@link TradingFeatures} represents a list of tradingFeatures that a GUI view uses in it's
+ * callback in order to simulate a Command. This ensures that the Controller and View remain
+ * decoupled.
  */
-public interface Features {
+public interface TradingFeatures {
 
+  /**
+   * Creates a portfolio for this UserModel and returns true if successfully created, false
+   * otherwise.
+   *
+   * @param portfolio the name of the portfolio
+   * @return true if the portfolio is created successfully, false otherwise
+   */
   boolean createPortfolio(String portfolio);
 
+  /**
+   * Gets the portfolio matching portfolioName.
+   *
+   * @param portfolioName name of the portfolio
+   * @return gets the portfolio matching portfolioName if present
+   */
   Optional<Portfolio> getPortfolio(String portfolioName);
 
+  /**
+   * Returns a list of immutable Portfolios
+   *
+   * @return a list of portfolios
+   */
   List<Portfolio> getAllPortfolios();
 
+  /**
+   * Returns the costBasis of this portfolio at the given date.
+   *
+   * @param date the date
+   * @return the costBasis of the given portfolio if possible
+   */
   Optional<BigDecimal> getPortfolioCostBasis(String portfolio, Date date);
 
+  /**
+   * Returns the total value of this portfolio at the given date.
+   *
+   * @param date the date
+   * @return the total value of the portfolio
+   */
   Optional<BigDecimal> getPortfolioValue(String portfolio, Date date);
 
-  Optional<Portfolio> getPortfolioComposition(String portfolio);
-
+  /**
+   * Returns the amount of liquid cash that is remaining with the user.
+   *
+   * <p>The amount that a user starts with is implementation dependent.
+   *
+   * @return the amount of liquid cash that is remaining with the user.
+   */
   BigDecimal getRemainingCapital();
 
   Optional<SharePurchaseOrder> buyShares(String tickerName,

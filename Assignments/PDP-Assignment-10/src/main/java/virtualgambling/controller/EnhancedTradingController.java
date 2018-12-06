@@ -26,7 +26,8 @@ import virtualgambling.view.View;
 
 /**
  * {@link EnhancedTradingController} represents a controller in the MVC pattern that extends a
- * {@link TradingController} and adds new features with the possibility of using commission and
+ * {@link TradingController} and adds new tradingFeatures with the possibility of using
+ * commission and
  * strategies in purchasing stock.
  */
 public class EnhancedTradingController extends TradingController {

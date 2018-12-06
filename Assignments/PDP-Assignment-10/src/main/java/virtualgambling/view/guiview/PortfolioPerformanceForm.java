@@ -35,7 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.Portfolio;
 
 /**
@@ -44,19 +44,19 @@ import virtualgambling.model.bean.Portfolio;
  */
 public class PortfolioPerformanceForm extends AbstractForm {
 
-  private final Features features;
+  private final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of PortfolioPerformanceForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public PortfolioPerformanceForm(MainForm mainForm, Features features)
+  public PortfolioPerformanceForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
     super(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Portfolio Performance");
   }
 
@@ -118,7 +118,7 @@ public class PortfolioPerformanceForm extends AbstractForm {
         return;
       }
 
-      Optional<Portfolio> optional = this.features.getPortfolio(portfolioName);
+      Optional<Portfolio> optional = this.tradingFeatures.getPortfolio(portfolioName);
       if (optional.isPresent()) {
         Portfolio portfolio = optional.get();
         this.plotGraph(portfolio, startDate, endDate);

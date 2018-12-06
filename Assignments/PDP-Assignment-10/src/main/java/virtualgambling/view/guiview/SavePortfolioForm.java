@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to save a portfolio to a file. It extends {@link AbstractForm}
@@ -24,7 +24,7 @@ import virtualgambling.controller.Features;
 public class SavePortfolioForm extends AbstractForm {
 
   private final MainForm mainForm;
-  private final Features features;
+  private final TradingFeatures tradingFeatures;
   private JLabel filePathLabel;
   private File selectedFile;
 
@@ -32,13 +32,13 @@ public class SavePortfolioForm extends AbstractForm {
    * Constructs a object of SavePortfolioForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public SavePortfolioForm(MainForm mainForm, Features features) throws IllegalArgumentException {
+  public SavePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures) throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Save Portfolio");
   }
 
@@ -99,7 +99,8 @@ public class SavePortfolioForm extends AbstractForm {
         return;
       }
 
-      boolean success = this.features.savePortfolio(portfolioName, selectedFile.getAbsolutePath());
+      boolean success = this.tradingFeatures.savePortfolio(portfolioName,
+              selectedFile.getAbsolutePath());
       if (success) {
         this.mainForm.display(String.format("Portfolio '%s' saved successfully",
                 portfolioName));

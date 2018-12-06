@@ -16,7 +16,8 @@ import virtualgambling.model.strategy.Strategy;
 
 /**
  * {@link EnhancedUserModelImpl} is an extension of the {@link SimpleUserModel} class and adds
- * features that allow the user to buy shares and specify commission value. It also provides the
+ * tradingFeatures that allow the user to buy shares and specify commission value. It also
+ * provides the
  * option to buy stock via a higher level strategy {@link Strategy}.
  */
 public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUserModel {

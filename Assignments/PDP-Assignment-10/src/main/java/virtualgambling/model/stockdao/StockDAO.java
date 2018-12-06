@@ -8,7 +8,8 @@ import virtualgambling.model.exceptions.StockDataNotFoundException;
 
 /**
  * <code>StockDAO</code> represents a stock data access object that acts as a mediator between
- * the user and the data source. <code>StockDAO</code> provides features of retrieving stock prices
+ * the user and the data source. <code>StockDAO</code> provides tradingFeatures of retrieving
+ * stock prices
  * and buying stocks.
  *
  * <p>This interface may be extended in the future to support stock sale.

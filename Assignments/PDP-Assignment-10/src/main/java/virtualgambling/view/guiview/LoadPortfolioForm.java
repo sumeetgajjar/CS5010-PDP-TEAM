@@ -14,7 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to Load the portfolio from the file into the model. It extends
@@ -24,7 +24,7 @@ public class LoadPortfolioForm extends AbstractForm {
 
   public static final String PORTFOLIO_FILE_PATH = "Portfolio File Path: ";
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
   private JLabel filePathLabel;
   private File selectedFile;
 
@@ -32,13 +32,13 @@ public class LoadPortfolioForm extends AbstractForm {
    * Constructs a object of LoadPortfolioForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public LoadPortfolioForm(MainForm mainForm, Features features) throws IllegalArgumentException {
+  public LoadPortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures) throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Load Portfolio");
   }
 
@@ -86,7 +86,7 @@ public class LoadPortfolioForm extends AbstractForm {
         return;
       }
 
-      boolean success = this.features.loadPortfolio(selectedFile.getAbsolutePath());
+      boolean success = this.tradingFeatures.loadPortfolio(selectedFile.getAbsolutePath());
 
       if (success) {
         this.showPrevious();

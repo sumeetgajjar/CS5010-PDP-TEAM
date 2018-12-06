@@ -35,11 +35,9 @@ public interface UserModel {
   Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException;
 
   /**
-   * Returns a new line separated string of portfolio name.
+   * Returns a list of immutable Portfolios
    *
-   * <p>It will return a blank string if there are no portfolios yet.
-   *
-   * @return a new line separated string of portfolio name
+   * @return a list of portfolios
    */
   List<Portfolio> getAllPortfolios();
 

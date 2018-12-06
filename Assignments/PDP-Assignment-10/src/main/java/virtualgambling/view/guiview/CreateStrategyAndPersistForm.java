@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to create strategy and persists it to a file. It extends {@link
@@ -14,20 +14,20 @@ import virtualgambling.controller.Features;
 public class CreateStrategyAndPersistForm extends AbstractForm {
 
   private final MainForm mainForm;
-  private final Features features;
+  private final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of CreateStrategyAndPersistForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public CreateStrategyAndPersistForm(MainForm mainForm, Features features)
+  public CreateStrategyAndPersistForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Create and Persist Strategy");
   }
 
@@ -39,7 +39,7 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
     recurringDifferentWeights.addActionListener(e -> {
       PersistRecurrentStrategyWithDifferentWeightsForm
               persistRecurrentStrategyWithDifferentWeightsForm =
-              new PersistRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
+              new PersistRecurrentStrategyWithDifferentWeightsForm(mainForm, tradingFeatures);
       Utils.showPrevious(persistRecurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
@@ -47,7 +47,7 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
     JButton recurringSameWeights = new JButton("Recurring Strategy with Same Weights");
     recurringSameWeights.addActionListener(e -> {
       PersistRecurrentStrategyWithSameWeightsForm persistRecurrentStrategyWithSameWeightsForm =
-              new PersistRecurrentStrategyWithSameWeightsForm(mainForm, features);
+              new PersistRecurrentStrategyWithSameWeightsForm(mainForm, tradingFeatures);
       Utils.showPrevious(persistRecurrentStrategyWithSameWeightsForm, this);
     });
     this.add(recurringSameWeights);

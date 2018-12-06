@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to load the strategy and execute it on a portfolio. It extends
@@ -26,7 +26,7 @@ import virtualgambling.controller.Features;
 public class LoadAndExecuteStrategyForm extends AbstractForm {
 
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
   private JLabel filePathLabel;
   private File selectedFile;
 
@@ -34,14 +34,14 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
    * Constructs a object of LoadAndExecuteStrategyForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public LoadAndExecuteStrategyForm(MainForm mainForm, Features features)
+  public LoadAndExecuteStrategyForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Load and Execute Strategy");
   }
 
@@ -129,7 +129,7 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
         return;
       }
 
-      boolean success = this.features.loadAndExecuteStrategy(portfolioName,
+      boolean success = this.tradingFeatures.loadAndExecuteStrategy(portfolioName,
               selectedFile.getAbsolutePath(), amountToInvest, commissionPercentage);
 
       if (success) {

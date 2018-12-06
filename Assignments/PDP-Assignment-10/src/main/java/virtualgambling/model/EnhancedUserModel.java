@@ -11,7 +11,8 @@ import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.strategy.Strategy;
 
 /**
- * {@link EnhancedUserModel} is an extension of the {@link UserModel} interface and adds features
+ * {@link EnhancedUserModel} is an extension of the {@link UserModel} interface and adds
+ * tradingFeatures
  * that allow the user to buy shares and specify commission value. It also provides the option to
  * buy stock via a higher level strategy {@link Strategy}.
  */

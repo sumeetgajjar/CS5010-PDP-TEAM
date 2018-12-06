@@ -48,15 +48,15 @@ public class GUITradingController implements Controller {
 
   @Override
   public void run() {
-    this.guiView.addFeatures(new FeaturesImpl(persistableUserModel, guiView));
+    this.guiView.addFeatures(new TradingFeaturesImpl(persistableUserModel, guiView));
   }
 
-  private static class FeaturesImpl implements Features {
+  private static class TradingFeaturesImpl implements TradingFeatures {
 
     private final PersistableUserModel userModel;
     private final GUIView guiView;
 
-    private FeaturesImpl(PersistableUserModel userModel, GUIView guiView) {
+    private TradingFeaturesImpl(PersistableUserModel userModel, GUIView guiView) {
       this.userModel = userModel;
       this.guiView = guiView;
     }
@@ -102,16 +102,6 @@ public class GUITradingController implements Controller {
     public Optional<BigDecimal> getPortfolioValue(String portfolio, Date date) {
       try {
         return Optional.of(this.userModel.getPortfolio(portfolio).getValue(date));
-      } catch (Exception e) {
-        this.guiView.displayError(e.getMessage());
-        return Optional.empty();
-      }
-    }
-
-    @Override
-    public Optional<Portfolio> getPortfolioComposition(String portfolio) {
-      try {
-        return Optional.of(this.userModel.getPortfolio(portfolio));
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();

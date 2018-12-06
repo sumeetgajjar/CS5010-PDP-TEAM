@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to create a portfolio. It extends {@link AbstractForm} to reduce
@@ -17,19 +17,19 @@ import virtualgambling.controller.Features;
 public class CreatePortfolioForm extends AbstractForm {
 
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of CreatePortfolioForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public CreatePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
+  public CreatePortfolioForm(MainForm mainForm, TradingFeatures tradingFeatures) throws HeadlessException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Portfolio creation");
   }
 
@@ -57,7 +57,7 @@ public class CreatePortfolioForm extends AbstractForm {
       }
 
       String portfolioName = portfolioNameJTextField.getText();
-      boolean success = this.features.createPortfolio(portfolioName);
+      boolean success = this.tradingFeatures.createPortfolio(portfolioName);
       if (success) {
         this.showPrevious();
         this.mainForm.display(String.format("Portfolio '%s' Successfully Created", portfolioName));

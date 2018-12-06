@@ -9,7 +9,7 @@ import java.util.Optional;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
@@ -24,13 +24,14 @@ public class BuySharesUsingOneTimeStrategyWithSameWeightsForm
    * Constructs a object of BuySharesUsingOneTimeStrategyWithSameWeightsForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public BuySharesUsingOneTimeStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+  public BuySharesUsingOneTimeStrategyWithSameWeightsForm(MainForm mainForm,
+                                                          TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
-    super(mainForm, features);
+    super(mainForm, tradingFeatures);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
   }
@@ -50,7 +51,7 @@ public class BuySharesUsingOneTimeStrategyWithSameWeightsForm
                                                               Date startDate,
                                                               BigDecimal amountToInvest,
                                                               Double commissionPercentage) {
-    return this.features.buyShares(portfolioName, startDate, this.stockPercentageMap.keySet(),
+    return this.tradingFeatures.buyShares(portfolioName, startDate, this.stockPercentageMap.keySet(),
             amountToInvest, commissionPercentage);
 
   }

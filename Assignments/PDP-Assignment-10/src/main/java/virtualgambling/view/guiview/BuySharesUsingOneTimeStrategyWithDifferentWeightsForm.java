@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
@@ -31,7 +31,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
   protected final Map<String, Double> stockPercentageMap;
   private JButton addStockJButton;
   private JTextArea stocksJTextArea;
@@ -44,16 +44,16 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
    * params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
   public BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(MainForm mainForm,
-                                                               Features features)
+                                                               TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Buy Shares");
@@ -145,7 +145,7 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
                                                               Date startDate,
                                                               BigDecimal amountToInvest,
                                                               Double commissionPercentage) {
-    return this.features.buyShares(portfolioName, startDate, this.stockPercentageMap,
+    return this.tradingFeatures.buyShares(portfolioName, startDate, this.stockPercentageMap,
             amountToInvest, commissionPercentage);
   }
 

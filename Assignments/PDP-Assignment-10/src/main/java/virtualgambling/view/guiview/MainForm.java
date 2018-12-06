@@ -19,7 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.factory.StockDataSourceType;
 
@@ -31,7 +31,7 @@ import virtualgambling.model.factory.StockDataSourceType;
 public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea jTextArea;
-  private Features features;
+  private TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of MainForm.
@@ -44,8 +44,8 @@ public class MainForm extends AbstractForm implements GUIView {
   }
 
   @Override
-  public void addFeatures(Features features) {
-    this.features = features;
+  public void addFeatures(TradingFeatures tradingFeatures) {
+    this.tradingFeatures = tradingFeatures;
   }
 
   @Override
@@ -143,7 +143,7 @@ public class MainForm extends AbstractForm implements GUIView {
       StockDataSourceType stockDataSourceType = n == 0 ? StockDataSourceType.SIMPLE :
               StockDataSourceType.ALPHA_VANTAGE;
 
-      this.features.setDataSource(stockDataSourceType);
+      this.tradingFeatures.setDataSource(stockDataSourceType);
       this.display(String.format("Stock Data Source selected: %s", stockDataSourceType.getName()));
     });
     return jButton;
@@ -153,7 +153,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Create and Save Strategy");
     jButton.addActionListener(e -> {
       CreateStrategyAndPersistForm createStrategyAndPersistForm =
-              new CreateStrategyAndPersistForm(this, features);
+              new CreateStrategyAndPersistForm(this, tradingFeatures);
       Utils.showPrevious(createStrategyAndPersistForm, this);
     });
     return jButton;
@@ -163,7 +163,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Load and Execute Strategy");
     jButton.addActionListener(e -> {
       LoadAndExecuteStrategyForm loadAndExecuteStrategyForm =
-              new LoadAndExecuteStrategyForm(this, features);
+              new LoadAndExecuteStrategyForm(this, tradingFeatures);
       Utils.showPrevious(loadAndExecuteStrategyForm, this);
     });
     return jButton;
@@ -173,7 +173,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Buy Shares using Strategy");
     jButton.addActionListener(e -> {
       SelectStrategyToBuySharesForm selectStrategyToBuySharesForm =
-              new SelectStrategyToBuySharesForm(this, features);
+              new SelectStrategyToBuySharesForm(this, tradingFeatures);
       Utils.showPrevious(selectStrategyToBuySharesForm, this);
     });
     return jButton;
@@ -183,7 +183,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Save Portfolio");
     jButton.addActionListener(e -> {
       SavePortfolioForm savePortfolioForm =
-              new SavePortfolioForm(this, features);
+              new SavePortfolioForm(this, tradingFeatures);
       Utils.showPrevious(savePortfolioForm, this);
     });
     return jButton;
@@ -193,7 +193,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Load Portfolio");
     jButton.addActionListener(e -> {
       LoadPortfolioForm loadPortfolioForm =
-              new LoadPortfolioForm(this, features);
+              new LoadPortfolioForm(this, tradingFeatures);
       Utils.showPrevious(loadPortfolioForm, this);
     });
     return jButton;
@@ -203,7 +203,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get Portfolio Composition");
     jButton.addActionListener(e -> {
       GetPortfolioCompositionForm getPortfolioCompositionForm =
-              new GetPortfolioCompositionForm(this, features);
+              new GetPortfolioCompositionForm(this, tradingFeatures);
       Utils.showPrevious(getPortfolioCompositionForm, this);
     });
     return jButton;
@@ -213,7 +213,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Buy Shares");
     jButton.addActionListener(e -> {
       BuySharesForm buySharesForm =
-              new BuySharesForm(this, features);
+              new BuySharesForm(this, tradingFeatures);
       Utils.showPrevious(buySharesForm, this);
     });
     return jButton;
@@ -223,7 +223,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Plot Portfolio Performance");
     jButton.addActionListener(e -> {
       PortfolioPerformanceForm portfolioPerformanceForm =
-              new PortfolioPerformanceForm(this, features);
+              new PortfolioPerformanceForm(this, tradingFeatures);
       Utils.showPrevious(portfolioPerformanceForm, this);
     });
     return jButton;
@@ -231,7 +231,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
   private JButton getQuitJButton() {
     JButton quitButton = new JButton("Quit");
-    quitButton.addActionListener(e -> features.quit());
+    quitButton.addActionListener(e -> tradingFeatures.quit());
     return quitButton;
   }
 
@@ -240,7 +240,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get Portfolios Cost Basis");
     jButton.addActionListener(e -> {
       GetPortfolioCostBasisForm getPortfolioCostBasisForm =
-              new GetPortfolioCostBasisForm(this, features);
+              new GetPortfolioCostBasisForm(this, tradingFeatures);
       Utils.showPrevious(getPortfolioCostBasisForm, this);
     });
     return jButton;
@@ -249,7 +249,8 @@ public class MainForm extends AbstractForm implements GUIView {
   private JButton getPortfolioValueButton() {
     JButton jButton = new JButton("Get Portfolios Value");
     jButton.addActionListener(e -> {
-      GetPortfolioCostBasisForm getPortfolioValueForm = new GetPortfolioValueForm(this, features);
+      GetPortfolioCostBasisForm getPortfolioValueForm = new GetPortfolioValueForm(this,
+              tradingFeatures);
       Utils.showPrevious(getPortfolioValueForm, this);
     });
     return jButton;
@@ -259,7 +260,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get all Portfolios");
     jButton.addActionListener(e -> {
 
-      List<Portfolio> allPortfolios = this.features.getAllPortfolios();
+      List<Portfolio> allPortfolios = this.tradingFeatures.getAllPortfolios();
       if (allPortfolios.isEmpty()) {
         this.display("There are not portfolios present");
       } else {
@@ -278,7 +279,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
 
       String formattedRemainingCapital =
-              Utils.getFormattedCurrencyNumberString(this.features.getRemainingCapital());
+              Utils.getFormattedCurrencyNumberString(this.tradingFeatures.getRemainingCapital());
       this.display(String.format("Remaining Capital: %s", formattedRemainingCapital));
     });
     return jButton;
@@ -288,7 +289,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton createPortfolioButton = new JButton("Create Portfolio");
 
     createPortfolioButton.addActionListener(e -> {
-      CreatePortfolioForm createPortfolioForm = new CreatePortfolioForm(this, features);
+      CreatePortfolioForm createPortfolioForm = new CreatePortfolioForm(this, tradingFeatures);
       Utils.showPrevious(createPortfolioForm, this);
     });
     return createPortfolioButton;

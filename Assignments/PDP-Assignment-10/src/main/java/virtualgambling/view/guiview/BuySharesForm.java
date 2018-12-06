@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
@@ -21,19 +21,19 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 public class BuySharesForm extends AbstractForm {
 
   private final MainForm mainForm;
-  private final Features features;
+  private final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a BuySharesForm Object with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public BuySharesForm(MainForm mainForm, Features features) throws IllegalArgumentException {
+  public BuySharesForm(MainForm mainForm, TradingFeatures tradingFeatures) throws IllegalArgumentException {
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Buy Shares");
   }
 
@@ -127,7 +127,7 @@ public class BuySharesForm extends AbstractForm {
         return;
       }
 
-      Optional<SharePurchaseOrder> optional = this.features.buyShares(tickerName,
+      Optional<SharePurchaseOrder> optional = this.tradingFeatures.buyShares(tickerName,
               portfolioName, date, quantity, commission);
 
       if (optional.isPresent()) {

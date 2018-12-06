@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to get the value of a portfolio. It extends {@link
@@ -17,13 +17,13 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
    * Constructs a object of GetPortfolioValueForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public GetPortfolioValueForm(MainForm mainForm, Features features)
+  public GetPortfolioValueForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
-    super(mainForm, features);
+    super(mainForm, tradingFeatures);
     this.setTitle("Portfolio Value");
   }
 
@@ -35,6 +35,6 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
 
   @Override
   protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
-    return this.features.getPortfolioValue(portfolioName, date);
+    return this.tradingFeatures.getPortfolioValue(portfolioName, date);
   }
 }

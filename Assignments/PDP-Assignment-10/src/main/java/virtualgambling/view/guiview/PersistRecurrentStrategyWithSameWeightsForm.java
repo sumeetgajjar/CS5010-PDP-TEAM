@@ -7,7 +7,7 @@ import java.util.Objects;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 
 /**
  * This class represents a GUI form to Persists a Strategy with Same weights. It extends {@link
@@ -21,13 +21,14 @@ public class PersistRecurrentStrategyWithSameWeightsForm extends
    * Constructs a object of PersistRecurrentStrategyWithSameWeightsForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public PersistRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+  public PersistRecurrentStrategyWithSameWeightsForm(MainForm mainForm,
+                                                     TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
-    super(mainForm, features);
+    super(mainForm, tradingFeatures);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
   }
@@ -48,7 +49,7 @@ public class PersistRecurrentStrategyWithSameWeightsForm extends
 
     boolean success;
     if (endDateTextField.getText().isEmpty()) {
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+      success = this.tradingFeatures.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
               dayFrequency,
               this.stockPercentageMap.keySet());
     } else {
@@ -56,7 +57,7 @@ public class PersistRecurrentStrategyWithSameWeightsForm extends
       if (Objects.isNull(endDate)) {
         return false;
       }
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+      success = this.tradingFeatures.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
               endDate,
               dayFrequency,
               this.stockPercentageMap.keySet());

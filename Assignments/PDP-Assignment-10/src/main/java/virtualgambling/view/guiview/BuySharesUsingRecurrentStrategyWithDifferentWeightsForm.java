@@ -21,7 +21,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import util.Utils;
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
@@ -32,7 +32,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
-  protected final Features features;
+  protected final TradingFeatures tradingFeatures;
   protected final Map<String, Double> stockPercentageMap;
   protected JTextField stockPercentageJTextField;
   protected JLabel stockPercentageJLabel;
@@ -45,16 +45,16 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
    * params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
   public BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm,
-                                                                 Features features)
+                                                                 TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
     super(mainForm);
     this.mainForm = Utils.requireNonNull(mainForm);
-    this.features = Utils.requireNonNull(features);
+    this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Buy Shares");
@@ -147,7 +147,7 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
                                                               Double commissionPercentage,
                                                               JTextField endDateTextField) {
     if (endDateTextField.getText().isEmpty()) {
-      return this.features.buyShares(portfolioName, startDate, dayFrequency,
+      return this.tradingFeatures.buyShares(portfolioName, startDate, dayFrequency,
               this.stockPercentageMap,
               amountToInvest, commissionPercentage);
     } else {
@@ -155,7 +155,7 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
       if (Objects.isNull(endDate)) {
         return Optional.empty();
       }
-      return this.features.buyShares(portfolioName, startDate, endDate,
+      return this.tradingFeatures.buyShares(portfolioName, startDate, endDate,
               dayFrequency,
               this.stockPercentageMap, amountToInvest, commissionPercentage);
     }

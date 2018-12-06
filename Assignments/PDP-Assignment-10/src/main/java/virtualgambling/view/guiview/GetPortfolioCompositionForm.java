@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.swing.JTextField;
 
-import virtualgambling.controller.Features;
+import virtualgambling.controller.TradingFeatures;
 import virtualgambling.model.bean.Portfolio;
 
 /**
@@ -18,13 +18,13 @@ public class GetPortfolioCompositionForm extends CreatePortfolioForm {
    * Constructs a object of GetPortfolioCompositionForm with the given params.
    *
    * @param mainForm the mainForm
-   * @param features the features
+   * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
-  public GetPortfolioCompositionForm(MainForm mainForm, Features features)
+  public GetPortfolioCompositionForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
 
-    super(mainForm, features);
+    super(mainForm, tradingFeatures);
     this.setTitle("Portfolio Composition");
   }
 
@@ -36,7 +36,7 @@ public class GetPortfolioCompositionForm extends CreatePortfolioForm {
       }
 
       String portfolioName = portfolioNameJTextField.getText();
-      Optional<Portfolio> optional = this.features.getPortfolioComposition(portfolioName);
+      Optional<Portfolio> optional = this.tradingFeatures.getPortfolio(portfolioName);
       if (optional.isPresent()) {
         this.mainForm.display(
                 String.format("Portfolio Composition of portfolio '%s'", portfolioName));
