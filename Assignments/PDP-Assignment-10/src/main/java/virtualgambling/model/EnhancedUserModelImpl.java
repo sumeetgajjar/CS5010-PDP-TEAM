@@ -14,17 +14,20 @@ import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.strategy.Strategy;
 
+/**
+ * {@link EnhancedUserModelImpl} is an extension of the {@link SimpleUserModel} class and adds
+ * features that allow the user to buy shares and specify commission value. It also provides the
+ * option to buy stock via a higher level strategy {@link Strategy}.
+ */
 public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUserModel {
-//  /**
-//   * Constructs a {@link EnhancedUserModelImpl} object with given params.
-//   *
-//   * @param stockDAO the stockDAO
-//   * @throws IllegalArgumentException if the given stockDAO is null
-//   */
-//  public EnhancedUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
-//    super(stockDAO);
-//  }
 
+  /**
+   * Constructs a Object of {@link EnhancedUserModelImpl} with the given params.
+   *
+   * @param stockDAOType        the stock DAO type
+   * @param stockDataSourceType the stockDataSource type
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public EnhancedUserModelImpl(StockDAOType stockDAOType,
                                StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
     super(stockDAOType, stockDataSourceType);

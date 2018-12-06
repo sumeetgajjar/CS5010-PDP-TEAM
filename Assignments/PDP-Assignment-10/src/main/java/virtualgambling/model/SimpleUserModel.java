@@ -40,7 +40,8 @@ public class SimpleUserModel implements UserModel {
    * @param stockDataSourceType type of the stock data source
    * @throws IllegalArgumentException if the given stockDAO is null
    */
-  public SimpleUserModel(StockDAOType stockDAOType, StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
+  public SimpleUserModel(StockDAOType stockDAOType, StockDataSourceType stockDataSourceType)
+          throws IllegalArgumentException {
     this.portfolios = new HashMap<>();
     this.remainingCapital = DEFAULT_USER_CAPITAL;
     this.stockDAOType = Utils.requireNonNull(stockDAOType);

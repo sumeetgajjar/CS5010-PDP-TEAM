@@ -112,13 +112,18 @@ public class SharePurchaseOrder {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof SharePurchaseOrder)) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SharePurchaseOrder)) {
+      return false;
+    }
+
     SharePurchaseOrder that = (SharePurchaseOrder) o;
-    return getQuantity() == that.getQuantity() &&
-            Double.compare(that.getCommissionPercentage(), getCommissionPercentage()) == 0 &&
-            Objects.equals(getTickerName(), that.getTickerName()) &&
-            Objects.equals(getStockPrice(), that.getStockPrice());
+    return getQuantity() == that.getQuantity()
+            && Double.compare(that.getCommissionPercentage(), getCommissionPercentage()) == 0
+            && Objects.equals(getTickerName(), that.getTickerName())
+            && Objects.equals(getStockPrice(), that.getStockPrice());
   }
 
   @Override
