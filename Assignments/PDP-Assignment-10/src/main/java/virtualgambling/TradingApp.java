@@ -22,7 +22,7 @@ import virtualgambling.view.guiview.MainForm;
 public class TradingApp {
 
   /**
-   * Runner for the Virtual Trading App
+   * Runner for the Virtual Trading App.
    *
    * @param args args
    */
