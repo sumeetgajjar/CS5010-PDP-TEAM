@@ -1,7 +1,5 @@
 package virtualgambling.controller.command.persistantusermodelcommand;
 
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -11,7 +9,6 @@ import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
-import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
 /**

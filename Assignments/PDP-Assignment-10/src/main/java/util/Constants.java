@@ -14,15 +14,12 @@ import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
  */
 public class Constants {
 
-  public static final Type PORTFOLIO_TYPE = new TypeToken<Portfolio>() {
-  }.getType();
+  public static final Type PORTFOLIO_TYPE = new TypeToken<Portfolio>() {}.getType();
 
   public static final Type RECURRING_STRATEGY_TYPE =
-          new TypeToken<RecurringWeightedInvestmentStrategy>() {
-  }.getType();
+          new TypeToken<RecurringWeightedInvestmentStrategy>() {}.getType();
   public static final Type ONETIME_STRATEGY_TYPE =
-          new TypeToken<OneTimeWeightedInvestmentStrategy>() {
-  }.getType();
+          new TypeToken<OneTimeWeightedInvestmentStrategy>() {}.getType();
 
   public static final String INVESTMENT_AMOUNT_MESSAGE = "Please enter the amount to invest";
 

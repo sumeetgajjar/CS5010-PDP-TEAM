@@ -269,6 +269,13 @@ public class Utils {
     return builder.toString();
   }
 
+  /**
+   * Gets the path relative to the default folder.
+   *
+   * @param path the path relative to
+   * @return path relative to the default folder
+   * @throws IOException if creating a directory fails
+   */
   public static Path getPathInDefaultFolder(Path path) throws IOException {
     Utils.requireNonNull(path);
     Path defaultPath = Paths.get(Constants.DEFAULT_PERSISTENCE_PATH);

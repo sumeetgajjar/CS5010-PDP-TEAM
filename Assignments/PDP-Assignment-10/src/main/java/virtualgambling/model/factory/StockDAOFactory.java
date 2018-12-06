@@ -45,11 +45,10 @@ public class StockDAOFactory {
         throw new IllegalArgumentException("Data source not found");
     }
 
-    switch (stockDAOType) {
-      case SIMPLE:
-        return new SimpleStockDAO(stockDataSource);
-      default:
-        throw new IllegalArgumentException("stock DAO not found");
+    if (stockDAOType == StockDAOType.SIMPLE) {
+      return new SimpleStockDAO(stockDataSource);
+    } else {
+      throw new IllegalArgumentException("stock DAO not found");
     }
   }
 
