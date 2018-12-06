@@ -14,6 +14,8 @@ import org.jfree.data.xy.XYDataset;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -123,30 +125,53 @@ public class PortfolioPerformanceForm extends AbstractForm {
 
   private static class PortfolioPlotJFrame extends JFrame {
 
-    private final JFrame previousFrame;
+    private final JFrame previousJFrame;
     private final Portfolio portfolio;
     private final Date startDate;
     private final Date endDate;
     private JFreeChart jFreeChart;
 
-    private PortfolioPlotJFrame(JFrame previousFrame, Portfolio portfolio,
+    private PortfolioPlotJFrame(JFrame previousJFrame, Portfolio portfolio,
                                 Date startDate, Date endDate) {
       super();
-      this.previousFrame = previousFrame;
+      this.previousJFrame = previousJFrame;
       this.portfolio = portfolio;
       this.startDate = startDate;
       this.endDate = endDate;
       this.initComponents();
       this.setTitles();
+      this.addJFrameClosingEvent();
+      this.pack();
+      this.centerThisJFrame();
     }
 
-    protected void initComponents() {
+    private void initComponents() {
       XYDataset dataset = createDataSet();
       this.jFreeChart = createChart(dataset);
       ChartPanel chartPanel = new ChartPanel(jFreeChart);
       chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
       chartPanel.setBackground(Color.white);
       add(chartPanel);
+    }
+
+    private void addJFrameClosingEvent() {
+      this.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          showPrevious();
+        }
+      });
+    }
+
+    private void showPrevious() {
+      GUIUtils.showPrevious(previousJFrame, this);
+    }
+
+    private void centerThisJFrame() {
+      Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+      int x = (int) (dim.getWidth() / 2 - this.getSize().getWidth() / 2);
+      int y = (int) (dim.getHeight() / 2 - this.getSize().getHeight() / 2);
+      this.setLocation(x, y);
     }
 
     private void setTitles() {
