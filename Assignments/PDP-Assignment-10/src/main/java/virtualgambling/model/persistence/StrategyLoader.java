@@ -17,7 +17,7 @@ public class StrategyLoader implements Loader {
   private final BigDecimal amountToInvest;
   private final double commissionPercentage;
 
-  public StrategyLoader(SerDes<Strategy> serDes, EnhancedUserModel enhancedUserModel,
+  public StrategyLoader(EnhancedUserModel enhancedUserModel, SerDes<Strategy> serDes,
                         String portfolioName, BigDecimal amountToInvest,
                         double commissionPercentage) {
     this.serDes = Utils.requireNonNull(serDes);
