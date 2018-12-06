@@ -1,7 +1,5 @@
 package virtualgambling.controller.command.persistantusermodelcommand;
 
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -39,8 +37,7 @@ public class LoadPortfolioCommand extends AbstractPersistableUserModelCommand {
 
   @Override
   public void execute() {
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(this.path, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(this.path, Constants.PORTFOLIO_TYPE);
 
     try {
       this.persistableUserModel.loadIntoModel(new PortfolioLoader(persistableUserModel, serDes));

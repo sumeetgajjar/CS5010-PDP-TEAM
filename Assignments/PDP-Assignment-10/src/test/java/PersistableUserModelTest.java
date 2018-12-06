@@ -51,8 +51,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     userModel.createPortfolio(PORTFOLIO_P1);
 
     Path test = Utils.getPathInDefaultFolder(Paths.get(PORTFOLIO_P1 + ".json"));
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
     userModel.buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10);
 
@@ -99,8 +98,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Portfolio portfolio = userModel.getPortfolio("p2");
     Path test = Utils.getPathInDefaultFolder(Paths.get("p2" + ".json"));
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
     try {
       userModel.persistFromModel(new PortfolioPersister(serDes,
@@ -143,8 +141,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Path test = Utils.getPathInDefaultFolder(Paths.get("strategy1" + ".json"));
     JSONSerDes<Strategy> serDes = new JSONSerDes<>(test,
-            new TypeToken<RecurringWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.RECURRING_STRATEGY_TYPE);
 
     // serialize the strategy
     try {
@@ -172,8 +169,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Path oneTimeStrategyPath = Utils.getPathInDefaultFolder(Paths.get("strategy2" + ".json"));
     JSONSerDes<Strategy> oneTimeSerde = new JSONSerDes<>(oneTimeStrategyPath,
-            new TypeToken<OneTimeWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.ONETIME_STRATEGY_TYPE);
     Strategy oneTimeStrategy = new OneTimeWeightedInvestmentStrategy(startCalendar.getTime(),
             stocksWeights);
 
@@ -205,8 +201,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Path test = null;
     try {
-      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
-      }.getType());
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
       Assert.fail("should have failed");
     } catch (IllegalArgumentException e) {
       Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
@@ -225,8 +220,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
       Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
     }
 
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
     try {
       userModel.persistFromModel(new PortfolioPersister(null, portfolio));
@@ -319,13 +313,9 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     if (Files.notExists(test)) {
       Files.createFile(test);
     }
-    JSONSerDes<Portfolio> portfolioJSONSerDes = new JSONSerDes<>(test,
-            new TypeToken<Portfolio>() {
-            }.getType());
+    JSONSerDes<Portfolio> portfolioJSONSerDes = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
-    JSONSerDes<Strategy> strategyJSONSerder = new JSONSerDes<>(test,
-            new TypeToken<Portfolio>() {
-            }.getType());
+    JSONSerDes<Strategy> strategyJSONSerder = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
     try {
       userModel.loadIntoModel(new PortfolioLoader(userModel, portfolioJSONSerDes));
@@ -352,8 +342,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
       throw new FileNotFoundException("add a file that has a manually created portfolio");
     }
 
-    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, Constants.PORTFOLIO_TYPE);
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
@@ -390,8 +379,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     }
 
     JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
-            new TypeToken<RecurringWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.RECURRING_STRATEGY_TYPE);
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
@@ -429,8 +417,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     }
 
     JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
-            new TypeToken<OneTimeWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.ONETIME_STRATEGY_TYPE);
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
@@ -483,8 +470,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
               "}").getBytes());
     }
 
-    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, Constants.PORTFOLIO_TYPE);
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 

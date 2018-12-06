@@ -1,7 +1,5 @@
 package virtualgambling.controller.command.persistantusermodelcommand;
 
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -12,7 +10,6 @@ import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.persistence.StrategyLoader;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
-import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
 /**
@@ -56,8 +53,7 @@ public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelC
   public void execute() {
 
     JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
-            new TypeToken<RecurringWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.RECURRING_STRATEGY_TYPE);
 
     try {
       this.persistableUserModel.loadIntoModel(new StrategyLoader(persistableUserModel, serDes,

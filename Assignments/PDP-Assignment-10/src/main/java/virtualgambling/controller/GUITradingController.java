@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import util.Constants;
 import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
@@ -237,8 +238,7 @@ public class GUITradingController implements Controller {
 
       try {
         JSONSerDes<Strategy> serDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<RecurringWeightedInvestmentStrategy>() {
-                }.getType());
+                Constants.RECURRING_STRATEGY_TYPE);
         userModel.loadIntoModel(new StrategyLoader(userModel, serDes, portfolioName,
                 amountToInvest, commissionPercentage));
         return true;
@@ -253,8 +253,7 @@ public class GUITradingController implements Controller {
                                 Set<String> tickerNames) {
       try {
         JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<RecurringWeightedInvestmentStrategy>() {
-                }.getType());
+                Constants.RECURRING_STRATEGY_TYPE);
         Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
                 Utils.getStocksWithWeights(tickerNames), dayFrequency);
 
@@ -272,8 +271,7 @@ public class GUITradingController implements Controller {
                                 Set<String> tickerNames) {
       try {
         JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<RecurringWeightedInvestmentStrategy>() {
-                }.getType());
+                Constants.RECURRING_STRATEGY_TYPE);
         Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
                 Utils.getStocksWithWeights(tickerNames), dayFrequency, endDate);
 
@@ -291,8 +289,7 @@ public class GUITradingController implements Controller {
             Double> stockWeights) {
       try {
         JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<RecurringWeightedInvestmentStrategy>() {
-                }.getType());
+                Constants.RECURRING_STRATEGY_TYPE);
         Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
                 stockWeights, dayFrequency);
 
@@ -310,8 +307,7 @@ public class GUITradingController implements Controller {
                                 Map<String, Double> stockWeights) {
       try {
         JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<RecurringWeightedInvestmentStrategy>() {
-                }.getType());
+                Constants.RECURRING_STRATEGY_TYPE);
         Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
                 stockWeights, dayFrequency, endDate);
 
@@ -328,8 +324,7 @@ public class GUITradingController implements Controller {
     public boolean loadPortfolio(String filePath) {
       try {
         JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<Portfolio>() {
-                }.getType());
+                Constants.PORTFOLIO_TYPE);
         userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
         return true;
       } catch (Exception e) {
@@ -342,8 +337,7 @@ public class GUITradingController implements Controller {
     public boolean savePortfolio(String portfolioName, String filePath) {
       try {
         JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
-                new TypeToken<Portfolio>() {
-                }.getType());
+                Constants.PORTFOLIO_TYPE);
         userModel.persistFromModel(new PortfolioPersister(jsonSerDes,
                 userModel.getPortfolio(portfolioName)));
         return true;
