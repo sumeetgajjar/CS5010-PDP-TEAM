@@ -1,7 +1,6 @@
 package virtualgambling.view.guiview;
 
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,17 +15,26 @@ import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to get the cost basis of a portfolio. It extends {@link
+ * AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class GetPortfolioCostBasisForm extends AbstractForm {
 
   private final MainForm mainForm;
   protected final Features features;
 
-  public GetPortfolioCostBasisForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a object of GetPortfolioCostBasisForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public GetPortfolioCostBasisForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Portfolio Cost basis");
   }
 

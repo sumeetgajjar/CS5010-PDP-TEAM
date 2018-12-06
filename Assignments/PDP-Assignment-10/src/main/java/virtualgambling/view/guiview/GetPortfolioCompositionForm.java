@@ -1,6 +1,5 @@
 package virtualgambling.view.guiview;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.util.Optional;
 
@@ -10,11 +9,21 @@ import virtualgambling.controller.Features;
 import virtualgambling.model.bean.Portfolio;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to get the composition of a portfolio. It extends {@link
+ * CreatePortfolioForm} to reduce the effort in implementing the common functionality.
  */
 public class GetPortfolioCompositionForm extends CreatePortfolioForm {
 
-  public GetPortfolioCompositionForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a object of GetPortfolioCompositionForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public GetPortfolioCompositionForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
+
     super(mainForm, features);
     this.setTitle("Portfolio Composition");
   }
