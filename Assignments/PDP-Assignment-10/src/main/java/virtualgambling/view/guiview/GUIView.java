@@ -11,9 +11,9 @@ import virtualgambling.view.View;
 public interface GUIView extends View {
 
   /**
-   * Sets the given Features, available for this View.
+   * Sets the given Features for this View.
    *
-   * @param features the feature available to this view
+   * @param features the feature for this view
    */
   void addFeatures(Features features);
 
