@@ -13,7 +13,19 @@ import virtualgambling.model.stockdatasource.AlphaVantageAPIStockDataSource;
 import virtualgambling.model.stockdatasource.SimpleStockDataSource;
 import virtualgambling.model.stockdatasource.StockDataSource;
 
+/**
+ * {@link StockDAOFactory} uses the factory pattern to generate an instance of {@link StockDAO}
+ * given the {@link StockDAOType} and the {@link StockDataSourceType}.
+ */
 public class StockDAOFactory {
+  /**
+   * Constructs an instance of {@link StockDAO} given the {@link StockDAOType} and the {@link
+   * StockDataSourceType}.
+   *
+   * @param stockDAOType        stock DAO type
+   * @param stockDataSourceType stock Data source type
+   * @return stock DAO instance
+   */
   public static StockDAO fromStockDAOAndDataSource(StockDAOType stockDAOType,
                                                    StockDataSourceType stockDataSourceType) {
     StockDataSource stockDataSource;
