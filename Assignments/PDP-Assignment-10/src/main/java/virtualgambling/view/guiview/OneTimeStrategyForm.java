@@ -11,13 +11,13 @@ public class OneTimeStrategyForm extends AbstractForm {
 
   private final Features features;
 
-  public OneTimeStrategyForm(JFrame previousJFrame, Features features) {
-    super(previousJFrame);
+  public OneTimeStrategyForm(MainForm mainForm, Features features) {
+    super(mainForm);
     this.features = features;
   }
 
   @Override
   protected void initComponents() {
-
+    this.add(new JLabel("One Time"));
   }
 }
