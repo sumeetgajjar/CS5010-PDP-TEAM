@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
@@ -111,6 +113,34 @@ public class GUITradingController implements Controller {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
       }
+    }
+
+    @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
+                                                        int dayFrequency, Set<String> tickerNames
+            , BigDecimal amountToInvest, double commission) {
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
+                                                        Date endDate, int dayFrequency,
+                                                        Set<String> tickerNames, BigDecimal amountToInvest, double commission) {
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
+                                                        int dayFrequency,
+                                                        Map<String, Double> stockWeights,
+                                                        BigDecimal amountToInvest,
+                                                        double commission) {
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate, Date endDate, int dayFrequency, Map<String, Double> stockWeights, BigDecimal amountToInvest, double commission) {
+      return Optional.empty();
     }
 
     @Override

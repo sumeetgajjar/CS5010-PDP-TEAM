@@ -24,17 +24,20 @@ public class SelectStrategyForm extends AbstractForm {
   protected void initComponents() {
     this.setLayout(new GridLayout(4, 1));
 
-    JButton oneTimeDifferentWeights = new JButton("One Time with Different Stock weights");
+    JButton oneTimeDifferentWeights = new JButton("One Time Strategy");
+    oneTimeDifferentWeights.addActionListener(e -> {
+      OneTimeStrategyForm oneTimeStrategyForm =
+              new OneTimeStrategyForm(this, features);
+      GUIUtils.showPrevious(oneTimeStrategyForm, this);
+    });
     this.add(oneTimeDifferentWeights);
 
-    JButton oneTimeSameWeights = new JButton("One Time with Same Stock weights");
-    this.add(oneTimeSameWeights);
-
-    JButton recurringDifferentWeights = new JButton("Recurring with Different Stock weights");
+    JButton recurringDifferentWeights = new JButton("Recurring Strategy");
+    recurringDifferentWeights.addActionListener(e -> {
+      RecurrentStrategyForm recurrentStrategyForm =
+              new RecurrentStrategyForm(this, features);
+      GUIUtils.showPrevious(recurrentStrategyForm, this);
+    });
     this.add(recurringDifferentWeights);
-
-    JButton recurringSameWeights = new JButton("Recurring with Same Stock weights");
-    this.add(recurringSameWeights);
-
   }
 }
