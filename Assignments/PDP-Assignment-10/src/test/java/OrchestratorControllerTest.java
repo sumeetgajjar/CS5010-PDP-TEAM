@@ -64,7 +64,7 @@ public class OrchestratorControllerTest {
               TestUtils.getWelcomeMessage() + System.lineSeparator()
                       + TestUtils.getMenuMessageOfOrchestrator()
                       + System.lineSeparator()
-                      + TestUtils.getMenuMessageOfEnhanceTradingController()
+                      + TestUtils.getMenuMessageOfPersistableTradingController()
                       + System.lineSeparator();
       Assert.assertEquals(expectedOutput, appendable.toString());
     }

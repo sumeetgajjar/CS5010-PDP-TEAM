@@ -96,7 +96,11 @@ public class TradingController extends AbstractController {
       this.displayOnView("Cannot get Price from API, please try after sometime or try " +
               "reducing the number of distinct shares to purchase");
     } catch (RuntimeException e) {
-      this.displayOnView(e.getMessage());
+      if (Objects.nonNull(e.getCause())) {
+        this.displayOnView(e.getCause().getMessage());
+      } else {
+        this.displayOnView(e.getMessage());
+      }
     }
   }
 

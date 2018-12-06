@@ -167,4 +167,23 @@ public class PersistableControllerPersistableModelTest extends EnhancedTradingCo
     Assert.assertEquals(expectedOutput.toString(), appendable.toString());
   }
 
+  @Test
+  public void loadingPortfolioWhereFileDoesNotExistDoesNotWork() {
+    Readable readable = new StringReader("12 Files/FILE_NOT_EXISTS.json quit");
+
+    Appendable appendable = new StringBuffer();
+    Controller controller = getController(readable, appendable);
+
+    controller.run();
+
+    StringBuilder expectedOutput = new StringBuilder(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator()).append(Constants.LOAD_PORTFOLIO_FROM_FILE);
+    expectedOutput.append(System.lineSeparator()).append("/Users/chintanshah/courses/cs5010/team" +
+            "-projects/CS5010-PDP-TEAM/Assignments/PDP-Assignment-10/Files/FILE_NOT_EXISTS.json " +
+            "(No such file or directory)");
+    expectedOutput.append(System.lineSeparator()).append(getMenuStringOfController());
+    expectedOutput.append(System.lineSeparator());
+
+    Assert.assertEquals(expectedOutput.toString(), appendable.toString());
+  }
 }
