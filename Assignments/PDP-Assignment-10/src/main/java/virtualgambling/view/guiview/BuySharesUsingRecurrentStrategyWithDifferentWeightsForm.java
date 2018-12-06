@@ -36,6 +36,7 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
+    this.setTitle("Buy Shares");
   }
 
   @Override

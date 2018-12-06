@@ -36,6 +36,7 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
+    this.setTitle("Buy Shares");
   }
 
   @Override

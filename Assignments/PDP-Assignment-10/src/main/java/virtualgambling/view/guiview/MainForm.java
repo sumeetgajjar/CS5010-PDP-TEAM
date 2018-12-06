@@ -23,6 +23,7 @@ public class MainForm extends AbstractForm implements GUIView {
     super(null);
     this.display("Welcome to Virtual Trading");
     this.setVisible(true);
+    this.setTitle("Virtual Trading");
   }
 
   @Override

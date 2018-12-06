@@ -39,6 +39,7 @@ public class PortfolioPerformanceForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Portfolio Performance");
   }
 
   @Override

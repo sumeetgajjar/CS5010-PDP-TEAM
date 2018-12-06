@@ -23,6 +23,7 @@ public class BuySharesForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Buy Shares");
   }
 
   @Override

@@ -24,6 +24,7 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Portfolio Cost basis");
   }
 
   @Override
