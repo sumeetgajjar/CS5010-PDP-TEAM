@@ -18,29 +18,41 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 2:19 AM, 12/6/18
+ * This class represents a GUI form to Persists a Strategy with different weights. It extends {@link
+ * AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
   protected final Features features;
+  protected final Map<String, Double> stockPercentageMap;
+
+  protected File selectedFile;
+  protected JTextField stockPercentageJTextField;
+  protected JLabel stockPercentageJLabel;
+
   private JLabel filePathLabel;
   private JButton addStockJButton;
   private JTextField stockNameJTextField;
   private JTextArea stocksJTextArea;
-  protected File selectedFile;
 
-  protected final Map<String, Double> stockPercentageMap;
-  protected JTextField stockPercentageJTextField;
-  protected JLabel stockPercentageJLabel;
+  /**
+   * Constructs a object of PersistRecurrentStrategyWithDifferentWeightsForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public PersistRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
 
-  public PersistRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Persist Strategy");
@@ -121,23 +133,37 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     this.add(container);
   }
 
-  private void addActionListenerToAddStockButton() {
-    addStockJButton.addActionListener(
-            this.getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+  protected boolean executeFeature(Date startDate,
+                                   JTextField endDateTextField,
+                                   int dayFrequency) {
+
+    boolean success;
+    if (endDateTextField.getText().isEmpty()) {
+      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+              dayFrequency,
+              this.stockPercentageMap);
+    } else {
+      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
+      if (Objects.isNull(endDate)) {
+        return false;
+      }
+      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+              endDate,
+              dayFrequency,
+              this.stockPercentageMap);
+    }
+    return success;
   }
 
-  private ActionListener getSelectStrategyFileActionListener() {
-    return e -> {
-      this.selectedFile = getFileToSaveUsingFileChooser();
-      if (Objects.nonNull(this.selectedFile)) {
-        this.filePathLabel.setText(String.format("%s%s", PORTFOLIO_FILE_LABEL_TEXT,
-                selectedFile.getAbsolutePath()));
-      }
-    };
-
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
+    return getActionListenerForAddStockButtonForDifferentWeight(
+            stocksJTextArea,
+            stockNameJTextField,
+            stockPercentageJTextField,
+            this.stockPercentageMap,
+            this.mainForm::displayError);
   }
 
   private ActionListener getActionListenerForExecuteButton(
@@ -174,37 +200,15 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     };
   }
 
-  protected boolean executeFeature(Date startDate,
-                                   JTextField endDateTextField,
-                                   int dayFrequency) {
-
-    boolean success;
-    if (endDateTextField.getText().isEmpty()) {
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
-              dayFrequency,
-              this.stockPercentageMap);
-    } else {
-      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
-      if (Objects.isNull(endDate)) {
-        return false;
+  private ActionListener getSelectStrategyFileActionListener() {
+    return e -> {
+      this.selectedFile = getFileToSaveUsingFileChooser();
+      if (Objects.nonNull(this.selectedFile)) {
+        this.filePathLabel.setText(String.format("%s%s", PORTFOLIO_FILE_LABEL_TEXT,
+                selectedFile.getAbsolutePath()));
       }
-      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
-              endDate,
-              dayFrequency,
-              this.stockPercentageMap);
-    }
-    return success;
-  }
+    };
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
-    return getActionListenerForAddStockButtonForDifferentWeight(
-            stocksJTextArea,
-            stockNameJTextField,
-            stockPercentageJTextField,
-            this.stockPercentageMap,
-            this.mainForm::displayError);
   }
 
   private boolean areInputsEmpty(JTextField startDateTextField,
@@ -212,5 +216,13 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
 
     return isStartDateTextFieldEmpty(startDateTextField) ||
             isRecurringIntervalTextFieldEmpty(recurringIntervalDaysTextField);
+  }
+
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            this.getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 }
