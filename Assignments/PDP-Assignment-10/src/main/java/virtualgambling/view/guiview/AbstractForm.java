@@ -2,11 +2,10 @@ package virtualgambling.view.guiview;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.function.Consumer;
@@ -27,6 +26,10 @@ public abstract class AbstractForm extends JFrame {
   public static final String EMPTY_QUANTITY_STRING_MESSAGE = "Quantity cannot be empty";
   public static final String EMPTY_COMMISSION_STRING_MESSAGE = "Commission cannot be empty";
   public static final String EMPTY_END_DATE_ERROR_MESSAGE = "End date cannot be empty";
+  public static final String EMPTY_RECURRING_INTERVAL_ERROR_MESSAGE = "Recurring Interval cannot " +
+          "be empty";
+  public static final String EMPTY_AMOUNT_TO_INVEST_ERROR_MESSAGE = "Amount to invest cannot be " +
+          "empty";
   public static final String EMPTY_START_DATE_ERROR_MESSAGE = "Start date cannot be empty";
   public static final String PORTFOLIO_FILE_LABEL_TEXT = "Portfolio File Path:";
 
@@ -118,6 +121,30 @@ public abstract class AbstractForm extends JFrame {
     return number;
   }
 
+  protected BigDecimal getBigDecimalFromTextField(JTextField jTextField,
+                                                  Consumer<String> displayErrorConsumer) {
+    String bigDecimalString = jTextField.getText();
+    BigDecimal number = null;
+    try {
+      number = new BigDecimal(bigDecimalString);
+    } catch (NumberFormatException e) {
+      displayErrorConsumer.accept(String.format("Unparseable Number, %s", e.getMessage()));
+    }
+    return number;
+  }
+
+  protected Integer getIntegerFromTextField(JTextField jTextField,
+                                            Consumer<String> displayErrorConsumer) {
+    String integerString = jTextField.getText();
+    Integer number = null;
+    try {
+      number = Integer.parseInt(integerString);
+    } catch (NumberFormatException e) {
+      displayErrorConsumer.accept(String.format("Unparseable Number, %s", e.getMessage()));
+    }
+    return number;
+  }
+
   protected Double getDoubleFromTextField(JTextField jTextField,
                                           Consumer<String> displayErrorConsumer) {
 
@@ -200,6 +227,24 @@ public abstract class AbstractForm extends JFrame {
   protected boolean isEndDateTextFieldEmpty(JTextField endDateJTextField) {
     if (this.isTextFieldEmpty(endDateJTextField)) {
       this.showError(AbstractForm.EMPTY_END_DATE_ERROR_MESSAGE);
+      return true;
+    }
+
+    return false;
+  }
+
+  protected boolean isRecurringIntervalTextFieldEmpty(JTextField recurringIntervalJTextField) {
+    if (this.isTextFieldEmpty(recurringIntervalJTextField)) {
+      this.showError(AbstractForm.EMPTY_RECURRING_INTERVAL_ERROR_MESSAGE);
+      return true;
+    }
+
+    return false;
+  }
+
+  protected boolean isAmountToInvestTextFieldEmpty(JTextField recurringIntervalJTextField) {
+    if (this.isTextFieldEmpty(recurringIntervalJTextField)) {
+      this.showError(AbstractForm.EMPTY_AMOUNT_TO_INVEST_ERROR_MESSAGE);
       return true;
     }
 
