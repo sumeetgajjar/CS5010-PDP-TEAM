@@ -22,7 +22,6 @@ import virtualgambling.view.guiview.MainForm;
 public class TradingApp {
 
   public static void main(String[] args) {
-    runGUITradingApp();
     if (args.length == 2) {
       if (args[0].equals("-view")) {
         switch (args[1]) {

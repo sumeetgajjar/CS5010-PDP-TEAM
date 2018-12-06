@@ -13,7 +13,6 @@ import virtualgambling.view.TextView;
 public class EnhancedTradingControllerPersistableModelTest extends
         EnhancedTradingControllerEnhancedModelTest {
 
-
   @Before
   public void setUp() {
     this.enhancedUserModel = TestUtils.getEmptyPersistableUserModel();
