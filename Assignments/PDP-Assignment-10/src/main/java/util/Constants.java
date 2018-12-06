@@ -47,9 +47,6 @@ public class Constants {
 
   public static final String INVALID_INPUT = "Invalid input";
 
-  public static final String PORTFOLIO_FILE_SAVE_MESSAGE = "Please enter the file name of the " +
-          "portfolio to save ";
-
   public static final String PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE = "Portfolio Successfully " +
           "Loaded";
 
@@ -59,4 +56,6 @@ public class Constants {
 
   public static final String PORTFOLIO_FILE_SAVE_NAME_MESSAGE = "Enter the absolute path of file " +
           "to save the portfolio";
+
+  public static final String PORTFOLIO_SUCCESSFULLY_SAVED_MESSAGE = "Portfolio successfully saved";
 }

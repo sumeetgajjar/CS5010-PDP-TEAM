@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 import util.Constants;
 import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadPortfolioCommand;
+import virtualgambling.controller.command.persistantusermodelcommand.SavePortfolioCommand;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.view.View;
 
@@ -59,6 +60,25 @@ public class PersistableTradingController extends EnhancedTradingController {
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadStrategyFromFileCommand() {
+    return null;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getSavePortfolioToFileCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = this.getPortfolioNameFromUser(supplier, consumer);
+      String filePath = getStringInputFromUser(Constants.PORTFOLIO_FILE_SAVE_NAME_MESSAGE,
+              supplier,
+              consumer);
+
+      return new SavePortfolioCommand(
+              this.persistableUserModel,
+              portfolioName,
+              Paths.get(filePath),
+              consumer);
+    };
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadPortfolioFromFileCommand() {
     return (supplier, consumer) -> {
       String filePath = getStringInputFromUser(Constants.LOAD_PORTFOLIO_FROM_FILE,
               supplier,
@@ -66,15 +86,6 @@ public class PersistableTradingController extends EnhancedTradingController {
 
       return new LoadPortfolioCommand(this.persistableUserModel, Paths.get(filePath), consumer);
     };
-
-  }
-
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getSavePortfolioToFileCommand() {
-    return null;
-  }
-
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadPortfolioFromFileCommand() {
-    return null;
   }
 
   @Override
