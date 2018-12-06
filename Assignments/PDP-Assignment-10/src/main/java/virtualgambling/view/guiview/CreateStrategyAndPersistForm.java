@@ -8,17 +8,26 @@ import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 1:52 AM, 12/6/18
+ * This class represents a GUI form to create strategy and persists it to a file. It extends {@link
+ * AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class CreateStrategyAndPersistForm extends AbstractForm {
 
   private final MainForm mainForm;
   private final Features features;
 
-  public CreateStrategyAndPersistForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of CreateStrategyAndPersistForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public CreateStrategyAndPersistForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Create and Persist Strategy");
   }
 

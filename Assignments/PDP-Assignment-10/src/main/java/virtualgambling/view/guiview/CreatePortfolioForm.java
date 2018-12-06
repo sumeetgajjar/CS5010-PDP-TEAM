@@ -7,20 +7,29 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to create a portfolio. It extends {@link AbstractForm} to reduce
+ * the effort in implementing the common functionality.
  */
 public class CreatePortfolioForm extends AbstractForm {
 
   protected final MainForm mainForm;
   protected final Features features;
 
+  /**
+   * Constructs a object of CreatePortfolioForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
   public CreatePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Portfolio creation");
   }
 
