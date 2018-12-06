@@ -53,9 +53,10 @@ public abstract class AbstractForm extends JFrame {
    * Protected Constructor to be used by the Dervied classes.
    *
    * @param previousJFrame the reference of the previous Jframe
+   * @throws IllegalArgumentException if the given param is null
    */
-  protected AbstractForm(JFrame previousJFrame) {
-    this.previousJFrame = previousJFrame;
+  protected AbstractForm(JFrame previousJFrame) throws IllegalArgumentException {
+    this.previousJFrame = Utils.requireNonNull(previousJFrame);
     this.currentJFrame = this;
     this.initComponents();
     this.postInit();

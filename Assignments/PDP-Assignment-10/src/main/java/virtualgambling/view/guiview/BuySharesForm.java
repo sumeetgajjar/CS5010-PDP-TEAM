@@ -8,21 +8,30 @@ import java.util.Optional;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to buys shares. It extends {@link AbstractForm} to reduce the
+ * effort in implementing the common functionality.
  */
 public class BuySharesForm extends AbstractForm {
 
   private final MainForm mainForm;
   private final Features features;
 
-  public BuySharesForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a BuySharesForm Object with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public BuySharesForm(MainForm mainForm, Features features) throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Buy Shares");
   }
 
