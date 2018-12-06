@@ -1,5 +1,6 @@
 package virtualgambling.controller;
 
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.function.Supplier;
 
 import util.Constants;
 import virtualgambling.controller.command.Command;
+import virtualgambling.controller.command.persistantusermodelcommand.LoadAndExecuteStrategyCommand;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadPortfolioCommand;
 import virtualgambling.controller.command.persistantusermodelcommand.SavePortfolioCommand;
 import virtualgambling.model.PersistableUserModel;
@@ -49,7 +51,7 @@ public class PersistableTradingController extends EnhancedTradingController {
     commandMap.put("11", getBuySharesWithRecurringSameWeightsCommand());
     commandMap.put("12", getLoadPortfolioFromFileCommand());
     commandMap.put("13", getSavePortfolioToFileCommand());
-    commandMap.put("14", getLoadStrategyFromFileCommand());
+    commandMap.put("14", getLoadStrategyFromFileAndExecuteCommand());
     commandMap.put("15", getSaveStrategyToFileCommand());
 
     return commandMap;
@@ -59,8 +61,25 @@ public class PersistableTradingController extends EnhancedTradingController {
     return null;
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadStrategyFromFileCommand() {
-    return null;
+  private BiFunction<Supplier<String>, Consumer<String>, Command>
+  getLoadStrategyFromFileAndExecuteCommand() {
+    return (supplier, consumer) -> {
+      String portfolioName = this.getPortfolioNameFromUser(supplier, consumer);
+      String filePath = getStringInputFromUser(Constants.LOAD_STRATEGY_FROM_FILE,
+              supplier,
+              consumer);
+      BigDecimal amountToInvest = getBigDecimalInputFromUser(
+              Constants.INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
+      double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
+
+      return new LoadAndExecuteStrategyCommand(
+              this.persistableUserModel,
+              portfolioName,
+              Paths.get(filePath),
+              amountToInvest,
+              commission,
+              consumer);
+    };
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getSavePortfolioToFileCommand() {

@@ -58,4 +58,15 @@ public class Constants {
           "to save the portfolio";
 
   public static final String PORTFOLIO_SUCCESSFULLY_SAVED_MESSAGE = "Portfolio successfully saved";
+
+  public static final String STRATEGY_SUCCESSFULLY_LOADED_MESSAGE = "Strategy Successfully " +
+          "Loaded";
+
+  public static final String LOAD_STRATEGY_FROM_FILE = "Enter the absolute path of " +
+          "Strategy file to load";
+
+  public static final String STRATEGY_FILE_SAVE_NAME_MESSAGE = "Enter the absolute path of file " +
+          "to save the Strategy";
+
+  public static final String STRATEGY_SUCCESSFULLY_SAVED_MESSAGE = "Strategy successfully saved";
 }
