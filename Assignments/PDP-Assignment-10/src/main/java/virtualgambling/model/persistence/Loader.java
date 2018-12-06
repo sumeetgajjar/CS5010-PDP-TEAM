@@ -16,9 +16,9 @@ public interface Loader {
   /**
    * Loads data into the host model that uses this loader.
    *
+   * @param persistableUserModel the user model into which it should load the data
    * @throws IOException          if an IO operation fails
    * @throws PersistenceException if persistence operation other than IO operation fails
-   * @param persistableUserModel
    */
   void load(PersistableUserModel persistableUserModel) throws IOException, PersistenceException;
 }
