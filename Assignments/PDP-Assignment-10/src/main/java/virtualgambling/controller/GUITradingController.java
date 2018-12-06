@@ -138,7 +138,7 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date date,
                                                         Map<String, Double> stockWeights,
                                                         BigDecimal amountToInvest,
                                                         double commission) {
