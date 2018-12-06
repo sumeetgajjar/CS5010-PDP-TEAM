@@ -21,7 +21,7 @@ import virtualgambling.view.TextView;
  */
 public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelTest {
 
-  private EnhancedUserModel enhancedUserModel;
+  protected EnhancedUserModel enhancedUserModel;
 
   @Before
   public void setUp() {
