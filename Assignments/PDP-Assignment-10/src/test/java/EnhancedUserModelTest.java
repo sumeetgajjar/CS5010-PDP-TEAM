@@ -1077,7 +1077,10 @@ public class EnhancedUserModelTest extends UserModelTest {
                       dayFrequency,
                       endCalendar.getTime());
 
-      enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+      try {
+        enhancedUserModel.createPortfolio(PORTFOLIO_P1);
+      } catch (IllegalArgumentException ignored) {
+      }
       for (double commission : Arrays.asList(0, 10)) {
         List<SharePurchaseOrder> sharePurchaseOrders = enhancedUserModel.buyShares(PORTFOLIO_P1,
                 new BigDecimal(amountToInvest),
