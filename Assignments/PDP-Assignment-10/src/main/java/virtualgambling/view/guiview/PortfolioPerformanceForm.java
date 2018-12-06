@@ -44,18 +44,20 @@ import virtualgambling.model.bean.Portfolio;
  */
 public class PortfolioPerformanceForm extends AbstractForm {
 
+  private final MainForm mainForm;
   private final TradingFeatures tradingFeatures;
 
   /**
    * Constructs a object of PortfolioPerformanceForm with the given params.
    *
-   * @param mainForm the mainForm
+   * @param mainForm        the mainForm
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
   public PortfolioPerformanceForm(MainForm mainForm, TradingFeatures tradingFeatures)
           throws IllegalArgumentException {
     super(mainForm);
+    this.mainForm = Utils.requireNonNull(mainForm);
     this.tradingFeatures = Utils.requireNonNull(tradingFeatures);
     this.setTitle("Portfolio Performance");
   }
@@ -137,8 +139,12 @@ public class PortfolioPerformanceForm extends AbstractForm {
 
   private void plotGraph(Portfolio portfolio, Date startDate, Date endDate) {
     SwingUtilities.invokeLater(() -> {
-      PortfolioPlotJFrame ex = new PortfolioPlotJFrame(this, portfolio, startDate, endDate);
-      ex.setVisible(true);
+      try {
+        PortfolioPlotJFrame ex = new PortfolioPlotJFrame(this, portfolio, startDate, endDate);
+        ex.setVisible(true);
+      } catch (Exception e) {
+        this.mainForm.displayError(e.getMessage());
+      }
     });
   }
 
