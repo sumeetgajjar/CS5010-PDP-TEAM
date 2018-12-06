@@ -23,19 +23,19 @@ public class CreatePortfolioForm extends AbstractForm {
 
   @Override
   protected void initComponents() {
-    JPanel jPanel = new JPanel();
+    JPanel container = new JPanel();
 
     JLabel jLabel = new JLabel("Please enter the name of the Portfolio");
-    jPanel.add(jLabel);
+    container.add(jLabel);
 
     JTextField portfolioNameJTextField = new JTextField(10);
-    jPanel.add(portfolioNameJTextField);
+    container.add(portfolioNameJTextField);
 
     ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    jPanel.add(buttonJPanel);
-    this.add(jPanel);
+    container.add(buttonJPanel);
+    this.add(container);
   }
 
   protected ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
