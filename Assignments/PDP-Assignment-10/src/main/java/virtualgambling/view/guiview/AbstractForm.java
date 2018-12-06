@@ -50,9 +50,9 @@ public abstract class AbstractForm extends JFrame {
   protected final JFrame currentJFrame;
 
   /**
-   * Protected Constructor to be used by the Dervied classes.
+   * Protected Constructor to be used by the Derived classes.
    *
-   * @param previousJFrame the reference of the previous Jframe
+   * @param previousJFrame the reference of the previous JFrame
    */
   protected AbstractForm(JFrame previousJFrame) {
     this.previousJFrame = previousJFrame;
