@@ -18,19 +18,24 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 /**
  * Created by gajjar.s, on 2:19 AM, 12/6/18
  */
-public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
+public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
   protected final Features features;
   protected final Map<String, Double> stockPercentageMap;
   protected JTextField stockPercentageJTextField;
   protected JLabel stockPercentageJLabel;
+  private JButton addStockJButton;
+  private JTextArea stocksJTextArea;
+  private JTextField stockNameJTextField;
 
-  public OneTimeStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
+  public BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm,
+                                                                 Features features) {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
+    this.addActionListenerToAddStockButton();
   }
 
   @Override
@@ -43,17 +48,27 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
     container.add(jPanel1);
 
     JPanel jPanel = new JPanel();
-    jPanel.setLayout(new GridLayout(4, 2));
+    jPanel.setLayout(new GridLayout(6, 2));
 
     JLabel jLabel = new JLabel("Portfolio Name:");
     jPanel.add(jLabel);
     JTextField portfolioNameJTextField = new JTextField(10);
     jPanel.add(portfolioNameJTextField);
 
-    JLabel startDateLabel = new JLabel("Investment date (YYYY-MM-DD):");
+    JLabel startDateLabel = new JLabel("Start date (YYYY-MM-DD):");
     jPanel.add(startDateLabel);
     JTextField startDateTextField = new JTextField(10);
     jPanel.add(startDateTextField);
+
+    JLabel endDateLabel = new JLabel("End date (YYYY-MM-DD):");
+    jPanel.add(endDateLabel);
+    JTextField endDateTextField = new JTextField(10);
+    jPanel.add(endDateTextField);
+
+    JLabel recurringIntervalLabel = new JLabel("Recurring Interval (Days):");
+    jPanel.add(recurringIntervalLabel);
+    JTextField recurringIntervalDaysTextField = new JTextField(10);
+    jPanel.add(recurringIntervalDaysTextField);
 
     JLabel amountToInvestLabel = new JLabel("Amount To Invest (Dollars):");
     jPanel.add(amountToInvestLabel);
@@ -67,13 +82,13 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
 
     container.add(jPanel);
 
-    JTextArea stocksJTextArea = new JTextArea();
+    stocksJTextArea = new JTextArea();
     stocksJTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
     stocksJTextArea.setEditable(false);
 
     JPanel stocksAdditionPanel = new JPanel();
     stocksAdditionPanel.add(new JLabel("Ticker Name:"));
-    JTextField stockNameJTextField = new JTextField(10);
+    stockNameJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockNameJTextField);
 
     stockPercentageJLabel = new JLabel("Stock Percentage:");
@@ -81,12 +96,7 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
     stockPercentageJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockPercentageJTextField);
 
-    JButton addStockJButton = new JButton("Add Stock");
-    addStockJButton.addActionListener(
-            getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+    addStockJButton = new JButton("Add Stock");
 
     stocksAdditionPanel.add(addStockJButton);
 
@@ -100,31 +110,32 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
             getActionListenerForExecuteButton(
                     portfolioNameJTextField,
                     startDateTextField,
+                    endDateTextField,
+                    recurringIntervalDaysTextField,
                     amountToInvestTextField,
                     commissionPercentageJTextField)));
 
     this.add(container);
   }
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
-    return getActionListenerForAddStockButtonForDifferentWeight(
-            stocksJTextArea,
-            stockNameJTextField,
-            stockPercentageJTextField,
-            this.stockPercentageMap,
-            this.mainForm::displayError);
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 
-  private ActionListener
-  getActionListenerForExecuteButton(JTextField portfolioNameJTextField,
-                                    JTextField startDateTextField,
-                                    JTextField amountToInvestTextField,
-                                    JTextField commissionPercentageJTextField) {
+  private ActionListener getActionListenerForExecuteButton(
+          JTextField portfolioNameJTextField,
+          JTextField startDateTextField,
+          JTextField endDateTextField,
+          JTextField recurringIntervalDaysTextField,
+          JTextField amountToInvestTextField,
+          JTextField commissionPercentageJTextField) {
     return e -> {
       if (this.areInputsEmpty(portfolioNameJTextField, startDateTextField,
-              amountToInvestTextField,
+              recurringIntervalDaysTextField, amountToInvestTextField,
               commissionPercentageJTextField)) {
         return;
       }
@@ -132,6 +143,12 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
       String portfolioName = portfolioNameJTextField.getText();
       Date startDate = getDateFromTextField(startDateTextField, this.mainForm::displayError);
       if (Objects.isNull(startDate)) {
+        return;
+      }
+
+      Integer dayFrequency = getIntegerFromTextField(recurringIntervalDaysTextField,
+              this.mainForm::displayError);
+      if (Objects.isNull(dayFrequency)) {
         return;
       }
 
@@ -148,7 +165,8 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
       }
 
       Optional<List<SharePurchaseOrder>> sharePurchaseOrders = executeFeature(
-              portfolioName, startDate, amountToInvest, commissionPercentage);
+              portfolioName, startDate, dayFrequency, amountToInvest, commissionPercentage,
+              endDateTextField);
 
       this.displaySharePurchaseOrder(sharePurchaseOrders, this.mainForm::display);
     };
@@ -156,19 +174,45 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
                                                               Date startDate,
+                                                              Integer dayFrequency,
                                                               BigDecimal amountToInvest,
-                                                              Double commissionPercentage) {
-    return this.features.buyShares(portfolioName, startDate, this.stockPercentageMap,
-            amountToInvest, commissionPercentage);
+                                                              Double commissionPercentage,
+                                                              JTextField endDateTextField) {
+    if (endDateTextField.getText().isEmpty()) {
+      return this.features.buyShares(portfolioName, startDate, dayFrequency,
+              this.stockPercentageMap,
+              amountToInvest, commissionPercentage);
+    } else {
+      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
+      if (Objects.isNull(endDate)) {
+        return Optional.empty();
+      }
+      return this.features.buyShares(portfolioName, startDate, endDate,
+              dayFrequency,
+              this.stockPercentageMap, amountToInvest, commissionPercentage);
+    }
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
+    return getActionListenerForAddStockButtonForDifferentWeight(
+            stocksJTextArea,
+            stockNameJTextField,
+            stockPercentageJTextField,
+            this.stockPercentageMap,
+            this.mainForm::displayError);
   }
 
   private boolean areInputsEmpty(JTextField portfolioNameJTextField,
                                  JTextField startDateTextField,
+                                 JTextField recurringIntervalDaysTextField,
                                  JTextField amountToInvestTextField,
                                  JTextField commissionPercentageJTextField) {
 
     return isPortfolioNameTextFieldEmpty(portfolioNameJTextField) ||
             isStartDateTextFieldEmpty(startDateTextField) ||
+            isRecurringIntervalTextFieldEmpty(recurringIntervalDaysTextField) ||
             isAmountToInvestTextFieldEmpty(amountToInvestTextField) ||
             isCommissionTextFieldEmpty(commissionPercentageJTextField);
   }

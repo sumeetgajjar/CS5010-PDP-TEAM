@@ -17,6 +17,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.StrategyLoader;
+import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
@@ -239,6 +240,82 @@ public class GUITradingController implements Controller {
                 }.getType());
         userModel.loadIntoModel(new StrategyLoader(userModel, serDes, portfolioName,
                 amountToInvest, commissionPercentage));
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
+      }
+    }
+
+    @Override
+    public boolean saveStrategy(String filePath, Date startDate, int dayFrequency,
+                                Set<String> tickerNames) {
+      try {
+        JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<RecurringWeightedInvestmentStrategy>() {
+                }.getType());
+        Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
+                Utils.getStocksWithWeights(tickerNames), dayFrequency);
+
+        userModel.persistFromModel(new StrategyPersister(jsonSerDes, strategy));
+
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
+      }
+    }
+
+    @Override
+    public boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
+                                Set<String> tickerNames) {
+      try {
+        JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<RecurringWeightedInvestmentStrategy>() {
+                }.getType());
+        Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
+                Utils.getStocksWithWeights(tickerNames), dayFrequency, endDate);
+
+        userModel.persistFromModel(new StrategyPersister(jsonSerDes, strategy));
+
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
+      }
+    }
+
+    @Override
+    public boolean saveStrategy(String filePath, Date startDate, int dayFrequency, Map<String,
+            Double> stockWeights) {
+      try {
+        JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<RecurringWeightedInvestmentStrategy>() {
+                }.getType());
+        Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
+                stockWeights, dayFrequency);
+
+        userModel.persistFromModel(new StrategyPersister(jsonSerDes, strategy));
+
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
+      }
+    }
+
+    @Override
+    public boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
+                                Map<String, Double> stockWeights) {
+      try {
+        JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<RecurringWeightedInvestmentStrategy>() {
+                }.getType());
+        Strategy strategy = new RecurringWeightedInvestmentStrategy(startDate,
+                stockWeights, dayFrequency, endDate);
+
+        userModel.persistFromModel(new StrategyPersister(jsonSerDes, strategy));
+
         return true;
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());

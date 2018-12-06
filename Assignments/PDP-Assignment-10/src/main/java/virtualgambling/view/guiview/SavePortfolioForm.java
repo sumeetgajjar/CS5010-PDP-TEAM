@@ -48,8 +48,7 @@ public class SavePortfolioForm extends AbstractForm {
     filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField
-    );
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
     outerPanel.add(fileChooserPanel);
@@ -85,9 +84,9 @@ public class SavePortfolioForm extends AbstractForm {
 
       boolean success = this.features.savePortfolio(portfolioName, selectedFile.getAbsolutePath());
       if (success) {
-        this.showPrevious();
         this.mainForm.display(String.format("Portfolio '%s' saved successfully",
                 portfolioName));
+        this.showPrevious();
       }
     };
   }
