@@ -86,13 +86,15 @@ public interface Features {
   boolean loadAndExecuteStrategy(String portfolioName, String filePath, BigDecimal amountToInvest
           , double commissionPercentage);
 
-  boolean saveStrategy(Date startDate, int dayFrequency, Set<String> tickerNames);
+  boolean saveStrategy(String filePath, Date startDate, int dayFrequency, Set<String> tickerNames);
 
-  boolean saveStrategy(Date startDate, Date endDate, int dayFrequency, Set<String> tickerNames);
+  boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
+                       Set<String> tickerNames);
 
-  boolean saveStrategy(Date startDate, int dayFrequency, Map<String, Double> stockWeights);
+  boolean saveStrategy(String filePath, Date startDate, int dayFrequency,
+                       Map<String, Double> stockWeights);
 
-  boolean saveStrategy(Date startDate, Date endDate, int dayFrequency,
+  boolean saveStrategy(String filePath, Date startDate, Date endDate, int dayFrequency,
                        Map<String, Double> stockWeights);
 
   boolean loadPortfolio(String filePath);
