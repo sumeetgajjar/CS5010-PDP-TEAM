@@ -1,6 +1,5 @@
 package virtualgambling.view.guiview;
 
-import java.awt.HeadlessException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Optional;
@@ -9,11 +8,21 @@ import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 3:13 AM, 12/5/18
+ * This class represents a GUI form to get the value of a portfolio. It extends {@link
+ * GetPortfolioCostBasisForm} to reduce the effort in implementing the common functionality.
  */
 public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
 
-  public GetPortfolioValueForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a object of GetPortfolioValueForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public GetPortfolioValueForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
+
     super(mainForm, features);
     this.setTitle("Portfolio Value");
   }
