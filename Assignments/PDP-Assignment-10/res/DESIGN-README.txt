@@ -1,8 +1,45 @@
+Licenses for 3rd party libraries:
 GSON : https://github.com/google/gson/blob/master/LICENSE
 jFreeChart : http://www.jfree.org/gpl.php
 
+Changes to the previous design: (Assignment 10)
+We use the Data Access Object pattern and we have a Data Access Object - StockDAO that can hook into itself different data sources
+to get stock data.
 
-Changes to the previous design:
+We were initially passing StockDAO around during construction of Portfolio and other such dependencies - however, in this design
+we have refactored it and are using a combination of Strategy Design Pattern and Factory Design pattern in this manner:
+1. We use a factory - StockDAOFactory that takes in the type of StockDAO and type of StockDataSource and creates an instance
+of the StockDAO.
+2. Instead of passing around the StockDAO every where, we are now passing StockDAOType and StockDataSourceType - as part of a
+Strategy pattern and when the "strategy" needs to be executed, the types are passed to the factory to get a concrete instance.
+
+There are 2 reasons of doing this:
+1. We can serialize and deserialize efficiently - instead of serializing and deserializing the entire stockDAO and stockDataSource,
+we end up serializing and deserializing only their types (see FILE-FORMAT-README.txt)
+2. We can switch the DAO and the DataSource at run time instead of creating a new model object - for e.g, the user can switch from
+In-memory data to Alpha Vantage at run time instead of restarting the application and losing all his/her work.
+
+This is the only change in design from the previous design.
+
+New features and enhancements:
+We have a new model that supports the strategy pattern discussed above (using 2 setters - one for StockDAOType and one
+for StockDataSourceType)
+and it supports persistence using composition through 2 classes - Loader and Persister.
+
+Loader takes a serialized strategy/portfolio, deserializes it and loads it into the model
+Persister takes a strategy/portfolio through the model and serializes it.
+
+We have 2 implementations each of these features - one for Strategy and one for Portfolio.
+
+We have a GUI now using Java Swing and in order to support that, we have a new controller,
+Features interface (that supports the UI features) and a new View that uses actionListeners and
+Features delegate to the controller.
+
+We also have a new Controller to support the new persistence features and work on the console.
+In order to support that feature, we have have extended the older design and simply added new commands.
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Changes to the previous design: (Assignment 9 - these changes were made in assignment 9)
 
 1. We are now returning a Portfolio bean instead of returning Strings from UserModel:
 Justification: In order to incorporate feedback from the CodeWalk, our design now returns an
