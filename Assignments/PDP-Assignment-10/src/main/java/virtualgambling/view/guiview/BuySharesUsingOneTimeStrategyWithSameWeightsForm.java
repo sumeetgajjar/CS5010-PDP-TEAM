@@ -14,9 +14,11 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
  * This class represents a GUI form to buys shares of Equal weights using the one time strategy. It
- * extends {@link AbstractForm} to reduce the effort in implementing the common functionality.
+ * extends {@link BuySharesUsingOneTimeStrategyWithDifferentWeightsForm} to reduce the effort in
+ * implementing the common functionality.
  */
-public class BuySharesUsingOneTimeStrategyWithSameWeightsForm extends BuySharesUsingOneTimeStrategyWithDifferentWeightsForm {
+public class BuySharesUsingOneTimeStrategyWithSameWeightsForm
+        extends BuySharesUsingOneTimeStrategyWithDifferentWeightsForm {
 
   /**
    * Constructs a object of BuySharesUsingOneTimeStrategyWithSameWeightsForm with the given params.

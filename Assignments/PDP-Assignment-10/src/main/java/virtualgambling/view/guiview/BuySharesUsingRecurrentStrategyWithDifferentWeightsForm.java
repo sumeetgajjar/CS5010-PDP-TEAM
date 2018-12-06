@@ -20,11 +20,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 2:19 AM, 12/6/18
+ * This class represents a GUI form to buys shares of different weights using the recurrent
+ * strategy. It extends {@link AbstractForm} to reduce the effort in implementing the common
+ * functionality.
  */
 public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
@@ -37,11 +40,21 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
   private JTextArea stocksJTextArea;
   private JTextField stockNameJTextField;
 
+  /**
+   * Constructs a object of BuySharesUsingRecurrentStrategyWithDifferentWeightsForm with the given
+   * params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
   public BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm,
-                                                                 Features features) {
+                                                                 Features features)
+          throws IllegalArgumentException {
+
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Buy Shares");
@@ -127,6 +140,38 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
     this.add(container);
   }
 
+  protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
+                                                              Date startDate,
+                                                              Integer dayFrequency,
+                                                              BigDecimal amountToInvest,
+                                                              Double commissionPercentage,
+                                                              JTextField endDateTextField) {
+    if (endDateTextField.getText().isEmpty()) {
+      return this.features.buyShares(portfolioName, startDate, dayFrequency,
+              this.stockPercentageMap,
+              amountToInvest, commissionPercentage);
+    } else {
+      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
+      if (Objects.isNull(endDate)) {
+        return Optional.empty();
+      }
+      return this.features.buyShares(portfolioName, startDate, endDate,
+              dayFrequency,
+              this.stockPercentageMap, amountToInvest, commissionPercentage);
+    }
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
+    return getActionListenerForAddStockButtonForDifferentWeight(
+            stocksJTextArea,
+            stockNameJTextField,
+            stockPercentageJTextField,
+            this.stockPercentageMap,
+            this.mainForm::displayError);
+  }
+
   private void addActionListenerToAddStockButton() {
     addStockJButton.addActionListener(
             getActionListenerForAddStockButton(
@@ -179,38 +224,6 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
 
       this.displaySharePurchaseOrder(sharePurchaseOrders, this.mainForm::display);
     };
-  }
-
-  protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
-                                                              Date startDate,
-                                                              Integer dayFrequency,
-                                                              BigDecimal amountToInvest,
-                                                              Double commissionPercentage,
-                                                              JTextField endDateTextField) {
-    if (endDateTextField.getText().isEmpty()) {
-      return this.features.buyShares(portfolioName, startDate, dayFrequency,
-              this.stockPercentageMap,
-              amountToInvest, commissionPercentage);
-    } else {
-      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
-      if (Objects.isNull(endDate)) {
-        return Optional.empty();
-      }
-      return this.features.buyShares(portfolioName, startDate, endDate,
-              dayFrequency,
-              this.stockPercentageMap, amountToInvest, commissionPercentage);
-    }
-  }
-
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
-    return getActionListenerForAddStockButtonForDifferentWeight(
-            stocksJTextArea,
-            stockNameJTextField,
-            stockPercentageJTextField,
-            this.stockPercentageMap,
-            this.mainForm::displayError);
   }
 
   private boolean areInputsEmpty(JTextField portfolioNameJTextField,

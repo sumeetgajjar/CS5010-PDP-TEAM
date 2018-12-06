@@ -141,12 +141,12 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
             this.mainForm::displayError);
   }
 
-  private void addActionListenerToAddStockButton() {
-    addStockJButton.addActionListener(
-            getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+  protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
+                                                              Date startDate,
+                                                              BigDecimal amountToInvest,
+                                                              Double commissionPercentage) {
+    return this.features.buyShares(portfolioName, startDate, this.stockPercentageMap,
+            amountToInvest, commissionPercentage);
   }
 
   private ActionListener getActionListenerForExecuteButton(
@@ -187,12 +187,12 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
     };
   }
 
-  protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
-                                                              Date startDate,
-                                                              BigDecimal amountToInvest,
-                                                              Double commissionPercentage) {
-    return this.features.buyShares(portfolioName, startDate, this.stockPercentageMap,
-            amountToInvest, commissionPercentage);
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 
   private boolean areInputsEmpty(JTextField portfolioNameJTextField,

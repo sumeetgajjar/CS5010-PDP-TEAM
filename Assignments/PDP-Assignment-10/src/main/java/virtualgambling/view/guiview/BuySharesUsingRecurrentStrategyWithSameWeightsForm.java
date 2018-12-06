@@ -15,11 +15,24 @@ import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 3:44 AM, 12/6/18
+ * This class represents a GUI form to buys shares of same weights using the recurrent strategy. It
+ * extends {@link BuySharesUsingRecurrentStrategyWithDifferentWeightsForm} to reduce the effort in
+ * implementing the common functionality.
  */
-public class BuySharesUsingRecurrentStrategyWithSameWeightsForm extends BuySharesUsingRecurrentStrategyWithDifferentWeightsForm {
+public class BuySharesUsingRecurrentStrategyWithSameWeightsForm
+        extends BuySharesUsingRecurrentStrategyWithDifferentWeightsForm {
 
-  public BuySharesUsingRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of BuySharesUsingRecurrentStrategyWithSameWeightsForm with the given
+   * params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public BuySharesUsingRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
+
     super(mainForm, features);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
