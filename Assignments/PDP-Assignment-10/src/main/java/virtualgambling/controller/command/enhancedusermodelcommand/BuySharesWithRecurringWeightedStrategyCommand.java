@@ -19,7 +19,7 @@ public class BuySharesWithRecurringWeightedStrategyCommand extends
 
   private final String portfolioName;
   private final BigDecimal amountToInvest;
-  private final Strategy strategy;
+  protected final Strategy strategy;
   private final double commission;
   private final Consumer<String> consumer;
 

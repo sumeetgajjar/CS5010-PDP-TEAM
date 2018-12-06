@@ -1,5 +1,12 @@
 package virtualgambling.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import virtualgambling.controller.command.Command;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.view.View;
 
@@ -14,6 +21,58 @@ public class PersistenceTradingController extends EnhancedTradingController {
   public PersistenceTradingController(PersistableUserModel enhancedUserModel, View view)
           throws IllegalArgumentException {
     super(enhancedUserModel, view);
+  }
+
+  @Override
+  protected Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> getCommandMap() {
+    Map<String, BiFunction<Supplier<String>, Consumer<String>, Command>> commandMap =
+            new HashMap<>();
+
+    commandMap.put("1", getCreatePortfolioCommand());
+    commandMap.put("2", getGetAllPortfolioCommand());
+    commandMap.put("3", getCostBasisCommand());
+    commandMap.put("4", getPortfolioValueCommand());
+    commandMap.put("5", getGetCompositionCommand());
+    commandMap.put("6", getRemainingCapitalCommand());
+    commandMap.put("7", getBuySharesWithCommissionCommand());
+    commandMap.put("8", getBuySharesWithDifferentWeightsCommand());
+    commandMap.put("9", getBuySharesWithSameWeightsCommand());
+    commandMap.put("10", getBuySharesWithRecurringDifferentWeightsCommand());
+    commandMap.put("11", getBuySharesWithRecurringSameWeightsCommand());
+    commandMap.put("12", getLoadPortfolioFromFileCommand());
+    commandMap.put("13", getSavePortfolioToFileCommand());
+    commandMap.put("14", getLoadStrategyFromFileCommand());
+    commandMap.put("15", getSaveStrategyToFileCommand());
+
+    return commandMap;
+  }
+
+  @Override
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
+    BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
+            super.getBuySharesWithRecurringSameWeightsCommand();
+    return null;
+  }
+
+  @Override
+  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringDifferentWeightsCommand() {
+    return super.getBuySharesWithRecurringDifferentWeightsCommand();
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getSaveStrategyToFileCommand() {
+    return null;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadStrategyFromFileCommand() {
+    return null;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getSavePortfolioToFileCommand() {
+    return null;
+  }
+
+  private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadPortfolioFromFileCommand() {
+    return null;
   }
 
   @Override
