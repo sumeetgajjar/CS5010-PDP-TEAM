@@ -184,9 +184,9 @@ public class PersistableTradingController extends EnhancedTradingController {
     };
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getLoadPortfolioFromFileCommand() {
-    
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getLoadPortfolioFromFileCommand() {
+
     return (supplier, consumer) -> {
       String filePath = getStringInputFromUser(Constants.LOAD_PORTFOLIO_FROM_FILE,
               supplier,
