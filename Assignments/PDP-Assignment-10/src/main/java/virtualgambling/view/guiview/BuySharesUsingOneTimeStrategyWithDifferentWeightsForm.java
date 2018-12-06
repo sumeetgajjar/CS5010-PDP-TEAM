@@ -20,28 +20,40 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 2:19 AM, 12/6/18
+ * This class represents a GUI form to buys shares of different weights using the one time strategy.
+ * It extends {@link AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
   protected final Features features;
+  protected final Map<String, Double> stockPercentageMap;
   private JButton addStockJButton;
   private JTextArea stocksJTextArea;
   private JTextField stockNameJTextField;
-  protected final Map<String, Double> stockPercentageMap;
   protected JTextField stockPercentageJTextField;
   protected JLabel stockPercentageJLabel;
 
+  /**
+   * Constructs a object of BuySharesUsingOneTimeStrategyWithDifferentWeightsForm with the given
+   * params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
   public BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(MainForm mainForm,
-                                                               Features features) {
+                                                               Features features)
+          throws IllegalArgumentException {
+
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
     this.setTitle("Buy Shares");
@@ -116,9 +128,11 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
   }
 
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
+
     return getActionListenerForAddStockButtonForDifferentWeight(
             stocksJTextArea,
             stockNameJTextField,
@@ -135,11 +149,12 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
                     stockPercentageJTextField));
   }
 
-  private ActionListener
-  getActionListenerForExecuteButton(JTextField portfolioNameJTextField,
-                                    JTextField startDateTextField,
-                                    JTextField amountToInvestTextField,
-                                    JTextField commissionPercentageJTextField) {
+  private ActionListener getActionListenerForExecuteButton(
+          JTextField portfolioNameJTextField,
+          JTextField startDateTextField,
+          JTextField amountToInvestTextField,
+          JTextField commissionPercentageJTextField) {
+
     return e -> {
       if (this.areInputsEmpty(portfolioNameJTextField, startDateTextField,
               amountToInvestTextField,
@@ -185,9 +200,9 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
                                  JTextField amountToInvestTextField,
                                  JTextField commissionPercentageJTextField) {
 
-    return isPortfolioNameTextFieldEmpty(portfolioNameJTextField) ||
-            isStartDateTextFieldEmpty(startDateTextField) ||
-            isAmountToInvestTextFieldEmpty(amountToInvestTextField) ||
-            isCommissionTextFieldEmpty(commissionPercentageJTextField);
+    return isPortfolioNameTextFieldEmpty(portfolioNameJTextField)
+            || isStartDateTextFieldEmpty(startDateTextField)
+            || isAmountToInvestTextFieldEmpty(amountToInvestTextField)
+            || isCommissionTextFieldEmpty(commissionPercentageJTextField);
   }
 }

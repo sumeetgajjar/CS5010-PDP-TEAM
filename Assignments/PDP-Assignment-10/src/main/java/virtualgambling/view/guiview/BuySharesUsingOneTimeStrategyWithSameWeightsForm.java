@@ -13,20 +13,32 @@ import virtualgambling.controller.Features;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 4:40 AM, 12/6/18
+ * This class represents a GUI form to buys shares of Equal weights using the one time strategy. It
+ * extends {@link AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class BuySharesUsingOneTimeStrategyWithSameWeightsForm extends BuySharesUsingOneTimeStrategyWithDifferentWeightsForm {
 
-  public BuySharesUsingOneTimeStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of BuySharesUsingOneTimeStrategyWithSameWeightsForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public BuySharesUsingOneTimeStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
+
     super(mainForm, features);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
   }
 
   @Override
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
+
     return getActionListenerForAddStockButtonForSameWeight(stocksJTextArea, stockNameJTextField,
             this.stockPercentageMap);
   }
