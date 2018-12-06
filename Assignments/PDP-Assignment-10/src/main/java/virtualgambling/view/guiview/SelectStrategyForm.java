@@ -22,12 +22,12 @@ public class SelectStrategyForm extends AbstractForm {
 
   @Override
   protected void initComponents() {
-    this.setLayout(new GridLayout(4, 1));
+    this.setLayout(new GridLayout(2, 1));
 
     JButton oneTimeDifferentWeights = new JButton("One Time Strategy");
     oneTimeDifferentWeights.addActionListener(e -> {
       OneTimeStrategyForm oneTimeStrategyForm =
-              new OneTimeStrategyForm(this, features);
+              new OneTimeStrategyForm(mainForm, features);
       GUIUtils.showPrevious(oneTimeStrategyForm, this);
     });
     this.add(oneTimeDifferentWeights);
@@ -35,7 +35,7 @@ public class SelectStrategyForm extends AbstractForm {
     JButton recurringDifferentWeights = new JButton("Recurring Strategy");
     recurringDifferentWeights.addActionListener(e -> {
       RecurrentStrategyForm recurrentStrategyForm =
-              new RecurrentStrategyForm(this, features);
+              new RecurrentStrategyForm(mainForm, features);
       GUIUtils.showPrevious(recurrentStrategyForm, this);
     });
     this.add(recurringDifferentWeights);
