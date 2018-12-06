@@ -1,7 +1,5 @@
 package virtualgambling.controller.command.persistantusermodelcommand;
 
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -47,8 +45,7 @@ public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
   @Override
   public void execute() {
     Portfolio portfolio = this.persistableUserModel.getPortfolio(portfolioName);
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(path, new TypeToken<Portfolio>() {
-    }.getType());
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(path, Constants.PORTFOLIO_TYPE);
 
     try {
       this.persistableUserModel.persistFromModel(new PortfolioPersister(serDes,

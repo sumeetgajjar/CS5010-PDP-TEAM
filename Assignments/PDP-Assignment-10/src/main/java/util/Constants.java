@@ -1,10 +1,28 @@
 package util;
 
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+
+import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
+import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
+
 /**
  * This class represents a Constants class. It contains various Constants that can be used by any
  * class.
  */
 public class Constants {
+
+  public static final Type PORTFOLIO_TYPE = new TypeToken<Portfolio>() {
+  }.getType();
+
+  public static final Type RECURRING_STRATEGY_TYPE =
+          new TypeToken<RecurringWeightedInvestmentStrategy>() {
+          }.getType();
+  public static final Type ONETIME_STRATEGY_TYPE =
+          new TypeToken<OneTimeWeightedInvestmentStrategy>() {
+          }.getType();
 
   public static final String INVESTMENT_AMOUNT_MESSAGE = "Please enter the amount to invest";
 

@@ -46,8 +46,7 @@ public class SaveStrategyCommand extends AbstractPersistableUserModelCommand {
   @Override
   public void execute() {
     JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
-            new TypeToken<RecurringWeightedInvestmentStrategy>() {
-            }.getType());
+            Constants.RECURRING_STRATEGY_TYPE);
 
     try {
       this.persistableUserModel.persistFromModel(new StrategyPersister(serDes, strategy));
