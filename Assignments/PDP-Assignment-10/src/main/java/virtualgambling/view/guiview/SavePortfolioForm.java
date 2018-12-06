@@ -31,16 +31,19 @@ public class SavePortfolioForm extends AbstractForm {
     outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
 
     JPanel fileChooserPanel = new JPanel();
-    fileChooserPanel.setLayout(new GridLayout(2, 1));
+    fileChooserPanel.setLayout(new GridLayout(3, 1));
 
-    JPanel jPanel = new JPanel();
-    JLabel jLabel = new JLabel("Please enter the name of the Portfolio to save");
-    jPanel.add(jLabel);
-
+    JPanel jPanel1 = new JPanel();
+    jPanel1.add(new JLabel("Please enter the name of the Portfolio to save"));
     JTextField portfolioNameJTextField = new JTextField(10);
-    jPanel.add(portfolioNameJTextField);
+    jPanel1.add(portfolioNameJTextField);
+    fileChooserPanel.add(jPanel1);
 
-    fileChooserPanel.add(jPanel);
+    JPanel jPanel2 = new JPanel();
+    jPanel2.add(new JLabel("Please enter the name of the Portfolio File to save"));
+    JTextField fileNameJTextField = new JTextField(10);
+    jPanel2.add(fileNameJTextField);
+    fileChooserPanel.add(jPanel2);
 
     JButton selectPortfolioFileButton = new JButton("Select portfolio file");
     selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
@@ -51,7 +54,8 @@ public class SavePortfolioForm extends AbstractForm {
     filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField,
+            fileNameJTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
     outerPanel.add(fileChooserPanel);
@@ -71,7 +75,8 @@ public class SavePortfolioForm extends AbstractForm {
     };
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
+  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField,
+                                                             JTextField fileNameJTextField) {
     return e -> {
 
       if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
