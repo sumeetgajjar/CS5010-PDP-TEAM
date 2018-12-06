@@ -35,11 +35,7 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
     this.mainForm = mainForm;
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
-    addStockJButton.addActionListener(
-            getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+    this.addActionListenerToAddStockButton();
   }
 
   @Override
@@ -110,6 +106,7 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
     this.add(container);
   }
 
+
   protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
                                                               JTextField stockNameJTextField,
                                                               JTextField stockPercentageJTextField) {
@@ -119,6 +116,14 @@ public class BuySharesUsingOneTimeStrategyWithDifferentWeightsForm extends Abstr
             stockPercentageJTextField,
             this.stockPercentageMap,
             this.mainForm::displayError);
+  }
+
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 
   private ActionListener
