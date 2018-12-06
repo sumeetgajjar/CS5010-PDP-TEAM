@@ -38,10 +38,14 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
     JPanel container = new JPanel();
     container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
+    JPanel jPanel1 = new JPanel();
+    jPanel1.add(new JLabel("Leave End date field blank if there is no end date"));
+    container.add(jPanel1);
+
     JPanel jPanel = new JPanel();
     jPanel.setLayout(new GridLayout(6, 2));
 
-    JLabel jLabel = new JLabel("Portfolio Name: ");
+    JLabel jLabel = new JLabel("Portfolio Name:");
     jPanel.add(jLabel);
     JTextField portfolioNameJTextField = new JTextField(10);
     jPanel.add(portfolioNameJTextField);
@@ -61,7 +65,7 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
     JTextField recurringIntervalDaysTextField = new JTextField(10);
     jPanel.add(recurringIntervalDaysTextField);
 
-    JLabel amountToInvestLabel = new JLabel("Amount To Invest:");
+    JLabel amountToInvestLabel = new JLabel("Amount To Invest (Dollars):");
     jPanel.add(amountToInvestLabel);
     JTextField amountToInvestTextField = new JTextField(10);
     jPanel.add(amountToInvestTextField);
