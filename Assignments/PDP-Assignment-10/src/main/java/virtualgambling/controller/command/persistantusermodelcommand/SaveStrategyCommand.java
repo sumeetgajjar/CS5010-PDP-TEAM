@@ -34,7 +34,9 @@ public class SaveStrategyCommand extends AbstractPersistableUserModelCommand {
    * @throws IllegalArgumentException if any of the given params are null
    */
   public SaveStrategyCommand(PersistableUserModel persistableUserModel, Strategy strategy,
-                             Path path, Consumer<String> consumer) throws IllegalArgumentException {
+                             Path path, Consumer<String> consumer)
+          throws IllegalArgumentException {
+
     super(persistableUserModel);
     this.strategy = Utils.requireNonNull(strategy);
     this.path = Utils.requireNonNull(path);

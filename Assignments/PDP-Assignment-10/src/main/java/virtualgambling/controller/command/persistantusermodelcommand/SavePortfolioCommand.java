@@ -25,7 +25,7 @@ public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
   private final Consumer<String> consumer;
 
   /**
-   * Constructs a Object of SavePortfolioCommand with the given params
+   * Constructs a Object of SavePortfolioCommand with the given params.
    *
    * @param persistableUserModel the persistable user model
    * @param portfolioName        the name of the portfolio to save
@@ -34,7 +34,9 @@ public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
    * @throws IllegalArgumentException if any of the given params are null
    */
   public SavePortfolioCommand(PersistableUserModel persistableUserModel, String portfolioName,
-                              Path path, Consumer<String> consumer) throws IllegalArgumentException {
+                              Path path, Consumer<String> consumer)
+          throws IllegalArgumentException {
+
     super(persistableUserModel);
     this.persistableUserModel = Utils.requireNonNull(persistableUserModel);
     this.portfolioName = Utils.requireNonNull(portfolioName);

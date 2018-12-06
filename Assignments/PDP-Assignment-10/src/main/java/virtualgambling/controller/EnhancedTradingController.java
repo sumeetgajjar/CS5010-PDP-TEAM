@@ -138,8 +138,10 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  protected Strategy getRecurringWeightedInvestmentStrategyWithSameWeights(Supplier<String> supplier,
-                                                                           Consumer<String> consumer) {
+  protected Strategy getRecurringWeightedInvestmentStrategyWithSameWeights(
+          Supplier<String> supplier,
+          Consumer<String> consumer) {
+
     Strategy strategy;
     Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
     Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
@@ -185,8 +187,9 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  protected Strategy getRecurringWeightedInvestmentStrategyWithDifferentWeights(Supplier<String> supplier
-          , Consumer<String> consumer) {
+  protected Strategy getRecurringWeightedInvestmentStrategyWithDifferentWeights(
+          Supplier<String> supplier, Consumer<String> consumer) {
+
     Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
     Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
     int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,

@@ -25,7 +25,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import virtualgambling.model.exceptions.RetryException;
 
@@ -211,7 +212,6 @@ public class Utils {
 
   /**
    * This method returns the last working day of the week before this day.
-   *
    * <p>This does not deal with public holidays, it merely treats Saturday and Sunday as holiday.
    *
    * @return the last working day of the week.

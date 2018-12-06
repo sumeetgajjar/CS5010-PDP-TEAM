@@ -9,22 +9,23 @@ import virtualgambling.model.persistence.Loader;
 import virtualgambling.model.persistence.Persister;
 
 /**
- * Created by gajjar.s, on 12:20 PM, 12/2/18
+ * This class represents an enhancement over {@link EnhancedUserModelImpl}. It implements {@link
+ * PersistableUserModel} interface. It adds the ability to persist and a given portfolio to a file
+ * and to load it back into the model.
  */
-public class PersistableUserModelImpl extends EnhancedUserModelImpl implements PersistableUserModel {
+public class PersistableUserModelImpl extends EnhancedUserModelImpl
+        implements PersistableUserModel {
 
-//  /**
-//   * Constructs a {@link PersistableUserModelImpl} object with given params.
-//   *
-//   * @param stockDAO the stockDAO
-//   * @throws IllegalArgumentException if the given stockDAO is null
-//   */
-//  public PersistableUserModelImpl(StockDAO stockDAO) throws IllegalArgumentException {
-//    super(stockDAO);
-//  }
-
+  /**
+   * Constructs a Object of {@link PersistableUserModelImpl} with the given params.
+   *
+   * @param stockDAOType        the stock DAO type
+   * @param stockDataSourceType the stockDataSource type
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public PersistableUserModelImpl(StockDAOType stockDAOType,
-                                  StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
+                                  StockDataSourceType stockDataSourceType)
+          throws IllegalArgumentException {
     super(stockDAOType, stockDataSourceType);
   }
 

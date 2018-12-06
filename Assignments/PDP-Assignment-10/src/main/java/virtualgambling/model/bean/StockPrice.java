@@ -27,11 +27,15 @@ public class StockPrice {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof StockPrice)) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof StockPrice)) {
+      return false;
+    }
     StockPrice that = (StockPrice) o;
-    return Objects.equals(getDate(), that.getDate()) &&
-            Objects.equals(stockPrice, that.stockPrice);
+    return Objects.equals(getDate(), that.getDate())
+            && Objects.equals(stockPrice, that.stockPrice);
   }
 
   @Override
