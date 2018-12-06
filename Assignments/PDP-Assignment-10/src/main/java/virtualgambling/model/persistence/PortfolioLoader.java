@@ -14,14 +14,10 @@ import virtualgambling.model.persistence.serdes.SerDes;
 public class PortfolioLoader implements Loader {
   private final PersistableUserModel userModel;
   private final SerDes<Portfolio> serDes;
-  private final String portfolioName;
 
-  public PortfolioLoader(PersistableUserModel userModel, SerDes<Portfolio> serDes,
-                         String portfolioName) {
-    //todo do we need portfolioName?
+  public PortfolioLoader(PersistableUserModel userModel, SerDes<Portfolio> serDes) {
     this.userModel = Utils.requireNonNull(userModel);
     this.serDes = Utils.requireNonNull(serDes);
-    this.portfolioName = Utils.requireNonNull(portfolioName);
   }
 
   @Override
@@ -38,7 +34,7 @@ public class PortfolioLoader implements Loader {
     userModel.setStockDataSourceType(portfolio.getStockDataSourceType());
     portfolio.getPurchases().forEach(sharePurchaseOrder ->
             userModel.buyShares(sharePurchaseOrder.getTickerName(),
-                    this.portfolioName,
+                    portfolio.getName(),
                     sharePurchaseOrder.getStockPrice().getDate(),
                     sharePurchaseOrder.getQuantity(),
                     sharePurchaseOrder.getCommissionPercentage())

@@ -69,12 +69,11 @@ public class LoadPortfolioForm extends AbstractForm {
         return;
       }
 
-      String portfolioName = this.features.loadPortfolio(selectedFile.getAbsolutePath());
+      boolean success = this.features.loadPortfolio(selectedFile.getAbsolutePath());
 
-      if (Objects.nonNull(portfolioName)) {
+      if (success) {
         this.showPrevious();
-        this.mainForm.display(String.format("Portfolio '%s' loaded Successfully",
-                portfolioName));
+        this.mainForm.display("Portfolio loaded Successfully");
       }
     };
   }

@@ -60,7 +60,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     }
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes, PORTFOLIO_P1));
+      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
     } catch (IOException e) {
       Assert.fail();
     }
@@ -75,7 +75,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Assert.assertNotEquals(userModel.getPortfolio(PORTFOLIO_P1), portfolio);
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes, PORTFOLIO_P1));
+      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
     } catch (IOException e) {
       Assert.fail();
     }
@@ -107,7 +107,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     userModel = TestUtils.getEmptyPersistableUserModel();
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes, "p2"));
+      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
     } catch (Exception e) {
       Assert.fail();
     }
@@ -292,7 +292,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
             }.getType());
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, portfolioJSONSerDes, PORTFOLIO_P1));
+      userModel.loadIntoModel(new PortfolioLoader(userModel, portfolioJSONSerDes));
       Assert.fail("should have failed");
     } catch (Exception e) {
       Assert.assertEquals("Could not deserialize portfolio", e.getMessage());

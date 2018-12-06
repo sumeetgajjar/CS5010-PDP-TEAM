@@ -31,7 +31,7 @@ public interface Features {
                                          long quantity,
                                          double commissionPercentage);
 
-  String loadPortfolio(String filePath);
+  boolean loadPortfolio(String filePath);
 
   boolean savePortfolio(String portfolioName, String filePath);
 
