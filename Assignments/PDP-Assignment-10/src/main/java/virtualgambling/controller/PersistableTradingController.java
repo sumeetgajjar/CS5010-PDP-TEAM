@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import util.Constants;
+import util.Utils;
 import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadAndExecuteStrategyCommand;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadPortfolioCommand;
@@ -18,21 +19,26 @@ import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.View;
 
+/**
+ * {@link PersistableTradingController} represents a controller in the MVC pattern that extends a
+ * {@link EnhancedTradingController} and adds new features with the possibility of persisting and
+ * loading back the portfolios and strategies.
+ */
 public class PersistableTradingController extends EnhancedTradingController {
 
   private final PersistableUserModel persistableUserModel;
 
   /**
-   * Constructs a object of {@link EnhancedTradingController} with the given params.
+   * Constructs a object of {@link PersistableTradingController} with the given params.
    *
-   * @param persistableUserModel the userModel
+   * @param persistableUserModel the persistable user model
    * @param view                 the view
    * @throws IllegalArgumentException if the given params are null
    */
   public PersistableTradingController(PersistableUserModel persistableUserModel, View view)
           throws IllegalArgumentException {
     super(persistableUserModel, view);
-    this.persistableUserModel = persistableUserModel;
+    this.persistableUserModel = Utils.requireNonNull(persistableUserModel);
   }
 
   @Override
@@ -57,6 +63,56 @@ public class PersistableTradingController extends EnhancedTradingController {
     commandMap.put("15", getSaveStrategyToFileCommand());
 
     return commandMap;
+  }
+
+  @Override
+  protected String getMenuString() {
+    return System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "1 => to create a portfolio"
+            + System.lineSeparator()
+            + "2 => to list all portfolios"
+            + System.lineSeparator()
+            + "3 => to get the cost basis of a portfolio"
+            + System.lineSeparator()
+            + "4 => to get the value of a portfolio"
+            + System.lineSeparator()
+            + "5 => to get the composition of a portfolio"
+            + System.lineSeparator()
+            + "6 => to get the remaining capital"
+            + System.lineSeparator()
+            + "7 => to buy shares of same stock"
+            + System.lineSeparator()
+            + "8 => to buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "9 => to buy shares of various stocks with equal weights"
+            + System.lineSeparator()
+            + "10 => to recurrently buy shares of various stocks with different individual weights"
+            + System.lineSeparator()
+            + "11 => to recurrently buy shares of various stocks with same individual weights"
+            + System.lineSeparator()
+            + "12 => to load a portfolio from a file"
+            + System.lineSeparator()
+            + "13 => to save a portfolio to a file"
+            + System.lineSeparator()
+            + "14 => to load a strategy from a file and apply it to a portfolio"
+            + System.lineSeparator()
+            + "15 => to create and save a strategy to a file"
+            + System.lineSeparator()
+            + "q or quit => to quit"
+            + System.lineSeparator()
+            + "Please enter a choice"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator()
+            + "All dates must be in this format 'yyyy-MM-DD'"
+            + System.lineSeparator()
+            + "While buying multiple stocks, if same stock is entered multiple times then the " +
+            "latest input will considered"
+            + System.lineSeparator()
+            + "=================================================================================="
+            + System.lineSeparator();
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getSaveStrategyToFileCommand() {
@@ -136,55 +192,5 @@ public class PersistableTradingController extends EnhancedTradingController {
 
       return new LoadPortfolioCommand(this.persistableUserModel, Paths.get(filePath), consumer);
     };
-  }
-
-  @Override
-  protected String getMenuString() {
-    return System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "1 => to create a portfolio"
-            + System.lineSeparator()
-            + "2 => to list all portfolios"
-            + System.lineSeparator()
-            + "3 => to get the cost basis of a portfolio"
-            + System.lineSeparator()
-            + "4 => to get the value of a portfolio"
-            + System.lineSeparator()
-            + "5 => to get the composition of a portfolio"
-            + System.lineSeparator()
-            + "6 => to get the remaining capital"
-            + System.lineSeparator()
-            + "7 => to buy shares of same stock"
-            + System.lineSeparator()
-            + "8 => to buy shares of various stocks with different individual weights"
-            + System.lineSeparator()
-            + "9 => to buy shares of various stocks with equal weights"
-            + System.lineSeparator()
-            + "10 => to recurrently buy shares of various stocks with different individual weights"
-            + System.lineSeparator()
-            + "11 => to recurrently buy shares of various stocks with same individual weights"
-            + System.lineSeparator()
-            + "12 => to load a portfolio from a file"
-            + System.lineSeparator()
-            + "13 => to save a portfolio to a file"
-            + System.lineSeparator()
-            + "14 => to load a strategy from a file and apply it to a portfolio"
-            + System.lineSeparator()
-            + "15 => to create and save a strategy to a file"
-            + System.lineSeparator()
-            + "q or quit => to quit"
-            + System.lineSeparator()
-            + "Please enter a choice"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator()
-            + "All dates must be in this format 'yyyy-MM-DD'"
-            + System.lineSeparator()
-            + "While buying multiple stocks, if same stock is entered multiple times then the " +
-            "latest input will considered"
-            + System.lineSeparator()
-            + "=================================================================================="
-            + System.lineSeparator();
   }
 }
