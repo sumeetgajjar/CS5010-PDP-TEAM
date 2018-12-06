@@ -28,6 +28,7 @@ public abstract class AbstractForm extends JFrame {
   public static final String EMPTY_COMMISSION_STRING_MESSAGE = "Commission cannot be empty";
   public static final String EMPTY_END_DATE_ERROR_MESSAGE = "End date cannot be empty";
   public static final String EMPTY_START_DATE_ERROR_MESSAGE = "Start date cannot be empty";
+  public static final String PORTFOLIO_FILE_LABEL_TEXT = "Portfolio File Path:";
 
   protected final JFrame previousJFrame;
   protected final JFrame currentJFrame;
@@ -168,14 +169,14 @@ public abstract class AbstractForm extends JFrame {
     return null;
   }
 
-  protected File getDirectoryToSave() {
+  protected File getFileToSave() {
     JFileChooser jFileChooser =
             new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-    jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
     jFileChooser.setApproveButtonText("Save");
 
-    int returnValue = jFileChooser.showOpenDialog(this);
+    int returnValue = jFileChooser.showSaveDialog(this);
 
     if (returnValue == JFileChooser.APPROVE_OPTION) {
       return jFileChooser.getSelectedFile();
