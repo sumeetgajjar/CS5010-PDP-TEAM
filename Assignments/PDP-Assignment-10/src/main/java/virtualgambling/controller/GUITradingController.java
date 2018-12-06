@@ -1,48 +1,54 @@
 package virtualgambling.controller;
 
+import com.google.gson.reflect.TypeToken;
+
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import virtualgambling.model.EnhancedUserModel;
+import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
+import virtualgambling.model.persistence.PortfolioLoader;
+import virtualgambling.model.persistence.PortfolioPersister;
+import virtualgambling.model.persistence.serdes.JSONSerDes;
 import virtualgambling.view.guiview.GUIView;
 
 /**
  * Created by gajjar.s, on 3:20 PM, 12/5/18
  */
 public class GUITradingController implements Controller {
-  private final EnhancedUserModel enhancedUserModel;
+  private final PersistableUserModel persistableUserModel;
   private final GUIView guiView;
 
-  public GUITradingController(EnhancedUserModel enhancedUserModel, GUIView guiView) {
-    this.enhancedUserModel = enhancedUserModel;
+  public GUITradingController(PersistableUserModel persistableUserModel, GUIView guiView) {
+    this.persistableUserModel = persistableUserModel;
     this.guiView = guiView;
   }
 
 
   @Override
   public void run() {
-    this.guiView.addFeatures(new FeaturesImpl(enhancedUserModel, guiView));
+    this.guiView.addFeatures(new FeaturesImpl(persistableUserModel, guiView));
   }
 
   private static class FeaturesImpl implements Features {
 
-    private final EnhancedUserModel enhancedUserModel;
+    private final PersistableUserModel userModel;
     private final GUIView guiView;
 
-    private FeaturesImpl(EnhancedUserModel enhancedUserModel, GUIView guiView) {
-      this.enhancedUserModel = enhancedUserModel;
+    private FeaturesImpl(PersistableUserModel userModel, GUIView guiView) {
+      this.userModel = userModel;
       this.guiView = guiView;
     }
 
     @Override
     public boolean createPortfolio(String portfolio) {
       try {
-        this.enhancedUserModel.createPortfolio(portfolio);
+        this.userModel.createPortfolio(portfolio);
         return true;
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
@@ -52,13 +58,13 @@ public class GUITradingController implements Controller {
 
     @Override
     public List<Portfolio> getAllPortfolios() {
-      return this.enhancedUserModel.getAllPortfolios();
+      return this.userModel.getAllPortfolios();
     }
 
     @Override
     public Optional<BigDecimal> getPortfolioCostBasis(String portfolio, Date date) {
       try {
-        return Optional.of(this.enhancedUserModel
+        return Optional.of(this.userModel
                 .getPortfolio(portfolio).getCostBasisIncludingCommission(date));
       } catch (PortfolioNotFoundException e) {
         this.guiView.displayError(e.getMessage());
@@ -69,7 +75,7 @@ public class GUITradingController implements Controller {
     @Override
     public Optional<BigDecimal> getPortfolioValue(String portfolio, Date date) {
       try {
-        return Optional.of(this.enhancedUserModel.getPortfolio(portfolio).getValue(date));
+        return Optional.of(this.userModel.getPortfolio(portfolio).getValue(date));
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
@@ -79,7 +85,7 @@ public class GUITradingController implements Controller {
     @Override
     public Optional<Portfolio> getPortfolioComposition(String portfolio) {
       try {
-        return Optional.of(this.enhancedUserModel.getPortfolio(portfolio));
+        return Optional.of(this.userModel.getPortfolio(portfolio));
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
@@ -88,7 +94,7 @@ public class GUITradingController implements Controller {
 
     @Override
     public BigDecimal getRemainingCapital() {
-      return this.enhancedUserModel.getRemainingCapital();
+      return this.userModel.getRemainingCapital();
     }
 
     @Override
@@ -98,7 +104,7 @@ public class GUITradingController implements Controller {
                                                   long quantity,
                                                   double commissionPercentage) {
       try {
-        return Optional.of(this.enhancedUserModel
+        return Optional.of(this.userModel
                 .buyShares(tickerName, portfolioName, date, quantity, commissionPercentage));
 
       } catch (Exception e) {
@@ -108,20 +114,30 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public String loadPortfolio(String filePath) {
+    public boolean loadPortfolio(String filePath) {
       try {
-        //todo implement this
-        return "asd";
+        JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<Portfolio>() {
+                }.getType());
+        userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+        return true;
       } catch (Exception e) {
-        return null;
+        this.guiView.displayError(e.getMessage());
+        return false;
       }
     }
 
     @Override
     public boolean savePortfolio(String portfolioName, String filePath) {
       try {
+        JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<Portfolio>() {
+                }.getType());
+        userModel.persistFromModel(new PortfolioPersister(jsonSerDes,
+                userModel.getPortfolio(portfolioName)));
         return true;
       } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
         return false;
       }
     }
