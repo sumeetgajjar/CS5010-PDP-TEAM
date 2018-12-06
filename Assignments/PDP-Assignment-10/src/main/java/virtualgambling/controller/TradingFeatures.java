@@ -221,7 +221,16 @@ public interface TradingFeatures {
 
   boolean savePortfolio(String portfolioName, String filePath);
 
+  /**
+   * Sets the {@link StockDataSourceType} that the model should operate with.
+   *
+   * @param stockDataSourceType the stockDataSourceType
+   * @return if it was successful to set the {@link StockDataSourceType}
+   */
   boolean setDataSource(StockDataSourceType stockDataSourceType);
 
+  /**
+   * When invoked will quit this Application
+   */
   void quit();
 }
