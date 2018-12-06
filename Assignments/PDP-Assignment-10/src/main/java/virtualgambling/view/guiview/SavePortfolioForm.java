@@ -79,7 +79,7 @@ public class SavePortfolioForm extends AbstractForm {
       String portfolioName = portfolioNameJTextField.getText();
 
       if (Objects.isNull(this.selectedFile)) {
-        this.mainForm.displayError("Please select the file for loading portfolio");
+        this.mainForm.displayError("Please select the file for saving portfolio");
         return;
       }
 
