@@ -230,7 +230,7 @@ public interface TradingFeatures {
   boolean setDataSource(StockDataSourceType stockDataSourceType);
 
   /**
-   * When invoked will quit this Application
+   * When invoked will quit this Application.
    */
   void quit();
 }

@@ -95,7 +95,8 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     Assert.assertEquals(value, userModel.getPortfolio(PORTFOLIO_P1).getValue(Utils.getTodayDate()));
     Assert.assertEquals(name, userModel.getPortfolio(PORTFOLIO_P1).getName());
     Assert.assertEquals(costBasisIncludingCommission,
-            userModel.getPortfolio(PORTFOLIO_P1).getCostBasisIncludingCommission(Utils.getTodayDate()));
+            userModel.getPortfolio(PORTFOLIO_P1)
+                    .getCostBasisIncludingCommission(Utils.getTodayDate()));
 
     Assert.assertEquals(userModel.getPortfolio(PORTFOLIO_P1), portfolio);
   }
