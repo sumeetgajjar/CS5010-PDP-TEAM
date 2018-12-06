@@ -69,4 +69,12 @@ public class Constants {
           "to save the Strategy";
 
   public static final String STRATEGY_SUCCESSFULLY_SAVED_MESSAGE = "Strategy successfully saved";
+
+  public static final String SELECT_STRATEGY_TO_CREATE_MESSAGE = "Enter 1 to create Recurrent " +
+          "Strategy with equal weights for given Stocks"
+          + System.lineSeparator()
+          + "Enter 2 to create Recurrent strategy with different weights for given stocks";
+
+  public static final String INVALID_OPTION_FOR_STRATEGY_CREATION_MESSAGE =
+          "Invalid option, please enter either 1 or 2";
 }

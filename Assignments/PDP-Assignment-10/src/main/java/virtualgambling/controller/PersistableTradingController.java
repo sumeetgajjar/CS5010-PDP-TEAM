@@ -13,7 +13,9 @@ import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadAndExecuteStrategyCommand;
 import virtualgambling.controller.command.persistantusermodelcommand.LoadPortfolioCommand;
 import virtualgambling.controller.command.persistantusermodelcommand.SavePortfolioCommand;
+import virtualgambling.controller.command.persistantusermodelcommand.SaveStrategyCommand;
 import virtualgambling.model.PersistableUserModel;
+import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.View;
 
 public class PersistableTradingController extends EnhancedTradingController {
@@ -58,7 +60,36 @@ public class PersistableTradingController extends EnhancedTradingController {
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getSaveStrategyToFileCommand() {
-    return null;
+    return (supplier, consumer) -> {
+
+      String filePath = getStringInputFromUser(Constants.STRATEGY_FILE_SAVE_NAME_MESSAGE,
+              supplier,
+              consumer);
+
+      long option;
+
+      while (true) {
+        option = getLongInputFromUser(Constants.SELECT_STRATEGY_TO_CREATE_MESSAGE,
+                supplier, consumer);
+
+        if (option == 1 || option == 2) {
+          break;
+        } else {
+          consumer.accept(Constants.INVALID_OPTION_FOR_STRATEGY_CREATION_MESSAGE);
+        }
+      }
+
+      Strategy strategy = null;
+      if (option == 1) {
+        strategy = this.getRecurringWeightedInvestmentStrategyWithSameWeights(supplier, consumer);
+      } else if (option == 2) {
+        strategy = this.getRecurringWeightedInvestmentStrategyWithDifferentWeights(supplier,
+                consumer);
+      }
+
+      return new SaveStrategyCommand(persistableUserModel, strategy, Paths.get(filePath), consumer);
+    };
+
   }
 
   private BiFunction<Supplier<String>,

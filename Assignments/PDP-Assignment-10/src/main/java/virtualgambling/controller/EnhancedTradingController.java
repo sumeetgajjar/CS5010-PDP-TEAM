@@ -21,6 +21,7 @@ import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWith
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.exceptions.StrategyExecutionException;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
+import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.View;
 
 /**
@@ -120,80 +121,91 @@ public class EnhancedTradingController extends TradingController {
           Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
-      Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
-      int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
-              supplier, consumer);
-      Set<String> shares = getSharesFromUser(supplier, consumer);
+
+      Strategy strategy = getRecurringWeightedInvestmentStrategyWithSameWeights(supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
               Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
-      if (Objects.nonNull(endDate)) {
-        return new BuySharesWithRecurringWeightedStrategyCommand(
-                this.enhancedUserModel,
-                portfolioName,
-                amountToInvest,
-                new RecurringWeightedInvestmentStrategy(
-                        startDate,
-                        Utils.getStocksWithWeights(shares),
-                        recurringPeriod,
-                        endDate),
-                commission,
-                consumer);
-      } else {
-        return new BuySharesWithRecurringWeightedStrategyCommand(
-                this.enhancedUserModel,
-                portfolioName,
-                amountToInvest,
-                new RecurringWeightedInvestmentStrategy(
-                        startDate,
-                        Utils.getStocksWithWeights(shares),
-                        recurringPeriod),
-                commission,
-                consumer);
-      }
+      return new BuySharesWithRecurringWeightedStrategyCommand(
+              this.enhancedUserModel,
+              portfolioName,
+              amountToInvest,
+              strategy,
+              commission,
+              consumer);
+
     };
+  }
+
+  protected Strategy getRecurringWeightedInvestmentStrategyWithSameWeights(Supplier<String> supplier,
+                                                                           Consumer<String> consumer) {
+    Strategy strategy;
+    Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
+    Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
+    int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
+            supplier, consumer);
+    Set<String> shares = getSharesFromUser(supplier, consumer);
+    if (Objects.nonNull(endDate)) {
+      strategy = new RecurringWeightedInvestmentStrategy(
+              startDate,
+              Utils.getStocksWithWeights(shares),
+              recurringPeriod,
+              endDate);
+    } else {
+      strategy = new RecurringWeightedInvestmentStrategy(
+              startDate,
+              Utils.getStocksWithWeights(shares),
+              recurringPeriod);
+    }
+    return strategy;
   }
 
   protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithRecurringDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
-      Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
-      Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
-      int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
-              supplier, consumer);
-      Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
+
+      Strategy strategy = getRecurringWeightedInvestmentStrategyWithDifferentWeights(supplier,
+              consumer);
+
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
               Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
-      if (Objects.nonNull(endDate)) {
-        return new BuySharesWithRecurringWeightedStrategyCommand(
-                this.enhancedUserModel,
-                portfolioName,
-                amountToInvest,
-                new RecurringWeightedInvestmentStrategy(
-                        startDate,
-                        sharePercentage,
-                        recurringPeriod,
-                        endDate),
-                commission,
-                consumer);
-      } else {
-        return new BuySharesWithRecurringWeightedStrategyCommand(
-                this.enhancedUserModel,
-                portfolioName,
-                amountToInvest,
-                new RecurringWeightedInvestmentStrategy(
-                        startDate,
-                        sharePercentage,
-                        recurringPeriod),
-                commission,
-                consumer);
-      }
+
+      return new BuySharesWithRecurringWeightedStrategyCommand(
+              this.enhancedUserModel,
+              portfolioName,
+              amountToInvest,
+              strategy,
+              commission,
+              consumer);
+
     };
+  }
+
+  protected Strategy getRecurringWeightedInvestmentStrategyWithDifferentWeights(Supplier<String> supplier
+          , Consumer<String> consumer) {
+    Date startDate = getDateFromUser(Constants.START_DATE_MESSAGE, supplier, consumer);
+    Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
+    int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
+            supplier, consumer);
+    Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
+    Strategy strategy;
+    if (Objects.nonNull(endDate)) {
+      strategy = new RecurringWeightedInvestmentStrategy(
+              startDate,
+              sharePercentage,
+              recurringPeriod,
+              endDate);
+    } else {
+      strategy = new RecurringWeightedInvestmentStrategy(
+              startDate,
+              sharePercentage,
+              recurringPeriod);
+    }
+    return strategy;
   }
 
   protected BiFunction<Supplier<String>,
