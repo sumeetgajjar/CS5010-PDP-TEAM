@@ -29,11 +29,18 @@ public class GUITradingController implements Controller {
   private final PersistableUserModel persistableUserModel;
   private final GUIView guiView;
 
-  public GUITradingController(PersistableUserModel persistableUserModel, GUIView guiView) {
-    this.persistableUserModel = persistableUserModel;
-    this.guiView = guiView;
+  /**
+   * Constructs a {@link GUITradingController} object with the given params.
+   *
+   * @param persistableUserModel the persistable user model
+   * @param guiView              the gui view
+   * @throws IllegalArgumentException if any of the given paramas are null
+   */
+  public GUITradingController(PersistableUserModel persistableUserModel,
+                              GUIView guiView) throws IllegalArgumentException {
+    this.persistableUserModel = Utils.requireNonNull(persistableUserModel);
+    this.guiView = Utils.requireNonNull(guiView);
   }
-
 
   @Override
   public void run() {
