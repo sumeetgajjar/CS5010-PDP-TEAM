@@ -35,8 +35,14 @@ public class LoadPortfolioCommand extends AbstractPersistableUserModelCommand {
     this.consumer = Utils.requireNonNull(consumer);
   }
 
+  /**
+   * Executes this command and consumes the result of the command using the consumer.
+   *
+   * @throws RuntimeException if any IOException occurs while writing to view then the exception is
+   *                          wrapped into RuntimeException and thrown
+   */
   @Override
-  public void execute() {
+  public void execute() throws RuntimeException {
 
     try {
       JSONSerDes<Portfolio> serDes = new JSONSerDes<>(this.path, Constants.PORTFOLIO_TYPE);
