@@ -51,7 +51,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     container.add(jPanel1);
 
     JPanel jPanel = new JPanel();
-    jPanel.setLayout(new GridLayout(6, 2));
+    jPanel.setLayout(new GridLayout(3, 2));
 
     JLabel startDateLabel = new JLabel("Start date (YYYY-MM-DD):");
     jPanel.add(startDateLabel);
