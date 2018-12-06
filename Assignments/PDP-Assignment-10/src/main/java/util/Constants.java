@@ -65,11 +65,10 @@ public class Constants {
   public static final String PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE = "Portfolio Successfully " +
           "Loaded";
 
-  public static final String LOAD_PORTFOLIO_FROM_FILE = "Enter the absolute path of " +
-          "portfolio " +
-          " file to load";
+  public static final String LOAD_PORTFOLIO_FROM_FILE = "Enter the path of " +
+          "portfolio file to load";
 
-  public static final String PORTFOLIO_FILE_SAVE_NAME_MESSAGE = "Enter the absolute path of file " +
+  public static final String PORTFOLIO_FILE_SAVE_NAME_MESSAGE = "Enter the path of file " +
           "to save the portfolio";
 
   public static final String PORTFOLIO_SUCCESSFULLY_SAVED_MESSAGE = "Portfolio successfully saved";
@@ -77,10 +76,10 @@ public class Constants {
   public static final String STRATEGY_SUCCESSFULLY_LOADED_MESSAGE = "Strategy Successfully " +
           "Loaded";
 
-  public static final String LOAD_STRATEGY_FROM_FILE = "Enter the absolute path of " +
+  public static final String LOAD_STRATEGY_FROM_FILE = "Enter the path of " +
           "Strategy file to load";
 
-  public static final String STRATEGY_FILE_SAVE_NAME_MESSAGE = "Enter the absolute path of file " +
+  public static final String STRATEGY_FILE_SAVE_NAME_MESSAGE = "Enter the path of file " +
           "to save the Strategy";
 
   public static final String STRATEGY_SUCCESSFULLY_SAVED_MESSAGE = "Strategy successfully saved";
@@ -92,7 +91,7 @@ public class Constants {
 
   public static final String INVALID_OPTION_FOR_STRATEGY_CREATION_MESSAGE =
           "Invalid option, please enter either 1 or 2";
-  public static final String ABSOLUTE_PATH_FILE_SAVE = "Enter the absolute path of file to save " +
+  public static final String ABSOLUTE_PATH_FILE_SAVE = "Enter the path of file to save " +
           "the portfolio";
 
   public static final String PORTFOLIO_FILE_SAVE_SUCCESS = "Portfolio successfully saved";

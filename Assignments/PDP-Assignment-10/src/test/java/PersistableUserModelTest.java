@@ -3,7 +3,6 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -351,7 +350,22 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_portfolio" + ".json"));
 
     if (!Files.exists(manual)) {
-      throw new FileNotFoundException("add a file that has a manually created portfolio");
+      Files.write(manual, ("{\n" +
+              "  \"name\": \"manual\",\n" +
+              "  \"purchases\": [\n" +
+              "    {\n" +
+              "      \"tickerName\": \"AAPL\",\n" +
+              "      \"quantity\": 10,\n" +
+              "      \"commissionPercentage\": 0.0,\n" +
+              "      \"stockPrice\": {\n" +
+              "        \"date\": \"2018-11-01\",\n" +
+              "        \"stockPrice\": 10\n" +
+              "      }\n" +
+              "    }" +
+              "  ],\n" +
+              "  \"stockDAOType\": \"SIMPLE\",\n" +
+              "  \"stockDataSourceType\": \"MOCK\"\n" +
+              "}").getBytes());
     }
 
     JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, Constants.PORTFOLIO_TYPE);
@@ -364,9 +378,9 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Portfolio portfolio = userModel.getAllPortfolios().get(0);
 
-    Assert.assertEquals(2, portfolio.getPurchases().size());
-    Assert.assertEquals(new BigDecimal("220000"), portfolio.getValue(Utils.getTodayDate()));
-    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal("220100"), 2),
+    Assert.assertEquals(1, portfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal("20000"), portfolio.getValue(Utils.getTodayDate()));
+    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal("100"), 2),
             TestUtils.getScaledStrippedBigDecimal(
                     portfolio.getCostBasisIncludingCommission(Utils.getTodayDate()), 2)
     );
@@ -380,13 +394,13 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     if (!Files.exists(manual)) {
       Files.write(manual, ("{\n" +
-              "  \"startDate\": \"Jan 24, 2018 12:00:00 AM\",\n" +
+              "  \"startDate\": \"2018-01-24\",\n" +
               "  \"stockWeights\": {\n" +
               "    \"GOOG\": 50.0,\n" +
               "    \"AAPL\": 50.0\n" +
               "  },\n" +
               "  \"dayFrequency\": 30,\n" +
-              "  \"endDate\": \"Nov 27, 2018 12:00:00 AM\"\n" +
+              "  \"endDate\": \"2018-11-27\"\n" +
               "}").getBytes());
     }
 
@@ -418,13 +432,13 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     if (!Files.exists(manual)) {
       Files.write(manual, ("{\n" +
-              "  \"startDate\": \"Sep 24, 2018 12:00:00 AM\",\n" +
+              "  \"startDate\": \"2018-09-24\",\n" +
               "  \"stockWeights\": {\n" +
               "    \"GOOG\": 20.0,\n" +
               "    \"AAPL\": 80.0\n" +
               "  },\n" +
               "  \"dayFrequency\": 1,\n" +
-              "  \"endDate\": \"Sep 24, 2018 12:00:00 AM\"\n" +
+              "  \"endDate\": \"2018-09-24\"\n" +
               "}").getBytes());
     }
 
@@ -463,7 +477,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
               "      \"quantity\": 10,\n" +
               "      \"commissionPercentage\": 0.0,\n" +
               "      \"stockPrice\": {\n" +
-              "        \"date\": \"Nov 1, 2018 12:00:00 AM\",\n" +
+              "        \"date\": \"2018-11-01\",\n" +
               "        \"stockPrice\": 10\n" +
               "      }\n" +
               "    },\n" +
@@ -472,7 +486,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
               "      \"quantity\": 100,\n" +
               "      \"commissionPercentage\": 10.0,\n" +
               "      \"stockPrice\": {\n" +
-              "        \"date\": \"Nov 2, 2018 12:00:00 AM\",\n" +
+              "        \"date\": \"2018-11-02\",\n" +
               "        \"stockPrice\": 10\n" +
               "      }\n" +
               "    }\n" +

@@ -21,6 +21,7 @@ import util.Utils;
 public class JSONSerDes<T> implements SerDes<T> {
   private static final Gson GSON = new GsonBuilder()
           .excludeFieldsWithModifiers(Modifier.TRANSIENT)
+          .setDateFormat("yyyy-MM-dd")
           .setPrettyPrinting()
           .create();
   private final Path path;
