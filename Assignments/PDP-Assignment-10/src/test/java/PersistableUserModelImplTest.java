@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import util.Constants;
 import util.TestUtils;
 import util.Utils;
 import virtualgambling.model.PersistableUserModel;
@@ -157,5 +158,120 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
     Assert.assertEquals(userModel.getPortfolio(PORTFOLIO_P1).getValue(Utils.getTodayDate()),
             new BigDecimal(110990));
+  }
+
+  @Test
+  public void invalidInputToPersisterOrLoaderForPortfolioFail() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+
+    userModel.createPortfolio(PORTFOLIO_P1);
+
+    Path test = null;
+    try {
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
+      }.getType());
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    userModel.buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10);
+
+    Portfolio portfolio = userModel.getPortfolio(PORTFOLIO_P1);
+
+    test = Utils.getPathInDefaultFolder(Paths.get("p1" + ".json"));
+
+    try {
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, new TypeToken<Portfolio>() {
+    }.getType());
+
+    try {
+      userModel.persistFromModel(new PortfolioPersister(null, portfolio));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    try {
+      userModel.persistFromModel(new PortfolioPersister(serDes, null));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    try {
+      userModel.persistFromModel(new PortfolioPersister(serDes, portfolio));
+    } catch (Exception e) {
+      Assert.fail(e.getMessage());
+    }
+  }
+
+
+  @Test
+  public void invalidInputToPersisterOrLoaderForStrategyoFail() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+
+    Path test = null;
+    try {
+      JSONSerDes<Strategy> serDes = new JSONSerDes<>(test, new TypeToken<Strategy>() {
+      }.getType());
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    test = Utils.getPathInDefaultFolder(Paths.get("p1" + ".json"));
+
+    try {
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(test, null);
+      Assert.fail("should have failed");
+    } catch (IllegalArgumentException e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    JSONSerDes<Strategy> serDes = new JSONSerDes<>(test, new TypeToken<Strategy>() {
+    }.getType());
+
+    Map<String, Double> stocksWeights = new HashMap<>();
+    stocksWeights.put("AAPL", 50.0D);
+    stocksWeights.put("GOOG", 50.0D);
+
+    Calendar startCalendar = Utils.getCalendarInstance();
+    Calendar endCalendar = Utils.getCalendarInstance();
+
+    startCalendar.set(2018, Calendar.SEPTEMBER, 24);
+    endCalendar.set(2018, Calendar.NOVEMBER, 27);
+
+    Strategy strategy =
+            new RecurringWeightedInvestmentStrategy(startCalendar.getTime(),
+                    stocksWeights,
+                    30,
+                    endCalendar.getTime());
+
+    try {
+      userModel.persistFromModel(new StrategyPersister(null, strategy));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    try {
+      userModel.persistFromModel(new StrategyPersister(serDes, null));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals(Constants.INVALID_INPUT, e.getMessage());
+    }
+
+    try {
+      userModel.persistFromModel(new StrategyPersister(serDes, strategy));
+    } catch (Exception e) {
+      Assert.fail(e.getMessage());
+    }
   }
 }
