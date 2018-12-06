@@ -8,6 +8,7 @@ import virtualgambling.controller.OrchestratorController;
 import virtualgambling.controller.TradingController;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.EnhancedUserModelImpl;
+import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.factory.StockDAOType;
@@ -28,9 +29,9 @@ public class TradingApp {
 
   private static void runGUITradingApp() {
     GUIView guiView = new MainForm();
-    EnhancedUserModel enhancedUserModel = new EnhancedUserModelImpl(StockDAOType.SIMPLE,
+    PersistableUserModelImpl persistableUserModel = new PersistableUserModelImpl(StockDAOType.SIMPLE,
             StockDataSourceType.SIMPLE);
-    Controller controller = new GUITradingController(enhancedUserModel, guiView);
+    Controller controller = new GUITradingController(persistableUserModel, guiView);
     controller.run();
   }
 
