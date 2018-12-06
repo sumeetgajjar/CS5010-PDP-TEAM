@@ -34,6 +34,20 @@ public interface Features {
                                          double commissionPercentage);
 
   Optional<List<SharePurchaseOrder>> buyShares(String portfolioName,
+                                               Date date,
+                                               Set<String> tickerNames,
+                                               BigDecimal amountToInvest,
+                                               double commission
+  );
+
+  Optional<List<SharePurchaseOrder>> buyShares(String portfolioName,
+                                               Date startDate,
+                                               Map<String, Double> stockWeights,
+                                               BigDecimal amountToInvest,
+                                               double commission
+  );
+
+  Optional<List<SharePurchaseOrder>> buyShares(String portfolioName,
                                                Date startDate,
                                                int dayFrequency,
                                                Set<String> tickerNames,
