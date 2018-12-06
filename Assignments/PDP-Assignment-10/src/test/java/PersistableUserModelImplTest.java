@@ -26,6 +26,7 @@ import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.StrategyLoader;
 import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
+import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 
@@ -160,6 +161,33 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
     Assert.assertEquals(userModel.getPortfolio(PORTFOLIO_P1).getValue(Utils.getTodayDate()),
             new BigDecimal(110990));
+
+
+    Path oneTimeStrategyPath = Utils.getPathInDefaultFolder(Paths.get("strategy2" + ".json"));
+    JSONSerDes<Strategy> oneTimeSerde = new JSONSerDes<>(oneTimeStrategyPath,
+            new TypeToken<OneTimeWeightedInvestmentStrategy>() {
+            }.getType());
+    Strategy oneTimeStrategy = new OneTimeWeightedInvestmentStrategy(startCalendar.getTime(),
+            stocksWeights);
+
+
+    try {
+      userModel.persistFromModel(new StrategyPersister(oneTimeSerde, oneTimeStrategy));
+    } catch (Exception e) {
+      Assert.fail();
+    }
+
+    try {
+      userModel.loadIntoModel(new StrategyLoader(userModel, oneTimeSerde, "p2",
+              new BigDecimal(1000), 10));
+    } catch (Exception e) {
+      Assert.fail(e.getMessage());
+    }
+
+    Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
+    Assert.assertEquals(new BigDecimal(100495),
+            userModel.getPortfolio("p2").getValue(Utils.getTodayDate()));
+
   }
 
   @Test
@@ -336,12 +364,12 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
 
 
   @Test
-  public void manuallyCreatedStrategyWorks() throws IOException {
+  public void manuallyCreatedRecurringStrategyWorks() throws IOException {
     PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
-    Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_strategy" + ".json"));
+    Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_recurring_strategy" + ".json"));
 
     if (!Files.exists(manual)) {
-      throw new FileNotFoundException("add a file that has a manually created strategy");
+      throw new FileNotFoundException("add a file that has a manually created recurring strategy");
     }
 
     JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
@@ -364,5 +392,82 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
             TestUtils.getScaledStrippedBigDecimal(portfolio.getCostBasisIncludingCommission(
                     Utils.getTodayDate()
             ), 2));
+  }
+
+  @Test
+  public void manuallyCreatedOneTimeStrategyWorks() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+    Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_onetime_strategy" + ".json"));
+
+    if (!Files.exists(manual)) {
+      throw new FileNotFoundException("add a file that has a manually created one time strategy");
+    }
+
+    JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
+            new TypeToken<OneTimeWeightedInvestmentStrategy>() {
+            }.getType());
+
+    Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
+
+    userModel.loadIntoModel(new StrategyLoader(userModel, jsonSerDes, PORTFOLIO_P1,
+            new BigDecimal("10000"), 10));
+
+    Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
+
+    Portfolio portfolio = userModel.getPortfolio(PORTFOLIO_P1);
+
+    Assert.assertEquals(2, portfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal("1601991"), portfolio.getValue(Utils.getTodayDate()));
+    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal("10990.1"),
+            2),
+            TestUtils.getScaledStrippedBigDecimal(portfolio.getCostBasisIncludingCommission(
+                    Utils.getTodayDate()
+            ), 2));
+  }
+
+  @Test
+  public void invalidDataInValidJsonFailsForPortfolio() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+    Path manual = Utils.getPathInDefaultFolder(Paths.get("invalid_manual_portfolio" + ".json"));
+
+    if (!Files.exists(manual)) {
+      Files.write(manual, ("{\n" +
+              "  \"name\": \"manual\",\n" +
+              "  \"purchases\": [\n" +
+              "    {\n" +
+              "      \"tickerName\": \"AAPL\",\n" +
+              "      \"quantity\": 10,\n" +
+              "      \"commissionPercentage\": 0.0,\n" +
+              "      \"stockPrice\": {\n" +
+              "        \"date\": \"Nov 1, 2018 12:00:00 AM\",\n" +
+              "        \"stockPrice\": 10\n" +
+              "      }\n" +
+              "    },\n" +
+              "    {\n" +
+              "      \"tickerName\": \"RANDOM_TICKER_NOT_AVAILABLE\",\n" +
+              "      \"quantity\": 100,\n" +
+              "      \"commissionPercentage\": 10.0,\n" +
+              "      \"stockPrice\": {\n" +
+              "        \"date\": \"Nov 2, 2018 12:00:00 AM\",\n" +
+              "        \"stockPrice\": 10\n" +
+              "      }\n" +
+              "    }\n" +
+              "  ],\n" +
+              "  \"stockDAOType\": \"SIMPLE\",\n" +
+              "  \"stockDataSourceType\": \"MOCK\"\n" +
+              "}").getBytes());
+    }
+
+    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, new TypeToken<Portfolio>() {
+    }.getType());
+
+    Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
+
+    try {
+      userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals("Stock Data not found", e.getMessage());
+    }
   }
 }

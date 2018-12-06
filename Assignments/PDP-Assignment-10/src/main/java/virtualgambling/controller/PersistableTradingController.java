@@ -61,8 +61,8 @@ public class PersistableTradingController extends EnhancedTradingController {
     return null;
   }
 
-  private BiFunction<Supplier<String>, Consumer<String>, Command>
-  getLoadStrategyFromFileAndExecuteCommand() {
+  private BiFunction<Supplier<String>,
+          Consumer<String>, Command> getLoadStrategyFromFileAndExecuteCommand() {
     return (supplier, consumer) -> {
       String portfolioName = this.getPortfolioNameFromUser(supplier, consumer);
       String filePath = getStringInputFromUser(Constants.LOAD_STRATEGY_FROM_FILE,
