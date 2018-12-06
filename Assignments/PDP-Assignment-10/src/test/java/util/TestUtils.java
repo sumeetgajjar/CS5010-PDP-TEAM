@@ -1,6 +1,7 @@
 package util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +15,8 @@ import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
-import virtualgambling.model.bean.StockPrice;
-import virtualgambling.model.exceptions.StockDataNotFoundException;
 import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
-import virtualgambling.model.stockdatasource.StockDataSource;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 
 /**
@@ -243,6 +241,10 @@ public class TestUtils {
     Calendar calendar = Utils.getCalendarInstance();
     calendar.add(Calendar.DATE, 1);
     return calendar.getTime();
+  }
+
+  public static BigDecimal getScaledStrippedBigDecimal(BigDecimal bigDecimal, int scale) {
+    return bigDecimal.setScale(scale, RoundingMode.HALF_DOWN).stripTrailingZeros();
   }
 
   public static class MockPortfolio extends Portfolio {

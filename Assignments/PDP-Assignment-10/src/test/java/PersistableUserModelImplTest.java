@@ -151,7 +151,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
     try {
-      userModel.loadIntoModel(new StrategyLoader(serDes, userModel, PORTFOLIO_P1,
+      userModel.loadIntoModel(new StrategyLoader(userModel, serDes, PORTFOLIO_P1,
               new BigDecimal(1000), 10));
     } catch (Exception e) {
       Assert.fail(e.getMessage());
@@ -300,7 +300,7 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     }
 
     try {
-      userModel.loadIntoModel(new StrategyLoader(strategyJSONSerder, userModel, PORTFOLIO_P1,
+      userModel.loadIntoModel(new StrategyLoader(userModel, strategyJSONSerder, PORTFOLIO_P1,
               new BigDecimal("1000"), 10));
       Assert.fail("should have failed");
     } catch (Exception e) {
@@ -332,5 +332,37 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Assert.assertEquals(new BigDecimal("220000"), portfolio.getValue(Utils.getTodayDate()));
     Assert.assertEquals(new BigDecimal("220100"),
             portfolio.getCostBasisIncludingCommission(Utils.getTodayDate()));
+  }
+
+
+  @Test
+  public void manuallyCreatedStrategyWorks() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+    Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_strategy" + ".json"));
+
+    if (!Files.exists(manual)) {
+      throw new FileNotFoundException("add a file that has a manually created strategy");
+    }
+
+    JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
+            new TypeToken<RecurringWeightedInvestmentStrategy>() {
+            }.getType());
+
+    Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
+
+    userModel.loadIntoModel(new StrategyLoader(userModel, jsonSerDes, PORTFOLIO_P1,
+            new BigDecimal("10000"), 10));
+
+    Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
+
+    Portfolio portfolio = userModel.getPortfolio(PORTFOLIO_P1);
+
+    Assert.assertEquals(22, portfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal("98934"), portfolio.getValue(Utils.getTodayDate()));
+    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal("108827.40"),
+            2),
+            TestUtils.getScaledStrippedBigDecimal(portfolio.getCostBasisIncludingCommission(
+                    Utils.getTodayDate()
+            ), 2));
   }
 }
