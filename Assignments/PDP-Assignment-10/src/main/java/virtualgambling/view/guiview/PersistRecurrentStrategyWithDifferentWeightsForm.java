@@ -23,7 +23,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
   private JButton addStockJButton;
   private JTextField stockNameJTextField;
   private JTextArea stocksJTextArea;
-  private File selectedFile;
+  protected File selectedFile;
 
   protected final Map<String, Double> stockPercentageMap;
   protected JTextField stockPercentageJTextField;
@@ -157,22 +157,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
         return;
       }
 
-      boolean success;
-      if (endDateTextField.getText().isEmpty()) {
-        success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
-                dayFrequency,
-                this.stockPercentageMap);
-      } else {
-        Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
-        if (Objects.isNull(endDate)) {
-          return;
-        }
-        success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
-                endDate,
-                dayFrequency,
-                this.stockPercentageMap);
-      }
-
+      boolean success = executeFeature(startDate, endDateTextField, dayFrequency);
       if (success) {
         this.mainForm.display("Strategy saved successfully");
         this.showPrevious();
@@ -180,9 +165,31 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     };
   }
 
-  private ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                            JTextField stockNameJTextField,
-                                                            JTextField stockPercentageJTextField) {
+  protected boolean executeFeature(Date startDate,
+                                   JTextField endDateTextField,
+                                   int dayFrequency) {
+
+    boolean success;
+    if (endDateTextField.getText().isEmpty()) {
+      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+              dayFrequency,
+              this.stockPercentageMap);
+    } else {
+      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
+      if (Objects.isNull(endDate)) {
+        return false;
+      }
+      success = this.features.saveStrategy(this.selectedFile.getAbsolutePath(), startDate,
+              endDate,
+              dayFrequency,
+              this.stockPercentageMap);
+    }
+    return success;
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
     return getActionListenerForAddStockButtonForDifferentWeight(
             stocksJTextArea,
             stockNameJTextField,
