@@ -23,9 +23,12 @@ import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.guiview.GUIView;
 
 /**
- * Created by gajjar.s, on 3:20 PM, 12/5/18
+ * This class represents a GUI Trading Controller. It implements {@link Controller} interface. This
+ * is a Asynchronous Controller which wait for the callback from {@link GUIView} to perform
+ * operations.
  */
 public class GUITradingController implements Controller {
+
   private final PersistableUserModel persistableUserModel;
   private final GUIView guiView;
 
