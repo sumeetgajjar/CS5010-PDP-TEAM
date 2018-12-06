@@ -21,7 +21,7 @@ public class JSONSerDes<T> implements SerDes<T> {
 
   public JSONSerDes(Path path, Type type) {
     this.path = Utils.requireNonNull(path);
-    this.instanceType = type;
+    this.instanceType = Utils.requireNonNull(type);
   }
 
 

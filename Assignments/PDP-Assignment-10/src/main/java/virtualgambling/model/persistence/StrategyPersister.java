@@ -2,6 +2,7 @@ package virtualgambling.model.persistence;
 
 import java.io.IOException;
 
+import util.Utils;
 import virtualgambling.model.persistence.serdes.SerDes;
 import virtualgambling.model.strategy.Strategy;
 
@@ -10,8 +11,8 @@ public class StrategyPersister implements Persister {
   private final Strategy strategy;
 
   public StrategyPersister(SerDes<Strategy> serDes, Strategy strategy) {
-    this.serDes = serDes;
-    this.strategy = strategy;
+    this.serDes = Utils.requireNonNull(serDes);
+    this.strategy = Utils.requireNonNull(strategy);
   }
 
   @Override

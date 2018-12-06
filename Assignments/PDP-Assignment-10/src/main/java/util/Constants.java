@@ -44,4 +44,6 @@ public class Constants {
           "stock";
 
   public static final String DEFAULT_PERSISTENCE_PATH = "Files";
+
+  public static final String INVALID_INPUT = "Invalid input";
 }
