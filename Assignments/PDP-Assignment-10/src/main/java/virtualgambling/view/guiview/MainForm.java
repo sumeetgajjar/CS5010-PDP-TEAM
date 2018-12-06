@@ -1,6 +1,7 @@
 package virtualgambling.view.guiview;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,20 +53,30 @@ public class MainForm extends AbstractForm implements GUIView {
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     this.setLayout(new FlowLayout());
 
+    JPanel outputPanel = new JPanel();
+    outputPanel.setLayout(new BoxLayout(outputPanel, BoxLayout.Y_AXIS));
 
     JPanel buttonJPanel = new JPanel();
-    buttonJPanel.setLayout(new BoxLayout(buttonJPanel, BoxLayout.Y_AXIS));
     this.addButtonsToPanel(buttonJPanel);
-    buttonJPanel.setBackground(Color.BLUE);
     buttonJPanel.setPreferredSize(new Dimension(300, 800));
     this.add(buttonJPanel);
 
     this.add(new JSeparator(SwingConstants.VERTICAL));
 
     this.jTextArea = getJTextArea();
-    JScrollPane outputJPanel = new JScrollPane(this.jTextArea);
-    outputJPanel.setPreferredSize(new Dimension(600, 800));
-    this.add(outputJPanel);
+    JScrollPane scrollPane = new JScrollPane(this.jTextArea);
+    scrollPane.setPreferredSize(new Dimension(600, 750));
+    scrollPane.add(new JSeparator(JSeparator.HORIZONTAL));
+    outputPanel.add(scrollPane);
+
+    JPanel clearInputPanel = new JPanel();
+    JButton clearButton = new JButton("Clear Output");
+    clearButton.addActionListener(e -> this.jTextArea.setText(null));
+    clearInputPanel.add(clearButton);
+
+    outputPanel.add(clearInputPanel);
+
+    this.add(outputPanel);
   }
 
   @Override
@@ -74,45 +85,23 @@ public class MainForm extends AbstractForm implements GUIView {
   }
 
   private void addButtonsToPanel(JPanel buttonJPanel) {
-    JButton createPortfolioButton = getCreatePortfolioJButton();
-    buttonJPanel.add(createPortfolioButton);
+    List<JButton> buttons = new ArrayList<>();
+    buttons.add(getCreatePortfolioJButton());
+    buttons.add(getLoadPortfolioButton());
+    buttons.add(getSavePortfolioButton());
+    buttons.add(getGetAllPortfolioJButton());
+    buttons.add(getPortfolioCostBasisButton());
+    buttons.add(getPortfolioCompositionButton());
+    buttons.add(getPortfolioValueButton());
+    buttons.add(getRemainingCapital());
+    buttons.add(getDrawPortfolioPerformanceButton());
+    buttons.add(getBuySharesButton());
+    buttons.add(getBuySharesUsingStrategyButton());
+    buttons.add(getLoadAndExecuteStrategyButton());
+    buttons.add(getQuitJButton());
 
-    JButton loadPortfolioButton = getLoadPortfolioButton();
-    buttonJPanel.add(loadPortfolioButton);
-
-    JButton savePortfolioButton = getSavePortfolioButton();
-    buttonJPanel.add(savePortfolioButton);
-
-    JButton getAllPortfoliosButton = getGetAllPortfolioJButton();
-    buttonJPanel.add(getAllPortfoliosButton);
-
-    JButton getPortfolioCostBasisButton = getPortfolioCostBasisButton();
-    buttonJPanel.add(getPortfolioCostBasisButton);
-
-    JButton getPortfolioCompositionButton = getPortfolioCompositionButton();
-    buttonJPanel.add(getPortfolioCompositionButton);
-
-    JButton getPortfolioValueButton = getPortfolioValueButton();
-    buttonJPanel.add(getPortfolioValueButton);
-
-    JButton getRemainingCapitalButton = getRemainingCapital();
-    buttonJPanel.add(getRemainingCapitalButton);
-
-    JButton plotPortfolioPerformanceButton = getDrawPortfolioPerformanceButton();
-    buttonJPanel.add(plotPortfolioPerformanceButton);
-
-    JButton buySharesButton = getBuySharesButton();
-    buttonJPanel.add(buySharesButton);
-
-    JButton buySharesUsingStrategyButton = getBuySharesUsingStrategyButton();
-    buttonJPanel.add(buySharesUsingStrategyButton);
-
-    JButton loadAndExecuteStrategyButton = getLoadAndExecuteStrategyButton();
-    buttonJPanel.add(loadAndExecuteStrategyButton);
-
-
-    JButton quitButton = getQuitJButton();
-    buttonJPanel.add(quitButton);
+    buttonJPanel.setLayout(new GridLayout(buttons.size(), 1));
+    buttons.forEach(buttonJPanel::add);
   }
 
   private JButton getLoadAndExecuteStrategyButton() {
@@ -252,7 +241,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea getJTextArea() {
     JTextArea jTextArea = new JTextArea();
-    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
+    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
     jTextArea.setEditable(false);
     jTextArea.setLineWrap(true);
     return jTextArea;
