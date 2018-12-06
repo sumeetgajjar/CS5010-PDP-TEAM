@@ -165,7 +165,7 @@ public class PortfolioPerformanceForm extends AbstractForm {
     }
 
     private void showPrevious() {
-      GUIUtils.showPrevious(previousJFrame, this);
+      Utils.showPrevious(previousJFrame, this);
     }
 
     private void centerThisJFrame() {

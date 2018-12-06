@@ -78,7 +78,7 @@ public abstract class AbstractForm extends JFrame {
   }
 
   protected void showError(String message) {
-    GUIUtils.displayError(this, message);
+    Utils.displayError(this, message);
   }
 
   protected void addJFrameClosingEvent() {
@@ -92,7 +92,7 @@ public abstract class AbstractForm extends JFrame {
   }
 
   protected void showPrevious() {
-    GUIUtils.showPrevious(previousJFrame, currentJFrame);
+    Utils.showPrevious(previousJFrame, currentJFrame);
   }
 
   protected void centerThisJFrame() {

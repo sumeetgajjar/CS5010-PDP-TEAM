@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -29,7 +30,7 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
     recurringDifferentWeights.addActionListener(e -> {
       PersistRecurrentStrategyWithDifferentWeightsForm persistRecurrentStrategyWithDifferentWeightsForm =
               new PersistRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(persistRecurrentStrategyWithDifferentWeightsForm, this);
+      Utils.showPrevious(persistRecurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
 
@@ -37,7 +38,7 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
     recurringSameWeights.addActionListener(e -> {
       PersistRecurrentStrategyWithSameWeightsForm persistRecurrentStrategyWithSameWeightsForm =
               new PersistRecurrentStrategyWithSameWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(persistRecurrentStrategyWithSameWeightsForm, this);
+      Utils.showPrevious(persistRecurrentStrategyWithSameWeightsForm, this);
     });
     this.add(recurringSameWeights);
   }

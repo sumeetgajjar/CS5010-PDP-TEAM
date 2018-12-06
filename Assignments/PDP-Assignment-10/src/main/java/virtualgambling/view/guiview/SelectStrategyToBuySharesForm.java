@@ -4,6 +4,7 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
@@ -29,7 +30,7 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
     oneTimeDifferentWeights.addActionListener(e -> {
       BuySharesUsingOneTimeStrategyWithDifferentWeightsForm buySharesUsingOneTimeStrategyWithDifferentWeightsForm =
               new BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(buySharesUsingOneTimeStrategyWithDifferentWeightsForm, this);
+      Utils.showPrevious(buySharesUsingOneTimeStrategyWithDifferentWeightsForm, this);
     });
     this.add(oneTimeDifferentWeights);
 
@@ -37,7 +38,7 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
     oneTimeSameWeights.addActionListener(e -> {
       BuySharesUsingOneTimeStrategyWithSameWeightsForm oneTimeStrategyWithSameWeightsForm =
               new BuySharesUsingOneTimeStrategyWithSameWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(oneTimeStrategyWithSameWeightsForm, this);
+      Utils.showPrevious(oneTimeStrategyWithSameWeightsForm, this);
     });
     this.add(oneTimeSameWeights);
 
@@ -45,7 +46,7 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
     recurringDifferentWeights.addActionListener(e -> {
       BuySharesUsingRecurrentStrategyWithDifferentWeightsForm buySharesUsingRecurrentStrategyWithDifferentWeightsForm =
               new BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(buySharesUsingRecurrentStrategyWithDifferentWeightsForm, this);
+      Utils.showPrevious(buySharesUsingRecurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
 
@@ -53,7 +54,7 @@ public class SelectStrategyToBuySharesForm extends AbstractForm {
     recurringSameWeights.addActionListener(e -> {
       BuySharesUsingRecurrentStrategyWithSameWeightsForm recurrentStrategyWithSameWeightsForm =
               new BuySharesUsingRecurrentStrategyWithSameWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(recurrentStrategyWithSameWeightsForm, this);
+      Utils.showPrevious(recurrentStrategyWithSameWeightsForm, this);
     });
     this.add(recurringSameWeights);
   }

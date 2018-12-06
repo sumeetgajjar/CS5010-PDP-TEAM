@@ -16,12 +16,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+
+import javax.swing.*;
+
+import virtualgambling.model.exceptions.RetryException;
 
 /**
  * Represents utility functions that are independent of the state of the application.
@@ -270,5 +276,184 @@ public class Utils {
       Files.createDirectory(defaultPath);
     }
     return Paths.get(Constants.DEFAULT_PERSISTENCE_PATH, path.toString());
+  }
+
+  /**
+   * Displays a prompt to the User to enter an input.
+   *
+   * @param jFrame the parent JFrame
+   * @return the input from the user
+   */
+  public static String getInput(JFrame jFrame) {
+    return JOptionPane.showInputDialog(jFrame, "Please enter the input");
+  }
+
+  /**
+   * Hides the current JFrame and displays the previous JFrame.
+   *
+   * @param previous the previous JFrame
+   * @param current  the current JFrame
+   */
+  public static void showPrevious(JFrame previous, JFrame current) {
+    current.setVisible(false);
+    previous.setVisible(true);
+  }
+
+  /**
+   * Displays a pop-up containing the given error message.
+   *
+   * @param jFrame  the parent JFrame
+   * @param message the message to be displayed
+   */
+  public static void displayError(JFrame jFrame, String message) {
+    JOptionPane.showMessageDialog(jFrame, message, "Error", JOptionPane.ERROR_MESSAGE);
+  }
+
+  /**
+   * {@link BiFunctionRetryer} represents a retrying mechanism that allows a client to retry any
+   * {@link java.util.function.BiFunction}.
+   *
+   * @param <T> the type of the first argument to the function
+   * @param <U> the type of the second argument to the function
+   * @param <R> the type of the result of the function
+   */
+  public static class BiFunctionRetryer<T, U, R> {
+    private final int numRetries;
+    private final int backOffSeconds;
+    private final BiFunction<T, U, R> functionToRetry;
+    private final Class<? extends Throwable> exceptionClass;
+
+    private BiFunctionRetryer(
+            int numRetries,
+            int backOffSeconds, BiFunction<T, U, R> functionToRetry,
+            Class<? extends Throwable> exceptionClass) {
+      this.numRetries = numRetries;
+      this.backOffSeconds = backOffSeconds;
+      this.functionToRetry = functionToRetry;
+      this.exceptionClass = exceptionClass;
+    }
+
+    /**
+     * Retry the function numEntries number of times.
+     *
+     * @param param1 param of type T
+     * @param param2 param of type U
+     * @return R after running the function at most the number of times one needs to retry.
+     * @throws RetryException in case it fails to get results after retrying numRetries times
+     */
+    public R retry(T param1, U param2) throws RetryException, InterruptedException {
+      for (int i = 0; i < numRetries; i++) {
+        try {
+          return functionToRetry.apply(param1, param2);
+        } catch (Throwable e) {
+          if (!exceptionClass.isInstance(e)) {
+            throw e;
+          } else {
+            Thread.sleep(this.backOffSeconds * 1000);
+          }
+        }
+      }
+      throw new RetryException(String.format("failed to get results after retrying %s number of " +
+              "times", numRetries));
+    }
+
+    /**
+     * A Retryer Builder that builds a retryer.
+     *
+     * @param <T> the type of the first argument to the function
+     * @param <U> the type of the second argument to the function
+     * @param <R> the type of the result of the function
+     */
+    public static class RetryerBuilder<T, U, R> {
+      private final BiFunction<T, U, R> functionToRetry;
+      private int numRetries;
+      private int backOffSeconds;
+      private Class<? extends Throwable> exceptionClass;
+
+      /**
+       * Sets up the builder with default values.
+       *
+       * @param functionToRetry the function that needs to be retried
+       */
+      public RetryerBuilder(BiFunction<T, U, R> functionToRetry) {
+        this.numRetries = 1;
+        this.backOffSeconds = 1;
+        this.functionToRetry = requireNonNull(functionToRetry);
+        exceptionClass = Exception.class;
+      }
+
+      /**
+       * Sets the number of seconds after which a failed call should retry.
+       *
+       * @param backOffSeconds backOffSeconds
+       * @return builder with backOffSeconds set
+       */
+      public RetryerBuilder<T, U, R> setBackOffSeconds(int backOffSeconds) {
+        this.backOffSeconds = backOffSeconds;
+        return this;
+      }
+
+      /**
+       * Sets the maximum number of retries after which the function should not retry.
+       *
+       * @param numRetries maximum number of retries
+       * @return builder with numRetries set
+       */
+      public RetryerBuilder<T, U, R> setNumRetries(int numRetries) {
+        this.numRetries = numRetries;
+        return this;
+      }
+
+      /**
+       * Sets the exception on which to retry, any other exception other than the one that is passed
+       * here will lead to the exception being propagated.
+       *
+       * @param exceptionClass the exception that needs to be caught and then retried
+       * @return builder with exceptionClass set
+       */
+      public RetryerBuilder<T, U, R> setExceptionClass(Class<? extends Throwable> exceptionClass) {
+        this.exceptionClass = exceptionClass;
+        return this;
+      }
+
+      /**
+       * Creates a new retryer with the parameters correctly set.
+       *
+       * @return a {@link BiFunctionRetryer} with their parameters set
+       */
+      public BiFunctionRetryer<T, U, R> createRetryer() {
+        return new BiFunctionRetryer<>(numRetries, backOffSeconds, functionToRetry, exceptionClass);
+      }
+    }
+  }
+
+  /**
+   * This class represents a LRU Key value cache of Generic Type. It extends {@link LinkedHashMap}
+   * class.
+   */
+  public static class LRUCache<K, V> extends LinkedHashMap<K, V> {
+
+    private final int cacheCapacity;
+
+    /**
+     * Create an object of LRU Cache with the given capacity.
+     *
+     * <p>It will start removing older entries once the cache capacity is hit.
+     *
+     * @param cacheCapacity the capacity of the cache
+     */
+    public LRUCache(int cacheCapacity) {
+      this.cacheCapacity = cacheCapacity;
+    }
+
+    /**
+     * Returns true if the current size of the cache is greater than it's capacity.
+     *
+     * @return true if the current size of the cache is greater than it's capacity
+     */
+    @Override
+    protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+      return this.size() > cacheCapacity;
+    }
   }
 }

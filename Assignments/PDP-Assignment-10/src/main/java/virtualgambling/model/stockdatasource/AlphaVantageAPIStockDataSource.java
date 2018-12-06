@@ -24,8 +24,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
 
-import util.BiFunctionRetryer;
-import util.LRUCache;
 import util.Utils;
 import virtualgambling.model.bean.StockPrice;
 import virtualgambling.model.exceptions.APILimitExceededException;
@@ -57,8 +55,8 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
           "7C6VFPULZK6DO30H"
   );
 
-  private static final LRUCache<String, NavigableMap<String, StockPrice>> LRU_CACHE =
-          new LRUCache<>(20);
+  private static final Utils.LRUCache<String, NavigableMap<String, StockPrice>> LRU_CACHE =
+          new Utils.LRUCache<>(20);
   private static final Random RANDOM = new Random();
   private static final String DISK_CACHE_ROOT_PATH = "StocksPriceCache";
 
@@ -66,8 +64,8 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
   private int apiKeyIndex = RANDOM.nextInt(API_KEYS.size());
 
-  private BiFunctionRetryer<String, Date, StockPrice> biFunctionRetryer =
-          new BiFunctionRetryer.RetryerBuilder<>(this::execute)
+  private Utils.BiFunctionRetryer<String, Date, StockPrice> biFunctionRetryer =
+          new Utils.BiFunctionRetryer.RetryerBuilder<>(this::execute)
                   .setNumRetries(10)
                   .setBackOffSeconds(1)
                   .setExceptionClass(APILimitExceededException.class)

@@ -39,7 +39,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
   @Override
   public String getInput() {
-    return GUIUtils.getInput(this);
+    return Utils.getInput(this);
   }
 
   @Override
@@ -138,7 +138,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       CreateStrategyAndPersistForm createStrategyAndPersistForm =
               new CreateStrategyAndPersistForm(this, features);
-      GUIUtils.showPrevious(createStrategyAndPersistForm, this);
+      Utils.showPrevious(createStrategyAndPersistForm, this);
     });
     return jButton;
   }
@@ -148,7 +148,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       LoadAndExecuteStrategyForm loadAndExecuteStrategyForm =
               new LoadAndExecuteStrategyForm(this, features);
-      GUIUtils.showPrevious(loadAndExecuteStrategyForm, this);
+      Utils.showPrevious(loadAndExecuteStrategyForm, this);
     });
     return jButton;
   }
@@ -158,7 +158,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       SelectStrategyToBuySharesForm selectStrategyToBuySharesForm =
               new SelectStrategyToBuySharesForm(this, features);
-      GUIUtils.showPrevious(selectStrategyToBuySharesForm, this);
+      Utils.showPrevious(selectStrategyToBuySharesForm, this);
     });
     return jButton;
   }
@@ -168,7 +168,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       SavePortfolioForm savePortfolioForm =
               new SavePortfolioForm(this, features);
-      GUIUtils.showPrevious(savePortfolioForm, this);
+      Utils.showPrevious(savePortfolioForm, this);
     });
     return jButton;
   }
@@ -178,7 +178,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       LoadPortfolioForm loadPortfolioForm =
               new LoadPortfolioForm(this, features);
-      GUIUtils.showPrevious(loadPortfolioForm, this);
+      Utils.showPrevious(loadPortfolioForm, this);
     });
     return jButton;
   }
@@ -188,7 +188,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       GetPortfolioCompositionForm getPortfolioCompositionForm =
               new GetPortfolioCompositionForm(this, features);
-      GUIUtils.showPrevious(getPortfolioCompositionForm, this);
+      Utils.showPrevious(getPortfolioCompositionForm, this);
     });
     return jButton;
   }
@@ -198,7 +198,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       BuySharesForm buySharesForm =
               new BuySharesForm(this, features);
-      GUIUtils.showPrevious(buySharesForm, this);
+      Utils.showPrevious(buySharesForm, this);
     });
     return jButton;
   }
@@ -208,7 +208,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       PortfolioPerformanceForm portfolioPerformanceForm =
               new PortfolioPerformanceForm(this, features);
-      GUIUtils.showPrevious(portfolioPerformanceForm, this);
+      Utils.showPrevious(portfolioPerformanceForm, this);
     });
     return jButton;
   }
@@ -225,7 +225,7 @@ public class MainForm extends AbstractForm implements GUIView {
     jButton.addActionListener(e -> {
       GetPortfolioCostBasisForm getPortfolioCostBasisForm =
               new GetPortfolioCostBasisForm(this, features);
-      GUIUtils.showPrevious(getPortfolioCostBasisForm, this);
+      Utils.showPrevious(getPortfolioCostBasisForm, this);
     });
     return jButton;
   }
@@ -234,7 +234,7 @@ public class MainForm extends AbstractForm implements GUIView {
     JButton jButton = new JButton("Get Portfolios Value");
     jButton.addActionListener(e -> {
       GetPortfolioCostBasisForm getPortfolioValueForm = new GetPortfolioValueForm(this, features);
-      GUIUtils.showPrevious(getPortfolioValueForm, this);
+      Utils.showPrevious(getPortfolioValueForm, this);
     });
     return jButton;
   }
@@ -273,7 +273,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
     createPortfolioButton.addActionListener(e -> {
       CreatePortfolioForm createPortfolioForm = new CreatePortfolioForm(this, features);
-      GUIUtils.showPrevious(createPortfolioForm, this);
+      Utils.showPrevious(createPortfolioForm, this);
     });
     return createPortfolioButton;
   }
