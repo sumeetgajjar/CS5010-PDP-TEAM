@@ -24,27 +24,11 @@ public class SelectStrategyToPersistForm extends AbstractForm {
   protected void initComponents() {
     this.setLayout(new GridLayout(4, 1));
 
-    JButton oneTimeDifferentWeights = new JButton("One Time Strategy with Different Weights");
-    oneTimeDifferentWeights.addActionListener(e -> {
-      BuySharesUsingOneTimeStrategyWithDifferentWeightsForm buySharesUsingOneTimeStrategyWithDifferentWeightsForm =
-              new BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(buySharesUsingOneTimeStrategyWithDifferentWeightsForm, this);
-    });
-    this.add(oneTimeDifferentWeights);
-
-    JButton oneTimeSameWeights = new JButton("One Time Strategy with Same Weights");
-    oneTimeSameWeights.addActionListener(e -> {
-      BuySharesUsingOneTimeStrategyWithSameWeightsForm oneTimeStrategyWithSameWeightsForm =
-              new BuySharesUsingOneTimeStrategyWithSameWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(oneTimeStrategyWithSameWeightsForm, this);
-    });
-    this.add(oneTimeSameWeights);
-
     JButton recurringDifferentWeights = new JButton("Recurring Strategy with Different Weights");
     recurringDifferentWeights.addActionListener(e -> {
-      BuySharesUsingRecurrentStrategyWithDifferentWeightsForm buySharesUsingRecurrentStrategyWithDifferentWeightsForm =
-              new BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(buySharesUsingRecurrentStrategyWithDifferentWeightsForm, this);
+      PersistRecurrentStrategyWithDifferentWeightsForm persistRecurrentStrategyWithDifferentWeightsForm =
+              new PersistRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(persistRecurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
 
