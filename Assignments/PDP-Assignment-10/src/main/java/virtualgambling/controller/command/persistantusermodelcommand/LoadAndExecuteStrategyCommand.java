@@ -61,7 +61,7 @@ public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelC
     try {
       JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
               Constants.RECURRING_STRATEGY_TYPE);
-      this.persistableUserModel.loadIntoModel(new StrategyLoader(persistableUserModel, serDes,
+      this.persistableUserModel.loadIntoModel(new StrategyLoader(serDes,
               portfolioName,
               amountToInvest, commission));
       this.consumer.accept(Constants.STRATEGY_SUCCESSFULLY_LOADED_MESSAGE);
