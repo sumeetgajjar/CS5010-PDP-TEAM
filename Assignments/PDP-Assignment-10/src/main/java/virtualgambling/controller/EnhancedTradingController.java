@@ -17,10 +17,10 @@ import virtualgambling.controller.command.Command;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuyShareWithCommissionCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesEquiWeightedCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWeightedCommand;
-import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringEquiWeightedStrategyCommand;
 import virtualgambling.controller.command.enhancedusermodelcommand.BuySharesWithRecurringWeightedStrategyCommand;
 import virtualgambling.model.EnhancedUserModel;
 import virtualgambling.model.exceptions.StrategyExecutionException;
+import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.view.View;
 
 /**
@@ -116,7 +116,7 @@ public class EnhancedTradingController extends TradingController {
     return commandMap;
   }
 
-  private BiFunction<Supplier<String>,
+  protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
@@ -130,31 +130,33 @@ public class EnhancedTradingController extends TradingController {
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       if (Objects.nonNull(endDate)) {
-        return new BuySharesWithRecurringEquiWeightedStrategyCommand(
+        return new BuySharesWithRecurringWeightedStrategyCommand(
                 this.enhancedUserModel,
                 portfolioName,
                 amountToInvest,
-                shares,
-                startDate,
-                endDate,
-                recurringPeriod,
+                new RecurringWeightedInvestmentStrategy(
+                        startDate,
+                        Utils.getStocksWithWeights(shares),
+                        recurringPeriod,
+                        endDate),
                 commission,
                 consumer);
       } else {
-        return new BuySharesWithRecurringEquiWeightedStrategyCommand(
+        return new BuySharesWithRecurringWeightedStrategyCommand(
                 this.enhancedUserModel,
                 portfolioName,
                 amountToInvest,
-                shares,
-                startDate,
-                recurringPeriod,
+                new RecurringWeightedInvestmentStrategy(
+                        startDate,
+                        Utils.getStocksWithWeights(shares),
+                        recurringPeriod),
                 commission,
                 consumer);
       }
     };
   }
 
-  private BiFunction<Supplier<String>,
+  protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithRecurringDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
@@ -172,10 +174,11 @@ public class EnhancedTradingController extends TradingController {
                 this.enhancedUserModel,
                 portfolioName,
                 amountToInvest,
-                sharePercentage,
-                startDate,
-                endDate,
-                recurringPeriod,
+                new RecurringWeightedInvestmentStrategy(
+                        startDate,
+                        sharePercentage,
+                        recurringPeriod,
+                        endDate),
                 commission,
                 consumer);
       } else {
@@ -183,16 +186,17 @@ public class EnhancedTradingController extends TradingController {
                 this.enhancedUserModel,
                 portfolioName,
                 amountToInvest,
-                sharePercentage,
-                startDate,
-                recurringPeriod,
+                new RecurringWeightedInvestmentStrategy(
+                        startDate,
+                        sharePercentage,
+                        recurringPeriod),
                 commission,
                 consumer);
       }
     };
   }
 
-  private BiFunction<Supplier<String>,
+  protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithCommissionCommand() {
     return (supplier, consumer) -> {
       String stockName = getStockNameFromUser(supplier, consumer);
@@ -214,7 +218,7 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>,
+  protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithDifferentWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
@@ -236,7 +240,7 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private BiFunction<Supplier<String>,
+  protected BiFunction<Supplier<String>,
           Consumer<String>, Command> getBuySharesWithSameWeightsCommand() {
     return (supplier, consumer) -> {
       String portfolioName = getPortfolioNameFromUser(supplier, consumer);
