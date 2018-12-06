@@ -67,12 +67,33 @@ public interface TradingFeatures {
    */
   BigDecimal getRemainingCapital();
 
+  /**
+   * Buys shares with given the ticker name, date, and quantity into the given portfolio.
+   *
+   * @param tickerName           the ticker name of the stock to buy
+   * @param portfolioName        the portfolio in which the stock needs to be purchased
+   * @param date                 the date at which the stock is to be purchased
+   * @param quantity             the quantity of the stock to buy
+   * @param commissionPercentage the commission percentage per transaction
+   * @return Optional containing the SharePurchaseOrder if the share was purchased successfully
+   */
   Optional<SharePurchaseOrder> buyShares(String tickerName,
                                          String portfolioName,
                                          Date date,
                                          long quantity,
                                          double commissionPercentage);
 
+  /**
+   * Buys shares of the given ticker name in equal proportions on the given date into the given
+   * portfolio.
+   *
+   * @param portfolioName  the portfolio in which the stock needs to be purchased
+   * @param date           the date at which the stock is to be purchased
+   * @param tickerNames    the ticker names of stocks to be purchased
+   * @param amountToInvest the total amount to invest
+   * @param commission     the commission percentage per transaction
+   * @return Optional containing the List of purchases if it was purchased successfully
+   */
   Optional<List<SharePurchaseOrder>> buyShares(String portfolioName,
                                                Date date,
                                                Set<String> tickerNames,
@@ -80,6 +101,17 @@ public interface TradingFeatures {
                                                double commission
   );
 
+  /**
+   * Buys shares of the given ticker name in given proportions on the given date into the given
+   * portfolio.
+   *
+   * @param portfolioName  the portfolio in which the stock needs to be purchased
+   * @param startDate      the date at which the stock is to be purchased
+   * @param stockWeights   percentages of stocks to purchase
+   * @param amountToInvest the total amount to invest
+   * @param commission     the commission percentage per transaction
+   * @return Optional containing the List of purchases if it was purchased successfully
+   */
   Optional<List<SharePurchaseOrder>> buyShares(String portfolioName,
                                                Date startDate,
                                                Map<String, Double> stockWeights,

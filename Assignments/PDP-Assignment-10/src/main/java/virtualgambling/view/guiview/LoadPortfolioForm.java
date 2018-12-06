@@ -22,7 +22,7 @@ import virtualgambling.controller.TradingFeatures;
  */
 public class LoadPortfolioForm extends AbstractForm {
 
-  public static final String PORTFOLIO_FILE_PATH = "Portfolio File Path: ";
+  private static final String PORTFOLIO_FILE_PATH = "Portfolio File Path: ";
   protected final MainForm mainForm;
   protected final TradingFeatures tradingFeatures;
   private JLabel filePathLabel;
@@ -31,7 +31,7 @@ public class LoadPortfolioForm extends AbstractForm {
   /**
    * Constructs a object of LoadPortfolioForm with the given params.
    *
-   * @param mainForm the mainForm
+   * @param mainForm        the mainForm
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
