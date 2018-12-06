@@ -17,6 +17,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.exceptions.PortfolioNotFoundException;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.PortfolioPersister;
+import virtualgambling.model.persistence.StrategyLoader;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
@@ -206,6 +207,23 @@ public class GUITradingController implements Controller {
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());
         return Optional.empty();
+      }
+    }
+
+    @Override
+    public boolean loadAndExecuteStrategy(String portfolioName, String filePath,
+                                          BigDecimal amountToInvest, int commissionPercentage) {
+
+      try {
+        JSONSerDes<Strategy> serDes = new JSONSerDes<>(Paths.get(filePath),
+                new TypeToken<RecurringWeightedInvestmentStrategy>() {
+                }.getType());
+        userModel.loadIntoModel(new StrategyLoader(userModel, serDes, portfolioName,
+                amountToInvest, commissionPercentage));
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
       }
     }
 

@@ -81,6 +81,9 @@ public interface Features {
                                                double commission
   );
 
+  boolean loadAndExecuteStrategy(String portfolioName, String filePath, BigDecimal amountToInvest
+          , int commissionPercentage);
+
   boolean loadPortfolio(String filePath);
 
   boolean savePortfolio(String portfolioName, String filePath);
