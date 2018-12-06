@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import util.Constants;
@@ -19,6 +20,7 @@ import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.UserModel;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.bean.SharePurchaseOrder;
 import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.PortfolioLoader;
@@ -34,7 +36,6 @@ import virtualgambling.model.strategy.Strategy;
  * The class represents a Junit class to test Persistable User Model in isolation.
  */
 public class PersistableUserModelTest extends EnhancedUserModelTest {
-  //todo add asserts for cost basis and value.
   private static final String PORTFOLIO_P1 = "p1";
   private static final String PORTFOLIO_FANG = "FANG";
 
@@ -56,6 +57,12 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     userModel.buyShares("AAPL", PORTFOLIO_P1, TestUtils.getValidDateForTrading(), 10);
 
     Portfolio portfolio = userModel.getPortfolio(PORTFOLIO_P1);
+
+    List<SharePurchaseOrder> purchases = portfolio.getPurchases();
+    BigDecimal costBasisIncludingCommission =
+            portfolio.getCostBasisIncludingCommission(Utils.getTodayDate());
+    BigDecimal value = portfolio.getValue(Utils.getTodayDate());
+    String name = portfolio.getName();
 
     try {
       userModel.persistFromModel(new PortfolioPersister(serDes,
@@ -84,6 +91,12 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     } catch (IOException e) {
       Assert.fail();
     }
+
+    Assert.assertEquals(purchases, userModel.getPortfolio(PORTFOLIO_P1).getPurchases());
+    Assert.assertEquals(value, userModel.getPortfolio(PORTFOLIO_P1).getValue(Utils.getTodayDate()));
+    Assert.assertEquals(name, userModel.getPortfolio(PORTFOLIO_P1).getName());
+    Assert.assertEquals(costBasisIncludingCommission,
+            userModel.getPortfolio(PORTFOLIO_P1).getCostBasisIncludingCommission(Utils.getTodayDate()));
 
     Assert.assertEquals(userModel.getPortfolio(PORTFOLIO_P1), portfolio);
   }
@@ -116,8 +129,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
       Assert.fail();
     }
 
-    Assert.assertEquals("p2", userModel.getPortfolio("p2").getName());
-    Assert.assertEquals(1, userModel.getPortfolio("p2").getPurchases().size());
+    Assert.assertEquals(portfolio, userModel.getPortfolio("p2"));
   }
 
   @Test
