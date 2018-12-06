@@ -2,7 +2,6 @@ package virtualgambling.view.guiview;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Objects;
@@ -15,10 +14,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to save a portfolio to a file. It extends {@link AbstractForm}
+ * to reduce the effort in implementing the common functionality.
  */
 public class SavePortfolioForm extends AbstractForm {
 
@@ -27,10 +28,17 @@ public class SavePortfolioForm extends AbstractForm {
   private JLabel filePathLabel;
   private File selectedFile;
 
-  public SavePortfolioForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a object of SavePortfolioForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public SavePortfolioForm(MainForm mainForm, Features features) throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Save Portfolio");
   }
 
