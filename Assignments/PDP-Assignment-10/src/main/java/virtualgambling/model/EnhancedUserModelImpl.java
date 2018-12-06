@@ -29,7 +29,8 @@ public class EnhancedUserModelImpl extends SimpleUserModel implements EnhancedUs
    * @throws IllegalArgumentException if any of the given params are null
    */
   public EnhancedUserModelImpl(StockDAOType stockDAOType,
-                               StockDataSourceType stockDataSourceType) throws IllegalArgumentException {
+                               StockDataSourceType stockDataSourceType)
+          throws IllegalArgumentException {
     super(stockDAOType, stockDataSourceType);
   }
 
