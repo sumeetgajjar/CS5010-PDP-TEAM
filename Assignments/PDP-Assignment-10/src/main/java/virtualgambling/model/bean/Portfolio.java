@@ -20,30 +20,25 @@ import virtualgambling.model.stockdao.StockDAO;
  * purchases of Share associated with it.
  */
 public class Portfolio implements Serializable {
-
-  //  private static final long serialVersionUID = -8134764875103300708L;
   private final String name;
   private final transient StockDAO stockDAO;
   private final List<SharePurchaseOrder> purchases;
   private final StockDAOType stockDAOType;
   private final StockDataSourceType stockDataSourceType;
 
-//  /**
-//   * Constructs a Object of {@link Portfolio} with the given name.
-//   *
-//   * @param name the name of the portfolio.
-//   * @throws IllegalArgumentException if any of the given params are null
-//   */
-//  public Portfolio(String name, StockDAO stockDAO, List<SharePurchaseOrder> purchases)
-//          throws IllegalArgumentException {
-//    this.name = Utils.requireNonNull(name);
-//    this.stockDAO = Utils.requireNonNull(stockDAO);
-//    this.purchases = Utils.requireNonNull(purchases);
-//  }
 
+  /**
+   * Constructs a Object of {@link Portfolio} with the given parameters.
+   *
+   * @param portfolioName       the name of the portfolio
+   * @param stockDAOType        the type of stockDAO to use
+   * @param stockDataSourceType the type of stockDataSource to use
+   * @param sharePurchaseOrders the list of sharePurchaseOrders
+   * @throws IllegalArgumentException if any of the given params are null
+   */
   public Portfolio(String portfolioName, StockDAOType stockDAOType,
                    StockDataSourceType stockDataSourceType,
-                   List<SharePurchaseOrder> sharePurchaseOrders) {
+                   List<SharePurchaseOrder> sharePurchaseOrders) throws IllegalArgumentException {
     this.stockDataSourceType = Utils.requireNonNull(stockDataSourceType);
     this.stockDAOType = Utils.requireNonNull(stockDAOType);
     this.stockDAO = StockDAOFactory.fromStockDAOAndDataSource(this.stockDAOType,
@@ -71,10 +66,20 @@ public class Portfolio implements Serializable {
     return Collections.unmodifiableList(this.purchases);
   }
 
+  /**
+   * Gets the current {@link StockDAOType} that is used by the portfolio.
+   *
+   * @return the current {@link StockDAOType} that is used by the portfolio.
+   */
   public StockDAOType getStockDAOType() {
     return stockDAOType;
   }
 
+  /**
+   * Gets the current {@link StockDataSourceType} that is used by the portfolio.
+   *
+   * @return the current {@link StockDataSourceType} that is used by the portfolio.
+   */
   public StockDataSourceType getStockDataSourceType() {
     return stockDataSourceType;
   }
@@ -153,8 +158,12 @@ public class Portfolio implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Portfolio)) return false;
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Portfolio)) {
+      return false;
+    }
     Portfolio portfolio = (Portfolio) o;
     return Objects.equals(getName(), portfolio.getName()) &&
             Objects.equals(getPurchases(), portfolio.getPurchases()) &&
