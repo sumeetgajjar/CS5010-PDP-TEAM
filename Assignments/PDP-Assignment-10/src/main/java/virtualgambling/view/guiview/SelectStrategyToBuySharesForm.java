@@ -8,17 +8,26 @@ import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 1:52 AM, 12/6/18
+ * This class represents a GUI form to select a strategy to buy shares. It extends {@link
+ * AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class SelectStrategyToBuySharesForm extends AbstractForm {
 
   private final MainForm mainForm;
   private final Features features;
 
-  public SelectStrategyToBuySharesForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of SelectStrategyToBuySharesForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public SelectStrategyToBuySharesForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Buy Shares using Strategy");
   }
 
