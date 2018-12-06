@@ -19,17 +19,26 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
 
   protected final MainForm mainForm;
   protected final Features features;
+  private JLabel filePathLabel;
+  private JButton addStockJButton;
+  private JTextField stockNameJTextField;
+  private JTextArea stocksJTextArea;
+  private File selectedFile;
+
   protected final Map<String, Double> stockPercentageMap;
   protected JTextField stockPercentageJTextField;
   protected JLabel stockPercentageJLabel;
-  private File selectedFile;
-  private JLabel filePathLabel;
 
   public PersistRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
+    addStockJButton.addActionListener(
+            this.getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 
   @Override
@@ -61,13 +70,13 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
 
     container.add(jPanel);
 
-    JTextArea stocksJTextArea = new JTextArea();
+    stocksJTextArea = new JTextArea();
     stocksJTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
     stocksJTextArea.setEditable(false);
 
     JPanel stocksAdditionPanel = new JPanel();
     stocksAdditionPanel.add(new JLabel("Ticker Name:"));
-    JTextField stockNameJTextField = new JTextField(10);
+    stockNameJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockNameJTextField);
 
     stockPercentageJLabel = new JLabel("Stock Percentage:");
@@ -75,12 +84,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     stockPercentageJTextField = new JTextField(10);
     stocksAdditionPanel.add(stockPercentageJTextField);
 
-    JButton addStockJButton = new JButton("Add Stock");
-    addStockJButton.addActionListener(
-            getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+    addStockJButton = new JButton("Add Stock");
 
     stocksAdditionPanel.add(addStockJButton);
     container.add(stocksAdditionPanel);
