@@ -211,8 +211,8 @@ public class Utils {
   }
 
   /**
-   * This method returns the last working day of the week before this day. This does not deal with
-   * public holidays, it merely treats Saturday and Sunday as holiday.
+   * Returns the last working day of the week before this day. This does not deal with public
+   * holidays, it merely treats Saturday and Sunday as holiday.
    *
    * @return the last working day of the week.
    */

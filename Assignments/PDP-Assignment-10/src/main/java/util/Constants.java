@@ -19,10 +19,10 @@ public class Constants {
 
   public static final Type RECURRING_STRATEGY_TYPE =
           new TypeToken<RecurringWeightedInvestmentStrategy>() {
-          }.getType();
+  }.getType();
   public static final Type ONETIME_STRATEGY_TYPE =
           new TypeToken<OneTimeWeightedInvestmentStrategy>() {
-          }.getType();
+  }.getType();
 
   public static final String INVESTMENT_AMOUNT_MESSAGE = "Please enter the amount to invest";
 

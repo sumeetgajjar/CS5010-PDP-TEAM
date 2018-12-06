@@ -155,9 +155,10 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     return success;
   }
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField) {
+  protected ActionListener getActionListenerForAddStockButton(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField) {
     return getActionListenerForAddStockButtonForDifferentWeight(
             stocksJTextArea,
             stockNameJTextField,
