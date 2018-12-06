@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
@@ -118,10 +119,36 @@ public class GUITradingController implements Controller {
     }
 
     @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date date,
+                                                        Set<String> tickerNames,
+                                                        BigDecimal amountToInvest,
+                                                        double commission) {
+      return Optional.empty();
+    }
+
+    @Override
+    public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
+                                                        Map<String, Double> stockWeights,
+                                                        BigDecimal amountToInvest,
+                                                        double commission) {
+      return Optional.empty();
+    }
+
+    @Override
     public Optional<List<SharePurchaseOrder>> buyShares(String portfolioName, Date startDate,
                                                         int dayFrequency, Set<String> tickerNames
             , BigDecimal amountToInvest, double commission) {
-      return Optional.empty();
+      try {
+        Strategy strategy =
+                new RecurringWeightedInvestmentStrategy(startDate,
+                        Utils.getStocksWithWeights(tickerNames), dayFrequency);
+
+        return Optional.of(this.userModel.buyShares(portfolioName, amountToInvest, strategy,
+                commission));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
     }
 
     @Override
@@ -130,7 +157,18 @@ public class GUITradingController implements Controller {
                                                         Set<String> tickerNames,
                                                         BigDecimal amountToInvest,
                                                         double commission) {
-      return Optional.empty();
+      try {
+        Strategy strategy =
+                new RecurringWeightedInvestmentStrategy(startDate,
+                        Utils.getStocksWithWeights(tickerNames), dayFrequency,
+                        endDate);
+
+        return Optional.of(this.userModel.buyShares(portfolioName, amountToInvest, strategy,
+                commission));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
     }
 
     @Override
