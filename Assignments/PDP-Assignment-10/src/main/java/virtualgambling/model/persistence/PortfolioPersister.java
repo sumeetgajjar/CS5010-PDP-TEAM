@@ -20,7 +20,7 @@ public class PortfolioPersister implements Persister {
   /**
    * Constructs a {@link PortfolioPersister} in terms of {@link SerDes} and a {@link Portfolio}.
    *
-   * @param serDes    the serializer/deserializer that will be delegated the job of serializing
+   * @param serDes    l
    * @param portfolio the portfolio that needs to be serialized
    */
   public PortfolioPersister(SerDes<Portfolio> serDes, Portfolio portfolio) {

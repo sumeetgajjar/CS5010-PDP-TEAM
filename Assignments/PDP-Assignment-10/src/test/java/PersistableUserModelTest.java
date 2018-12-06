@@ -71,7 +71,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     }
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
+      userModel.loadIntoModel(new PortfolioLoader(serDes));
     } catch (IOException e) {
       Assert.fail();
     }
@@ -86,7 +86,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     Assert.assertNotEquals(userModel.getPortfolio(PORTFOLIO_P1), portfolio);
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
+      userModel.loadIntoModel(new PortfolioLoader(serDes));
     } catch (IOException e) {
       Assert.fail();
     }
@@ -123,7 +123,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     userModel = TestUtils.getEmptyPersistableUserModel();
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, serDes));
+      userModel.loadIntoModel(new PortfolioLoader(serDes));
     } catch (Exception e) {
       Assert.fail();
     }
@@ -167,7 +167,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     // deserialize the strategy
     try {
-      userModel.loadIntoModel(new StrategyLoader(userModel, serDes, PORTFOLIO_P1,
+      userModel.loadIntoModel(new StrategyLoader(serDes, PORTFOLIO_P1,
               new BigDecimal(1000), 10));
     } catch (Exception e) {
       Assert.fail(e.getMessage());
@@ -192,7 +192,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     }
 
     try {
-      userModel.loadIntoModel(new StrategyLoader(userModel, oneTimeSerde, "p2",
+      userModel.loadIntoModel(new StrategyLoader(oneTimeSerde, "p2",
               new BigDecimal(1000), 10));
     } catch (Exception e) {
       Assert.fail(e.getMessage());
@@ -329,14 +329,14 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     JSONSerDes<Strategy> strategyJSONSerder = new JSONSerDes<>(test, Constants.PORTFOLIO_TYPE);
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, portfolioJSONSerDes));
+      userModel.loadIntoModel(new PortfolioLoader(portfolioJSONSerDes));
       Assert.fail("should have failed");
     } catch (Exception e) {
       Assert.assertEquals("Could not deserialize portfolio", e.getMessage());
     }
 
     try {
-      userModel.loadIntoModel(new StrategyLoader(userModel, strategyJSONSerder, PORTFOLIO_P1,
+      userModel.loadIntoModel(new StrategyLoader(strategyJSONSerder, PORTFOLIO_P1,
               new BigDecimal("1000"), 10));
       Assert.fail("should have failed");
     } catch (Exception e) {
@@ -372,7 +372,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
-    userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+    userModel.loadIntoModel(new PortfolioLoader(jsonSerDes));
 
     Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
 
@@ -409,7 +409,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
-    userModel.loadIntoModel(new StrategyLoader(userModel, jsonSerDes, PORTFOLIO_P1,
+    userModel.loadIntoModel(new StrategyLoader(jsonSerDes, PORTFOLIO_P1,
             new BigDecimal("10000"), 10));
 
     Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
@@ -447,7 +447,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
 
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
-    userModel.loadIntoModel(new StrategyLoader(userModel, jsonSerDes, PORTFOLIO_P1,
+    userModel.loadIntoModel(new StrategyLoader(jsonSerDes, PORTFOLIO_P1,
             new BigDecimal("10000"), 10));
 
     Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
@@ -501,7 +501,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
     try {
-      userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+      userModel.loadIntoModel(new PortfolioLoader(jsonSerDes));
       Assert.fail("should have failed");
     } catch (Exception e) {
       Assert.assertEquals("Stock Data not found", e.getMessage());

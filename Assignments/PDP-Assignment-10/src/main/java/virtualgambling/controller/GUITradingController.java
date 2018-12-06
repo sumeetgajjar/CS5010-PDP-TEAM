@@ -227,7 +227,7 @@ public class GUITradingController implements Controller {
       try {
         JSONSerDes<Strategy> serDes = new JSONSerDes<>(Paths.get(filePath),
                 Constants.RECURRING_STRATEGY_TYPE);
-        userModel.loadIntoModel(new StrategyLoader(userModel, serDes, portfolioName,
+        userModel.loadIntoModel(new StrategyLoader(serDes, portfolioName,
                 amountToInvest, commissionPercentage));
         return true;
       } catch (Exception e) {
@@ -313,7 +313,7 @@ public class GUITradingController implements Controller {
       try {
         JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(Paths.get(filePath),
                 Constants.PORTFOLIO_TYPE);
-        userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+        userModel.loadIntoModel(new PortfolioLoader(jsonSerDes));
         return true;
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());

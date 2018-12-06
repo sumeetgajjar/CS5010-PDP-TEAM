@@ -17,7 +17,7 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl
         implements PersistableUserModel {
 
   /**
-   * Constructs a Object of {@link PersistableUserModelImpl} with the given params.
+   * Constructs a instance of {@link PersistableUserModelImpl} with the given params.
    *
    * @param stockDAOType        the stock DAO type
    * @param stockDataSourceType the stockDataSource type
@@ -42,7 +42,7 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl
 
   @Override
   public void loadIntoModel(Loader loader) throws IOException {
-    loader.load();
+    loader.load(this);
   }
 
   @Override

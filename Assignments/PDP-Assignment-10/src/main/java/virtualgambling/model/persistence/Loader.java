@@ -2,6 +2,7 @@ package virtualgambling.model.persistence;
 
 import java.io.IOException;
 
+import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.exceptions.PersistenceException;
 
 /**
@@ -17,6 +18,7 @@ public interface Loader {
    *
    * @throws IOException          if an IO operation fails
    * @throws PersistenceException if persistence operation other than IO operation fails
+   * @param persistableUserModel
    */
-  void load() throws IOException, PersistenceException;
+  void load(PersistableUserModel persistableUserModel) throws IOException, PersistenceException;
 }
