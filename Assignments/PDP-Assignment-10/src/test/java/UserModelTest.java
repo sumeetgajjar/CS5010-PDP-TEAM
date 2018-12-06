@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import util.Share;
 import util.TestUtils;
 import util.Utils;
 import virtualgambling.model.UserModel;
@@ -123,7 +122,7 @@ public class UserModelTest {
           StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     userModel.createPortfolio("p1");
     try {
@@ -152,7 +151,7 @@ public class UserModelTest {
   public void buyingShareFailsForNullInputs() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithEmptyPortfolio();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     try {
       userModel.buyShares(null, "p1", date, 1);
@@ -180,7 +179,7 @@ public class UserModelTest {
   public void buyingShareForMissingPortfolioFails() throws StockDataNotFoundException {
     UserModel userModel = getUserModelWithSimpleStockDao();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     try {
       userModel.buyShares(appleShare.getTickerName(), "p1", date, 1);
@@ -193,7 +192,7 @@ public class UserModelTest {
   @Test
   public void buyingSharesAtInvalidTimeFails() throws StockDataNotFoundException {
     UserModel userModel = getUserModel(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE);
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
     userModel.createPortfolio("p1");
 
     try {
@@ -224,7 +223,7 @@ public class UserModelTest {
   public void getRemainingCapitalWorks() throws StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
     userModel.createPortfolio("p1");
 
     Assert.assertEquals(TestUtils.DEFAULT_USER_CAPITAL, userModel.getRemainingCapital());
@@ -327,8 +326,8 @@ public class UserModelTest {
 
   @Test
   public void buyMultipleStocksWorks() throws IllegalArgumentException, StockDataNotFoundException {
-    Share appleShare = getAppleShare();
-    Share googleShare = getGoogleShare();
+    TestUtils.Share appleShare = getAppleShare();
+    TestUtils.Share googleShare = getGoogleShare();
 
     Date date = TestUtils.getValidDateForTrading();
 
@@ -398,7 +397,7 @@ public class UserModelTest {
           StockDataNotFoundException {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -444,8 +443,8 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
     userModel.createPortfolio("p2");
-    Share appleShare = getAppleShare();
-    Share googleShare = getGoogleShare();
+    TestUtils.Share appleShare = getAppleShare();
+    TestUtils.Share googleShare = getGoogleShare();
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -555,7 +554,7 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
 
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -600,7 +599,7 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
 
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -666,7 +665,7 @@ public class UserModelTest {
     UserModel userModel = TestUtils.getMockedUserModel();
     userModel.createPortfolio("p1");
 
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     Calendar calendar = Utils.getCalendarInstance();
     calendar.set(2018, Calendar.NOVEMBER, 1, 10, 0);
@@ -693,12 +692,12 @@ public class UserModelTest {
     }
   }
 
-  protected static Share getAppleShare() {
-    return new Share("AAPL", BigDecimal.TEN);
+  protected static TestUtils.Share getAppleShare() {
+    return new TestUtils.Share("AAPL", BigDecimal.TEN);
   }
 
-  private Share getGoogleShare() {
-    return new Share("GOOG", new BigDecimal("11"));
+  private TestUtils.Share getGoogleShare() {
+    return new TestUtils.Share("GOOG", new BigDecimal("11"));
   }
 
   private static Date getDateAfterClosingTime() {

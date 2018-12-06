@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import util.Share;
 import util.TestUtils;
 import util.Utils;
 import virtualgambling.model.EnhancedUserModel;
@@ -180,7 +179,7 @@ public class EnhancedUserModelTest extends UserModelTest {
   public void buySharesFailsForNullInputs() throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     try {
       enhancedUserModel.buyShares(null, "p1", date, 1, 10);
@@ -230,7 +229,7 @@ public class EnhancedUserModelTest extends UserModelTest {
           StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     enhancedUserModel.createPortfolio("p1");
     try {
@@ -253,7 +252,7 @@ public class EnhancedUserModelTest extends UserModelTest {
           throws StockDataNotFoundException {
     EnhancedUserModel enhancedUserModel = TestUtils.getEmptyEnhancedUserModel();
     Date date = TestUtils.getValidDateForTrading();
-    Share appleShare = getAppleShare();
+    TestUtils.Share appleShare = getAppleShare();
 
     try {
       enhancedUserModel.buyShares(appleShare.getTickerName(), "p1", date, 1, 10);
