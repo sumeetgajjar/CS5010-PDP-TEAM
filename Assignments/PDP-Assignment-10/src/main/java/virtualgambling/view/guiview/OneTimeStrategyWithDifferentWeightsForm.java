@@ -86,9 +86,7 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
             getActionListenerForAddStockButton(
                     stocksJTextArea,
                     stockNameJTextField,
-                    stockPercentageJTextField,
-                    this.stockPercentageMap,
-                    this.mainForm::displayError));
+                    stockPercentageJTextField));
 
     stocksAdditionPanel.add(addStockJButton);
 
@@ -106,6 +104,17 @@ public class OneTimeStrategyWithDifferentWeightsForm extends AbstractForm {
                     commissionPercentageJTextField)));
 
     this.add(container);
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
+    return getActionListenerForAddStockButtonForDifferentWeight(
+            stocksJTextArea,
+            stockNameJTextField,
+            stockPercentageJTextField,
+            this.stockPercentageMap,
+            this.mainForm::displayError);
   }
 
   private ActionListener

@@ -285,11 +285,13 @@ public abstract class AbstractForm extends JFrame {
     }
   }
 
-  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                              JTextField stockNameJTextField,
-                                                              JTextField stockPercentageJTextField,
-                                                              Map<String, Double> stockPercentageMap,
-                                                              Consumer<String> errorMessageConsumer) {
+  protected ActionListener getActionListenerForAddStockButtonForDifferentWeight(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          JTextField stockPercentageJTextField,
+          Map<String, Double> stockPercentageMap,
+          Consumer<String> errorMessageConsumer) {
+
     return e -> {
       if (this.isTickerNameTextFieldEmpty(stockNameJTextField)) {
         return;
@@ -307,6 +309,30 @@ public abstract class AbstractForm extends JFrame {
       StringBuilder builder = new StringBuilder();
       for (Map.Entry<String, Double> entry : stockPercentageMap.entrySet()) {
         builder.append(String.format("%s:%s %%", entry.getKey(), entry.getValue()));
+        builder.append(System.lineSeparator());
+      }
+
+      stocksJTextArea.setText(builder.toString());
+    };
+  }
+
+  protected ActionListener getActionListenerForAddStockButtonForSameWeight(
+          JTextArea stocksJTextArea,
+          JTextField stockNameJTextField,
+          Map<String, Double> stockPercentageMap) {
+
+    return e -> {
+      if (this.isTickerNameTextFieldEmpty(stockNameJTextField)) {
+        return;
+      }
+
+      String tickerName = stockNameJTextField.getText();
+
+      stockPercentageMap.put(tickerName, 0D);
+
+      StringBuilder builder = new StringBuilder();
+      for (Map.Entry<String, Double> entry : stockPercentageMap.entrySet()) {
+        builder.append(entry.getKey());
         builder.append(System.lineSeparator());
       }
 

@@ -187,7 +187,7 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
   protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
                                                               JTextField stockNameJTextField,
                                                               JTextField stockPercentageJTextField) {
-    return getActionListenerForAddStockButton(
+    return getActionListenerForAddStockButtonForDifferentWeight(
             stocksJTextArea,
             stockNameJTextField,
             stockPercentageJTextField,
