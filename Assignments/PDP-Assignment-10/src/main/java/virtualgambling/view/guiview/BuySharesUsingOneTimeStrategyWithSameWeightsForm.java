@@ -23,7 +23,7 @@ public class BuySharesUsingOneTimeStrategyWithSameWeightsForm
   /**
    * Constructs a object of BuySharesUsingOneTimeStrategyWithSameWeightsForm with the given params.
    *
-   * @param mainForm the mainForm
+   * @param mainForm        the mainForm
    * @param tradingFeatures the tradingFeatures
    * @throws IllegalArgumentException if the given params are null
    */
@@ -51,7 +51,8 @@ public class BuySharesUsingOneTimeStrategyWithSameWeightsForm
                                                               Date startDate,
                                                               BigDecimal amountToInvest,
                                                               Double commissionPercentage) {
-    return this.tradingFeatures.buyShares(portfolioName, startDate, this.stockPercentageMap.keySet(),
+    return this.tradingFeatures.buyShares(portfolioName, startDate,
+            this.stockPercentageMap.keySet(),
             amountToInvest, commissionPercentage);
 
   }
