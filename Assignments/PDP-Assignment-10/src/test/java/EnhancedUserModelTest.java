@@ -541,7 +541,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(2), shareCount.get("NFLX"));
 
     Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal(88), 2),
-            TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day1), 2));
+            TestUtils.getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(day1), 2));
     Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal(80), 2),
             TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getValue(day1), 2));
 
@@ -557,7 +558,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(Long.valueOf(4), shareCount.get("NFLX"));
 
     Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal(176), 2),
-            TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day2), 2));
+            TestUtils.getScaledStrippedBigDecimal(
+                    fangPortfolio.getCostBasisIncludingCommission(day2), 2));
     Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal(160), 2),
             TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getValue(day2), 2));
 
@@ -580,7 +582,8 @@ public class EnhancedUserModelTest extends UserModelTest {
     Assert.assertEquals(new BigDecimal(279.4)
                     .setScale(2, BigDecimal.ROUND_HALF_DOWN)
                     .stripTrailingZeros(),
-            TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getCostBasisIncludingCommission(day3), 2));
+            TestUtils.getScaledStrippedBigDecimal(fangPortfolio
+                    .getCostBasisIncludingCommission(day3), 2));
     Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal(254), 2),
             TestUtils.getScaledStrippedBigDecimal(fangPortfolio.getValue(day3), 2));
   }
@@ -759,8 +762,10 @@ public class EnhancedUserModelTest extends UserModelTest {
     BigDecimal expectedCostOfPurchaseWithCommission =
             getPriceAfterCommission(withoutCommission.getCostOfPurchase(), commission);
 
-    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(expectedCostOfPurchaseWithCommission, 2),
-            TestUtils.getScaledStrippedBigDecimal(withCommissionWithoutStrategy.getCostOfPurchase(), 2));
+    Assert.assertEquals(TestUtils
+                    .getScaledStrippedBigDecimal(expectedCostOfPurchaseWithCommission, 2),
+            TestUtils.getScaledStrippedBigDecimal(
+                    withCommissionWithoutStrategy.getCostOfPurchase(), 2));
   }
 
   @Test
