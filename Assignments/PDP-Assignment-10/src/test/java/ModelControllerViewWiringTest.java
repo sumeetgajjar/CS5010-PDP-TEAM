@@ -140,7 +140,7 @@ public class ModelControllerViewWiringTest {
   @Test
   public void testingEnhancedUserModelControllerViewWiring() {
     Readable readable = new StringReader("1 p1 3 p1 2018-11-11 4 p1 2018-11-11 5 p1 2 6 7 AAPL p1" +
-            " 2018-11-11 11 11 10 p1 2018-11-1 2018-11-4 1 10000 2 AAPL 40 GOOG 60 10 q");
+            " 2018-11-11 11 11 10 p1 2018-11-1 2018-11-4 1 2 AAPL 40 GOOG 60 10000 10 q");
     Appendable appendable = new StringBuffer();
     StringBuilder log = new StringBuilder();
 
@@ -250,13 +250,13 @@ public class ModelControllerViewWiringTest {
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 11 share(s) of 'AAPL' at a rate of $10.00 per stock on 2018-11-01");

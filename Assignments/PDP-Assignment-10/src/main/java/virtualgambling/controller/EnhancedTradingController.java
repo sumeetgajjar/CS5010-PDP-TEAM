@@ -124,9 +124,9 @@ public class EnhancedTradingController extends TradingController {
       Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
       int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
+      Set<String> shares = getSharesFromUser(supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
               Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
-      Set<String> shares = getSharesFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       if (Objects.nonNull(endDate)) {
@@ -164,9 +164,9 @@ public class EnhancedTradingController extends TradingController {
       Date endDate = getEndDateFromUser(Constants.END_DATE_MESSAGE, supplier, consumer);
       int recurringPeriod = getIntegerInputFromUser(Constants.RECURRING_INTERVAL_MESSAGE,
               supplier, consumer);
+      Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
       BigDecimal amountToInvest = getBigDecimalInputFromUser(
               Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE, supplier, consumer);
-      Map<String, Double> sharePercentage = getSharePercentageFromUser(supplier, consumer);
       double commission = getDoubleInputFromUser(Constants.COMMISSION_MESSAGE, supplier, consumer);
 
       if (Objects.nonNull(endDate)) {

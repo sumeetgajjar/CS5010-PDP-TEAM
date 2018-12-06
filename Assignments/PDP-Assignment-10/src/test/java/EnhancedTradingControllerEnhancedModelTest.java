@@ -6,9 +6,9 @@ import java.io.StringReader;
 import java.util.Calendar;
 import java.util.Date;
 
+import util.Constants;
 import util.TestUtils;
 import util.Utils;
-import util.Constants;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.EnhancedTradingController;
 import virtualgambling.model.EnhancedUserModel;
@@ -278,8 +278,8 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void incompleteBuySharesWithStrategyForPortfolioAsksToRetry() {
-    Readable readable = new StringReader("1 p1 11 p1 2018-10 2018-10-30 2018-10 2018-10-30 a 1 a " +
-            "10000 a 1 AAPL a 10 3 p1 2018-11-01 quit");
+    Readable readable = new StringReader("1 p1 11 p1 2018-10 2018-10-30 2018-10 2018-10-30 a 1 " +
+            "a 1 AAPL a 10000 a 10 3 p1 2018-11-01 quit");
 
     Appendable appendable = new StringBuffer();
     Controller controller = getController(readable, appendable);
@@ -300,16 +300,16 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: " +
             "\"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
-    expectedOutput.append(System.lineSeparator()).append("Unparseable Input");
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: " +
             "\"a\"");
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
+    expectedOutput.append(System.lineSeparator()).append("Unparseable Input");
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append("Unparseable Input, For input string: " +
             "\"a\"");
@@ -490,7 +490,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithSameWeightsWithRecurrentStrategy() {
-    Readable readable = new StringReader("11 p1 2018-11-1 2018-11-4 1 10000 2 AAPL GOOG 10 " +
+    Readable readable = new StringReader("11 p1 2018-11-1 2018-11-4 1 2 AAPL GOOG 10000 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -503,11 +503,11 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 454 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
@@ -540,7 +540,7 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
 
   @Test
   public void buySharesWithDifferentWeightsWithRecurrentStrategy() {
-    Readable readable = new StringReader("10 p1 2018-11-1 2018-11-4 1 10000 2 AAPL 40 GOOG 60 10 " +
+    Readable readable = new StringReader("10 p1 2018-11-1 2018-11-4 1 2 AAPL 40 GOOG 60 10000 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -553,13 +553,13 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     expectedOutput.append(System.lineSeparator())
             .append("Purchased 545 share(s) of 'GOOG' at a rate of $11.00 per stock on 2018-11-01");
@@ -635,11 +635,12 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     calendar.setTime(todayDate);
     calendar.add(Calendar.DATE, -7);
 
-    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(), Utils.getLastWorkingDay());
+    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(),
+            Utils.getLastWorkingDay());
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 
-    Readable readable = new StringReader("11 p1 " + startDateString + " - 1 10000 2 AAPL GOOG 10 " +
+    Readable readable = new StringReader("11 p1 " + startDateString + " - 1 2 AAPL GOOG 10000 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -652,11 +653,11 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
     for (int i = 0; i < numberOfDays; i++) {
       Date date = calendar.getTime();
@@ -686,12 +687,13 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     Calendar calendar = Utils.getCalendarInstance();
     calendar.setTime(todayDate);
     calendar.add(Calendar.DATE, -7);
-    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(), Utils.getLastWorkingDay());
+    long numberOfDays = Utils.absoluteInclusiveDaysBetweenDates(calendar.getTime(),
+            Utils.getLastWorkingDay());
     Date dateBefore3Days = calendar.getTime();
     String startDateString = Utils.getDefaultFormattedDateStringFromDate(dateBefore3Days);
 
-    Readable readable = new StringReader("10 p1 " + startDateString + " - 1 10000 2 AAPL 40 GOOG " +
-            "60 10 " +
+    Readable readable = new StringReader("10 p1 " + startDateString + " - 1 2 AAPL 40 GOOG " +
+            "60 10000 10 " +
             "5 p1 quit");
 
     Appendable appendable = new StringBuffer();
@@ -704,13 +706,13 @@ public class EnhancedTradingControllerEnhancedModelTest extends ControllerModelT
     expectedOutput.append(System.lineSeparator()).append(Constants.START_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.END_DATE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.RECURRING_INTERVAL_MESSAGE);
-    expectedOutput.append(System.lineSeparator())
-            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_COUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_NAME_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.STOCK_PERCENTAGE_MESSAGE);
+    expectedOutput.append(System.lineSeparator())
+            .append(Constants.RECURRING_INVESTMENT_AMOUNT_MESSAGE);
     expectedOutput.append(System.lineSeparator()).append(Constants.COMMISSION_MESSAGE);
 
     for (int i = 0; i < numberOfDays; i++) {
