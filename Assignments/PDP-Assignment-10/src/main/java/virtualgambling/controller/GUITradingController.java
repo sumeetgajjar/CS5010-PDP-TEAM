@@ -212,7 +212,7 @@ public class GUITradingController implements Controller {
 
     @Override
     public boolean loadAndExecuteStrategy(String portfolioName, String filePath,
-                                          BigDecimal amountToInvest, int commissionPercentage) {
+                                          BigDecimal amountToInvest, double commissionPercentage) {
 
       try {
         JSONSerDes<Strategy> serDes = new JSONSerDes<>(Paths.get(filePath),

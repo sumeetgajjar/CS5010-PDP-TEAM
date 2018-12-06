@@ -82,7 +82,7 @@ public interface Features {
   );
 
   boolean loadAndExecuteStrategy(String portfolioName, String filePath, BigDecimal amountToInvest
-          , int commissionPercentage);
+          , double commissionPercentage);
 
   boolean loadPortfolio(String filePath);
 

@@ -3,6 +3,7 @@ package virtualgambling.view.guiview;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.swing.*;
@@ -27,54 +28,104 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
 
   @Override
   protected void initComponents() {
-    JPanel outerPanel = new JPanel();
-    outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
+    JPanel container = new JPanel();
+    container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
-    JPanel fileChooserPanel = new JPanel();
-    fileChooserPanel.setLayout(new GridLayout(2, 1));
+    JPanel jPanel = new JPanel();
+    jPanel.setLayout(new GridLayout(4, 2));
 
-    JButton selectPortfolioFileButton = new JButton("Select portfolio file");
+    JLabel portfolioLabel = new JLabel("Portfolio Name:");
+    jPanel.add(portfolioLabel);
+    JTextField portfolioTextField = new JTextField(10);
+    jPanel.add(portfolioTextField);
+
+    JLabel amountToInvestLabel = new JLabel("Amount To Invest (Dollars):");
+    jPanel.add(amountToInvestLabel);
+    JTextField amountToInvestTextField = new JTextField(10);
+    jPanel.add(amountToInvestTextField);
+
+    JLabel commissionLabel = new JLabel("Commission percentage:");
+    jPanel.add(commissionLabel);
+    JTextField commissionTextField = new JTextField(10);
+    jPanel.add(commissionTextField);
+
+    jPanel.add(new JLabel("Strategy File:"));
+    JButton selectPortfolioFileButton = new JButton("Select Strategy file");
     selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
-    fileChooserPanel.add(selectPortfolioFileButton);
+    jPanel.add(selectPortfolioFileButton);
+
+    container.add(jPanel);
 
     this.filePathLabel = new JLabel();
-
     filePathLabel.setPreferredSize(new Dimension(600, 20));
-    fileChooserPanel.add(this.filePathLabel);
+    JPanel filePathPanel = new JPanel();
+    filePathPanel.add(this.filePathLabel);
+    container.add(filePathPanel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio();
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioTextField,
+            amountToInvestTextField,
+            commissionTextField);
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
-    outerPanel.add(fileChooserPanel);
-    outerPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
-    outerPanel.add(buttonJPanel);
+    container.add(new JSeparator(SwingConstants.HORIZONTAL));
+    container.add(buttonJPanel);
 
-    this.add(outerPanel);
+    this.add(container);
   }
 
   private ActionListener getSelectPortfolioFileActionListener() {
     return e -> {
       this.selectedFile = getFileToLoad();
       if (Objects.nonNull(this.selectedFile)) {
-        this.filePathLabel.setText(String.format("Portfolio File Path: %s",
+        this.filePathLabel.setText(String.format("Strategy File Path: %s",
                 selectedFile.getAbsolutePath()));
       }
     };
   }
 
-  private ActionListener getActionListenerForCreatePortfolio() {
+  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
+                                                             JTextField amountToInvestTextField,
+                                                             JTextField commissionTextField) {
     return e -> {
-      if (Objects.isNull(this.selectedFile)) {
-        this.mainForm.displayError("Please select the file for loading portfolio");
+      if (this.areInputsEmpty(portfolioTextField, amountToInvestTextField, commissionTextField)) {
         return;
       }
 
-      boolean success = this.features.loadPortfolio(selectedFile.getAbsolutePath());
+      String portfolioName = portfolioTextField.getText();
+      BigDecimal amountToInvest = getBigDecimalFromTextField(amountToInvestTextField,
+              this.mainForm::displayError);
+
+      if (Objects.isNull(amountToInvest)) {
+        return;
+      }
+
+      Double commissionPercentage = getDoubleFromTextField(commissionTextField,
+              this.mainForm::displayError);
+      if (Objects.isNull(commissionPercentage)) {
+        return;
+      }
+
+      if (Objects.isNull(this.selectedFile)) {
+        this.mainForm.displayError("Please select the file for loading Strategy");
+        return;
+      }
+
+      boolean success = this.features.loadAndExecuteStrategy(portfolioName,
+              selectedFile.getAbsolutePath(), amountToInvest, commissionPercentage);
 
       if (success) {
         this.showPrevious();
-        this.mainForm.display("Portfolio loaded Successfully");
+        this.mainForm.display("Strategy loaded Successfully");
       }
     };
+  }
+
+  private boolean areInputsEmpty(JTextField portfolioTextField,
+                                 JTextField amountToInvestTextField,
+                                 JTextField commissionTextField) {
+
+    return isPortfolioNameTextFieldEmpty(portfolioTextField) ||
+            isAmountToInvestTextFieldEmpty(amountToInvestTextField) ||
+            isCommissionTextFieldEmpty(commissionTextField);
   }
 }
