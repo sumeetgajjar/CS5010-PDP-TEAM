@@ -358,8 +358,10 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
 
     Assert.assertEquals(2, portfolio.getPurchases().size());
     Assert.assertEquals(new BigDecimal("220000"), portfolio.getValue(Utils.getTodayDate()));
-    Assert.assertEquals(new BigDecimal("220100"),
-            portfolio.getCostBasisIncludingCommission(Utils.getTodayDate()));
+    Assert.assertEquals(TestUtils.getScaledStrippedBigDecimal(new BigDecimal("220100"), 2),
+            TestUtils.getScaledStrippedBigDecimal(
+                    portfolio.getCostBasisIncludingCommission(Utils.getTodayDate()), 2)
+    );
   }
 
 
@@ -369,7 +371,15 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_recurring_strategy" + ".json"));
 
     if (!Files.exists(manual)) {
-      throw new FileNotFoundException("add a file that has a manually created recurring strategy");
+      Files.write(manual, ("{\n" +
+              "  \"startDate\": \"Jan 24, 2018 12:00:00 AM\",\n" +
+              "  \"stockWeights\": {\n" +
+              "    \"GOOG\": 50.0,\n" +
+              "    \"AAPL\": 50.0\n" +
+              "  },\n" +
+              "  \"dayFrequency\": 30,\n" +
+              "  \"endDate\": \"Nov 27, 2018 12:00:00 AM\"\n" +
+              "}").getBytes());
     }
 
     JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
@@ -400,7 +410,15 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_onetime_strategy" + ".json"));
 
     if (!Files.exists(manual)) {
-      throw new FileNotFoundException("add a file that has a manually created one time strategy");
+      Files.write(manual, ("{\n" +
+              "  \"startDate\": \"Sep 24, 2018 12:00:00 AM\",\n" +
+              "  \"stockWeights\": {\n" +
+              "    \"GOOG\": 20.0,\n" +
+              "    \"AAPL\": 80.0\n" +
+              "  },\n" +
+              "  \"dayFrequency\": 1,\n" +
+              "  \"endDate\": \"Sep 24, 2018 12:00:00 AM\"\n" +
+              "}").getBytes());
     }
 
     JSONSerDes<Strategy> jsonSerDes = new JSONSerDes<>(manual,
