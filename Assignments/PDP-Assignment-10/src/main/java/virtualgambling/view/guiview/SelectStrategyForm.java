@@ -26,9 +26,9 @@ public class SelectStrategyForm extends AbstractForm {
 
     JButton oneTimeDifferentWeights = new JButton("One Time Strategy");
     oneTimeDifferentWeights.addActionListener(e -> {
-      OneTimeStrategyForm oneTimeStrategyForm =
-              new OneTimeStrategyForm(mainForm, features);
-      GUIUtils.showPrevious(oneTimeStrategyForm, this);
+      OneTimeStrategyWithDifferentWeightsForm oneTimeStrategyWithDifferentWeightsForm =
+              new OneTimeStrategyWithDifferentWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(oneTimeStrategyWithDifferentWeightsForm, this);
     });
     this.add(oneTimeDifferentWeights);
 

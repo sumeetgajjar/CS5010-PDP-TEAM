@@ -8,12 +8,17 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 
 import util.Utils;
+import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
  * Created by gajjar.s, on 1:50 AM, 12/5/18
@@ -267,5 +272,45 @@ public abstract class AbstractForm extends JFrame {
     }
 
     return false;
+  }
+
+  protected void displaySharePurchaseOrder(Optional<List<SharePurchaseOrder>> sharePurchaseOrders
+          , Consumer<String> consumer) {
+    if (sharePurchaseOrders.isPresent()) {
+      List<SharePurchaseOrder> list = sharePurchaseOrders.get();
+      for (SharePurchaseOrder sharePurchaseOrder : list) {
+        consumer.accept(sharePurchaseOrder.toString());
+      }
+      this.showPrevious();
+    }
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField,
+                                                              Map<String, Double> stockPercentageMap,
+                                                              Consumer<String> errorMessageConsumer) {
+    return e -> {
+      if (this.isTickerNameTextFieldEmpty(stockNameJTextField)) {
+        return;
+      }
+
+      String tickerName = stockNameJTextField.getText();
+      Double stockPercentage = getDoubleFromTextField(stockPercentageJTextField,
+              errorMessageConsumer);
+      if (Objects.isNull(stockPercentage)) {
+        return;
+      }
+
+      stockPercentageMap.put(tickerName, stockPercentage);
+
+      StringBuilder builder = new StringBuilder();
+      for (Map.Entry<String, Double> entry : stockPercentageMap.entrySet()) {
+        builder.append(String.format("%s:%s %%", entry.getKey(), entry.getValue()));
+        builder.append(System.lineSeparator());
+      }
+
+      stocksJTextArea.setText(builder.toString());
+    };
   }
 }
