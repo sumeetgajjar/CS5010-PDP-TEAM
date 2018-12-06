@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
@@ -212,7 +213,6 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     }
   }
 
-
   @Test
   public void invalidInputToPersisterOrLoaderForStrategyoFail() throws IOException {
     PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
@@ -272,6 +272,38 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
       userModel.persistFromModel(new StrategyPersister(serDes, strategy));
     } catch (Exception e) {
       Assert.fail(e.getMessage());
+    }
+  }
+
+  @Test
+  public void blankFileLeadsToInvalidJSON() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+    Path test = Utils.getPathInDefaultFolder(Paths.get("blank" + ".json"));
+
+    if (Files.notExists(test)) {
+      Files.createFile(test);
+    }
+    JSONSerDes<Portfolio> portfolioJSONSerDes = new JSONSerDes<>(test,
+            new TypeToken<Portfolio>() {
+            }.getType());
+
+    JSONSerDes<Strategy> strategyJSONSerder = new JSONSerDes<>(test,
+            new TypeToken<Portfolio>() {
+            }.getType());
+
+    try {
+      userModel.loadIntoModel(new PortfolioLoader(userModel, portfolioJSONSerDes, PORTFOLIO_P1));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals("Could not deserialize portfolio", e.getMessage());
+    }
+
+    try {
+      userModel.loadIntoModel(new StrategyLoader(strategyJSONSerder, userModel, PORTFOLIO_P1,
+              new BigDecimal("1000"), 10));
+      Assert.fail("should have failed");
+    } catch (Exception e) {
+      Assert.assertEquals("Could not deserialize strategy", e.getMessage());
     }
   }
 }

@@ -1,9 +1,12 @@
 package virtualgambling.model.persistence;
 
 import java.io.IOException;
+import java.util.Objects;
 
+import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.exceptions.PersistenceException;
 import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.serdes.SerDes;
@@ -15,14 +18,18 @@ public class PortfolioLoader implements Loader {
 
   public PortfolioLoader(PersistableUserModel userModel, SerDes<Portfolio> serDes,
                          String portfolioName) {
-    this.userModel = userModel;
-    this.serDes = serDes;
-    this.portfolioName = portfolioName;
+    //todo do we need portfolioName?
+    this.userModel = Utils.requireNonNull(userModel);
+    this.serDes = Utils.requireNonNull(serDes);
+    this.portfolioName = Utils.requireNonNull(portfolioName);
   }
 
   @Override
-  public void load() throws IOException {
+  public void load() throws IOException, PersistenceException {
     Portfolio portfolio = this.serDes.deserialize();
+    if (Objects.isNull(portfolio)) {
+      throw new PersistenceException("Could not deserialize portfolio");
+    }
     userModel.createPortfolio(portfolio.getName());
     StockDAOType stockDAOType = userModel.getStockDAOType();
     StockDataSourceType stockDataSourceType = userModel.getStockDataSourceType();
