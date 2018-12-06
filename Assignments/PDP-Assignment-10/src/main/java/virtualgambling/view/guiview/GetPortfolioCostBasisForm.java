@@ -68,6 +68,15 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
     this.add(buttonJPanel);
   }
 
+  protected String getPrefix(String portfolioName, Date date) {
+    return "Cost basis of portfolio '" + portfolioName + "' on '"
+            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
+  }
+
+  protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
+    return this.features.getPortfolioCostBasis(portfolioName, date);
+  }
+
   private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioTextField,
                                                              JTextField dateTextField) {
     return e -> {
@@ -89,15 +98,6 @@ public class GetPortfolioCostBasisForm extends AbstractForm {
         this.showPrevious();
       }
     };
-  }
-
-  protected String getPrefix(String portfolioName, Date date) {
-    return "Cost basis of portfolio '" + portfolioName + "' on '"
-            + Utils.getDefaultFormattedDateStringFromDate(date) + "'";
-  }
-
-  protected Optional<BigDecimal> executeFeature(String portfolioName, Date date) {
-    return this.features.getPortfolioCostBasis(portfolioName, date);
   }
 
   private boolean areInputsEmpty(JTextField portfolioTextField, JTextField dateTextField) {
