@@ -18,13 +18,13 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 /**
  * Created by gajjar.s, on 2:19 AM, 12/6/18
  */
-public class RecurrentStrategyForm extends AbstractForm {
+public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
-  private final MainForm mainForm;
-  private final Features features;
-  private final Map<String, Double> stockPercentageMap;
+  protected final MainForm mainForm;
+  protected final Features features;
+  protected final Map<String, Double> stockPercentageMap;
 
-  public RecurrentStrategyForm(MainForm mainForm, Features features) {
+  public RecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
@@ -148,21 +148,9 @@ public class RecurrentStrategyForm extends AbstractForm {
         return;
       }
 
-      Optional<List<SharePurchaseOrder>> sharePurchaseOrders;
-      if (endDateTextField.getText().isEmpty()) {
-        sharePurchaseOrders =
-                this.features.buyShares(portfolioName, startDate, dayFrequency,
-                        this.stockPercentageMap,
-                        amountToInvest, commissionPercentage);
-      } else {
-        Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
-        if (Objects.isNull(endDate)) {
-          return;
-        }
-        sharePurchaseOrders = this.features.buyShares(portfolioName, startDate, endDate,
-                dayFrequency,
-                this.stockPercentageMap, amountToInvest, commissionPercentage);
-      }
+      Optional<List<SharePurchaseOrder>> sharePurchaseOrders = executeFeature(
+              portfolioName, startDate, dayFrequency, amountToInvest, commissionPercentage,
+              endDateTextField);
 
       if (sharePurchaseOrders.isPresent()) {
         List<SharePurchaseOrder> list = sharePurchaseOrders.get();
@@ -174,9 +162,30 @@ public class RecurrentStrategyForm extends AbstractForm {
     };
   }
 
-  private ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
-                                                            JTextField stockNameJTextField,
-                                                            JTextField stockPercentageJTextField) {
+  protected Optional<List<SharePurchaseOrder>> executeFeature(String portfolioName,
+                                                              Date startDate,
+                                                              Integer dayFrequency,
+                                                              BigDecimal amountToInvest,
+                                                              Double commissionPercentage,
+                                                              JTextField endDateTextField) {
+    if (endDateTextField.getText().isEmpty()) {
+      return this.features.buyShares(portfolioName, startDate, dayFrequency,
+              this.stockPercentageMap,
+              amountToInvest, commissionPercentage);
+    } else {
+      Date endDate = getDateFromTextField(endDateTextField, this.mainForm::displayError);
+      if (Objects.isNull(endDate)) {
+        return Optional.empty();
+      }
+      return this.features.buyShares(portfolioName, startDate, endDate,
+              dayFrequency,
+              this.stockPercentageMap, amountToInvest, commissionPercentage);
+    }
+  }
+
+  protected ActionListener getActionListenerForAddStockButton(JTextArea stocksJTextArea,
+                                                              JTextField stockNameJTextField,
+                                                              JTextField stockPercentageJTextField) {
     return e -> {
       if (this.isTickerNameTextFieldEmpty(stockNameJTextField)) {
         return;

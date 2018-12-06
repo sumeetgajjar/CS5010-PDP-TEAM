@@ -32,12 +32,20 @@ public class SelectStrategyForm extends AbstractForm {
     });
     this.add(oneTimeDifferentWeights);
 
-    JButton recurringDifferentWeights = new JButton("Recurring Strategy");
+    JButton recurringDifferentWeights = new JButton("Recurring Strategy with Different Weights");
     recurringDifferentWeights.addActionListener(e -> {
-      RecurrentStrategyForm recurrentStrategyForm =
-              new RecurrentStrategyForm(mainForm, features);
-      GUIUtils.showPrevious(recurrentStrategyForm, this);
+      RecurrentStrategyWithDifferentWeightsForm recurrentStrategyWithDifferentWeightsForm =
+              new RecurrentStrategyWithDifferentWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(recurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
+
+    JButton recurringSameWeights = new JButton("Recurring Strategy with Same Weights");
+    recurringSameWeights.addActionListener(e -> {
+      RecurrentStrategyWithSameWeightsForm recurrentStrategyWithSameWeightsForm =
+              new RecurrentStrategyWithSameWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(recurrentStrategyWithSameWeightsForm, this);
+    });
+    this.add(recurringSameWeights);
   }
 }
