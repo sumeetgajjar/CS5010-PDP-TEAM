@@ -52,10 +52,10 @@ public class LoadAndExecuteStrategyCommand extends AbstractPersistableUserModelC
   @Override
   public void execute() {
 
-    JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
-            Constants.RECURRING_STRATEGY_TYPE);
 
     try {
+      JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
+              Constants.RECURRING_STRATEGY_TYPE);
       this.persistableUserModel.loadIntoModel(new StrategyLoader(persistableUserModel, serDes,
               portfolioName,
               amountToInvest, commission));

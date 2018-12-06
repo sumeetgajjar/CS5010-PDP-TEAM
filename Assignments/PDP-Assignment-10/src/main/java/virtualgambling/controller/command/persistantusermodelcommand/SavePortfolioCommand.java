@@ -45,9 +45,9 @@ public class SavePortfolioCommand extends AbstractPersistableUserModelCommand {
   @Override
   public void execute() {
     Portfolio portfolio = this.persistableUserModel.getPortfolio(portfolioName);
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(path, Constants.PORTFOLIO_TYPE);
 
     try {
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(path, Constants.PORTFOLIO_TYPE);
       this.persistableUserModel.persistFromModel(new PortfolioPersister(serDes,
               portfolio));
       this.consumer.accept(Constants.PORTFOLIO_SUCCESSFULLY_SAVED_MESSAGE);

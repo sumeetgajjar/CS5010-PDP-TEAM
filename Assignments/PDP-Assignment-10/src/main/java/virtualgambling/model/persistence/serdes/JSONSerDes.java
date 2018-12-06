@@ -6,7 +6,9 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import util.Utils;
 
@@ -32,8 +34,11 @@ public class JSONSerDes<T> implements SerDes<T> {
    * @param path path of the input/output
    * @param type type of object that needs to be serializer/deserialize.
    */
-  public JSONSerDes(Path path, Type type) {
+  public JSONSerDes(Path path, Type type) throws IOException {
     this.path = Utils.requireNonNull(path);
+    if (Objects.nonNull(this.path.getParent()) && Files.notExists(this.path.getParent())) {
+      Files.createDirectory(this.path.getParent());
+    }
     this.instanceType = Utils.requireNonNull(type);
   }
 

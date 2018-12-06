@@ -42,10 +42,9 @@ public class SaveStrategyCommand extends AbstractPersistableUserModelCommand {
 
   @Override
   public void execute() {
-    JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
-            Constants.RECURRING_STRATEGY_TYPE);
-
     try {
+      JSONSerDes<Strategy> serDes = new JSONSerDes<>(path,
+              Constants.RECURRING_STRATEGY_TYPE);
       this.persistableUserModel.persistFromModel(new StrategyPersister(serDes, strategy));
       this.consumer.accept(Constants.STRATEGY_SUCCESSFULLY_SAVED_MESSAGE);
     } catch (IOException e) {

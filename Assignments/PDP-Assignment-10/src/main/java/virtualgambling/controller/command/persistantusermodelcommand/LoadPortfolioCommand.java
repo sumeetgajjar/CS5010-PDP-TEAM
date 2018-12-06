@@ -37,9 +37,9 @@ public class LoadPortfolioCommand extends AbstractPersistableUserModelCommand {
 
   @Override
   public void execute() {
-    JSONSerDes<Portfolio> serDes = new JSONSerDes<>(this.path, Constants.PORTFOLIO_TYPE);
 
     try {
+      JSONSerDes<Portfolio> serDes = new JSONSerDes<>(this.path, Constants.PORTFOLIO_TYPE);
       this.persistableUserModel.loadIntoModel(new PortfolioLoader(persistableUserModel, serDes));
       consumer.accept(Constants.PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE);
     } catch (IOException e) {
