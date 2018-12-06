@@ -39,23 +39,17 @@ public class SavePortfolioForm extends AbstractForm {
     jPanel1.add(portfolioNameJTextField);
     fileChooserPanel.add(jPanel1);
 
-    JPanel jPanel2 = new JPanel();
-    jPanel2.add(new JLabel("Please enter the name of the Portfolio File to save"));
-    JTextField fileNameJTextField = new JTextField(10);
-    jPanel2.add(fileNameJTextField);
-    fileChooserPanel.add(jPanel2);
-
-    JButton selectPortfolioFileButton = new JButton("Select portfolio file");
+    JButton selectPortfolioFileButton = new JButton("Select portfolio file destination");
     selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
     fileChooserPanel.add(selectPortfolioFileButton);
 
-    this.filePathLabel = new JLabel();
+    this.filePathLabel = new JLabel(PORTFOLIO_FILE_LABEL_TEXT);
 
     filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField,
-            fileNameJTextField);
+    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField
+    );
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
     outerPanel.add(fileChooserPanel);
@@ -67,16 +61,15 @@ public class SavePortfolioForm extends AbstractForm {
 
   private ActionListener getSelectPortfolioFileActionListener() {
     return e -> {
-      this.selectedFile = getFileToLoad();
+      this.selectedFile = getFileToSave();
       if (Objects.nonNull(this.selectedFile)) {
-        this.filePathLabel.setText(String.format("Portfolio File Path: %s",
+        this.filePathLabel.setText(String.format("%s%s", PORTFOLIO_FILE_LABEL_TEXT,
                 selectedFile.getAbsolutePath()));
       }
     };
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField,
-                                                             JTextField fileNameJTextField) {
+  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
     return e -> {
 
       if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
@@ -93,7 +86,7 @@ public class SavePortfolioForm extends AbstractForm {
       boolean success = this.features.savePortfolio(portfolioName, selectedFile.getAbsolutePath());
       if (success) {
         this.showPrevious();
-        this.mainForm.display(String.format("Portfolio '%s' loaded Successfully",
+        this.mainForm.display(String.format("Portfolio '%s' saved successfully",
                 portfolioName));
       }
     };
