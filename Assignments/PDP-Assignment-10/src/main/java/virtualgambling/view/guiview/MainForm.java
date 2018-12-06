@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,10 +61,17 @@ public class MainForm extends AbstractForm implements GUIView {
 
   @Override
   public void display(String text) {
-    this.jTextArea.append(System.lineSeparator());
+    StringBuilder separator = new StringBuilder();
+    for (int i = 0; i < 123; i++) {
+      separator.append("-");
+    }
+
     this.jTextArea.append(text);
     this.jTextArea.append(System.lineSeparator());
+    this.jTextArea.append(separator.toString());
+    this.jTextArea.append(System.lineSeparator());
     this.jTextArea.setCaretPosition(jTextArea.getDocument().getLength());
+    this.jTextArea.append(System.lineSeparator());
   }
 
   @Override
@@ -83,7 +91,7 @@ public class MainForm extends AbstractForm implements GUIView {
 
     this.jTextArea = getJTextArea();
     JScrollPane scrollPane = new JScrollPane(this.jTextArea);
-    scrollPane.setPreferredSize(new Dimension(800, 750));
+    scrollPane.setPreferredSize(new Dimension(1000, 750));
     scrollPane.add(new JSeparator(JSeparator.HORIZONTAL));
     outputPanel.add(scrollPane);
 
@@ -297,9 +305,10 @@ public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea getJTextArea() {
     JTextArea jTextArea = new JTextArea();
-    jTextArea.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+    jTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
     jTextArea.setEditable(false);
     jTextArea.setLineWrap(true);
+    jTextArea.setMargin(new Insets(4, 4, 4, 4));
     return jTextArea;
   }
 }
