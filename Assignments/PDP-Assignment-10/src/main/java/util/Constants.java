@@ -46,4 +46,17 @@ public class Constants {
   public static final String DEFAULT_PERSISTENCE_PATH = "Files";
 
   public static final String INVALID_INPUT = "Invalid input";
+
+  public static final String PORTFOLIO_FILE_SAVE_MESSAGE = "Please enter the file name of the " +
+          "portfolio to save ";
+
+  public static final String PORTFOLIO_SUCCESSFULLY_LOADED_MESSAGE = "Portfolio Successfully " +
+          "Loaded";
+
+  public static final String LOAD_PORTFOLIO_FROM_FILE = "Enter the absolute path of " +
+          "portfolio " +
+          " file to load";
+
+  public static final String PORTFOLIO_FILE_SAVE_NAME_MESSAGE = "Enter the absolute path of file " +
+          "to save the portfolio";
 }
