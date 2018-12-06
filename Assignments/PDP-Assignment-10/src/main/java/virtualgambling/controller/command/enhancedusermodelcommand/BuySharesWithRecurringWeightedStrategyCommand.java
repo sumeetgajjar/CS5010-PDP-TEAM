@@ -50,6 +50,9 @@ public class BuySharesWithRecurringWeightedStrategyCommand extends
     this.consumer = consumer;
   }
 
+  /**
+   * Executes this command and consumes the result of the command using the consumer.
+   */
   @Override
   public void execute() {
     List<SharePurchaseOrder> sharePurchaseOrders = this.enhancedUserModel.buyShares(portfolioName

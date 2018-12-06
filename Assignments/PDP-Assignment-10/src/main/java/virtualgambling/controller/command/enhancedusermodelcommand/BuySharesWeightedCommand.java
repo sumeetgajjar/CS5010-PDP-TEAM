@@ -54,6 +54,9 @@ public class BuySharesWeightedCommand extends AbstractEnhancedUserModelCommand {
     this.consumer = consumer;
   }
 
+  /**
+   * Executes this command and consumes the result of the command using the consumer.
+   */
   @Override
   public void execute() {
     List<SharePurchaseOrder> sharePurchaseOrders = this.enhancedUserModel.buyShares(portfolioName
