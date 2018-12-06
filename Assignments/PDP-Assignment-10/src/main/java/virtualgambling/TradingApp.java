@@ -6,8 +6,6 @@ import virtualgambling.controller.Controller;
 import virtualgambling.controller.GUITradingController;
 import virtualgambling.controller.OrchestratorController;
 import virtualgambling.controller.TradingController;
-import virtualgambling.model.EnhancedUserModel;
-import virtualgambling.model.EnhancedUserModelImpl;
 import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
@@ -24,18 +22,34 @@ import virtualgambling.view.guiview.MainForm;
 public class TradingApp {
 
   public static void main(String[] args) {
-    runGUITradingApp();
+    if (args.length == 2) {
+      if (args[0].equals("-view")) {
+        switch (args[1]) {
+          case "console":
+            runPersistableTradingApp();
+            break;
+          case "gui":
+            runGUITradingApp();
+            break;
+          default:
+            System.out.println("Invalid view options, correct usage is -view [gui|console]");
+        }
+      }
+    } else {
+      System.out.println("Invalid view options, correct usage is -view [gui|console]");
+    }
   }
 
   private static void runGUITradingApp() {
     GUIView guiView = new MainForm();
-    PersistableUserModelImpl persistableUserModel = new PersistableUserModelImpl(StockDAOType.SIMPLE,
-            StockDataSourceType.SIMPLE);
+    PersistableUserModelImpl persistableUserModel =
+            new PersistableUserModelImpl(StockDAOType.SIMPLE,
+                    StockDataSourceType.SIMPLE);
     Controller controller = new GUITradingController(persistableUserModel, guiView);
     controller.run();
   }
 
-  private static void runEnhancedTradingApp() {
+  private static void runPersistableTradingApp() {
     View view = new TextView(new InputStreamReader(System.in), System.out);
     Controller controller = new OrchestratorController(view);
     controller.run();

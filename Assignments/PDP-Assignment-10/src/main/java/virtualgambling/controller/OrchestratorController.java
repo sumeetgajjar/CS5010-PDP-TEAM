@@ -1,7 +1,7 @@
 package virtualgambling.controller;
 
 import util.Constants;
-import virtualgambling.model.EnhancedUserModelImpl;
+import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.factory.StockDAOType;
 import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.view.View;
@@ -37,12 +37,13 @@ public class OrchestratorController extends AbstractController {
 
       switch (commandString) {
         case "1":
-          controller = new EnhancedTradingController(
-                  new EnhancedUserModelImpl(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE), view);
+          controller = new PersistableTradingController(
+                  new PersistableUserModelImpl(StockDAOType.SIMPLE, StockDataSourceType.SIMPLE),
+                  view);
           break;
         case "2":
           controller =
-                  new EnhancedTradingController(new EnhancedUserModelImpl(StockDAOType.SIMPLE,
+                  new PersistableTradingController(new PersistableUserModelImpl(StockDAOType.SIMPLE,
                           StockDataSourceType.ALPHA_VANTAGE), view);
           break;
         default:
