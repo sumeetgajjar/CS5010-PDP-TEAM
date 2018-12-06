@@ -98,10 +98,15 @@ public class MainForm extends AbstractForm implements GUIView {
     buttons.add(getBuySharesButton());
     buttons.add(getBuySharesUsingStrategyButton());
     buttons.add(getLoadAndExecuteStrategyButton());
+    buttons.add(getPersistStrategyButton());
     buttons.add(getQuitJButton());
 
     buttonJPanel.setLayout(new GridLayout(buttons.size(), 1));
     buttons.forEach(buttonJPanel::add);
+  }
+
+  private JButton getPersistStrategyButton() {
+    return null;
   }
 
   private JButton getLoadAndExecuteStrategyButton() {
@@ -117,9 +122,9 @@ public class MainForm extends AbstractForm implements GUIView {
   private JButton getBuySharesUsingStrategyButton() {
     JButton jButton = new JButton("Buy Shares using Strategy");
     jButton.addActionListener(e -> {
-      SelectStrategyForm selectStrategyForm =
-              new SelectStrategyForm(this, features);
-      GUIUtils.showPrevious(selectStrategyForm, this);
+      SelectStrategyToBuySharesForm selectStrategyToBuySharesForm =
+              new SelectStrategyToBuySharesForm(this, features);
+      GUIUtils.showPrevious(selectStrategyToBuySharesForm, this);
     });
     return jButton;
   }
