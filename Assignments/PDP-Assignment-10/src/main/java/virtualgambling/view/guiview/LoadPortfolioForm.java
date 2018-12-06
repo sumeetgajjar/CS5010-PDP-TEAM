@@ -6,7 +6,6 @@ import java.io.File;
 import java.util.Objects;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileSystemView;
 
 import virtualgambling.controller.Features;
 
@@ -32,24 +31,18 @@ public class LoadPortfolioForm extends AbstractForm {
     outerPanel.setLayout(new BoxLayout(outerPanel, BoxLayout.Y_AXIS));
 
     JPanel fileChooserPanel = new JPanel();
-    fileChooserPanel.setLayout(new BoxLayout(fileChooserPanel, BoxLayout.Y_AXIS));
-
-    JLabel jLabel = new JLabel("Please enter the name of the Portfolio");
-    fileChooserPanel.add(jLabel);
-
-    JTextField portfolioNameJTextField = new JTextField(10);
-    fileChooserPanel.add(portfolioNameJTextField);
+    fileChooserPanel.setLayout(new GridLayout(2, 1));
 
     JButton selectPortfolioFileButton = new JButton("Select portfolio file");
-    selectPortfolioFileButton.addActionListener(getSelectPortfolioFileActionListener());
+    selectPortfolioFileButton.addActionListener(this.getSelectPortfolioFileActionListener());
     fileChooserPanel.add(selectPortfolioFileButton);
 
     this.filePathLabel = new JLabel();
-    filePathLabel.setPreferredSize(new Dimension(400, 20));
-    filePathLabel.setBackground(Color.red);
+
+    filePathLabel.setPreferredSize(new Dimension(600, 20));
     fileChooserPanel.add(this.filePathLabel);
 
-    ActionListener actionListener = getActionListenerForCreatePortfolio(portfolioNameJTextField);
+    ActionListener actionListener = getActionListenerForCreatePortfolio();
     JPanel buttonJPanel = this.getActionButtonJPanel(actionListener);
 
     outerPanel.add(fileChooserPanel);
@@ -61,34 +54,24 @@ public class LoadPortfolioForm extends AbstractForm {
 
   private ActionListener getSelectPortfolioFileActionListener() {
     return e -> {
-      JFileChooser jFileChooser =
-              new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-
-      int returnValue = jFileChooser.showOpenDialog(this);
-
-      if (returnValue == JFileChooser.APPROVE_OPTION) {
-        this.selectedFile = jFileChooser.getSelectedFile();
+      this.selectedFile = getFileToLoad();
+      if (Objects.nonNull(this.selectedFile)) {
         this.filePathLabel.setText(String.format("Portfolio File Path: %s",
                 selectedFile.getAbsolutePath()));
       }
     };
   }
 
-  private ActionListener getActionListenerForCreatePortfolio(JTextField portfolioNameJTextField) {
+  private ActionListener getActionListenerForCreatePortfolio() {
     return e -> {
-      if (this.isPortfolioNameTextFieldEmpty(portfolioNameJTextField)) {
-        return;
-      }
-
       if (Objects.isNull(this.selectedFile)) {
         this.mainForm.displayError("Please select the file for loading portfolio");
         return;
       }
 
-      String portfolioName = portfolioNameJTextField.getText();
-      boolean success = this.features.loadPortfolio(portfolioName, selectedFile);
+      String portfolioName = this.features.loadPortfolio(selectedFile);
 
-      if (success) {
+      if (Objects.nonNull(portfolioName)) {
         this.showPrevious();
         this.mainForm.display(String.format("Portfolio '%s' loaded Successfully",
                 portfolioName));

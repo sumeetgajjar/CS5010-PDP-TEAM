@@ -6,11 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.function.Consumer;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 
 import util.Utils;
 
@@ -149,6 +151,36 @@ public abstract class AbstractForm extends JFrame {
       displayErrorConsumer.accept(String.format("Unparseable Decimal, %s", e.getMessage()));
     }
     return number;
+  }
+
+  protected File getFileToLoad() {
+    JFileChooser jFileChooser =
+            new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    jFileChooser.setApproveButtonText("Open");
+
+    int returnValue = jFileChooser.showOpenDialog(this);
+
+    if (returnValue == JFileChooser.APPROVE_OPTION) {
+      return jFileChooser.getSelectedFile();
+    }
+    return null;
+  }
+
+  protected File getDirectoryToSave() {
+    JFileChooser jFileChooser =
+            new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+    jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    jFileChooser.setApproveButtonText("Save");
+
+    int returnValue = jFileChooser.showOpenDialog(this);
+
+    if (returnValue == JFileChooser.APPROVE_OPTION) {
+      return jFileChooser.getSelectedFile();
+    }
+    return null;
   }
 
   protected boolean isPortfolioNameTextFieldEmpty(JTextField portfolioNameJTextField) {

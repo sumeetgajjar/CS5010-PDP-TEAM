@@ -32,9 +32,9 @@ public interface Features {
                                          long quantity,
                                          double commissionPercentage);
 
-  boolean loadPortfolio(String portfolioName, File portfolioFile);
+  String loadPortfolio(File portfolioFile);
 
-  boolean savePortfolio(String portfolioName);
+  boolean savePortfolio(String portfolioName, File selectedFile);
 
   void quit();
 }

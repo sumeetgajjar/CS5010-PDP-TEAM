@@ -109,16 +109,17 @@ public class GUITradingController implements Controller {
     }
 
     @Override
-    public boolean loadPortfolio(String portfolioName, File portfolioFile) {
+    public String loadPortfolio(File portfolioFile) {
       try {
-        return true;
+        //todo implement this
+        return "asd";
       } catch (Exception e) {
-        return false;
+        return null;
       }
     }
 
     @Override
-    public boolean savePortfolio(String portfolioName) {
+    public boolean savePortfolio(String portfolioName, File selectedFile) {
       try {
         return true;
       } catch (Exception e) {
