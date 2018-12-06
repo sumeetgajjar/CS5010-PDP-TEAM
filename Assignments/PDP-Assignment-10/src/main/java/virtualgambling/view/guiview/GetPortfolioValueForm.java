@@ -15,6 +15,7 @@ public class GetPortfolioValueForm extends GetPortfolioCostBasisForm {
 
   public GetPortfolioValueForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm, features);
+    this.setTitle("Portfolio Value");
   }
 
   @Override

@@ -39,6 +39,7 @@ public class PortfolioPerformanceForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Portfolio Performance");
   }
 
   @Override
@@ -216,7 +217,7 @@ public class PortfolioPerformanceForm extends AbstractForm {
       JFreeChart chart = ChartFactory.createTimeSeriesChart(
               "Portfolio Performance",
               "Time",
-              "Value",
+              "Dollars",
               dataset,
               true,
               true,

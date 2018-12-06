@@ -9,6 +9,7 @@ import java.util.Set;
 
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.factory.StockDataSourceType;
 
 /**
  * Created by gajjar.s, on 3:38 AM, 12/5/18
@@ -100,6 +101,8 @@ public interface Features {
   boolean loadPortfolio(String filePath);
 
   boolean savePortfolio(String portfolioName, String filePath);
+
+  boolean setDataSource(StockDataSourceType stockDataSourceType);
 
   void quit();
 }

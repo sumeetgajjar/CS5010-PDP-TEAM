@@ -23,6 +23,7 @@ public class SavePortfolioForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Save Portfolio");
   }
 
   @Override

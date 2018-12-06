@@ -35,6 +35,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
     this.addActionListenerToAddStockButton();
+    this.setTitle("Persist Strategy");
   }
 
   @Override

@@ -18,6 +18,7 @@ public class CreateStrategyAndPersistForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Create and Persist Strategy");
   }
 
   @Override

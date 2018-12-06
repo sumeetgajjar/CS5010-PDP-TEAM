@@ -16,6 +16,7 @@ public class GetPortfolioCompositionForm extends CreatePortfolioForm {
 
   public GetPortfolioCompositionForm(MainForm mainForm, Features features) throws HeadlessException {
     super(mainForm, features);
+    this.setTitle("Portfolio Composition");
   }
 
   @Override

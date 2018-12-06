@@ -24,6 +24,7 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;
+    this.setTitle("Load and Execute Strategy");
   }
 
   @Override

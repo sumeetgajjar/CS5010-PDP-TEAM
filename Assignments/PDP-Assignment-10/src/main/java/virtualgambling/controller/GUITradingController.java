@@ -14,6 +14,7 @@ import util.Utils;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.bean.SharePurchaseOrder;
+import virtualgambling.model.factory.StockDataSourceType;
 import virtualgambling.model.persistence.PortfolioLoader;
 import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.StrategyLoader;
@@ -345,6 +346,17 @@ public class GUITradingController implements Controller {
                 }.getType());
         userModel.persistFromModel(new PortfolioPersister(jsonSerDes,
                 userModel.getPortfolio(portfolioName)));
+        return true;
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return false;
+      }
+    }
+
+    @Override
+    public boolean setDataSource(StockDataSourceType stockDataSourceType) {
+      try {
+        userModel.setStockDataSourceType(stockDataSourceType);
         return true;
       } catch (Exception e) {
         this.guiView.displayError(e.getMessage());

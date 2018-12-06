@@ -10,6 +10,7 @@ import javax.swing.*;
 import util.Utils;
 import virtualgambling.controller.Features;
 import virtualgambling.model.bean.Portfolio;
+import virtualgambling.model.factory.StockDataSourceType;
 
 /**
  * Created by gajjar.s, on 11:27 PM, 12/4/18
@@ -23,6 +24,7 @@ public class MainForm extends AbstractForm implements GUIView {
     super(null);
     this.display("Welcome to Virtual Trading");
     this.setVisible(true);
+    this.setTitle("Virtual Trading");
   }
 
   @Override
@@ -87,8 +89,6 @@ public class MainForm extends AbstractForm implements GUIView {
   private void addButtonsToPanel(JPanel buttonJPanel) {
     List<JButton> buttons = new ArrayList<>();
     buttons.add(getCreatePortfolioJButton());
-    buttons.add(getLoadPortfolioButton());
-    buttons.add(getSavePortfolioButton());
     buttons.add(getGetAllPortfolioJButton());
     buttons.add(getPortfolioCostBasisButton());
     buttons.add(getPortfolioCompositionButton());
@@ -97,12 +97,40 @@ public class MainForm extends AbstractForm implements GUIView {
     buttons.add(getDrawPortfolioPerformanceButton());
     buttons.add(getBuySharesButton());
     buttons.add(getBuySharesUsingStrategyButton());
+    buttons.add(getLoadPortfolioButton());
+    buttons.add(getSavePortfolioButton());
     buttons.add(getLoadAndExecuteStrategyButton());
     buttons.add(getCreateStrategyAndPersistButton());
+    buttons.add(getSelectDataSourceButton());
     buttons.add(getQuitJButton());
 
     buttonJPanel.setLayout(new GridLayout(buttons.size(), 1));
     buttons.forEach(buttonJPanel::add);
+  }
+
+  private JButton getSelectDataSourceButton() {
+    JButton jButton = new JButton("Select DataSource");
+    jButton.addActionListener(e -> {
+
+      Object[] options = {StockDataSourceType.SIMPLE.getName(),
+              StockDataSourceType.ALPHA_VANTAGE.getName()};
+
+      int n = JOptionPane.showOptionDialog(this,
+              "Please Select the Stock Data Source",
+              "Stock Data Source Selection",
+              JOptionPane.YES_NO_OPTION,
+              JOptionPane.QUESTION_MESSAGE,
+              null,
+              options,
+              options[0]);
+
+      StockDataSourceType stockDataSourceType = n == 0 ? StockDataSourceType.SIMPLE :
+              StockDataSourceType.ALPHA_VANTAGE;
+
+      this.features.setDataSource(stockDataSourceType);
+      this.display(String.format("Stock Data Source selected: %s", stockDataSourceType.getName()));
+    });
+    return jButton;
   }
 
   private JButton getCreateStrategyAndPersistButton() {
