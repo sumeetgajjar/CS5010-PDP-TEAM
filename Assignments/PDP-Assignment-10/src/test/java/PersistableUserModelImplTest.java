@@ -3,6 +3,7 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -305,5 +306,31 @@ public class PersistableUserModelImplTest extends EnhancedUserModelTest {
     } catch (Exception e) {
       Assert.assertEquals("Could not deserialize strategy", e.getMessage());
     }
+  }
+
+  @Test
+  public void manuallyCreatedPortfolioWorks() throws IOException {
+    PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
+    Path manual = Utils.getPathInDefaultFolder(Paths.get("manual_portfolio" + ".json"));
+
+    if (!Files.exists(manual)) {
+      throw new FileNotFoundException("add a file that has a manually created portfolio");
+    }
+
+    JSONSerDes<Portfolio> jsonSerDes = new JSONSerDes<>(manual, new TypeToken<Portfolio>() {
+    }.getType());
+
+    Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
+
+    userModel.loadIntoModel(new PortfolioLoader(userModel, jsonSerDes));
+
+    Assert.assertFalse(userModel.getAllPortfolios().isEmpty());
+
+    Portfolio portfolio = userModel.getAllPortfolios().get(0);
+
+    Assert.assertEquals(2, portfolio.getPurchases().size());
+    Assert.assertEquals(new BigDecimal("220000"), portfolio.getValue(Utils.getTodayDate()));
+    Assert.assertEquals(new BigDecimal("220100"),
+            portfolio.getCostBasisIncludingCommission(Utils.getTodayDate()));
   }
 }
