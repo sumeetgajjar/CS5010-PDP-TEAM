@@ -18,7 +18,7 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 /**
  * Created by gajjar.s, on 2:19 AM, 12/6/18
  */
-public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
+public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
 
   protected final MainForm mainForm;
   protected final Features features;
@@ -26,7 +26,7 @@ public class RecurrentStrategyWithDifferentWeightsForm extends AbstractForm {
   protected JTextField stockPercentageJTextField;
   protected JLabel stockPercentageJLabel;
 
-  public RecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
+  public BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(MainForm mainForm, Features features) {
     super(mainForm);
     this.mainForm = mainForm;
     this.features = features;

@@ -26,32 +26,32 @@ public class SelectStrategyToPersistForm extends AbstractForm {
 
     JButton oneTimeDifferentWeights = new JButton("One Time Strategy with Different Weights");
     oneTimeDifferentWeights.addActionListener(e -> {
-      OneTimeStrategyWithDifferentWeightsForm oneTimeStrategyWithDifferentWeightsForm =
-              new OneTimeStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(oneTimeStrategyWithDifferentWeightsForm, this);
+      BuySharesUsingOneTimeStrategyWithDifferentWeightsForm buySharesUsingOneTimeStrategyWithDifferentWeightsForm =
+              new BuySharesUsingOneTimeStrategyWithDifferentWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(buySharesUsingOneTimeStrategyWithDifferentWeightsForm, this);
     });
     this.add(oneTimeDifferentWeights);
 
     JButton oneTimeSameWeights = new JButton("One Time Strategy with Same Weights");
     oneTimeSameWeights.addActionListener(e -> {
-      OneTimeStrategyWithSameWeightsForm oneTimeStrategyWithSameWeightsForm =
-              new OneTimeStrategyWithSameWeightsForm(mainForm, features);
+      BuySharesUsingOneTimeStrategyWithSameWeightsForm oneTimeStrategyWithSameWeightsForm =
+              new BuySharesUsingOneTimeStrategyWithSameWeightsForm(mainForm, features);
       GUIUtils.showPrevious(oneTimeStrategyWithSameWeightsForm, this);
     });
     this.add(oneTimeSameWeights);
 
     JButton recurringDifferentWeights = new JButton("Recurring Strategy with Different Weights");
     recurringDifferentWeights.addActionListener(e -> {
-      RecurrentStrategyWithDifferentWeightsForm recurrentStrategyWithDifferentWeightsForm =
-              new RecurrentStrategyWithDifferentWeightsForm(mainForm, features);
-      GUIUtils.showPrevious(recurrentStrategyWithDifferentWeightsForm, this);
+      BuySharesUsingRecurrentStrategyWithDifferentWeightsForm buySharesUsingRecurrentStrategyWithDifferentWeightsForm =
+              new BuySharesUsingRecurrentStrategyWithDifferentWeightsForm(mainForm, features);
+      GUIUtils.showPrevious(buySharesUsingRecurrentStrategyWithDifferentWeightsForm, this);
     });
     this.add(recurringDifferentWeights);
 
     JButton recurringSameWeights = new JButton("Recurring Strategy with Same Weights");
     recurringSameWeights.addActionListener(e -> {
-      RecurrentStrategyWithSameWeightsForm recurrentStrategyWithSameWeightsForm =
-              new RecurrentStrategyWithSameWeightsForm(mainForm, features);
+      BuySharesUsingRecurrentStrategyWithSameWeightsForm recurrentStrategyWithSameWeightsForm =
+              new BuySharesUsingRecurrentStrategyWithSameWeightsForm(mainForm, features);
       GUIUtils.showPrevious(recurrentStrategyWithSameWeightsForm, this);
     });
     this.add(recurringSameWeights);

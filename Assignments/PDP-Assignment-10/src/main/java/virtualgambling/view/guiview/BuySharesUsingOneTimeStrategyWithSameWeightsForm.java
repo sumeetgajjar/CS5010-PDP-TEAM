@@ -14,9 +14,9 @@ import virtualgambling.model.bean.SharePurchaseOrder;
 /**
  * Created by gajjar.s, on 4:40 AM, 12/6/18
  */
-public class OneTimeStrategyWithSameWeightsForm extends OneTimeStrategyWithDifferentWeightsForm {
+public class BuySharesUsingOneTimeStrategyWithSameWeightsForm extends BuySharesUsingOneTimeStrategyWithDifferentWeightsForm {
 
-  public OneTimeStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
+  public BuySharesUsingOneTimeStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
     super(mainForm, features);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);
