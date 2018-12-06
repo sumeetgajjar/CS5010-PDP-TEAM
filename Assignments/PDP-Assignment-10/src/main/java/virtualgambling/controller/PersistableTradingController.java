@@ -1,26 +1,33 @@
 package virtualgambling.controller;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import util.Constants;
 import virtualgambling.controller.command.Command;
+import virtualgambling.controller.command.persistantusermodelcommand.LoadPortfolioCommand;
 import virtualgambling.model.PersistableUserModel;
 import virtualgambling.view.View;
 
-public class PersistenceTradingController extends EnhancedTradingController {
+public class PersistableTradingController extends EnhancedTradingController {
+
+  private final PersistableUserModel persistableUserModel;
+
   /**
    * Constructs a object of {@link EnhancedTradingController} with the given params.
    *
-   * @param enhancedUserModel the userModel
-   * @param view              the view
+   * @param persistableUserModel the userModel
+   * @param view                 the view
    * @throws IllegalArgumentException if the given params are null
    */
-  public PersistenceTradingController(PersistableUserModel enhancedUserModel, View view)
+  public PersistableTradingController(PersistableUserModel persistableUserModel, View view)
           throws IllegalArgumentException {
-    super(enhancedUserModel, view);
+    super(persistableUserModel, view);
+    this.persistableUserModel = persistableUserModel;
   }
 
   @Override
@@ -47,24 +54,19 @@ public class PersistenceTradingController extends EnhancedTradingController {
     return commandMap;
   }
 
-  @Override
-  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringSameWeightsCommand() {
-    BiFunction<Supplier<String>, Consumer<String>, Command> biFunction =
-            super.getBuySharesWithRecurringSameWeightsCommand();
-    return null;
-  }
-
-  @Override
-  protected BiFunction<Supplier<String>, Consumer<String>, Command> getBuySharesWithRecurringDifferentWeightsCommand() {
-    return super.getBuySharesWithRecurringDifferentWeightsCommand();
-  }
-
   private BiFunction<Supplier<String>, Consumer<String>, Command> getSaveStrategyToFileCommand() {
     return null;
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getLoadStrategyFromFileCommand() {
-    return null;
+    return (supplier, consumer) -> {
+      String filePath = getStringInputFromUser(Constants.LOAD_PORTFOLIO_FROM_FILE,
+              supplier,
+              consumer);
+
+      return new LoadPortfolioCommand(this.persistableUserModel, Paths.get(filePath), consumer);
+    };
+
   }
 
   private BiFunction<Supplier<String>, Consumer<String>, Command> getSavePortfolioToFileCommand() {

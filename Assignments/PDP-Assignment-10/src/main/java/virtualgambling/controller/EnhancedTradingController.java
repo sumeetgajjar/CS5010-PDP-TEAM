@@ -261,7 +261,7 @@ public class EnhancedTradingController extends TradingController {
     };
   }
 
-  private Set<String> getSharesFromUser(Supplier<String> supplier, Consumer<String> consumer) {
+  protected Set<String> getSharesFromUser(Supplier<String> supplier, Consumer<String> consumer) {
     int tickerNameCount = getIntegerInputFromUser(Constants.STOCK_COUNT_MESSAGE, supplier,
             consumer);
 
@@ -273,8 +273,8 @@ public class EnhancedTradingController extends TradingController {
     return stocks;
   }
 
-  private Map<String, Double> getSharePercentageFromUser(Supplier<String> supplier,
-                                                         Consumer<String> consumer) {
+  protected Map<String, Double> getSharePercentageFromUser(Supplier<String> supplier,
+                                                           Consumer<String> consumer) {
 
     int tickerNameCount = getIntegerInputFromUser(Constants.STOCK_COUNT_MESSAGE, supplier,
             consumer);
