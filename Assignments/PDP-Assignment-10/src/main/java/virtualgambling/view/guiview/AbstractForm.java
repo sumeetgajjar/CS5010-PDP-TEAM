@@ -25,18 +25,18 @@ import virtualgambling.model.bean.SharePurchaseOrder;
  */
 public abstract class AbstractForm extends JFrame {
 
-  public static final String EMPTY_TICKER_NAME_MESSAGE = "Ticker Name cannot be empty";
-  public static final String EMPTY_PORTFOLIO_NAME_MESSAGE = "Portfolio Name cannot be empty";
-  public static final String EMPTY_DATE_STRING_MESSAGE = "Date cannot be empty";
-  public static final String EMPTY_QUANTITY_STRING_MESSAGE = "Quantity cannot be empty";
-  public static final String EMPTY_COMMISSION_STRING_MESSAGE = "Commission cannot be empty";
-  public static final String EMPTY_END_DATE_ERROR_MESSAGE = "End date cannot be empty";
-  public static final String EMPTY_RECURRING_INTERVAL_ERROR_MESSAGE = "Recurring Interval cannot " +
+  protected static final String EMPTY_TICKER_NAME_MESSAGE = "Ticker Name cannot be empty";
+  protected static final String EMPTY_PORTFOLIO_NAME_MESSAGE = "Portfolio Name cannot be empty";
+  protected static final String EMPTY_DATE_STRING_MESSAGE = "Date cannot be empty";
+  protected static final String EMPTY_QUANTITY_STRING_MESSAGE = "Quantity cannot be empty";
+  protected static final String EMPTY_COMMISSION_STRING_MESSAGE = "Commission cannot be empty";
+  protected static final String EMPTY_END_DATE_ERROR_MESSAGE = "End date cannot be empty";
+  protected static final String EMPTY_RECURRING_INTERVAL_ERROR_MESSAGE = "Recurring Interval " +
+          "cannot be empty";
+  protected static final String EMPTY_AMOUNT_TO_INVEST_ERROR_MESSAGE = "Amount to invest cannot " +
           "be empty";
-  public static final String EMPTY_AMOUNT_TO_INVEST_ERROR_MESSAGE = "Amount to invest cannot be " +
-          "empty";
-  public static final String EMPTY_START_DATE_ERROR_MESSAGE = "Start date cannot be empty";
-  public static final String PORTFOLIO_FILE_LABEL_TEXT = "Portfolio File Path:";
+  protected static final String EMPTY_START_DATE_ERROR_MESSAGE = "Start date cannot be empty";
+  protected static final String PORTFOLIO_FILE_LABEL_TEXT = "Portfolio File Path:";
 
   protected final JFrame previousJFrame;
   protected final JFrame currentJFrame;
