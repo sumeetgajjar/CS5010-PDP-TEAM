@@ -35,11 +35,7 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
     this.mainForm = mainForm;
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
-    addStockJButton.addActionListener(
-            getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+    this.addActionListenerToAddStockButton();
   }
 
   @Override
@@ -122,12 +118,21 @@ public class BuySharesUsingRecurrentStrategyWithDifferentWeightsForm extends Abs
     this.add(container);
   }
 
-  private ActionListener
-  getActionListenerForExecuteButton(JTextField portfolioNameJTextField,
-                                    JTextField startDateTextField, JTextField endDateTextField,
-                                    JTextField recurringIntervalDaysTextField,
-                                    JTextField amountToInvestTextField,
-                                    JTextField commissionPercentageJTextField) {
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
+  }
+
+  private ActionListener getActionListenerForExecuteButton(
+          JTextField portfolioNameJTextField,
+          JTextField startDateTextField,
+          JTextField endDateTextField,
+          JTextField recurringIntervalDaysTextField,
+          JTextField amountToInvestTextField,
+          JTextField commissionPercentageJTextField) {
     return e -> {
       if (this.areInputsEmpty(portfolioNameJTextField, startDateTextField,
               recurringIntervalDaysTextField, amountToInvestTextField,

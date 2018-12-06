@@ -34,11 +34,7 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
     this.mainForm = mainForm;
     this.features = features;
     this.stockPercentageMap = new LinkedHashMap<>();
-    addStockJButton.addActionListener(
-            this.getActionListenerForAddStockButton(
-                    stocksJTextArea,
-                    stockNameJTextField,
-                    stockPercentageJTextField));
+    this.addActionListenerToAddStockButton();
   }
 
   @Override
@@ -114,6 +110,14 @@ public class PersistRecurrentStrategyWithDifferentWeightsForm extends AbstractFo
                     recurringIntervalDaysTextField)));
 
     this.add(container);
+  }
+
+  private void addActionListenerToAddStockButton() {
+    addStockJButton.addActionListener(
+            this.getActionListenerForAddStockButton(
+                    stocksJTextArea,
+                    stockNameJTextField,
+                    stockPercentageJTextField));
   }
 
   private ActionListener getSelectStrategyFileActionListener() {
