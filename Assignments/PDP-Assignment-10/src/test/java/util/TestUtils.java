@@ -43,8 +43,9 @@ public class TestUtils {
    *
    * @return a PersistableUserModel
    */
-  public static PersistableUserModel getEmptyPersistableUserModelWithStockDAO(StockDAOType stockDAOType,
-                                                                              StockDataSourceType stockDataSourceType) {
+  public static PersistableUserModel getEmptyPersistableUserModelWithStockDAO(
+          StockDAOType stockDAOType,
+          StockDataSourceType stockDataSourceType) {
     return new PersistableUserModelImpl(stockDAOType, stockDataSourceType);
   }
 
@@ -62,8 +63,9 @@ public class TestUtils {
    *
    * @return a EnhancedUserModel
    */
-  public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(StockDAOType stockDAOType,
-                                                                        StockDataSourceType stockDataSourceType) {
+  public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(
+          StockDAOType stockDAOType,
+          StockDataSourceType stockDataSourceType) {
     return new EnhancedUserModelImpl(stockDAOType, stockDataSourceType);
   }
 
@@ -81,8 +83,9 @@ public class TestUtils {
    *
    * @return a SimpleUserModel
    */
-  public static UserModel getEmptySimpleUserModelUsingStockDAO(StockDAOType stockDAOType,
-                                                               StockDataSourceType stockDataSourceType) {
+  public static UserModel getEmptySimpleUserModelUsingStockDAO(
+          StockDAOType stockDAOType,
+          StockDataSourceType stockDataSourceType) {
     return new SimpleUserModel(stockDAOType, stockDataSourceType);
   }
 
