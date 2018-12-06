@@ -2,7 +2,6 @@ package virtualgambling.view.guiview;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.math.BigDecimal;
@@ -16,10 +15,13 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import util.Utils;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 11:43 PM, 12/4/18
+ * This class represents a GUI form to load the strategy and execute it on a portfolio. It extends
+ * {@link LoadAndExecuteStrategyForm} to reduce the effort in implementing the common
+ * functionality.
  */
 public class LoadAndExecuteStrategyForm extends AbstractForm {
 
@@ -28,10 +30,17 @@ public class LoadAndExecuteStrategyForm extends AbstractForm {
   private JLabel filePathLabel;
   private File selectedFile;
 
-  public LoadAndExecuteStrategyForm(MainForm mainForm, Features features) throws HeadlessException {
+  /**
+   * Constructs a object of LoadAndExecuteStrategyForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public LoadAndExecuteStrategyForm(MainForm mainForm, Features features) throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.mainForm = Utils.requireNonNull(mainForm);
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Load and Execute Strategy");
   }
 
