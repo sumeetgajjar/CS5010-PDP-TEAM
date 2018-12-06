@@ -10,12 +10,23 @@ import javax.swing.JTextField;
 import virtualgambling.controller.Features;
 
 /**
- * Created by gajjar.s, on 10:48 AM, 12/6/18
+ * This class represents a GUI form to Persists a Strategy with Same weights. It extends {@link
+ * PersistRecurrentStrategyWithDifferentWeightsForm} to reduce the effort in implementing the common
+ * functionality.
  */
 public class PersistRecurrentStrategyWithSameWeightsForm extends
         PersistRecurrentStrategyWithDifferentWeightsForm {
 
-  public PersistRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of PersistRecurrentStrategyWithSameWeightsForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public PersistRecurrentStrategyWithSameWeightsForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
+
     super(mainForm, features);
     this.stockPercentageJTextField.setVisible(false);
     this.stockPercentageJLabel.setVisible(false);

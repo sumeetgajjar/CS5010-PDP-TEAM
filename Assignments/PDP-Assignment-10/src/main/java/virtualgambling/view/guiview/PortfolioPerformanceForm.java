@@ -39,17 +39,24 @@ import virtualgambling.controller.Features;
 import virtualgambling.model.bean.Portfolio;
 
 /**
- * Created by gajjar.s, on 4:06 AM, 12/5/18
+ * This class represents a GUI form to view performance of a portfolio. It extends {@link
+ * AbstractForm} to reduce the effort in implementing the common functionality.
  */
 public class PortfolioPerformanceForm extends AbstractForm {
 
-  private final MainForm mainForm;
   private final Features features;
 
-  protected PortfolioPerformanceForm(MainForm mainForm, Features features) {
+  /**
+   * Constructs a object of PortfolioPerformanceForm with the given params.
+   *
+   * @param mainForm the mainForm
+   * @param features the features
+   * @throws IllegalArgumentException if the given params are null
+   */
+  public PortfolioPerformanceForm(MainForm mainForm, Features features)
+          throws IllegalArgumentException {
     super(mainForm);
-    this.mainForm = mainForm;
-    this.features = features;
+    this.features = Utils.requireNonNull(features);
     this.setTitle("Portfolio Performance");
   }
 
