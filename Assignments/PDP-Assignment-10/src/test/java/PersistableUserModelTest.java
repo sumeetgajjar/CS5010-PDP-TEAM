@@ -45,7 +45,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
   }
 
   @Test
-  public void persistPortfolioTest() throws IOException {
+  public void persistPortfolioWorksAndLoadingOverridesExistingPortfolio() throws IOException {
     PersistableUserModel userModel = TestUtils.getEmptyPersistableUserModel();
 
     userModel.createPortfolio(PORTFOLIO_P1);
@@ -146,6 +146,7 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
             new TypeToken<RecurringWeightedInvestmentStrategy>() {
             }.getType());
 
+    // serialize the strategy
     try {
       userModel.persistFromModel(new StrategyPersister(serDes,
               recurringWeightedInvestmentStrategy));
@@ -153,8 +154,10 @@ public class PersistableUserModelTest extends EnhancedUserModelTest {
       Assert.fail();
     }
 
+    // Assert that there are no portfolios yet
     Assert.assertTrue(userModel.getAllPortfolios().isEmpty());
 
+    // deserialize the strategy
     try {
       userModel.loadIntoModel(new StrategyLoader(userModel, serDes, PORTFOLIO_P1,
               new BigDecimal(1000), 10));
