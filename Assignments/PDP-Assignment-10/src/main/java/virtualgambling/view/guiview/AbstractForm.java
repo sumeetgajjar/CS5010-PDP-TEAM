@@ -21,7 +21,8 @@ import util.Utils;
 import virtualgambling.model.bean.SharePurchaseOrder;
 
 /**
- * Created by gajjar.s, on 1:50 AM, 12/5/18
+ * This class represents a abstract class {@link AbstractForm} which extends {@link JFrame}. It
+ * minimize the effort required to take input from the User and validate the input.
  */
 public abstract class AbstractForm extends JFrame {
 
@@ -163,7 +164,7 @@ public abstract class AbstractForm extends JFrame {
     return number;
   }
 
-  protected File getFileToLoad() {
+  protected File getFileToLoadUsingFileChooser() {
     JFileChooser jFileChooser =
             new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
@@ -178,7 +179,7 @@ public abstract class AbstractForm extends JFrame {
     return null;
   }
 
-  protected File getFileToSave() {
+  protected File getFileToSaveUsingFileChooser() {
     JFileChooser jFileChooser =
             new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 

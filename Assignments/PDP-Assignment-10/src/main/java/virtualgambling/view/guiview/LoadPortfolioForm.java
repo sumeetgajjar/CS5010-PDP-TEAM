@@ -54,7 +54,7 @@ public class LoadPortfolioForm extends AbstractForm {
 
   private ActionListener getSelectPortfolioFileActionListener() {
     return e -> {
-      this.selectedFile = getFileToLoad();
+      this.selectedFile = getFileToLoadUsingFileChooser();
       if (Objects.nonNull(this.selectedFile)) {
         this.filePathLabel.setText(String.format("Portfolio File Path: %s",
                 selectedFile.getAbsolutePath()));

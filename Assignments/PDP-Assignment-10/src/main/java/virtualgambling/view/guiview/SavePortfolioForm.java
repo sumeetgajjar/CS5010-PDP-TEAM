@@ -61,7 +61,7 @@ public class SavePortfolioForm extends AbstractForm {
 
   private ActionListener getSelectPortfolioFileActionListener() {
     return e -> {
-      this.selectedFile = getFileToSave();
+      this.selectedFile = getFileToSaveUsingFileChooser();
       if (Objects.nonNull(this.selectedFile)) {
         this.filePathLabel.setText(String.format("%s%s", PORTFOLIO_FILE_LABEL_TEXT,
                 selectedFile.getAbsolutePath()));
