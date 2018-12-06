@@ -10,8 +10,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 
-import util.TestUtils;
 import util.Constants;
+import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.model.UserModel;
 

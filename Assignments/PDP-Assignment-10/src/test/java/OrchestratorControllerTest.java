@@ -4,8 +4,8 @@ import org.junit.Test;
 import java.io.StringReader;
 import java.util.Arrays;
 
-import util.TestUtils;
 import util.Constants;
+import util.TestUtils;
 import virtualgambling.controller.Controller;
 import virtualgambling.controller.OrchestratorController;
 import virtualgambling.view.TextView;
