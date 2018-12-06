@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,14 +24,19 @@ import virtualgambling.model.bean.Portfolio;
 import virtualgambling.model.factory.StockDataSourceType;
 
 /**
- * Created by gajjar.s, on 11:27 PM, 12/4/18
+ * This class represents a the GUI view of this MVC application. It extends {@link AbstractForm} to
+ * reduce the effort in implementing the common functionality and implements {@link GUIView}
+ * interface.
  */
 public class MainForm extends AbstractForm implements GUIView {
 
   private JTextArea jTextArea;
   private Features features;
 
-  public MainForm() throws HeadlessException {
+  /**
+   * Constructs a object of MainForm.
+   */
+  public MainForm() {
     super(null);
     this.display("Welcome to Virtual Trading");
     this.setVisible(true);
