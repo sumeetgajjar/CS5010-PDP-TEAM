@@ -38,9 +38,9 @@ public class TestUtils {
   }
 
   /**
-   * Returns a SimpleUserModel.
+   * Returns a PersistableUserModel.
    *
-   * @return a SimpleUserModel
+   * @return a PersistableUserModel
    */
   public static PersistableUserModel getEmptyPersistableUserModelWithStockDAO(StockDAOType stockDAOType,
                                                                               StockDataSourceType stockDataSourceType) {
@@ -48,18 +48,18 @@ public class TestUtils {
   }
 
   /**
-   * Returns a SimpleUserModel.
+   * Returns a PersistableUserModel.
    *
-   * @return a SimpleUserModel
+   * @return a PersistableUserModel
    */
   public static PersistableUserModel getEmptyPersistableUserModel() {
     return getEmptyPersistableUserModelWithStockDAO(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
   }
 
   /**
-   * Returns a SimpleUserModel.
+   * Returns a EnhancedUserModel.
    *
-   * @return a SimpleUserModel
+   * @return a EnhancedUserModel
    */
   public static EnhancedUserModel getEmptyEnhancedUserModelWithStockDAO(StockDAOType stockDAOType,
                                                                         StockDataSourceType stockDataSourceType) {
@@ -67,9 +67,9 @@ public class TestUtils {
   }
 
   /**
-   * Returns a SimpleUserModel.
+   * Returns a EnhancedUserModel.
    *
-   * @return a SimpleUserModel
+   * @return a EnhancedUserModel
    */
   public static EnhancedUserModel getEmptyEnhancedUserModel() {
     return getEmptyEnhancedUserModelWithStockDAO(StockDAOType.SIMPLE, StockDataSourceType.MOCK);
