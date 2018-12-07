@@ -70,80 +70,83 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl
   }
 
   private class InnerDecorator implements PersistableUserModel {
-    private final PersistableUserModelImpl persistable;
+    private final PersistableUserModelImpl delegate;
 
     private InnerDecorator(PersistableUserModelImpl persistableUserModel) {
-      this.persistable = persistableUserModel;
+      this.delegate = persistableUserModel;
     }
 
     @Override
     public void createPortfolio(String portfolioName) throws IllegalArgumentException {
       Utils.requireNonNull(portfolioName);
-      persistable.validateAndCreatePortfolio(portfolioName);
+      delegate.validateAndCreatePortfolio(portfolioName);
     }
 
     @Override
     public Portfolio getPortfolio(String portfolioName) throws PortfolioNotFoundException {
-      return persistable.getPortfolio(portfolioName);
+      return delegate.getPortfolio(portfolioName);
     }
 
     @Override
     public List<Portfolio> getAllPortfolios() {
-      return persistable.getAllPortfolios();
+      return delegate.getAllPortfolios();
     }
 
     @Override
     public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
                                         long quantity) throws IllegalArgumentException,
             StockDataNotFoundException, InsufficientCapitalException {
-      return persistable.buyShares(tickerName, portfolioName, date, quantity);
+      return delegate.buyShares(tickerName, portfolioName, date, quantity);
     }
 
     @Override
     public BigDecimal getRemainingCapital() {
-      return persistable.getRemainingCapital();
+      return delegate.getRemainingCapital();
     }
 
     @Override
     public void persistFromModel(Persister persister) throws IOException {
-      persistable.persistFromModel(persister);
+      delegate.persistFromModel(persister);
     }
 
     @Override
     public void loadIntoModel(Loader loader) throws IOException {
-      persistable.loadIntoModel(loader);
+      delegate.loadIntoModel(loader);
     }
 
     @Override
     public StockDAOType getStockDAOType() {
-      return persistable.getStockDAOType();
+      return delegate.getStockDAOType();
     }
 
     @Override
     public StockDataSourceType getStockDataSourceType() {
-      return persistable.getStockDataSourceType();
+      return delegate.getStockDataSourceType();
     }
 
     @Override
     public void setStockDAOType(StockDAOType stockDAOType) {
-      persistable.setStockDAOType(stockDAOType);
+      delegate.setStockDAOType(stockDAOType);
     }
 
     @Override
     public void setStockDataSourceType(StockDataSourceType stockDataSourceType) {
-      persistable.setStockDataSourceType(stockDataSourceType);
+      delegate.setStockDataSourceType(stockDataSourceType);
     }
 
     @Override
     public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
-                                        long quantity, double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
-      return persistable.buyShares(tickerName, portfolioName, date, quantity, commissionPercentage);
+                                        long quantity, double commissionPercentage) throws
+            IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
+      return delegate.buyShares(tickerName, portfolioName, date, quantity, commissionPercentage);
     }
 
     @Override
     public List<SharePurchaseOrder> buyShares(String portfolioName, BigDecimal amountToInvest,
-                                              Strategy strategy, double commissionPercentage) throws IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException, StrategyExecutionException {
-      return persistable.buyShares(portfolioName, amountToInvest, strategy, commissionPercentage);
+                                              Strategy strategy, double commissionPercentage)
+            throws IllegalArgumentException, StockDataNotFoundException,
+            InsufficientCapitalException, StrategyExecutionException {
+      return delegate.buyShares(portfolioName, amountToInvest, strategy, commissionPercentage);
     }
   }
 }
