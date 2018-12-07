@@ -197,13 +197,21 @@ public class AlphaVantageAPIStockDataSource implements StockDataSource {
 
     try {
       NavigableMap<String, StockPrice> timeStampMap = queryApi(tickerName);
-      addToLruCache(tickerName, timeStampMap);
+      Map.Entry<String, StockPrice> lastEntry = timeStampMap.lastEntry();
+      Map.Entry<String, StockPrice> firstEntry = timeStampMap.firstEntry();
 
-      StockPrice stockPrice = timeStampMap.get(dateString);
-      return !Objects.isNull(stockPrice);
+      if (Objects.nonNull(firstEntry) && Objects.nonNull(lastEntry)) {
+        if (lastEntry.getKey().compareTo(dateString) >= 0 &&
+                firstEntry.getKey().compareTo(dateString) <= 0) {
+          addToLruCache(tickerName, timeStampMap);
+          return true;
+
+        }
+      }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+    return false;
   }
 
   private void addToLruCache(String tickerName,
