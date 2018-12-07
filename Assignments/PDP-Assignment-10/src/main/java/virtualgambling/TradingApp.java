@@ -6,6 +6,7 @@ import virtualgambling.controller.Controller;
 import virtualgambling.controller.GUITradingController;
 import virtualgambling.controller.OrchestratorController;
 import virtualgambling.controller.TradingController;
+import virtualgambling.model.PersistableUserModel;
 import virtualgambling.model.PersistableUserModelImpl;
 import virtualgambling.model.SimpleUserModel;
 import virtualgambling.model.UserModel;
@@ -47,7 +48,7 @@ public class TradingApp {
 
   private static void runGUITradingApp() {
     GUIView guiView = new MainForm();
-    PersistableUserModelImpl persistableUserModel =
+    PersistableUserModel persistableUserModel =
             new PersistableUserModelImpl(StockDAOType.SIMPLE,
                     StockDataSourceType.MOCK);
     Controller controller = new GUITradingController(persistableUserModel, guiView);
