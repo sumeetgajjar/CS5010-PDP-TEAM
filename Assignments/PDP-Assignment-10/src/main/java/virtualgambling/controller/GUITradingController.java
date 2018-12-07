@@ -19,6 +19,7 @@ import virtualgambling.model.persistence.PortfolioPersister;
 import virtualgambling.model.persistence.StrategyLoader;
 import virtualgambling.model.persistence.StrategyPersister;
 import virtualgambling.model.persistence.serdes.JSONSerDes;
+import virtualgambling.model.strategy.OneTimeWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.RecurringWeightedInvestmentStrategy;
 import virtualgambling.model.strategy.Strategy;
 import virtualgambling.view.guiview.GUIView;
@@ -134,7 +135,17 @@ public class GUITradingController implements Controller {
                                                         Set<String> tickerNames,
                                                         BigDecimal amountToInvest,
                                                         double commission) {
-      return Optional.empty();
+      try {
+        Strategy strategy =
+                new OneTimeWeightedInvestmentStrategy(date,
+                        Utils.getStocksWithWeights(tickerNames));
+
+        return Optional.of(this.userModel.buyShares(portfolioName, amountToInvest, strategy,
+                commission));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
     }
 
     @Override
@@ -142,7 +153,17 @@ public class GUITradingController implements Controller {
                                                         Map<String, Double> stockWeights,
                                                         BigDecimal amountToInvest,
                                                         double commission) {
-      return Optional.empty();
+      try {
+        Strategy strategy =
+                new OneTimeWeightedInvestmentStrategy(date,
+                        stockWeights);
+
+        return Optional.of(this.userModel.buyShares(portfolioName, amountToInvest, strategy,
+                commission));
+      } catch (Exception e) {
+        this.guiView.displayError(e.getMessage());
+        return Optional.empty();
+      }
     }
 
     @Override
