@@ -93,13 +93,6 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl
     }
 
     @Override
-    public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
-                                        long quantity) throws IllegalArgumentException,
-            StockDataNotFoundException, InsufficientCapitalException {
-      return delegate.buyShares(tickerName, portfolioName, date, quantity);
-    }
-
-    @Override
     public BigDecimal getRemainingCapital() {
       return delegate.getRemainingCapital();
     }
@@ -139,6 +132,13 @@ public class PersistableUserModelImpl extends EnhancedUserModelImpl
                                         long quantity, double commissionPercentage) throws
             IllegalArgumentException, StockDataNotFoundException, InsufficientCapitalException {
       return delegate.buyShares(tickerName, portfolioName, date, quantity, commissionPercentage);
+    }
+
+    @Override
+    public SharePurchaseOrder buyShares(String tickerName, String portfolioName, Date date,
+                                        long quantity) throws IllegalArgumentException,
+            StockDataNotFoundException, InsufficientCapitalException {
+      return delegate.buyShares(tickerName, portfolioName, date, quantity);
     }
 
     @Override
